@@ -19,6 +19,8 @@ type Selection = {
   names?: string | null;
   date?: string | null;
   venue?: string | null;
+  fontFamily?: string | null;
+  referencePhotos?: string[] | null;
   lead?: string | null;
   selectedAt: string;
 };
@@ -42,16 +44,32 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
 
   const subject = `Template chosen — ${s.names || "client"} · ${s.templateName}`;
   const lines = [
-    `Template:   ${s.templateName}  (${s.templateId})`,
-    `Layout:     ${s.layout}`,
-    `Names:      ${s.names || "—"}`,
-    `Date:       ${s.date || "—"}`,
-    `Venue:      ${s.venue || "—"}`,
-    s.lead ? `Lead token: ${s.lead}` : null,
-    `Selected:   ${s.selectedAt}`,
+    `Template:    ${s.templateName}  (${s.templateId})`,
+    `Layout:      ${s.layout}`,
+    `Names:       ${s.names || "—"}`,
+    `Date:        ${s.date || "—"}`,
+    `Venue:       ${s.venue || "—"}`,
+    `Font Family: ${s.fontFamily || "—"}`,
+    s.lead ? `Lead token:  ${s.lead}` : null,
+    `Selected:    ${s.selectedAt}`,
   ].filter(Boolean).join("\n");
 
-  const html = `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.6;color:#241E1A;background:#EAE2D5;padding:24px;border-radius:4px;">${lines}</pre>`;
+  let html = `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.6;color:#241E1A;background:#EAE2D5;padding:24px;border-radius:4px;">${lines}</pre>`;
+
+  if (s.referencePhotos && s.referencePhotos.length > 0) {
+    html += `
+      <div style="margin-top:20px; font-family: sans-serif;">
+        <h3 style="font-size:14px; color:#241E1A; margin-bottom: 12px; font-weight: 600;">Uploaded Reference Photos:</h3>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          ${s.referencePhotos.map((photo, idx) => `
+            <div style="border: 1px solid #C4B59D; border-radius: 4px; padding: 4px; background: white;">
+              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:200px; max-height:200px; object-fit:cover; display:block; border-radius: 2px;" />
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
 
   try {
     const resend = new Resend(apiKey);
@@ -60,7 +78,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       to: toAddr,
       subject,
       html,
-      text: lines,
+      text: lines + (s.referencePhotos && s.referencePhotos.length > 0 ? `\n\n[Attached reference photos: ${s.referencePhotos.length}]` : ""),
     });
     if (error) return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
     return { ok: true, detail: `email sent (id ${data?.id || "?"})` };
@@ -104,6 +122,10 @@ export async function POST(req: NextRequest) {
     names: body.names ? String(body.names).slice(0, 200) : null,
     date: body.date ? String(body.date).slice(0, 100) : null,
     venue: body.venue ? String(body.venue).slice(0, 300) : null,
+    fontFamily: body.fontFamily ? String(body.fontFamily).slice(0, 200) : null,
+    referencePhotos: body.referencePhotos && Array.isArray(body.referencePhotos)
+      ? body.referencePhotos.map((p: any) => String(p))
+      : null,
     lead: body.lead ? String(body.lead).slice(0, 200) : null,
     selectedAt: new Date().toISOString(),
   };

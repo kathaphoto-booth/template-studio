@@ -999,8 +999,8 @@ export const PRESETS: PhotoboothPreset[] = [
   {
     id: "heirloom-pina-L",
     name: "Katha Signature — Heirloom Piña L-Shape",
-    type: "postcard-vertical",
-    layoutId: "pv-L",
+    type: "postcard",
+    layoutId: "pc-L",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -1013,15 +1013,15 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderWidth: "1.5px",
     slotGap: "20px",
     slotBgColor: "#E0D7C7",
-    innerSpacing: "60px",
+    innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Three photos trace an L on a piña-fiber ground, with the open corner cradling a champagne calado divider."
   },
   {
     id: "loom-frame-invL",
     name: "Katha Signature — Loom Frame Γ-Shape",
-    type: "postcard-vertical",
-    layoutId: "pv-invL",
+    type: "postcard",
+    layoutId: "pc-invL",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#241E1A",
@@ -1034,7 +1034,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderWidth: "1.5px",
     slotGap: "20px",
     slotBgColor: "#E0D7C7",
-    innerSpacing: "60px",
+    innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names."
   },
@@ -1088,10 +1088,12 @@ const DECORATION_ALIASES: Record<string, string> = {
   "katha-heirloom-pina-postcard":   "katha-heirloom-pina",
   "katha-heirloom-pina-landscape":  "katha-heirloom-pina",
   "katha-heirloom-pina-L":          "katha-heirloom-pina",
+  "heirloom-pina-L":                "katha-heirloom-pina",
 
   "katha-loom-frame-postcard":      "katha-loom-frame",
   "katha-loom-frame-landscape":     "katha-loom-frame",
   "katha-loom-frame-invL":          "katha-loom-frame",
+  "loom-frame-invL":                "katha-loom-frame",
 
   "katha-knalum-night-postcard":    "katha-knalum-night",
   "katha-knalum-night-landscape":   "katha-knalum-night",

@@ -9,7 +9,7 @@
 // ----------------------------------------------------------------------
 
 import React, { useState, useMemo } from "react";
-import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX } from "@/lib/templates";
+import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX, LUXURY_FONTS } from "@/lib/templates";
 
 type TierFilter = "all" | "signature" | "classic";
 type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard";
@@ -37,6 +37,7 @@ function TemplateCanvas({
   names = "",
   date = "",
   venue = "",
+  fontFamily = "",
 }: {
   preset: PhotoboothPreset;
   width: number;
@@ -45,9 +46,11 @@ function TemplateCanvas({
   names?: string;
   date?: string;
   venue?: string;
+  fontFamily?: string;
 }) {
   const { vb } = tileDims(preset.type);
-  const isCursive = preset.fontFamily.toLowerCase().includes("cursive");
+  const activeFont = fontFamily || preset.fontFamily;
+  const isCursive = activeFont.toLowerCase().includes("cursive");
   const svg = renderDecorativeSvg(preset.id, preset.type, preset.textColor, preset.secondaryColor, preset.borderColor, "bottom");
   const layout = resolveLayout(preset.layoutId, preset.type);
   const viewBox = VIEWBOX[preset.type];
@@ -107,7 +110,7 @@ function TemplateCanvas({
             {showText ? (
               <>
                 <div
-                  style={{ fontFamily: preset.fontFamily, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
+                  style={{ fontFamily: activeFont, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
                   className={isCursive ? "normal-case" : "uppercase tracking-wide"}
                 >
                   {names || "Your Names"}
@@ -147,6 +150,11 @@ export default function GalleryPage() {
   const [nameTwo, setNameTwo] = useState("");
   const [date, setDate] = useState("");
   const [venue, setVenue] = useState("");
+  const [selectedFont, setSelectedFont] = useState("");
+  const [referencePhotos, setReferencePhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [dragActive, setDragActive] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
 
   const filtered = useMemo(() => {
@@ -166,12 +174,100 @@ export default function GalleryPage() {
     setNameTwo("");
     setDate("");
     setVenue("");
+    setSelectedFont(p.fontFamily);
+    setReferencePhotos([]);
+    setErrorMsg("");
     setConfirmed(false);
+  };
+
+  const handleFiles = (files: FileList) => {
+    setErrorMsg("");
+    const maxFiles = 3;
+    const maxSize = 1.5 * 1024 * 1024; // 1.5MB per file
+    const maxTotalSize = 2.5 * 1024 * 1024; // 2.5MB total
+
+    const newPhotos = [...referencePhotos];
+    
+    if (newPhotos.length + files.length > maxFiles) {
+      setErrorMsg(`You can upload a maximum of ${maxFiles} reference photos.`);
+      return;
+    }
+
+    let sizeSum = 0;
+    newPhotos.forEach(p => {
+      sizeSum += p.length * 0.75;
+    });
+
+    Array.from(files).forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        setErrorMsg("Only image files (JPEG, PNG, WEBP) are supported.");
+        return;
+      }
+      if (file.size > maxSize) {
+        setErrorMsg(`Each file must be under 1.5MB. "${file.name}" is too large.`);
+        return;
+      }
+      sizeSum += file.size;
+    });
+
+    if (sizeSum > maxTotalSize) {
+      setErrorMsg("Total upload size is limited to 2.5MB. Please choose smaller or compressed images.");
+      return;
+    }
+
+    setUploading(true);
+    let loaded = 0;
+    const targets = Array.from(files);
+
+    if (targets.length === 0) {
+      setUploading(false);
+      return;
+    }
+
+    targets.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result && typeof e.target.result === "string") {
+          newPhotos.push(e.target.result);
+        }
+        loaded++;
+        if (loaded === targets.length) {
+          setReferencePhotos(newPhotos);
+          setUploading(false);
+        }
+      };
+      reader.onerror = () => {
+        setErrorMsg("Failed to read one or more files.");
+        loaded++;
+        if (loaded === targets.length) {
+          setUploading(false);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFiles(e.dataTransfer.files);
+    }
   };
 
   const confirmSelection = async () => {
     if (!selected) return;
-    // Pull ?lead=<token> from the URL so HoneyBook-linked clients are attributable
     const lead = typeof window !== "undefined"
       ? new URLSearchParams(window.location.search).get("lead")
       : null;
@@ -182,32 +278,28 @@ export default function GalleryPage() {
       names: names || null,
       date: date.trim() || null,
       venue: venue.trim() || null,
+      fontFamily: selectedFont || null,
+      referencePhotos: referencePhotos.length > 0 ? referencePhotos : null,
       lead,
       selectedAt: new Date().toISOString(),
     };
 
-    // Persist locally as offline fallback (always)
     try {
       const prev = JSON.parse(localStorage.getItem("katha_selections") || "[]");
       localStorage.setItem("katha_selections", JSON.stringify([payload, ...prev].slice(0, 50)));
     } catch {}
 
-    // POST to /api/selection — email notification + future HoneyBook sync
     try {
       const res = await fetch("/api/selection", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      // 200 = dispatched, 202 = recorded but no dispatch (env not set yet)
       if (res.ok || res.status === 202) {
         setConfirmed(true);
         return;
       }
-    } catch {
-      // Network error — still show success since we have the local copy
-    }
-    // Soft-success: the localStorage copy still lets the studio pick it up
+    } catch {}
     setConfirmed(true);
   };
 
@@ -355,6 +447,7 @@ export default function GalleryPage() {
                     names={names}
                     date={date}
                     venue={venue}
+                    fontFamily={selectedFont}
                   />
                 </div>
 
@@ -381,6 +474,98 @@ export default function GalleryPage() {
                       className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none" style={{ borderColor: "#C4B59D" }} />
                     <input value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
                       className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none" style={{ borderColor: "#C4B59D" }} />
+
+                    {/* Dynamic luxury font gallery selector */}
+                    <div className="flex flex-col gap-1 mt-2">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                        Personalized Font
+                      </label>
+                      <select
+                        value={selectedFont}
+                        onChange={(e) => setSelectedFont(e.target.value)}
+                        className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A] cursor-pointer"
+                        style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
+                      >
+                        {LUXURY_FONTS.map((font) => (
+                          <option key={font.css} value={font.css} style={{ fontFamily: font.css }}>
+                            {font.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Drag & Drop Reference Photos Uploader */}
+                    <div className="flex flex-col gap-1 mt-4">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                        Reference Photos (Optional)
+                      </label>
+                      
+                      <div
+                        onDragEnter={handleDrag}
+                        onDragOver={handleDrag}
+                        onDragLeave={handleDrag}
+                        onDrop={handleDrop}
+                        className={`relative border border-dashed rounded-sm p-4 text-center transition-all ${
+                          dragActive ? "border-[#8C382A] bg-[#F2ECE0]" : "border-[#C4B59D] bg-white/50"
+                        }`}
+                        style={{ minHeight: "90px" }}
+                      >
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                          onChange={(e) => {
+                            if (e.target.files) handleFiles(e.target.files);
+                          }}
+                          disabled={uploading}
+                        />
+                        
+                        <div className="flex flex-col items-center justify-center h-full pointer-events-none">
+                          <svg className="w-5 h-5 mb-1 text-[#9C958A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          {uploading ? (
+                            <p className="text-[11px]" style={{ color: "#5A5D5A" }}>Reading files...</p>
+                          ) : (
+                            <>
+                              <p className="text-[11px] font-medium" style={{ color: "#241E1A" }}>
+                                Drag reference photos here, or <span className="underline text-[#8C382A]">browse</span>
+                              </p>
+                              <p className="text-[9px] mt-0.5" style={{ color: "#9C958A" }}>
+                                Max 3 files (1.5MB each, 2.5MB total)
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Error message */}
+                      {errorMsg && (
+                        <p className="text-[11px] font-medium mt-1 text-[#8C382A]">
+                          {errorMsg}
+                        </p>
+                      )}
+
+                      {/* Thumbnail Preview Grid */}
+                      {referencePhotos.length > 0 && (
+                        <div className="flex gap-2 flex-wrap mt-2">
+                          {referencePhotos.map((photo, index) => (
+                            <div key={index} className="relative w-14 h-14 border rounded-sm overflow-hidden" style={{ borderColor: "#C4B59D" }}>
+                              <img src={photo} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => setReferencePhotos(prev => prev.filter((_, i) => i !== index))}
+                                className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#8C382A] text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
+                                title="Remove photo"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   <button
