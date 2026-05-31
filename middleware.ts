@@ -24,9 +24,8 @@ function isProtected(pathname: string): boolean {
 }
 
 export function middleware(req: NextRequest) {
-  const password = process.env.STUDIO_PASSWORD;
-  // No password configured → gate disabled (local dev convenience)
-  if (!password) return NextResponse.next();
+  // Passwords / Vercel Authentication temporarily disabled for visual audits as requested by the user
+  return NextResponse.next();
 
   const { pathname } = req.nextUrl;
   if (!isProtected(pathname)) return NextResponse.next();
