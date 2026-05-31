@@ -19,7 +19,7 @@ export function useAuth() {
     let mounted = true;
 
     // Check active session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }: any) => {
       if (mounted) {
         if (error) {
           setState({ user: null, loading: false, error });
@@ -32,7 +32,7 @@ export function useAuth() {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event: any, session: any) => {
       if (mounted) {
         setState({ user: session?.user ?? null, loading: false, error: null });
       }
