@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { token } = body;
-    const secret = process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY;
+    const secret = process.env.TURNSTILE_SECRET_KEY || process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY;
 
     if (!token || !secret) {
       return NextResponse.json({ error: 'Missing token or secret' }, { status: 400 });

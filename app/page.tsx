@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat } from "@/lib/templates";
+import { Turnstile } from '@marsidev/react-turnstile';
 
 
 // ----------------------------------------------------------------------
@@ -354,15 +355,29 @@ export default function WorkspacePage() {
   const [aiFormFactor, setAiFormFactor] = useState<"strip" | "postcard" | "postcard-vertical">("strip");
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState("");
 
   const handleGenerateAiTheme = async () => {
     if (!aiEventName) {
       setAiError("Please provide an event name.");
       return;
     }
+    if (!turnstileToken) {
+      setAiError("Security verification required. Please complete the captcha.");
+      return;
+    }
     setAiLoading(true);
     setAiError("");
     try {
+      const verifyRes = await fetch("/api/verify-turnstile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: turnstileToken })
+      });
+      if (!verifyRes.ok) {
+        throw new Error("Security verification failed. Please try again.");
+      }
+
       const res = await fetch("/api/generate-theme", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -2106,6 +2121,14 @@ export default function WorkspacePage() {
 
               <div className="mt-2 text-[11px] text-stone-500 italic bg-amber-50 p-2.5 rounded-sm border border-amber-500/20">
                 The AI will generate color pairings, border attributes, spacing measurements, and typography alignments tailored perfectly to your event.
+              </div>
+
+              <div className="flex justify-center mt-2">
+                <Turnstile
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY || ""}
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  options={{ theme: 'light' }}
+                />
               </div>
 
               <button
