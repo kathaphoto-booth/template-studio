@@ -18,7 +18,7 @@ Vercel auto-deploys on every push to `main`.
 |---|---|---|
 | `STUDIO_PASSWORD` | _pick a password — the admin studio at `/` will require it_ | **Yes** (else studio is public) |
 | `RESEND_API_KEY` | Get free at https://resend.com → API Keys | **Yes** (for email notifications) |
-| `NOTIFICATION_EMAIL` | `hello@kathabooth.com` (or your inbox) | **Yes** |
+| `NOTIFICATION_EMAIL` | `kathabooth@gmail.com` (default if unset) | Optional |
 | `NOTIFICATION_FROM` | leave blank — uses Resend's `onboarding@resend.dev` until kathabooth.com is verified with Resend | Optional |
 | `GEMINI_API_KEY` | only if using the AI theme generator | Optional |
 

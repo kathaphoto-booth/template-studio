@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
 
 // ──────────────────────────────────────────────────────────────────────
 // /api/selection — receives a template pick from the client gallery
@@ -24,15 +25,20 @@ type Selection = {
 
 const FORBIDDEN_WORDS = ["luxury", "premium", "stunning", "amazing"];
 
-// ── Dispatch target #1: email via Resend ──────────────────────────────
+// ── Dispatch target #1: email via Resend SDK ──────────────────────────
+// Sender notes:
+//   • from: 'onboarding@resend.dev' works out of the box (no domain verification)
+//   • once kathabooth.com is verified with Resend, set NOTIFICATION_FROM to
+//     e.g. "Katha <hello@kathabooth.com>"
+//   • to: defaults to kathabooth@gmail.com if NOTIFICATION_EMAIL is unset
 async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: string }> {
   const apiKey = process.env.RESEND_API_KEY;
-  const toAddr = process.env.NOTIFICATION_EMAIL;
-  const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
-
-  if (!apiKey || !toAddr) {
-    return { ok: false, detail: "email not configured (missing RESEND_API_KEY or NOTIFICATION_EMAIL)" };
+  if (!apiKey) {
+    return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
   }
+
+  const toAddr = process.env.NOTIFICATION_EMAIL || "kathabooth@gmail.com";
+  const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
 
   const subject = `Template chosen — ${s.names || "client"} · ${s.templateName}`;
   const lines = [
@@ -48,15 +54,18 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
   const html = `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.6;color:#241E1A;background:#EAE2D5;padding:24px;border-radius:4px;">${lines}</pre>`;
 
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from: fromAddr, to: toAddr, subject, html, text: lines }),
+    const resend = new Resend(apiKey);
+    const { data, error } = await resend.emails.send({
+      from: fromAddr,
+      to: toAddr,
+      subject,
+      html,
+      text: lines,
     });
-    if (!res.ok) return { ok: false, detail: `resend ${res.status}: ${(await res.text()).slice(0, 200)}` };
-    return { ok: true, detail: "email sent" };
+    if (error) return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
+    return { ok: true, detail: `email sent (id ${data?.id || "?"})` };
   } catch (err: any) {
-    return { ok: false, detail: `email error: ${err?.message || err}` };
+    return { ok: false, detail: `email exception: ${err?.message || err}` };
   }
 }
 
