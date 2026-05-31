@@ -83,7 +83,7 @@ const SLOT_BORDER_W = 1;
 const SLOT_COUNT = 2;
 
 // ──────────────────────────────────────────────────────────────────────
-// DECORATION — same logic as renderDecorativeSvg case "wedding-tracy-prince",
+// DECORATION — same logic as renderDecorativeSvg case "rose-whisper-postcard",
 // but with safe-margin-respecting frame coordinates.
 // ──────────────────────────────────────────────────────────────────────
 const MONOGRAM_Y = VB_H - 320;

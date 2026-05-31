@@ -428,24 +428,24 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "A pristine high-fidelity debossed mold layout using multi-level outer letterpress frame margins and gold-metallic hot stamp monograms."
   },
   {
-    id: "wedding-tracy-prince-postcard",
-    name: "Style 21 — Tracy & Prince 4x6 Vertical",
+    id: "rose-whisper-postcard",
+    name: "Style 21 — Rose Whisper Postcard",
     type: "postcard-vertical",
     backgroundColor: "#FDFCFB",
     textColor: "#9E5460",
     borderColor: "#E5E5E5",
     secondaryColor: "#9E5460",
     fontFamily: "'Parisienne', cursive",
-    titleText: "Tracy & Prince",
+    titleText: "Maria & Jose",
     subTitleText: "",
     dateText: "",
     slotBorderRadius: "0px",
     slotBorderWidth: "1px",
     slotGap: "20px",
     slotBgColor: "#F9F9F9",
-    innerSpacing: "40px",
+    innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Minimalist and modern 4x6 vertical postcard with 2 stacked photos. Romantic script fonts with elegant rose-gold accents, tailored for Tracy & Prince."
+    designerExplanation: "Minimalist 4x6 postcard with two stacked photos, a fine rose-gold double frame, and a delicate monogram seal above flowing Parisienne script."
   },
   // ─── KATHA SIGNATURE TIER ───────────────────────────────────────────
   // Brand-aligned templates: Katha palette (Iron Bark / Piña Ecru / Loko
@@ -570,8 +570,273 @@ export const PRESETS: PhotoboothPreset[] = [
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Capiz-shell windowpane lattice rendered in sage — the translucent pane that filters lowland light into a soft, even glow."
+  },
+  // ─── 4×6 VERTICAL POSTCARDS ────────────────────────────────────────────
+  // 2-photo stacked. Decoration aliased to existing strip designs via
+  // DECORATION_ALIASES so we don't re-author 100+ lines of SVG per design.
+  {
+    id: "tradition-gold-postcard",
+    name: "Style 22 — Tradition Gold Postcard",
+    type: "postcard-vertical",
+    backgroundColor: "#FAF6F0",
+    textColor: "#1C1917",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
+    fontFamily: "'Cinzel', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "NAPA VALLEY",
+    slotBorderRadius: "4px",
+    slotBorderWidth: "3px",
+    slotGap: "24px",
+    slotBgColor: "#F4EDE3",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Double gold-foil hairline frame with crisp corner accents. A 4×6 postcard distillation of the Tradition Gold strip."
+  },
+  {
+    id: "editorial-postcard",
+    name: "Style 23 — Editorial Postcard",
+    type: "postcard-vertical",
+    backgroundColor: "#FCFCFC",
+    textColor: "#121212",
+    borderColor: "#E5E5E5",
+    secondaryColor: "#737373",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "GALLERY",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1px",
+    slotGap: "30px",
+    slotBgColor: "#F5F5F5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Generous gallery margins with a single hairline rule and wide-tracked Italiana display. Quiet, modernist."
+  },
+  {
+    id: "heirloom-pina-postcard",
+    name: "Katha Signature — Heirloom Piña Postcard",
+    type: "postcard-vertical",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Cormorant Garamond', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "MANILA",
+    slotBorderRadius: "2px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#E0D7C7",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "The Heirloom Piña strip rendered as a 4×6 postcard. Piña-fiber ecru ground with a champagne double-frame and calado openwork divider."
+  },
+  {
+    id: "loom-frame-postcard",
+    name: "Katha Signature — Loom Frame Postcard",
+    type: "postcard-vertical",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#241E1A",
+    secondaryColor: "#241E1A",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "ILOCOS NORTE",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#E0D7C7",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Loom-frame border in iron-bark serif. Postcard variant of the Loom Frame strip."
+  },
+  {
+    id: "knalum-night-postcard",
+    name: "Katha Signature — Knalum Night Postcard",
+    type: "postcard-vertical",
+    backgroundColor: "#1A1816",
+    textColor: "#EAE2D5",
+    borderColor: "#2A2622",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Cormorant Garamond', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "LAKE SEBU",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#211D1A",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. 4×6 postcard variant."
+  },
+  {
+    id: "brass-ring-postcard",
+    name: "Katha Signature — Brass Ring Postcard",
+    type: "postcard-vertical",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#8C382A",
+    secondaryColor: "#8C382A",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "SOUTH COTABATO",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#E0D7C7",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names."
+  },
+  // ─── 6×4 HORIZONTAL POSTCARDS ──────────────────────────────────────────
+  // 3-photo row layout. Decoration aliased to existing strip designs.
+  {
+    id: "tradition-gold-landscape",
+    name: "Style 28 — Tradition Gold Landscape",
+    type: "postcard",
+    backgroundColor: "#FAF6F0",
+    textColor: "#1C1917",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
+    fontFamily: "'Cinzel', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "NAPA VALLEY",
+    slotBorderRadius: "4px",
+    slotBorderWidth: "3px",
+    slotGap: "18px",
+    slotBgColor: "#F4EDE3",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Tradition Gold rendered horizontal: gold-foil hairline frame, three photos in a row, formal Cinzel display."
+  },
+  {
+    id: "linen-rose-landscape",
+    name: "Style 29 — Linen Rose Landscape",
+    type: "postcard",
+    backgroundColor: "#FAF9F6",
+    textColor: "#292524",
+    borderColor: "#EBE9E4",
+    secondaryColor: "#A59E92",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "ESTABLISHED",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1px",
+    slotGap: "18px",
+    slotBgColor: "#EDEDE9",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Linen-paper ground with a hand-sketched English rose. Landscape postcard variant — three stacked moments side by side."
+  },
+  {
+    id: "editorial-landscape",
+    name: "Style 30 — Editorial Landscape",
+    type: "postcard",
+    backgroundColor: "#FCFCFC",
+    textColor: "#121212",
+    borderColor: "#E5E5E5",
+    secondaryColor: "#737373",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "GALLERY",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1px",
+    slotGap: "18px",
+    slotBgColor: "#F5F5F5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Editorial gallery margins, hairline rule, wide-tracked display. Landscape postcard for cinematic three-photo storytelling."
+  },
+  {
+    id: "botanical-arch-landscape",
+    name: "Style 31 — Botanical Arch Landscape",
+    type: "postcard",
+    backgroundColor: "#FCFAF6",
+    textColor: "#2B2D2B",
+    borderColor: "#E3DFD5",
+    secondaryColor: "#707A65",
+    fontFamily: "'Cormorant Garamond', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "BOTANICAL",
+    slotBorderRadius: "25px 25px 0px 0px",
+    slotBorderWidth: "2px",
+    slotGap: "18px",
+    slotBgColor: "#F5F3ED",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Double fine-lined cathedral arch crowning three photo slots. Landscape variant of the Delicate Fine-Line Arch."
+  },
+  {
+    id: "loom-frame-landscape",
+    name: "Katha Signature — Loom Frame Landscape",
+    type: "postcard",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#241E1A",
+    secondaryColor: "#241E1A",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "ILOCOS NORTE",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#E0D7C7",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Loom-frame border in iron-bark serif. Landscape postcard variant for three-photo Katha events."
+  },
+  {
+    id: "capiz-sage-landscape",
+    name: "Katha Signature — Capiz Sage Landscape",
+    type: "postcard",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#9FA38F",
+    secondaryColor: "#6E7268",
+    fontFamily: "'Cormorant Garamond', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "CAPIZ",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#E4DCCE",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
   }
 ];
+
+// ─── DECORATION ALIASES ───────────────────────────────────────────────
+// New postcard variants reuse decoration logic from existing strip designs.
+// Resolved at the top of renderDecorativeSvg before the switch statement.
+const DECORATION_ALIASES: Record<string, string> = {
+  // 4×6 vertical postcards → vertical decoration of source design
+  "tradition-gold-postcard":   "wedding-luxe-gold",
+  "editorial-postcard":        "wedding-editorial",
+  "heirloom-pina-postcard":    "katha-heirloom-pina",
+  "loom-frame-postcard":       "katha-loom-frame",
+  "knalum-night-postcard":     "katha-knalum-night",
+  "brass-ring-postcard":       "katha-brass-ring",
+  // 6×4 landscape postcards → landscape decoration of source design
+  "tradition-gold-landscape":  "wedding-luxe-gold",
+  "linen-rose-landscape":      "wedding-white-rose",
+  "editorial-landscape":       "wedding-editorial",
+  "botanical-arch-landscape":  "wedding-botanical-arch",
+  "loom-frame-landscape":      "katha-loom-frame",
+  "capiz-sage-landscape":      "katha-capiz-sage",
+};
 
 export const LUXURY_FONTS = [
   { id: "cinzel", name: "Cinzel (Royal Roman)", css: "'Cinzel', serif" },
@@ -639,6 +904,10 @@ export const HARMONY_PALETTES = [
 ];
 
 export function renderDecorativeSvg(presetId: string, type: "strip" | "postcard" | "postcard-vertical", color: string, secondaryColor: string, borderColor: string, textPosition: "bottom" | "top" = "bottom") {
+  // Resolve alias FIRST so new postcard variants pick up the existing
+  // decoration cases without duplicating 100+ lines of SVG.
+  if (DECORATION_ALIASES[presetId]) presetId = DECORATION_ALIASES[presetId];
+
   const isGoldPreset = ["wedding-luxe-gold", "wedding-art-deco", "wedding-warm-terracotta", "wedding-royal-crest", "wedding-classic-monogram"].includes(presetId);
   const strokeColor = isGoldPreset ? "url(#svg-gold-shimmer)" : secondaryColor;
 
@@ -660,7 +929,7 @@ export function renderDecorativeSvg(presetId: string, type: "strip" | "postcard"
 
   if (type === "postcard-vertical") {
     switch (presetId) {
-      case "wedding-tracy-prince-postcard":
+      case "rose-whisper-postcard":
         return defs + `
           <!-- Minimal modern double-hairline frame -->
           <rect x="24" y="24" width="1152" height="1752" fill="none" stroke="${strokeColor}" stroke-width="1.5" />

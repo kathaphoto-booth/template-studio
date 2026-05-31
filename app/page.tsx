@@ -416,7 +416,7 @@ export default function WorkspacePage() {
       setActivePresetType(preset.type as any);
     }
 
-    if (preset.id === "wedding-tracy-prince-postcard") {
+    if (preset.id === "rose-whisper-postcard") {
       setPartnerOne("Tracy");
       setPartnerTwo("Prince");
       setTextSeparator("&");
@@ -439,7 +439,7 @@ export default function WorkspacePage() {
       setPartnerLetterSpacing(1);
       setPartnerFontWeight("font-normal");
       setPartnerItalic(false);
-    } else if (preset.id === "wedding-tracy-prince-postcard") {
+    } else if (preset.id === "rose-whisper-postcard") {
       setPartnerFontSize(36);
       setPartnerLetterSpacing(2);
       setPartnerFontWeight("font-normal");
@@ -967,7 +967,7 @@ export default function WorkspacePage() {
         <div className="flex items-center space-x-6 text-xs">
           <div className="flex flex-col items-end">
             <span className="text-[9px] uppercase font-bold tracking-widest text-stone-400">Heirloom Catalog</span>
-            <span className="font-mono text-stone-700 font-bold text-[10px]">21 templates</span>
+            <span className="font-mono text-stone-700 font-bold text-[10px]">{PRESETS.length} templates</span>
           </div>
           <div className="hidden sm:flex flex-col items-end border-l border-stone-200 pl-6">
             <span className="text-[9px] uppercase font-bold tracking-widest text-[#a8a29e]">Rendering Platform</span>
@@ -1488,7 +1488,7 @@ export default function WorkspacePage() {
                       (activePresetType === "strip" || activePresetType === "postcard-vertical") ? "flex-col" : "flex-row items-stretch"
                     )}
                   >
-                    {Array.from({ length: (activePresetType === "postcard-vertical" || currentPreset.id === "wedding-tracy-prince-postcard") ? 2 : 3 }).map((_, idx) => {
+                    {Array.from({ length: (activePresetType === "postcard-vertical" || currentPreset.id === "rose-whisper-postcard") ? 2 : 3 }).map((_, idx) => {
                       return (
                         <label
                           key={idx}

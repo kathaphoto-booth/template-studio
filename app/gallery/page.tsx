@@ -12,8 +12,12 @@ import React, { useState, useMemo } from "react";
 import { PRESETS, renderDecorativeSvg, type PhotoboothPreset } from "@/lib/templates";
 
 type TierFilter = "all" | "signature" | "classic";
+type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard";
 
-const isSignature = (p: PhotoboothPreset) => p.id.startsWith("katha-");
+// Use the public name as the signature signal — covers ids like
+// "heirloom-pina-postcard" that don't start with "katha-" but still
+// belong to the Signature tier.
+const isSignature = (p: PhotoboothPreset) => p.name.includes("Katha Signature");
 
 // Dimensions per layout type, normalized to a 300px-tall tile.
 function tileDims(type: PhotoboothPreset["type"]) {
@@ -112,6 +116,7 @@ function TemplateCanvas({
 
 export default function GalleryPage() {
   const [tier, setTier] = useState<TierFilter>("all");
+  const [format, setFormat] = useState<FormatFilter>("all");
   const [selected, setSelected] = useState<PhotoboothPreset | null>(null);
 
   // Personalization fields (stage 2)
@@ -122,10 +127,13 @@ export default function GalleryPage() {
   const [confirmed, setConfirmed] = useState(false);
 
   const filtered = useMemo(() => {
-    if (tier === "signature") return PRESETS.filter(isSignature);
-    if (tier === "classic") return PRESETS.filter((p) => !isSignature(p));
-    return PRESETS;
-  }, [tier]);
+    return PRESETS.filter((p) => {
+      if (tier === "signature" && !isSignature(p)) return false;
+      if (tier === "classic" && isSignature(p)) return false;
+      if (format !== "all" && p.type !== format) return false;
+      return true;
+    });
+  }, [tier, format]);
 
   const names = [nameOne.trim(), nameTwo.trim()].filter(Boolean).join("  &  ");
 
@@ -215,6 +223,34 @@ export default function GalleryPage() {
             </button>
           ))}
         </div>
+
+        {/* Format filter */}
+        <div className="mt-4 inline-flex flex-wrap justify-center rounded-full p-1" style={{ backgroundColor: "#E0D7C7" }}>
+          {([
+            ["all", "All formats"],
+            ["strip", "2×6 Strip"],
+            ["postcard-vertical", "4×6 Postcard"],
+            ["postcard", "6×4 Landscape"],
+          ] as [FormatFilter, string][]).map(([key, label]) => (
+            <button
+              key={key}
+              onClick={() => setFormat(key)}
+              className="px-3.5 py-1.5 text-[11px] uppercase tracking-widest rounded-full transition-colors cursor-pointer"
+              style={
+                format === key
+                  ? { backgroundColor: "#8C382A", color: "#EAE2D5" }
+                  : { color: "#5A5D5A" }
+              }
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* Result count */}
+        <p className="mt-4 text-[11px] uppercase tracking-[0.2em]" style={{ color: "#9C958A" }}>
+          {filtered.length} {filtered.length === 1 ? "template" : "templates"}
+        </p>
       </header>
 
       {/* Gallery grid */}
