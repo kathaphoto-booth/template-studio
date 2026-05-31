@@ -1,0 +1,10 @@
+{
+  "name": "Photobooth Template Studio",
+  "description": "An elegant, production-grade event photobooth template designer featuring a curated pre-coded library of 2x6 strips and 4x6 postcards, custom text styling, vector overlays, and beautiful high-res print exports.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
