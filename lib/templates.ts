@@ -3,11 +3,18 @@
 // and the client gallery (app/gallery/). Edit decoration HERE only — it updates
 // preview, canvas export, AND the gallery thumbnails simultaneously.
 
+// Re-export layout helpers so consumers get everything from one module.
+export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout } from "./layouts.js";
+
 // Types
 export interface PhotoboothPreset {
   id: string;
   name: string;
   type: "strip" | "postcard" | "postcard-vertical";
+  // OPTIONAL — references a layout in lib/layouts.js. If omitted, the default
+  // layout for `type` is used. This makes every preset render with declarative
+  // slot geometry rather than hand-computed math.
+  layoutId?: string;
   backgroundColor: string;
   textColor: string;
   borderColor: string;
@@ -431,6 +438,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "rose-whisper-postcard",
     name: "Style 21 — Rose Whisper Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#FDFCFB",
     textColor: "#9E5460",
     borderColor: "#E5E5E5",
@@ -578,6 +586,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "tradition-gold-postcard",
     name: "Style 22 — Tradition Gold Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
     borderColor: "#C5A85C",
@@ -598,6 +607,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "editorial-postcard",
     name: "Style 23 — Editorial Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#FCFCFC",
     textColor: "#121212",
     borderColor: "#E5E5E5",
@@ -618,6 +628,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "heirloom-pina-postcard",
     name: "Katha Signature — Heirloom Piña Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -638,6 +649,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "loom-frame-postcard",
     name: "Katha Signature — Loom Frame Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#241E1A",
@@ -658,6 +670,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "knalum-night-postcard",
     name: "Katha Signature — Knalum Night Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#1A1816",
     textColor: "#EAE2D5",
     borderColor: "#2A2622",
@@ -678,6 +691,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "brass-ring-postcard",
     name: "Katha Signature — Brass Ring Postcard",
     type: "postcard-vertical",
+    layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#8C382A",
@@ -700,6 +714,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "tradition-gold-landscape",
     name: "Style 28 — Tradition Gold Landscape",
     type: "postcard",
+    layoutId: "pc-3",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
     borderColor: "#C5A85C",
@@ -720,6 +735,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "linen-rose-landscape",
     name: "Style 29 — Linen Rose Landscape",
     type: "postcard",
+    layoutId: "pc-3",
     backgroundColor: "#FAF9F6",
     textColor: "#292524",
     borderColor: "#EBE9E4",
@@ -740,6 +756,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "editorial-landscape",
     name: "Style 30 — Editorial Landscape",
     type: "postcard",
+    layoutId: "pc-3",
     backgroundColor: "#FCFCFC",
     textColor: "#121212",
     borderColor: "#E5E5E5",
@@ -760,6 +777,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "botanical-arch-landscape",
     name: "Style 31 — Botanical Arch Landscape",
     type: "postcard",
+    layoutId: "pc-3",
     backgroundColor: "#FCFAF6",
     textColor: "#2B2D2B",
     borderColor: "#E3DFD5",
@@ -780,6 +798,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "loom-frame-landscape",
     name: "Katha Signature — Loom Frame Landscape",
     type: "postcard",
+    layoutId: "pc-3",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#241E1A",
@@ -800,6 +819,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "capiz-sage-landscape",
     name: "Katha Signature — Capiz Sage Landscape",
     type: "postcard",
+    layoutId: "pc-3",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#9FA38F",
@@ -815,6 +835,93 @@ export const PRESETS: PhotoboothPreset[] = [
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
+  },
+  // ─── L-SHAPE & INVERTED L LAYOUT VARIANTS ─────────────────────────────
+  // Photos trace an L (open top-right) or Γ (open bottom-left), creating
+  // editorial asymmetry without breaking the safe-margin grid.
+  {
+    id: "heirloom-pina-L",
+    name: "Style 34 — Heirloom Piña L-Shape",
+    type: "postcard-vertical",
+    layoutId: "pv-L",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Cormorant Garamond', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "MANILA",
+    slotBorderRadius: "2px",
+    slotBorderWidth: "1.5px",
+    slotGap: "20px",
+    slotBgColor: "#E0D7C7",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Three photos trace an L on a piña-fiber ground, with the open corner cradling a champagne calado divider."
+  },
+  {
+    id: "loom-frame-invL",
+    name: "Style 35 — Loom Frame Γ-Shape",
+    type: "postcard-vertical",
+    layoutId: "pv-invL",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#241E1A",
+    secondaryColor: "#241E1A",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "ILOCOS NORTE",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "20px",
+    slotBgColor: "#E0D7C7",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names."
+  },
+  {
+    id: "editorial-landscape-L",
+    name: "Style 36 — Editorial L-Shape Landscape",
+    type: "postcard",
+    layoutId: "pc-L",
+    backgroundColor: "#FCFCFC",
+    textColor: "#121212",
+    borderColor: "#E5E5E5",
+    secondaryColor: "#737373",
+    fontFamily: "'Italiana', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "GALLERY",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1px",
+    slotGap: "20px",
+    slotBgColor: "#F5F5F5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Italiana display."
+  },
+  {
+    id: "capiz-sage-invL",
+    name: "Style 37 — Capiz Sage Γ-Shape Landscape",
+    type: "postcard",
+    layoutId: "pc-invL",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#9FA38F",
+    secondaryColor: "#6E7268",
+    fontFamily: "'Cormorant Garamond', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "CAPIZ",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "20px",
+    slotBgColor: "#E4DCCE",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Capiz windowpane in sage. Inverted-L photo arrangement with the open corner reserved for the names."
   }
 ];
 
@@ -836,6 +943,12 @@ const DECORATION_ALIASES: Record<string, string> = {
   "botanical-arch-landscape":  "wedding-botanical-arch",
   "loom-frame-landscape":      "katha-loom-frame",
   "capiz-sage-landscape":      "katha-capiz-sage",
+  // L-shape & inverted-L variants reuse the source design's decoration —
+  // the layout swap happens via preset.layoutId, not via decoration.
+  "heirloom-pina-L":           "katha-heirloom-pina",
+  "loom-frame-invL":           "katha-loom-frame",
+  "editorial-landscape-L":     "wedding-editorial",
+  "capiz-sage-invL":           "katha-capiz-sage",
 };
 
 export const LUXURY_FONTS = [

@@ -20,6 +20,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import opentype from "opentype.js";
 import { PDFDocument } from "pdf-lib";
+import { resolveLayout, VIEWBOX, SAFE_MARGIN } from "../lib/layouts.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,40 +54,32 @@ const PRESET = {
 };
 
 // ──────────────────────────────────────────────────────────────────────
-// FORMAT GEOMETRY — physical dimensions + safe margins
+// FORMAT GEOMETRY — derived from lib/layouts.js (single source of truth)
 // ──────────────────────────────────────────────────────────────────────
-// 4×6 vertical: viewBox 1200×1800 = 1 viewBox unit per 0.00333 inch at 300 DPI
-const VB_W = 1200;
-const VB_H = 1800;
-const SCALE = 3;                  // render at 3× viewBox → 3600×5400 px
+const vb = VIEWBOX[PRESET.format];
+const VB_W = vb.w;
+const VB_H = vb.h;
+const SCALE = 3;
 const W = VB_W * SCALE;
 const H = VB_H * SCALE;
 
 // Physical print size (PDF points, 72 pt/inch)
-const PRINT_W_PT = 4 * 72;        // 288 pt = 4"
-const PRINT_H_PT = 6 * 72;        // 432 pt = 6"
+const PRINT_W_PT = (PRESET.format === "postcard" ? 6 : PRESET.format === "strip" ? 2 : 4) * 72;
+const PRINT_H_PT = (PRESET.format === "postcard" ? 4 : 6) * 72;
 
-// MARGIN SAFETY
-// Photo printers have ±1/16" (~0.06") trim tolerance. We use a generous 60
-// viewBox units (~0.2" at 300 DPI) as the safe zone — anything critical
-// (text, primary decoration) stays inside; anything that touches the edge
-// (background fill) is fine but should be designed to survive trim.
-const SAFE_MARGIN = 60;
-const FRAME_OUTER = 60;           // outer decorative frame inset
-const FRAME_INNER = 72;           // inner decorative frame inset (12 from outer)
+// Layout (slot rectangles + text zone) for this preset
+const LAYOUT = resolveLayout(PRESET.layoutId || "pv-2", PRESET.format);
 
-// Text zone (mentor's ~28% rule; preset.innerSpacing pushed to safe value)
-const TEXT_ZONE = 420;
-const INNER_PAD = SAFE_MARGIN;    // photo slot inset = 60 (was 40, unsafe)
-const SLOT_GAP = 20;
+// Decorative frame insets — slightly inside the safe-margin slots
+const FRAME_OUTER = 60;
+const FRAME_INNER = 72;
 const SLOT_BORDER_W = 1;
-const SLOT_COUNT = 2;
 
 // ──────────────────────────────────────────────────────────────────────
-// DECORATION — same logic as renderDecorativeSvg case "rose-whisper-postcard",
-// but with safe-margin-respecting frame coordinates.
+// DECORATION — frame + monogram. Monogram positioned just above the
+// text-zone top edge (declarative — comes from the layout's textZone).
 // ──────────────────────────────────────────────────────────────────────
-const MONOGRAM_Y = VB_H - 320;
+const MONOGRAM_Y = LAYOUT.textZone.y + 80; // 80u below the text-zone top edge
 const decoration = `
   <rect x="${FRAME_OUTER}" y="${FRAME_OUTER}" width="${VB_W - FRAME_OUTER * 2}" height="${VB_H - FRAME_OUTER * 2}" fill="none" stroke="${PRESET.secondary}" stroke-width="1.5"/>
   <rect x="${FRAME_INNER}" y="${FRAME_INNER}" width="${VB_W - FRAME_INNER * 2}" height="${VB_H - FRAME_INNER * 2}" fill="none" stroke="${PRESET.secondary}" stroke-width="0.5" opacity="0.55"/>
@@ -99,22 +92,20 @@ const decoration = `
 `;
 
 // ──────────────────────────────────────────────────────────────────────
-// PHOTO SLOTS — vertical 2-up, leaving the text zone clear at the bottom
+// PHOTO SLOTS — driven by the layout's slot rectangles. Works for any
+// arrangement (stacked, row, L-shape, inverted-L) without code changes.
 // ──────────────────────────────────────────────────────────────────────
-const slotW = VB_W - INNER_PAD * 2;
-const slotH = (VB_H - INNER_PAD * 2 - SLOT_GAP - TEXT_ZONE) / SLOT_COUNT;
-const slotRects = [];
-for (let i = 0; i < SLOT_COUNT; i++) {
-  const y = INNER_PAD + i * (slotH + SLOT_GAP);
-  slotRects.push(`<rect x="${INNER_PAD}" y="${y}" width="${slotW}" height="${slotH}" fill="${PRESET.slotBg}" stroke="${PRESET.border}" stroke-width="${SLOT_BORDER_W}"/>`);
-}
+const slotRects = LAYOUT.slots.map(
+  (s) => `<rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" fill="${PRESET.slotBg}" stroke="${PRESET.border}" stroke-width="${SLOT_BORDER_W}"/>`
+);
 
 // ──────────────────────────────────────────────────────────────────────
 // NAMES — Parisienne baked to vector path; baseline inside safe zone
 // ──────────────────────────────────────────────────────────────────────
 // Names sit far enough from the bottom edge that ascenders/descenders stay
 // inside the safe margin even with cursive glyph variability.
-const TEXT_BASELINE_Y = VB_H - 200;    // 200 from bottom (text height ~180 + safety)
+// Place the names baseline in the lower-middle of the layout's text zone
+const TEXT_BASELINE_Y = LAYOUT.textZone.y + LAYOUT.textZone.h * 0.62;
 const namesText = textToSvgPath({
   text: PRESET.names,
   cx: VB_W / 2,

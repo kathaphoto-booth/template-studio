@@ -28,7 +28,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg } from "@/lib/templates";
+import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat } from "@/lib/templates";
 
 
 // ----------------------------------------------------------------------
@@ -592,40 +592,29 @@ export default function WorkspacePage() {
       );
     }
 
-    // 3. Draw Photo Slots Mask & Outlines Layer
+    // 3. Draw Photo Slots Mask & Outlines Layer — DATA-DRIVEN
+    // Slot rectangles come from lib/layouts.js (the single source of truth).
+    // Per-format magic numbers, mentor spacing, L/Γ arrangements — all live
+    // there as data. Canvas export, studio preview, and gallery thumbnails
+    // all read the same definitions.
     if (layer === "all" || layer === "slots") {
       const isGoldBorder = ["wedding-luxe-gold", "wedding-art-deco", "wedding-warm-terracotta"].includes(currentPreset.id);
-      const slotCount = activePresetType === "postcard-vertical" ? 2 : 3;
-      for (let i = 0; i < slotCount; i++) {
-        let x = 0, y = 0, sw = 0, sh = 0;
-
-        // Text zone heights follow the mentor's ~28% rule: the text/event area
-        // is a first-class citizen, not an afterthought. These match the
-        // wireframe proportions (2x6: 500/1800=28%, 4x6: 420/1800=23%, 6x4: 320/1200=27%).
-        const TEXT_ZONE_STRIP = 500;       // 2x6 strip — generous names + date + venue
-        const TEXT_ZONE_VERT  = 420;       // 4x6 vertical postcard
-        const TEXT_ZONE_LAND  = 320;       // 6x4 landscape postcard
-
-        if (activePresetType === "strip") {
-          const textH = TEXT_ZONE_STRIP * scaleFactor;
-          sw = cardWidth - (parsedPadding * 2);
-          sh = (cardHeight - (parsedPadding * 2) - (parsedGap * 2) - textH) / 3;
-          x = parsedPadding;
-          y = (textPosition === "top" ? parsedPadding + textH : parsedPadding) + i * (sh + parsedGap);
-        } else if (activePresetType === "postcard-vertical") {
-          const textH = TEXT_ZONE_VERT * scaleFactor;
-          sw = cardWidth - (parsedPadding * 2);
-          sh = (cardHeight - (parsedPadding * 2) - parsedGap - textH) / 2;
-          x = parsedPadding;
-          y = (textPosition === "top" ? parsedPadding + textH : parsedPadding) + i * (sh + parsedGap);
-        } else {
-          const textH = TEXT_ZONE_LAND;
-          const padX = parseInt(innerSpacing) * 1.5;
-          const gapX = parseInt(slotGap) * 1.5;
-          sw = (cardWidth - (padX * 2) - (gapX * 2)) / 3;
-          sh = cardHeight - (padX * 2) - textH;
-          x = padX + i * (sw + gapX);
-          y = textPosition === "top" ? padX + textH : padX;
+      const layoutDef = resolveLayout(currentPreset.layoutId, activePresetType);
+      const vb = VIEWBOX[activePresetType];
+      // Map viewBox units → canvas pixels for the active export
+      const sx = cardWidth / vb.w;
+      const sy = cardHeight / vb.h;
+      for (let i = 0; i < layoutDef.slots.length; i++) {
+        const s = layoutDef.slots[i];
+        let x = s.x * sx;
+        let y = s.y * sy;
+        let sw = s.w * sx;
+        let sh = s.h * sy;
+        // If the user flips text to the top, mirror every slot vertically
+        // so the text zone lands at the top of the canvas. The layout text
+        // zone implicitly sits below the slots; mirroring keeps the look.
+        if (textPosition === "top") {
+          y = cardHeight - y - sh;
         }
 
         if (layer === "slots") {
@@ -1433,14 +1422,14 @@ export default function WorkspacePage() {
                 useTransparentSlots ? "bg-[radial-gradient(#e5e5e5_1px,transparent_1px)] [background-size:16px_16px]" : ""
               )}
             >
-              {/* Flat viewport */}
-              <div 
+              {/* Flat viewport — layout coords include the safe margin, so no
+                   padding here. Slots position themselves via layout data. */}
+              <div
                 style={{
                   backgroundColor: customBasePhoto ? undefined : (useTransparentSlots ? "transparent" : backgroundColor),
                   backgroundImage: customBasePhoto ? `url(${customBasePhoto})` : undefined,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  padding: innerSpacing,
                 }}
                 className="w-full h-full flex flex-col justify-between absolute inset-0 overflow-hidden shadow-xl"
               >
@@ -1476,33 +1465,40 @@ export default function WorkspacePage() {
                   />
                   {textPosition === "top" && stationeryTextElement}
  
-                  {/* THE PHOTO MOUNT SLOTS */}
-                  <div 
-                    style={{
-                      gap: slotGap,
-                      flexDirection: (activePresetType === "strip" || activePresetType === "postcard-vertical") ? "column" : "row",
-                      flex: 1
-                    }}
-                    className={cn(
-                      "flex relative z-20",
-                      (activePresetType === "strip" || activePresetType === "postcard-vertical") ? "flex-col" : "flex-row items-stretch"
-                    )}
-                  >
-                    {Array.from({ length: (activePresetType === "postcard-vertical" || currentPreset.id === "rose-whisper-postcard") ? 2 : 3 }).map((_, idx) => {
-                      return (
+                  {/* THE PHOTO MOUNT SLOTS — data-driven from lib/layouts.js
+                       Slot rectangles, including L/Γ shapes, come from the
+                       resolved layout. Absolute positioning via viewBox-relative
+                       percentages so the same data renders identically in the
+                       studio preview, the canvas export, and the gallery.
+                       NB: layout coords already include the 60u safe margin so
+                       this wrapper does NOT add its own padding. */}
+                  <div className="absolute inset-0 z-20">
+                    {(() => {
+                      const lay = resolveLayout(currentPreset.layoutId, activePresetType);
+                      const vb = VIEWBOX[activePresetType];
+                      return lay.slots.map((s: { x: number; y: number; w: number; h: number }, idx: number) => {
+                        const left = (s.x / vb.w) * 100;
+                        const top = (s.y / vb.h) * 100;
+                        const width = (s.w / vb.w) * 100;
+                        const height = (s.h / vb.h) * 100;
+                        return (
                         <label
                           key={idx}
                           id={`slot-preview-item-${idx}`}
                           style={{
+                            position: "absolute",
+                            left: `${left}%`,
+                            top: textPosition === "top" ? "auto" : `${top}%`,
+                            bottom: textPosition === "top" ? `${100 - top - height}%` : "auto",
+                            width: `${width}%`,
+                            height: `${height}%`,
                             borderRadius: slotBorderRadius,
                             border: `${slotBorderWidth} ${useTransparentSlots && !customBasePhoto ? "dashed" : "solid"} ${useTransparentSlots && !customBasePhoto ? "rgba(0,0,0,0.15)" : borderColor}`,
                             backgroundColor: useTransparentSlots ? "rgba(0,0,0,0.02)" : slotBgColor,
-                            flex: 1,
-                            // Premium 3D inner drop-shadow bevel effect:
                             boxShadow: useTransparentSlots ? "none" : "inset 2px 3px 6px rgba(0, 0, 0, 0.18), inset -1px -1px 3px rgba(255, 255, 255, 0.85), 0.5px 1px 1px rgba(0,0,0,0.03)",
                           }}
                           className={cn(
-                            "relative overflow-hidden group flex flex-col items-center justify-center transition-all cursor-pointer text-center",
+                            "overflow-hidden group flex flex-col items-center justify-center transition-all cursor-pointer text-center",
                             useTransparentSlots ? "border-dashed" : "hover:bg-stone-50/20"
                           )}
                         >
@@ -1604,8 +1600,9 @@ export default function WorkspacePage() {
                             </div>
                           )}
                         </label>
-                      );
-                    })}
+                        );
+                      });
+                    })()}
                   </div>
 
                   {textPosition === "bottom" && stationeryTextElement}

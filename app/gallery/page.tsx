@@ -9,7 +9,7 @@
 // ----------------------------------------------------------------------
 
 import React, { useState, useMemo } from "react";
-import { PRESETS, renderDecorativeSvg, type PhotoboothPreset } from "@/lib/templates";
+import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX } from "@/lib/templates";
 
 type TierFilter = "all" | "signature" | "classic";
 type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard";
@@ -19,15 +19,16 @@ type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard";
 // belong to the Signature tier.
 const isSignature = (p: PhotoboothPreset) => p.name.includes("Katha Signature");
 
-// Dimensions per layout type, normalized to a 300px-tall tile.
+// Tile dimensions normalized to a 300px-tall tile (vertical) or 200px-wide (horizontal).
 function tileDims(type: PhotoboothPreset["type"]) {
-  if (type === "strip") return { w: 100, h: 300, vb: "0 0 600 1800", slots: 3, dir: "col" as const };
-  if (type === "postcard-vertical") return { w: 200, h: 300, vb: "0 0 1200 1800", slots: 2, dir: "col" as const };
-  return { w: 200, h: 133, vb: "0 0 1800 1200", slots: 3, dir: "row" as const };
+  if (type === "strip") return { w: 100, h: 300, vb: "0 0 600 1800" };
+  if (type === "postcard-vertical") return { w: 200, h: 300, vb: "0 0 1200 1800" };
+  return { w: 200, h: 133, vb: "0 0 1800 1200" };
 }
 
-// A faithful, text-optional render of a template — mirrors the studio
-// preview structure (full-bleed decoration SVG + padded photo slots).
+// A faithful, text-optional render of a template. Slot geometry comes from
+// lib/layouts.js (the single source of truth) — supports any arrangement
+// including L-shape and inverted-L without code changes.
 function TemplateCanvas({
   preset,
   width,
@@ -45,9 +46,11 @@ function TemplateCanvas({
   date?: string;
   venue?: string;
 }) {
-  const { vb, slots, dir } = tileDims(preset.type);
+  const { vb } = tileDims(preset.type);
   const isCursive = preset.fontFamily.toLowerCase().includes("cursive");
   const svg = renderDecorativeSvg(preset.id, preset.type, preset.textColor, preset.secondaryColor, preset.borderColor, "bottom");
+  const layout = resolveLayout(preset.layoutId, preset.type);
+  const viewBox = VIEWBOX[preset.type];
 
   return (
     <div
@@ -61,55 +64,75 @@ function TemplateCanvas({
         className="absolute inset-0 h-full w-full pointer-events-none"
         dangerouslySetInnerHTML={{ __html: svg }}
       />
-      {/* Padded content area: photo slots + optional text */}
-      <div className="absolute inset-0 flex flex-col" style={{ padding: "7%" }}>
-        <div
-          className="flex flex-1 min-h-0"
-          style={{ flexDirection: dir === "row" ? "row" : "column", gap: "6%" }}
-        >
-          {Array.from({ length: slots }).map((_, i) => (
-            <div
-              key={i}
-              className="flex-1"
-              style={{
-                backgroundColor: preset.slotBgColor,
-                border: `1px solid ${preset.borderColor}`,
-                borderRadius: preset.slotBorderRadius,
-              }}
-            />
-          ))}
-        </div>
-        {/* Text zone — always visible so clients know where personalization goes */}
-        <div className="text-center mt-[6%] shrink-0" style={{ color: preset.textColor }}>
-          {showText ? (
-            <>
-              <div
-                style={{ fontFamily: preset.fontFamily, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
-                className={isCursive ? "normal-case" : "uppercase tracking-wide"}
-              >
-                {names || "Your Names"}
+      {/* Photo slots — absolute-positioned from layout data */}
+      {layout.slots.map((s: { x: number; y: number; w: number; h: number }, i: number) => {
+        const left = (s.x / viewBox.w) * 100;
+        const top = (s.y / viewBox.h) * 100;
+        const w = (s.w / viewBox.w) * 100;
+        const h = (s.h / viewBox.h) * 100;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: `${left}%`,
+              top: `${top}%`,
+              width: `${w}%`,
+              height: `${h}%`,
+              backgroundColor: preset.slotBgColor,
+              border: `1px solid ${preset.borderColor}`,
+              borderRadius: preset.slotBorderRadius,
+            }}
+          />
+        );
+      })}
+      {/* Text zone — absolute-positioned from layout data */}
+      {(() => {
+        const z = layout.textZone;
+        const left = (z.x / viewBox.w) * 100;
+        const top = (z.y / viewBox.h) * 100;
+        const w = (z.w / viewBox.w) * 100;
+        const h = (z.h / viewBox.h) * 100;
+        return (
+          <div
+            className="absolute flex flex-col items-center justify-center text-center"
+            style={{
+              left: `${left}%`,
+              top: `${top}%`,
+              width: `${w}%`,
+              height: `${h}%`,
+              color: preset.textColor,
+            }}
+          >
+            {showText ? (
+              <>
+                <div
+                  style={{ fontFamily: preset.fontFamily, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
+                  className={isCursive ? "normal-case" : "uppercase tracking-wide"}
+                >
+                  {names || "Your Names"}
+                </div>
+                {date && (
+                  <div style={{ color: preset.secondaryColor, fontSize: Math.max(7, width * 0.05) }} className="uppercase tracking-widest mt-1">
+                    {date}
+                  </div>
+                )}
+                {venue && (
+                  <div style={{ fontSize: Math.max(6, width * 0.042) }} className="uppercase tracking-widest mt-0.5 opacity-80">
+                    {venue}
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex flex-col items-center gap-[3px]" style={{ opacity: 0.3 }}>
+                <div style={{ width: "65%", height: Math.max(2, width * 0.025), backgroundColor: preset.textColor, borderRadius: 1 }} />
+                <div style={{ width: "40%", height: Math.max(1.5, width * 0.015), backgroundColor: preset.secondaryColor, borderRadius: 1 }} />
+                <div style={{ width: "50%", height: Math.max(1.5, width * 0.012), backgroundColor: preset.textColor, borderRadius: 1 }} />
               </div>
-              {date && (
-                <div style={{ color: preset.secondaryColor, fontSize: Math.max(7, width * 0.05) }} className="uppercase tracking-widest mt-1">
-                  {date}
-                </div>
-              )}
-              {venue && (
-                <div style={{ fontSize: Math.max(6, width * 0.042) }} className="uppercase tracking-widest mt-0.5 opacity-80">
-                  {venue}
-                </div>
-              )}
-            </>
-          ) : (
-            /* Gallery mode: placeholder lines showing where text will go */
-            <div className="flex flex-col items-center gap-[3px]" style={{ opacity: 0.3 }}>
-              <div style={{ width: "65%", height: Math.max(2, width * 0.025), backgroundColor: preset.textColor, borderRadius: 1 }} />
-              <div style={{ width: "40%", height: Math.max(1.5, width * 0.015), backgroundColor: preset.secondaryColor, borderRadius: 1 }} />
-              <div style={{ width: "50%", height: Math.max(1.5, width * 0.012), backgroundColor: preset.textColor, borderRadius: 1 }} />
-            </div>
-          )}
-        </div>
-      </div>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }
