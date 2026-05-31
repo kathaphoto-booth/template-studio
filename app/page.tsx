@@ -309,7 +309,7 @@ export default function WorkspacePage() {
   const [useTransparentSlots, setUseTransparentSlots] = useState(false);
 
   // Advanced Export Settings States for Professional Production Layers
-  const [exportMode, setExportMode] = useState<"composite" | "layers" | "pdf-print">("composite");
+  const [exportMode, setExportMode] = useState<"composite" | "layers" | "luma-overlay" | "pdf-print">("composite");
   const [pdfLayoutType, setPdfLayoutType] = useState<"single-page" | "multi-page">("single-page");
   const [exportCmykMode, setExportCmykMode] = useState(true);
 
@@ -599,24 +599,33 @@ export default function WorkspacePage() {
       for (let i = 0; i < slotCount; i++) {
         let x = 0, y = 0, sw = 0, sh = 0;
 
+        // Text zone heights follow the mentor's ~28% rule: the text/event area
+        // is a first-class citizen, not an afterthought. These match the
+        // wireframe proportions (2x6: 500/1800=28%, 4x6: 420/1800=23%, 6x4: 320/1200=27%).
+        const TEXT_ZONE_STRIP = 500;       // 2x6 strip — generous names + date + venue
+        const TEXT_ZONE_VERT  = 420;       // 4x6 vertical postcard
+        const TEXT_ZONE_LAND  = 320;       // 6x4 landscape postcard
+
         if (activePresetType === "strip") {
+          const textH = TEXT_ZONE_STRIP * scaleFactor;
           sw = cardWidth - (parsedPadding * 2);
-          sh = (cardHeight - (parsedPadding * 2) - (parsedGap * 2) - (310 * scaleFactor)) / 3;
+          sh = (cardHeight - (parsedPadding * 2) - (parsedGap * 2) - textH) / 3;
           x = parsedPadding;
-          y = (textPosition === "top" ? parsedPadding + (310 * scaleFactor) : parsedPadding) + i * (sh + parsedGap);
+          y = (textPosition === "top" ? parsedPadding + textH : parsedPadding) + i * (sh + parsedGap);
         } else if (activePresetType === "postcard-vertical") {
-          // 2-photo stacked layout specifically for the 4x6 vertical postcard
+          const textH = TEXT_ZONE_VERT * scaleFactor;
           sw = cardWidth - (parsedPadding * 2);
-          sh = (cardHeight - (parsedPadding * 2) - parsedGap - (185 * scaleFactor)) / 2;
+          sh = (cardHeight - (parsedPadding * 2) - parsedGap - textH) / 2;
           x = parsedPadding;
-          y = (textPosition === "top" ? parsedPadding + (185 * scaleFactor) : parsedPadding) + i * (sh + parsedGap);
+          y = (textPosition === "top" ? parsedPadding + textH : parsedPadding) + i * (sh + parsedGap);
         } else {
+          const textH = TEXT_ZONE_LAND;
           const padX = parseInt(innerSpacing) * 1.5;
           const gapX = parseInt(slotGap) * 1.5;
           sw = (cardWidth - (padX * 2) - (gapX * 2)) / 3;
-          sh = cardHeight - (padX * 2) - 260;
+          sh = cardHeight - (padX * 2) - textH;
           x = padX + i * (sw + gapX);
-          y = textPosition === "top" ? padX + 260 : padX;
+          y = textPosition === "top" ? padX + textH : padX;
         }
 
         if (layer === "slots") {
@@ -675,7 +684,7 @@ export default function WorkspacePage() {
       const namesText = isCursive ? getDerivedNames() : getDerivedNames().toUpperCase();
 
       if (activePresetType === "strip") {
-        const textBaseY = textPosition === "top" ? (115 * scaleFactor) : cardHeight - (200 * scaleFactor);
+        const textBaseY = textPosition === "top" ? (190 * scaleFactor) : cardHeight - (310 * scaleFactor);
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
         const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
 
@@ -704,13 +713,12 @@ export default function WorkspacePage() {
         const hasVenue = vText !== "";
 
         if (!hasDate && !hasVenue) {
-          // Center the script names perfectly inside the generous footer or header margins
-          const textBaseY = textPosition === "top" ? (100 * scaleFactor) : cardHeight - (100 * scaleFactor);
+          const textBaseY = textPosition === "top" ? (200 * scaleFactor) : cardHeight - (200 * scaleFactor);
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${(partnerFontSize + 4) * scaleFactor}px ${partnerCleanFont}`;
           ctx.fillStyle = finalTextColor;
           ctx.fillText(namesText, cardWidth / 2, textBaseY);
         } else {
-          const textBaseY = textPosition === "top" ? (60 * scaleFactor) : cardHeight - (115 * scaleFactor);
+          const textBaseY = textPosition === "top" ? (140 * scaleFactor) : cardHeight - (280 * scaleFactor);
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * scaleFactor}px ${partnerCleanFont}`;
           ctx.fillStyle = finalTextColor;
           ctx.fillText(namesText, cardWidth / 2, textBaseY);
@@ -729,7 +737,7 @@ export default function WorkspacePage() {
           }
         }
       } else {
-        const textBaseY = textPosition === "top" ? 90 : cardHeight - 150;
+        const textBaseY = textPosition === "top" ? 130 : cardHeight - 200;
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
         const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
 
@@ -789,6 +797,33 @@ export default function WorkspacePage() {
           downloadNode.download = `${baseSlug}_layer_${item.suffix}.png`;
           downloadNode.click();
         }, i * 180);
+      }
+    } else if (exportMode === "luma-overlay") {
+      // Alpha-transparent overlay for Luma Booth: decoration + text on transparent bg.
+      // This is the single PNG that Luma composites on top of photos during the event.
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        const scaleFactor = 3.0;
+        const cw = activePresetType === "strip" ? 600 * scaleFactor : (activePresetType === "postcard-vertical" ? 1200 : 1800);
+        const ch = activePresetType === "strip" ? 1800 * scaleFactor : (activePresetType === "postcard-vertical" ? 1800 : 1200);
+        canvas.width = cw;
+        canvas.height = ch;
+        ctx.clearRect(0, 0, cw, ch);
+
+        // Draw decoration layer (vectors/frames)
+        const vecCanvas = await generateTemplateCanvas("vectors");
+        if (vecCanvas) ctx.drawImage(vecCanvas, 0, 0);
+
+        // Draw text layer
+        const txtCanvas = await generateTemplateCanvas("text");
+        if (txtCanvas) ctx.drawImage(txtCanvas, 0, 0);
+
+        const dataUrl = canvas.toDataURL("image/png");
+        const downloadNode = document.createElement("a");
+        downloadNode.href = dataUrl;
+        downloadNode.download = `${baseSlug}_luma_overlay_alpha.png`;
+        downloadNode.click();
       }
     } else if (exportMode === "pdf-print") {
       // High-Fidelity 300DPI printed PDF formulation (Color managed / CMYK calibration optimization)
@@ -857,16 +892,16 @@ export default function WorkspacePage() {
   };
 
   const stationeryTextElement = (
-    <div 
-      style={{ 
-        color: currentPreset.id === "wedding-heritage-sage" && activePresetType === "strip" ? "#FFFFFF" : textColor 
-      }} 
+    <div
+      style={{
+        color: currentPreset.id === "wedding-heritage-sage" && activePresetType === "strip" ? "#FFFFFF" : textColor,
+        minHeight: activePresetType === "strip" ? "28%" : activePresetType === "postcard-vertical" ? "23%" : "27%",
+        paddingTop: textPosition === "bottom" ? (activePresetType === "strip" ? "12px" : "8px") : "4px",
+        paddingBottom: textPosition === "top" ? (activePresetType === "strip" ? "12px" : "8px") : "4px",
+      }}
       className={cn(
-        "flex flex-col text-center relative z-25 justify-center",
+        "flex flex-col text-center relative z-25 justify-center shrink-0",
         textPosition === "top" ? "mb-auto" : "mt-auto",
-        textPosition === "top" 
-          ? (activePresetType === "strip" ? "pb-5 pt-1" : "pb-4") 
-          : (activePresetType === "strip" ? "pt-5 pb-1" : "pt-4")
       )}
     >
       <h3 
@@ -1816,12 +1851,12 @@ export default function WorkspacePage() {
               </p>
 
               {/* Mode Selectors */}
-              <div className="grid grid-cols-3 gap-1 mt-2">
+              <div className="grid grid-cols-4 gap-1 mt-2">
                 <button
                   type="button"
                   onClick={() => setExportMode("composite")}
                   className={cn(
-                    "text-[8.5px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
+                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
                     exportMode === "composite"
                       ? "bg-stone-900 text-white border-stone-900"
                       : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
@@ -1831,9 +1866,21 @@ export default function WorkspacePage() {
                 </button>
                 <button
                   type="button"
+                  onClick={() => setExportMode("luma-overlay")}
+                  className={cn(
+                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
+                    exportMode === "luma-overlay"
+                      ? "bg-amber-800 text-white border-amber-800"
+                      : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
+                  )}
+                >
+                  Luma
+                </button>
+                <button
+                  type="button"
                   onClick={() => setExportMode("layers")}
                   className={cn(
-                    "text-[8.5px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
+                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
                     exportMode === "layers"
                       ? "bg-stone-900 text-white border-stone-900"
                       : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
@@ -1845,7 +1892,7 @@ export default function WorkspacePage() {
                   type="button"
                   onClick={() => setExportMode("pdf-print")}
                   className={cn(
-                    "text-[8.5px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
+                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
                     exportMode === "pdf-print"
                       ? "bg-stone-900 text-white border-stone-900"
                       : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
@@ -1856,9 +1903,18 @@ export default function WorkspacePage() {
               </div>
 
               {/* Advanced Config based on selection */}
+              {exportMode === "luma-overlay" && (
+                <div className="mt-2 p-1.5 bg-amber-50 border border-amber-200 rounded-xs space-y-1">
+                  <span className="text-[8.5px] font-mono font-semibold text-amber-900 block text-left">Luma Booth Overlay</span>
+                  <p className="text-[8px] text-amber-800 leading-normal text-left">
+                    Single alpha-transparent PNG with decoration + text. Upload directly to Luma Booth event dashboard as the overlay layer.
+                  </p>
+                </div>
+              )}
+
               {exportMode === "layers" && (
                 <div className="mt-2 p-1.5 bg-white border border-[#E9E4DC] rounded-xs space-y-1">
-                  <span className="text-[8.5px] font-mono font-semibold text-stone-700 block text-left">✓ Separate Transparent PNG Layers</span>
+                  <span className="text-[8.5px] font-mono font-semibold text-stone-700 block text-left">Separate Transparent PNG Layers</span>
                   <p className="text-[8px] text-stone-500 leading-normal text-left">
                     Downloads 4 separate high-definition transparent assets in sequence: <br />
                     <span className="font-mono text-[7.5px] text-[#8A7342]">Background • Slots Mask • Typography • Borders</span>
@@ -1932,6 +1988,7 @@ export default function WorkspacePage() {
               <Download className="w-4 h-4" />
               <span>
                 {exportMode === "composite" && "Export High-Res Stamp"}
+                {exportMode === "luma-overlay" && "Download Luma Overlay (Alpha PNG)"}
                 {exportMode === "layers" && "Download Layers Stack (PNGs)"}
                 {exportMode === "pdf-print" && "Export Print PDF (CMYK)"}
               </span>

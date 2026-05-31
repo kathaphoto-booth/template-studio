@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ai } from "@/lib/gemini";
+import { getGeminiClient } from "@/lib/gemini";
 import { Type } from "@google/genai";
 
 export async function POST(req: NextRequest) {
   try {
+    const ai = getGeminiClient();
     const body = await req.json();
     const { action } = body;
 

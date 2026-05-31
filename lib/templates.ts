@@ -662,9 +662,16 @@ export function renderDecorativeSvg(presetId: string, type: "strip" | "postcard"
     switch (presetId) {
       case "wedding-tracy-prince-postcard":
         return defs + `
-          <!-- Minimal and modern 4x6 double-hairline frame details -->
-          <rect x="20" y="20" width="1160" height="1760" fill="none" stroke="${strokeColor}" stroke-width="1.5" />
-          <rect x="26" y="26" width="1148" height="1748" fill="none" stroke="${strokeColor}" stroke-width="0.5" opacity="0.6" />
+          <!-- Minimal modern double-hairline frame -->
+          <rect x="24" y="24" width="1152" height="1752" fill="none" stroke="${strokeColor}" stroke-width="1.5" />
+          <rect x="32" y="32" width="1136" height="1736" fill="none" stroke="${strokeColor}" stroke-width="0.5" opacity="0.55" />
+          <!-- Rose-gold monogram circle + hairline connectors in the text zone -->
+          <g transform="translate(600, ${getTranslateY(1560, 1800)})" fill="none" stroke="${strokeColor}">
+            <circle cx="0" cy="0" r="36" stroke-width="1" opacity="0.45" />
+            <circle cx="0" cy="0" r="28" stroke-width="0.5" opacity="0.3" />
+            <line x1="-200" y1="0" x2="-44" y2="0" stroke-width="0.75" opacity="0.35" />
+            <line x1="44" y1="0" x2="200" y2="0" stroke-width="0.75" opacity="0.35" />
+          </g>
         `;
       case "katha-heirloom-pina":
       case "katha-capiz-sage":

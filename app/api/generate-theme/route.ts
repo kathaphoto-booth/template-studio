@@ -1,14 +1,6 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
 import { NextResponse } from "next/server";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-  httpOptions: {
-    headers: {
-      "User-Agent": "aistudio-build",
-    },
-  },
-});
+import { getGeminiClient } from "@/lib/gemini";
 
 export async function POST(req: Request) {
   try {
@@ -40,6 +32,7 @@ You must use exactly one of these CSS rules for the fontFamily:
 
 Pick elegant colors (hex codes). Make sure contrast is readable.`;
 
+    const ai = getGeminiClient();
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: prompt,

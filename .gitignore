@@ -5,3 +5,9 @@ coverage/
 *.log
 .env*
 !.env.example
+.vercel
+tsconfig.tsbuildinfo
+# Generated client exports — regenerate via `npm run export:tracy`
+exports/*.png
+exports/*.pdf
+

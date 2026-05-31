@@ -75,26 +75,36 @@ function TemplateCanvas({
             />
           ))}
         </div>
-        {showText && (
-          <div className="text-center mt-[6%] shrink-0" style={{ color: preset.textColor }}>
-            <div
-              style={{ fontFamily: preset.fontFamily, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
-              className={isCursive ? "normal-case" : "uppercase tracking-wide"}
-            >
-              {names || "Your Names"}
+        {/* Text zone — always visible so clients know where personalization goes */}
+        <div className="text-center mt-[6%] shrink-0" style={{ color: preset.textColor }}>
+          {showText ? (
+            <>
+              <div
+                style={{ fontFamily: preset.fontFamily, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
+                className={isCursive ? "normal-case" : "uppercase tracking-wide"}
+              >
+                {names || "Your Names"}
+              </div>
+              {date && (
+                <div style={{ color: preset.secondaryColor, fontSize: Math.max(7, width * 0.05) }} className="uppercase tracking-widest mt-1">
+                  {date}
+                </div>
+              )}
+              {venue && (
+                <div style={{ fontSize: Math.max(6, width * 0.042) }} className="uppercase tracking-widest mt-0.5 opacity-80">
+                  {venue}
+                </div>
+              )}
+            </>
+          ) : (
+            /* Gallery mode: placeholder lines showing where text will go */
+            <div className="flex flex-col items-center gap-[3px]" style={{ opacity: 0.3 }}>
+              <div style={{ width: "65%", height: Math.max(2, width * 0.025), backgroundColor: preset.textColor, borderRadius: 1 }} />
+              <div style={{ width: "40%", height: Math.max(1.5, width * 0.015), backgroundColor: preset.secondaryColor, borderRadius: 1 }} />
+              <div style={{ width: "50%", height: Math.max(1.5, width * 0.012), backgroundColor: preset.textColor, borderRadius: 1 }} />
             </div>
-            {date && (
-              <div style={{ color: preset.secondaryColor, fontSize: Math.max(7, width * 0.05) }} className="uppercase tracking-widest mt-1">
-                {date}
-              </div>
-            )}
-            {venue && (
-              <div style={{ fontSize: Math.max(6, width * 0.042) }} className="uppercase tracking-widest mt-0.5 opacity-80">
-                {venue}
-              </div>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
@@ -128,8 +138,12 @@ export default function GalleryPage() {
     setConfirmed(false);
   };
 
-  const confirmSelection = () => {
+  const confirmSelection = async () => {
     if (!selected) return;
+    // Pull ?lead=<token> from the URL so HoneyBook-linked clients are attributable
+    const lead = typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("lead")
+      : null;
     const payload = {
       templateId: selected.id,
       templateName: selected.name,
@@ -137,14 +151,32 @@ export default function GalleryPage() {
       names: names || null,
       date: date.trim() || null,
       venue: venue.trim() || null,
+      lead,
       selectedAt: new Date().toISOString(),
     };
-    // No backend yet — persist locally so the admin/studio can pick it up.
-    // When Honeybook/Zapier is wired, POST this payload to /api/selection.
+
+    // Persist locally as offline fallback (always)
     try {
       const prev = JSON.parse(localStorage.getItem("katha_selections") || "[]");
       localStorage.setItem("katha_selections", JSON.stringify([payload, ...prev].slice(0, 50)));
     } catch {}
+
+    // POST to /api/selection — email notification + future HoneyBook sync
+    try {
+      const res = await fetch("/api/selection", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      // 200 = dispatched, 202 = recorded but no dispatch (env not set yet)
+      if (res.ok || res.status === 202) {
+        setConfirmed(true);
+        return;
+      }
+    } catch {
+      // Network error — still show success since we have the local copy
+    }
+    // Soft-success: the localStorage copy still lets the studio pick it up
     setConfirmed(true);
   };
 
