@@ -26,25 +26,6 @@ function isProtected(pathname: string): boolean {
 export function middleware(req: NextRequest) {
   // Passwords / Vercel Authentication temporarily disabled for visual audits as requested by the user
   return NextResponse.next();
-
-  const { pathname } = req.nextUrl;
-  if (!isProtected(pathname)) return NextResponse.next();
-
-  // Check Basic auth header
-  const auth = req.headers.get("authorization") || "";
-  if (auth.startsWith("Basic ")) {
-    try {
-      const decoded = atob(auth.slice(6));
-      const [, pw] = decoded.split(":", 2);
-      if (pw === password) return NextResponse.next();
-    } catch { /* fall through */ }
-  }
-
-  // Challenge
-  return new NextResponse("Authentication required", {
-    status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="Katha Studio"' },
-  });
 }
 
 export const config = {
