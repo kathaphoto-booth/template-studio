@@ -152,6 +152,7 @@ export default function GalleryPage() {
   const [venue, setVenue] = useState("");
   const [selectedFont, setSelectedFont] = useState("");
   const [referencePhotos, setReferencePhotos] = useState<string[]>([]);
+  const [notes, setNotes] = useState("");
   const [uploading, setUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [dragActive, setDragActive] = useState(false);
@@ -176,6 +177,7 @@ export default function GalleryPage() {
     setVenue("");
     setSelectedFont(p.fontFamily);
     setReferencePhotos([]);
+    setNotes("");
     setErrorMsg("");
     setConfirmed(false);
   };
@@ -280,6 +282,7 @@ export default function GalleryPage() {
       venue: venue.trim() || null,
       fontFamily: selectedFont || null,
       referencePhotos: referencePhotos.length > 0 ? referencePhotos : null,
+      notes: notes.trim() || null,
       lead,
       selectedAt: new Date().toISOString(),
     };
@@ -566,6 +569,21 @@ export default function GalleryPage() {
                         </div>
                       )}
                     </div>
+
+                    {/* Additional Notes */}
+                    <div className="flex flex-col gap-1 mt-4">
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                        Additional Details
+                      </label>
+                      <textarea
+                        value={notes}
+                        onChange={(e) => setNotes(e.target.value)}
+                        placeholder="Any specific requests or design details not covered?"
+                        rows={2}
+                        className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]"
+                        style={{ borderColor: "#C4B59D", resize: "none" }}
+                      />
+                    </div>
                   </div>
 
                   <button
@@ -575,9 +593,11 @@ export default function GalleryPage() {
                   >
                     Choose this style
                   </button>
-                  <p className="mt-3 text-[11px] text-center" style={{ color: "#9C958A" }}>
-                    Details can be adjusted later — this just reserves your design.
-                  </p>
+                  <div className="mt-4 text-center">
+                    <p className="text-[11px] leading-relaxed" style={{ color: "#9C958A" }}>
+                      Please note: This preview is a preliminary canvas—a general guide to visualize our shared vision. Your final heirloom design will be meticulously refined. Details can be adjusted later.
+                    </p>
+                  </div>
                 </div>
               </div>
             )}

@@ -21,6 +21,7 @@ type Selection = {
   venue?: string | null;
   fontFamily?: string | null;
   referencePhotos?: string[] | null;
+  notes?: string | null;
   lead?: string | null;
   selectedAt: string;
 };
@@ -50,6 +51,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
     `Date:        ${s.date || "—"}`,
     `Venue:       ${s.venue || "—"}`,
     `Font Family: ${s.fontFamily || "—"}`,
+    s.notes ? `Notes:       ${s.notes}` : null,
     s.lead ? `Lead token:  ${s.lead}` : null,
     `Selected:    ${s.selectedAt}`,
   ].filter(Boolean).join("\n");
@@ -126,6 +128,7 @@ export async function POST(req: NextRequest) {
     referencePhotos: body.referencePhotos && Array.isArray(body.referencePhotos)
       ? body.referencePhotos.map((p: any) => String(p))
       : null,
+    notes: body.notes ? String(body.notes).slice(0, 2000) : null,
     lead: body.lead ? String(body.lead).slice(0, 200) : null,
     selectedAt: new Date().toISOString(),
   };
