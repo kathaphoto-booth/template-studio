@@ -19,6 +19,15 @@ type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard" | "postca
 // belong to the Signature tier.
 const isSignature = (p: PhotoboothPreset) => p.name.includes("Katha Signature");
 
+// Hand-torn deckle edge masks — rotated by index across Signature thumbnails
+// so no two adjacent tiles share the same torn rhythm. Classic thumbnails
+// stay polished per project memory (feedback_no_fukinsei_in_templates).
+const DECKLE_MASKS = [
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M2,3 L96,1 L98,5 L99,40 L97,72 L98,97 L65,99 L30,98 L4,99 L1,60 L3,28 Z' fill='black'/></svg>\")",
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M3,2 L40,3 L70,1 L98,4 L96,35 L99,68 L97,98 L60,96 L25,99 L1,97 L3,55 L1,20 Z' fill='black'/></svg>\")",
+  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M1,5 L25,2 L55,4 L85,1 L99,8 L97,40 L98,75 L95,98 L70,96 L40,99 L10,97 L2,70 L4,30 Z' fill='black'/></svg>\")",
+];
+
 // Tile dimensions normalized to a 300px-tall tile (vertical) or 200px-wide (horizontal).
 function tileDims(type: PhotoboothPreset["type"]) {
   if (type === "strip") return { w: 100, h: 300, vb: "0 0 600 1800" };
@@ -412,7 +421,7 @@ export default function GalleryPage() {
       <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "#332A24", backgroundColor: "#1A1816" }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#C4B59D" }}>Designed & Finalized Keepsakes</p>
+            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#A35C44" }}>Designed & Finalized Keepsakes</p>
             <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Keepsakes</h2>
             <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
               Behold our live keepsakes as personalized by actual clients. These designs embody the true spirit of handloomed heirloom artistry—where raw silk threads, fine-ruled double frames, and gold-shimmer gradients gently trace over the photo edges, weaving your moments directly into the fabric of the keepsake.
@@ -426,7 +435,7 @@ export default function GalleryPage() {
               if (!p) return null;
               const d = tileDims(p.type);
               return (
-                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 border border-neutral-800/80 backdrop-blur-sm shadow-xl group hover:border-neutral-700/80 transition-all duration-300">
+                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 backdrop-blur-sm shadow-xl group transition-all duration-300" style={{ border: "1px solid rgba(156,149,138,0.4)" }}>
                   <div className="flex justify-center items-center flex-none">
                     <div className="relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] bg-black p-1 rounded-[3px]">
                       <TemplateCanvas
@@ -463,7 +472,7 @@ export default function GalleryPage() {
               if (!p) return null;
               const d = tileDims(p.type);
               return (
-                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 border border-neutral-800/80 backdrop-blur-sm shadow-xl group hover:border-neutral-700/80 transition-all duration-300">
+                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 backdrop-blur-sm shadow-xl group transition-all duration-300" style={{ border: "1px solid rgba(156,149,138,0.4)" }}>
                   <div className="flex justify-center items-center flex-none">
                     <div className="relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] bg-black p-1 rounded-[3px]">
                       <TemplateCanvas
@@ -500,8 +509,19 @@ export default function GalleryPage() {
       {/* Gallery grid */}
       <section className="px-6 md:px-12 py-12">
         <div className="flex flex-wrap justify-center gap-x-8 gap-y-12">
-          {filtered.map((p) => {
+          {filtered.map((p, i) => {
             const d = tileDims(p.type);
+            const sig = isSignature(p);
+            const deckleStyle: React.CSSProperties | undefined = sig
+              ? {
+                  WebkitMaskImage: DECKLE_MASKS[i % 3],
+                  maskImage: DECKLE_MASKS[i % 3],
+                  WebkitMaskSize: "100% 100%",
+                  maskSize: "100% 100%",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                }
+              : undefined;
             return (
               <button
                 key={p.id}
@@ -509,7 +529,10 @@ export default function GalleryPage() {
                 className="group flex flex-col items-center cursor-pointer"
                 style={{ width: 200 }}
               >
-                <div className="h-[300px] flex items-end justify-center transition-transform duration-300 group-hover:-translate-y-1">
+                <div
+                  className="h-[300px] flex items-end justify-center transition-transform duration-300 group-hover:-translate-y-1"
+                  style={deckleStyle}
+                >
                   <TemplateCanvas preset={p} width={d.w} height={d.h} />
                 </div>
                 <div className="mt-4 text-center">
@@ -542,7 +565,7 @@ export default function GalleryPage() {
           <div
             id="katha-modal"
             className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl"
-            style={{ backgroundColor: "#FBF9F5" }}
+            style={{ backgroundColor: confirmed ? "#B5B8A3" : "#FBF9F5" }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -556,8 +579,8 @@ export default function GalleryPage() {
 
             {confirmed ? (
               <div className="px-8 py-16 text-center">
-                <div className="text-3xl" style={{ fontFamily: "'Fraunces', serif" }}>Thank you</div>
-                <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#5A5D5A" }}>
+                <div className="text-3xl" style={{ fontFamily: "'Fraunces', serif", color: "#241E1A" }}>Thank you</div>
+                <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#241E1A" }}>
                   Your choice of <strong>{selected.name.replace("Katha Signature — ", "")}</strong> has been saved.
                   Katha will reach out to finalize the details and send your proof.
                 </p>
