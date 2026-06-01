@@ -136,7 +136,7 @@ The Katha Team
         Details, fonts, and print outlines are fully adjustable. At your own pace, choose the blueprint that speaks to you.
       </p>
       
-      <p style="font-size:15px; margin-top:30px; font-family:'Inter', sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:#5A564E;">
+      <p style="margin-top:30px; font-family:'Inter', sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:#5A564E;">
         Warmly,<br/>
         The Katha Team
       </p>

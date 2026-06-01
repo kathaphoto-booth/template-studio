@@ -1503,8 +1503,11 @@ export default function WorkspacePage() {
                           style={{
                             position: "absolute",
                             left: `${left}%`,
-                            top: textPosition === "top" ? "auto" : `${top}%`,
-                            bottom: textPosition === "top" ? `${100 - top - height}%` : "auto",
+                            // Vertical reflection when text flips to top — slots
+                            // move down so the text can sit above. The previous
+                            // bottom-anchored flip was a no-op (bottom: 100-y-h
+                            // with height h yields the same vertical span).
+                            top: textPosition === "top" ? `${100 - top - height}%` : `${top}%`,
                             width: `${width}%`,
                             height: `${height}%`,
                             borderRadius: slotBorderRadius,
@@ -2119,7 +2122,7 @@ export default function WorkspacePage() {
                 </div>
               </div>
 
-              <div className="mt-2 text-[11px] text-stone-500 italic bg-amber-50 p-2.5 rounded-sm border border-amber-500/20">
+              <div className="mt-2 text-[11px] text-stone-700 italic bg-amber-50 p-2.5 rounded-sm border border-amber-500/20">
                 The AI will generate color pairings, border attributes, spacing measurements, and typography alignments tailored perfectly to your event.
               </div>
 
