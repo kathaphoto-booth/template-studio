@@ -1,0 +1,30 @@
+name: Katha Brand Guard
+
+# Katha-native replacement for the legacy oax brand-guard CI.
+# Two-layer model: this job BLOCKS only on P0 (legacy hex, pure b/w, forbidden
+# user-facing copy, slot-geometry violations). P1 drift (font, off-canon tint,
+# impeccable UI anti-patterns) is printed for executive review but never blocks.
+
+on:
+  push:
+    branches: [main, refinement-preview]
+  pull_request:
+
+jobs:
+  brand-guard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: photobooth-template-studio
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: photobooth-template-studio/package-lock.json
+      - run: npm ci
+      # Full pipeline: template guard + layout law + impeccable detect.
+      # Exits non-zero ONLY on P0 — P1 advisories are surfaced in the log.
+      - name: Katha Guard
+        run: npm run guard
