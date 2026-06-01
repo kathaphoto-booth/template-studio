@@ -60,13 +60,6 @@ function TemplateCanvas({
       style={{ width, height, backgroundColor: preset.backgroundColor }}
       className="relative overflow-hidden shadow-md ring-1 ring-black/5"
     >
-      {/* Full-bleed decoration — single source of truth */}
-      <svg
-        viewBox={vb}
-        preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full pointer-events-none"
-        dangerouslySetInnerHTML={{ __html: svg }}
-      />
       {/* Photo slots — absolute-positioned from layout data */}
       {layout.slots.map((s: { x: number; y: number; w: number; h: number }, i: number) => {
         const left = (s.x / viewBox.w) * 100;
@@ -136,6 +129,13 @@ function TemplateCanvas({
           </div>
         );
       })()}
+      {/* Full-bleed decoration overlay — rendered on top of slots to allow subtle overlaps */}
+      <svg
+        viewBox={vb}
+        preserveAspectRatio="none"
+        className="absolute inset-0 h-full w-full pointer-events-none z-10"
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
     </div>
   );
 }
@@ -326,7 +326,7 @@ export default function GalleryPage() {
     <main className="min-h-screen" style={{ backgroundColor: "#EAE2D5", color: "#241E1A" }}>
       {/* Header */}
       <header className="px-6 md:px-12 py-10 text-center border-b" style={{ borderColor: "#C4B59D" }}>
-        <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "#9C958A" }}>
+        <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "#5A564E" }}>
           Katha Photo Booth
         </p>
         <h1 className="mt-3 text-3xl md:text-4xl" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.01em" }}>
@@ -383,10 +383,99 @@ export default function GalleryPage() {
         </div>
 
         {/* Result count */}
-        <p className="mt-4 text-[11px] uppercase tracking-[0.2em]" style={{ color: "#9C958A" }}>
+        <p className="mt-4 text-[11px] uppercase tracking-[0.2em]" style={{ color: "#5A564E" }}>
           {filtered.length} {filtered.length === 1 ? "template" : "templates"}
         </p>
       </header>
+
+      {/* Katha Keepsakes Showcase — Bespoke Finalist Showcase */}
+      <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "#332A24", backgroundColor: "#1A1816" }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#C4B59D" }}>Designed & Finalized Keepsakes</p>
+            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>Katha Keepsakes</h2>
+            <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
+              Behold our live keepsakes as personalized by actual clients. These designs embody the true spirit of handloomed heirloom artistry—where raw silk threads, fine-ruled double frames, and gold-shimmer gradients gently trace over the photo edges, weaving your moments directly into the fabric of the keepsake.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-stretch">
+            {/* Keepsake Card 1: Steven & Cristalyn */}
+            {(() => {
+              const p = PRESETS.find(pr => pr.id === "wedding-luxe-gold");
+              if (!p) return null;
+              const d = tileDims(p.type);
+              return (
+                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 border border-neutral-800/80 backdrop-blur-sm shadow-xl group hover:border-neutral-700/80 transition-all duration-300">
+                  <div className="flex justify-center items-center flex-none">
+                    <div className="relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] bg-black p-1 rounded-[3px]">
+                      <TemplateCanvas
+                        preset={p}
+                        width={d.w * 1.5}
+                        height={d.h * 1.5}
+                        showText
+                        names="Steven & Cristalyn"
+                        date="JULY 25, 2026"
+                        venue="NAPA VALLEY, CALIFORNIA"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-between py-2">
+                    <div>
+                      <span className="text-[9px] uppercase tracking-widest font-mono text-amber-400">Style 1 — Classic Tier</span>
+                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Tradition Gold Luxe</h3>
+                      <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
+                        Designed for Steven & Cristalyn. Concentric rules in luxurious gold-foil shimmer, featuring floating corner tie-ins that gently overlay the edges of your memories.
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-neutral-800 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-neutral-300 font-mono">
+                      <div><strong className="text-neutral-400 font-normal">FONT:</strong> Cinzel (Roman Serif)</div>
+                      <div><strong className="text-neutral-400 font-normal">FORMAT:</strong> 2×6 Photostrip</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* Keepsake Card 2: Tracy & Prince */}
+            {(() => {
+              const p = PRESETS.find(pr => pr.id === "katha-tracy-prince");
+              if (!p) return null;
+              const d = tileDims(p.type);
+              return (
+                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 border border-neutral-800/80 backdrop-blur-sm shadow-xl group hover:border-neutral-700/80 transition-all duration-300">
+                  <div className="flex justify-center items-center flex-none">
+                    <div className="relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] bg-black p-1 rounded-[3px]">
+                      <TemplateCanvas
+                        preset={p}
+                        width={d.w * 1.0}
+                        height={d.h * 1.0}
+                        showText
+                        names="Tracy & Prince"
+                        date=""
+                        venue=""
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-between py-2">
+                    <div>
+                      <span className="text-[9px] uppercase tracking-widest font-mono text-rose-400">Katha Signature Tier</span>
+                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Tracy & Prince Signature</h3>
+                      <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
+                        Designed for Tracy & Prince. Features romantic Parisian calligraphy resting on a delicate branding pedestal, bounded by a dual-line concentric framework that gently draws the concentric borders over the image edges.
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-neutral-800 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-neutral-300 font-mono">
+                      <div><strong className="text-neutral-400 font-normal">FONT:</strong> Parisienne (Calligraphy)</div>
+                      <div><strong className="text-neutral-400 font-normal">FORMAT:</strong> 4×6 Postcard</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
+      </section>
 
       {/* Gallery grid */}
       <section className="px-6 md:px-12 py-12">

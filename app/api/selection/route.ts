@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { supabaseAdmin } from "@/lib/supabase";
+
 
 // ──────────────────────────────────────────────────────────────────────
 // /api/selection — receives a template pick from the client gallery
@@ -89,15 +91,104 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
   }
 }
 
-// ── Dispatch target #2: HoneyBook contract sync (stub) ─────────────────
-async function dispatchHoneyBook(_s: Selection): Promise<{ ok: boolean; detail: string }> {
-  // Wire when HoneyBook API token (or Zapier catch-hook URL) is available.
-  // Project PID: 679039857c7a9b001f4098a8
-  if (!process.env.HONEYBOOK_API_KEY && !process.env.HONEYBOOK_WEBHOOK_URL) {
+// ── Dispatch target #2: HoneyBook contract sync (webhook or API) ─────────
+async function dispatchHoneyBook(s: Selection): Promise<{ ok: boolean; detail: string }> {
+  const webhookUrl = process.env.HONEYBOOK_WEBHOOK_URL;
+  const apiKey = process.env.HONEYBOOK_API_KEY;
+
+  if (!webhookUrl && !apiKey) {
     return { ok: false, detail: "honeybook not configured (skipped)" };
   }
-  return { ok: false, detail: "honeybook dispatch not implemented yet" };
+
+  // 1. Webhook (Zapier catch-hook) dispatch
+  if (webhookUrl) {
+    try {
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source: "katha_gallery",
+          project_id: "679039857c7a9b001f4098a8",
+          lead: s.lead,
+          template_id: s.templateId,
+          template_name: s.templateName,
+          layout: s.layout,
+          names: s.names,
+          date: s.date,
+          venue: s.venue,
+          notes: s.notes,
+          selected_at: s.selectedAt,
+          font_family: s.fontFamily,
+          reference_photos: s.referencePhotos
+        })
+      });
+
+      if (!res.ok) {
+        return { ok: false, detail: `webhook failed with status ${res.status}` };
+      }
+      return { ok: true, detail: "honeybook webhook synced successfully" };
+    } catch (err: any) {
+      return { ok: false, detail: `webhook exception: ${err?.message || err}` };
+    }
+  }
+
+  // 2. HoneyBook Native API dispatch (future upgrade slot)
+  if (apiKey) {
+    try {
+      const res = await fetch("https://api.honeybook.com/v1/projects/679039857c7a9b001f4098a8/selections", {
+        method: "POST",
+        headers: { 
+          "Authorization": `Bearer ${apiKey}`,
+          "Content-Type": "application/json" 
+        },
+        body: JSON.stringify(s)
+      });
+
+      if (!res.ok) {
+        return { ok: false, detail: `honeybook API failed with status ${res.status}` };
+      }
+      return { ok: true, detail: "honeybook API synced successfully" };
+    } catch (err: any) {
+      return { ok: false, detail: `honeybook API exception: ${err?.message || err}` };
+    }
+  }
+
+  return { ok: false, detail: "honeybook integration misconfigured" };
 }
+
+// ── Dispatch target #3: database record via Supabase ───────────────────
+async function dispatchSupabase(s: Selection): Promise<{ ok: boolean; detail: string }> {
+  if (!supabaseAdmin) {
+    return { ok: false, detail: "supabase not configured (skipped)" };
+  }
+
+  try {
+    const { error } = await supabaseAdmin
+      .from("selections")
+      .insert({
+        template_id: s.templateId,
+        template_name: s.templateName,
+        layout: s.layout,
+        names: s.names,
+        date: s.date,
+        venue: s.venue,
+        font_family: s.fontFamily,
+        reference_photos: s.referencePhotos,
+        notes: s.notes,
+        lead: s.lead,
+        selected_at: s.selectedAt,
+      });
+
+    if (error) {
+      return { ok: false, detail: `supabase error: ${error.message || JSON.stringify(error)}` };
+    }
+    return { ok: true, detail: "recorded in supabase database successfully" };
+  } catch (err: any) {
+    return { ok: false, detail: `supabase exception: ${err?.message || err}` };
+  }
+}
+
+
 
 // ── POST handler ──────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
@@ -137,7 +228,9 @@ export async function POST(req: NextRequest) {
   const results = await Promise.all([
     dispatchEmail(selection).then(r => ({ target: "email", ...r })),
     dispatchHoneyBook(selection).then(r => ({ target: "honeybook", ...r })),
+    dispatchSupabase(selection).then(r => ({ target: "supabase", ...r })),
   ]);
+
 
   const anyOk = results.some(r => r.ok);
 
