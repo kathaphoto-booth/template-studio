@@ -636,7 +636,7 @@ export default function GalleryPage() {
                     <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
                       className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
 
-                    {/* Dynamic luxury font gallery selector */}
+                    {/* Personalized font picker */}
                     <div className="flex flex-col gap-1 mt-2">
                       <label htmlFor="katha-font-selector" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
                         Personalized Font

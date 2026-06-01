@@ -50,7 +50,7 @@ function drawPaperTexture(
   ctx.save();
 
   if (["wedding-luxe-gold", "wedding-classic-monogram", "wedding-vintage-lace", "wedding-luxury-blind-deboss", "wedding-art-deco"].includes(presetId)) {
-    // 1. Luxury Premium Ivory Linen / Cross-woven Cotton thread matrix
+    // Ivory linen / cross-woven cotton thread matrix — wedding-luxe-gold family
     ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
     ctx.lineWidth = 1;
     for (let i = 0; i < width; i += 4) {
@@ -1471,7 +1471,7 @@ export default function WorkspacePage() {
                     }}
                   />
 
-                  {/* Dynamically rendered inline SVGs frame according to luxury presets selection */}
+                  {/* Inline SVG decoration layer — re-renders when preset / colors / textPosition change */}
                   <svg 
                     className="absolute inset-0 w-full h-full pointer-events-none z-10" 
                     style={{ opacity: graphicOpacity / 100 }}
@@ -1646,7 +1646,7 @@ export default function WorkspacePage() {
         {/* SIDEBAR RIGHT: STATIONERY THEMES CATALOG & PRODUCTION EXPORT */}
         <aside id="sidebar-photo-sources" className="lg:w-80 border-t lg:border-t-0 lg:border-l border-stone-200 bg-white p-5 flex flex-col gap-5 shrink-0 overflow-y-auto lg:h-[calc(100vh-64px)]">
           
-          {/* CATALOG OF PREMIUM WEDDING TEMPLATES */}
+          {/* Template catalog */}
           <div>
             <div className="text-[11px] uppercase font-bold tracking-widest text-stone-400 mb-2.5 px-0.5 flex items-center justify-between font-sans">
               <span>Wedding Preset Styles (Style 1 - 12)</span>

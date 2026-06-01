@@ -123,7 +123,7 @@ The Katha Team
       </p>
       
       <p style="font-size:16px; margin-bottom:30px;">
-        To help us customize the backdrops, luxury layout geometry, and typography for your event, we invite you to browse our dynamic template gallery and finalize your aesthetic blueprint:
+        To help us shape the backdrops, layout geometry, and typography for your event, we invite you to browse the template gallery and finalize your aesthetic blueprint:
       </p>
       
       <div style="margin-bottom:35px; text-align:center;">
