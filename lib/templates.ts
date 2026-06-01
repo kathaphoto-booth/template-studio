@@ -33,7 +33,7 @@ export interface PhotoboothPreset {
   designerExplanation: string;
 }
 
-// ─── 15 PREMIUM AESTHETIC FAMILIES (SINGLE SOURCE OF TRUTH) ───────────────────
+// ─── 15 AESTHETIC FAMILIES (SINGLE SOURCE OF TRUTH) ───────────────────────────
 export const PRESETS: PhotoboothPreset[] = [
   // ─── 1. HEIRLOOM PIÑA (Katha Signature)
   {

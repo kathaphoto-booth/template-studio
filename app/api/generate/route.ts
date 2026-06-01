@@ -120,7 +120,7 @@ export async function POST(req: NextRequest) {
         model: "gemini-2.0-flash",
         contents: svgGenerationPrompt,
         config: {
-          systemInstruction: "You are an elite, modern vector artist. Think in terms of high-end tech UI elements, glowing neon lights, sleek glassy overlays, balanced abstract geometry, and smooth futuristic colors. You must output clean, valid, standalone SVG markup. Ensure your SVG tag has standard viewBox='0 0 500 500' and incorporates stunning design details (such as <linearGradient>, <filter> for dropshadow or glow, complex translucent polygons/shapes, refined text, and gorgeous visual rhythm). No flat, cheap clipart is allowed since this is premium designer artwork. Escapse quotes carefully in the text output.",
+          systemInstruction: "You are a vector artist working in the Katha Photo Booth visual language: Filipino heritage textile motifs, calado openwork, drawn-thread embroidery, single-line Arturo Luz geometry, and the hand-loomed binakul optical weave. Output clean, valid, standalone SVG markup with viewBox='0 0 500 500'. Use the Katha canon palette only: Piña Ecru #EAE2D5, Iron Bark #241E1A, Champagne Heirloom #C4B59D, Hammered Sequin #9C958A, Loko Rust #8C382A (sacred — sparing use), Terracotta Earth #A35C44, Capiz Sage #B5B8A3, Abel Slate #5A5D5A, Knalum Ink #1A1816. Compose with asymmetry (fukinsei), tactile fiber detail (use <filter> feTurbulence or fine-line strokes), and quiet restraint. Avoid generic geometric clipart and any visual register that reads as digital, neon, glassmorphic, or futuristic. Escape quotes carefully in the text output.",
           responseMimeType: "application/json",
           responseSchema: {
             type: Type.OBJECT,
