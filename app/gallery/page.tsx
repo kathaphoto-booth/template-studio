@@ -324,76 +324,96 @@ export default function GalleryPage() {
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "#EAE2D5", color: "#241E1A" }}>
-      {/* Header */}
-      <header className="px-6 md:px-12 py-10 text-center border-b" style={{ borderColor: "#C4B59D" }}>
-        <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "#5A564E" }}>
-          Katha Photo Booth
-        </p>
-        <h1 className="mt-3 text-3xl md:text-4xl" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", letterSpacing: "0.01em" }}>
-          Choose your style
-        </h1>
-        <p className="mt-3 text-sm max-w-xl mx-auto" style={{ color: "#5A5D5A" }}>
-          Browse our template library and choose the one that feels like you. We&apos;ll personalize the details together.
-        </p>
+      {/* Header — asymmetric 7/5 (Fukinsei): title weights the loom-frame; filters drift to the right edge */}
+      <header className="px-6 md:px-12 py-10" style={{ borderColor: "#C4B59D" }}>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:items-end">
+          {/* Left column — eyebrow + display H1 + lede */}
+          <div className="md:col-span-7 text-center md:text-left">
+            <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "#5A564E" }}>
+              Katha Photo Booth
+            </p>
+            <h1 className="mt-3 text-3xl md:text-5xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "0.01em" }}>
+              Choose your style
+            </h1>
+            <p className="mt-3 text-sm max-w-xl mx-auto md:mx-0" style={{ color: "#5A5D5A" }}>
+              Browse our template library and choose the one that feels like you. We&apos;ll personalize the details together.
+            </p>
+          </div>
 
-        {/* Tier filter */}
-        <div className="mt-7 inline-flex rounded-full p-1" style={{ backgroundColor: "#E0D7C7" }}>
-          {([
-            ["all", "All styles"],
-            ["classic", "Classic"],
-            ["signature", "Katha Signature"],
-          ] as [TierFilter, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setTier(key)}
-              className="px-4 py-1.5 text-xs uppercase tracking-widest rounded-full transition-colors cursor-pointer"
-              style={
-                tier === key
-                  ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
-                  : { color: "#5A5D5A" }
-              }
-            >
-              {label}
-            </button>
-          ))}
+          {/* Right column — tier + format filters + result count, right-aligned on md+ */}
+          <div className="md:col-span-5 flex flex-col items-center md:items-end gap-3">
+            {/* Tier filter */}
+            <div className="inline-flex p-1" style={{ backgroundColor: "#E0D7C7" }}>
+              {([
+                ["all", "All styles"],
+                ["classic", "Classic"],
+                ["signature", "Katha Signature"],
+              ] as [TierFilter, string][]).map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setTier(key)}
+                  className="px-4 py-1.5 text-xs uppercase tracking-widest transition-colors cursor-pointer"
+                  style={
+                    tier === key
+                      ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
+                      : { color: "#5A5D5A" }
+                  }
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Format filter */}
+            <div className="inline-flex flex-wrap justify-center md:justify-end p-1" style={{ backgroundColor: "#E0D7C7" }}>
+              {([
+                ["all", "All formats"],
+                ["strip", "2×6 Strip"],
+                ["postcard-vertical", "4×6 Postcard"],
+                ["postcard", "6×4 Landscape"],
+                ["postcard-square", "6×4 Square"],
+              ] as [FormatFilter, string][]).map(([key, label]) => (
+                <button
+                  key={key}
+                  onClick={() => setFormat(key)}
+                  className="px-3.5 py-1.5 text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
+                  style={
+                    format === key
+                      ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
+                      : { color: "#5A5D5A" }
+                  }
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {/* Result count */}
+            <p className="text-[11px] uppercase tracking-[0.2em]" style={{ color: "#5A564E" }}>
+              {filtered.length} {filtered.length === 1 ? "template" : "templates"}
+            </p>
+          </div>
         </div>
-
-        {/* Format filter */}
-        <div className="mt-4 inline-flex flex-wrap justify-center rounded-full p-1" style={{ backgroundColor: "#E0D7C7" }}>
-          {([
-            ["all", "All formats"],
-            ["strip", "2×6 Strip"],
-            ["postcard-vertical", "4×6 Postcard"],
-            ["postcard", "6×4 Landscape"],
-            ["postcard-square", "6×4 Square"],
-          ] as [FormatFilter, string][]).map(([key, label]) => (
-            <button
-              key={key}
-              onClick={() => setFormat(key)}
-              className="px-3.5 py-1.5 text-[11px] uppercase tracking-widest rounded-full transition-colors cursor-pointer"
-              style={
-                format === key
-                  ? { backgroundColor: "#8C382A", color: "#EAE2D5" }
-                  : { color: "#5A5D5A" }
-              }
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Result count */}
-        <p className="mt-4 text-[11px] uppercase tracking-[0.2em]" style={{ color: "#5A564E" }}>
-          {filtered.length} {filtered.length === 1 ? "template" : "templates"}
-        </p>
       </header>
+
+      {/* Calado divider — drawn-thread openwork; the only rule line allowed */}
+      <div
+        aria-hidden
+        className="mx-6 md:mx-12 h-[6px]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='6' viewBox='0 0 48 6'><circle cx='4' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='14' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='24' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='34' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='44' cy='3' r='0.9' fill='%23C4B59D'/></svg>\")",
+          backgroundRepeat: "repeat-x",
+          backgroundPosition: "center",
+        }}
+      />
 
       {/* Katha Keepsakes Showcase — Bespoke Finalist Showcase */}
       <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "#332A24", backgroundColor: "#1A1816" }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#C4B59D" }}>Designed & Finalized Keepsakes</p>
-            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>Katha Keepsakes</h2>
+            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Keepsakes</h2>
             <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
               Behold our live keepsakes as personalized by actual clients. These designs embody the true spirit of handloomed heirloom artistry—where raw silk threads, fine-ruled double frames, and gold-shimmer gradients gently trace over the photo edges, weaving your moments directly into the fabric of the keepsake.
             </p>
@@ -423,7 +443,7 @@ export default function GalleryPage() {
                   <div className="flex flex-col justify-between py-2">
                     <div>
                       <span className="text-[9px] uppercase tracking-widest font-mono text-amber-400">Style 1 — Classic Tier</span>
-                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Tradition Gold Luxe</h3>
+                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Fraunces', serif" }}>Tradition Gold Luxe</h3>
                       <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
                         Designed for Steven & Cristalyn. Concentric rules in luxurious gold-foil shimmer, featuring floating corner tie-ins that gently overlay the edges of your memories.
                       </p>
@@ -460,7 +480,7 @@ export default function GalleryPage() {
                   <div className="flex flex-col justify-between py-2">
                     <div>
                       <span className="text-[9px] uppercase tracking-widest font-mono text-rose-400">Katha Signature Tier</span>
-                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Tracy & Prince Signature</h3>
+                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Fraunces', serif" }}>Tracy & Prince Signature</h3>
                       <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
                         Designed for Tracy & Prince. Features romantic Parisian calligraphy resting on a delicate branding pedestal, bounded by a dual-line concentric framework that gently draws the concentric borders over the image edges.
                       </p>
@@ -493,7 +513,7 @@ export default function GalleryPage() {
                   <TemplateCanvas preset={p} width={d.w} height={d.h} />
                 </div>
                 <div className="mt-4 text-center">
-                  <div className="text-[13px]" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+                  <div className="text-[13px]" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
                     {p.name.replace("Katha Signature — ", "")}
                   </div>
                   {isSignature(p) && (
@@ -536,7 +556,7 @@ export default function GalleryPage() {
 
             {confirmed ? (
               <div className="px-8 py-16 text-center">
-                <div className="text-3xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>Thank you</div>
+                <div className="text-3xl" style={{ fontFamily: "'Fraunces', serif" }}>Thank you</div>
                 <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#5A5D5A" }}>
                   Your choice of <strong>{selected.name.replace("Katha Signature — ", "")}</strong> has been saved.
                   Katha will reach out to finalize the details and send your proof.
@@ -570,7 +590,7 @@ export default function GalleryPage() {
                   <p className="text-[11px] uppercase tracking-[0.25em]" style={{ color: "#9C958A" }}>
                     {isSignature(selected) ? "Katha Signature" : "Classic Collection"}
                   </p>
-                  <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                  <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "'Fraunces', serif" }}>
                     {selected.name.replace("Katha Signature — ", "")}
                   </h2>
                   <p className="mt-3 text-[13px] leading-relaxed" style={{ color: "#5A5D5A" }}>

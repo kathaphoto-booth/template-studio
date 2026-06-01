@@ -15,10 +15,11 @@ Generate a custom photobooth preset configuration. Make deliberate color pairing
 Do NOT use any of these words in the designerExplanation or anywhere: luxury, premium, stunning, amazing, unforgettable, curated, gorgeous, vibe. Describe the craft and materials specifically instead.
 Important: The styling must feel distinct and fitting for the event name provided.
 You must use exactly one of these CSS rules for the fontFamily:
+- 'Fraunces', serif
 - 'Cinzel', serif
 - 'Playfair Display', serif
 - 'Bodoni Moda', serif
-- 'Cormorant Garamond', serif
+- 'EB Garamond', serif
 - 'Italiana', serif
 - 'Aboreto', sans-serif
 - 'Great Vibes', cursive

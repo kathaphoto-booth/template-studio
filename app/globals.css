@@ -3,4 +3,23 @@
 @theme {
   --font-sans: var(--font-sans), system-ui, sans-serif;
   --font-serif: var(--font-serif), Georgia, serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "EB Garamond", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Katha palette — 9 canon tokens (UI + narrative) */
+  --color-katha-obsidian: #111112;
+  --color-katha-pina-ecru: #EAE2D5;
+  --color-katha-hammered-sequin: #9C958A;
+  --color-katha-champagne-heirloom: #C4B59D;
+  --color-katha-iron-bark: #241E1A;
+  --color-katha-knalum-ink: #1A1816;
+  --color-katha-loko-rust: #8C382A;
+  --color-katha-terracotta-earth: #A35C44;
+  --color-katha-abel-slate: #5A5D5A;
+  --color-katha-capiz-sage: #B5B8A3;
+
+  /* §VIII WCAG-AA muted text on Piña Ecru ground (replaces unsafe #9C958A) */
+  --color-katha-ecru-muted: #5A564E;
+  --color-katha-ecru-muted-soft: #6E6A62;
 }

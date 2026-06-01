@@ -23,7 +23,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Alex+Brush&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cinzel:wght@400..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Great+Vibes&family=Montserrat:wght@100..900&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Sacramento&family=Rochester&family=Meie+Script&family=Italiana&family=La+Belle+Aurore&family=Parisienne&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Alex+Brush&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cinzel:wght@400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Great+Vibes&family=Italiana&family=JetBrains+Mono:wght@400..700&family=La+Belle+Aurore&family=Montserrat:wght@100..900&family=Parisienne&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Rochester&family=Sacramento&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased" suppressHydrationWarning>{children}</body>
     </html>

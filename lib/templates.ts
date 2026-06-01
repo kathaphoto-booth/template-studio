@@ -419,27 +419,27 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
   },
 
-  // ─── 7. TRACY & PRINCE (Katha Signature)
+  // ─── 7. TRACY & PRINCE (Katha Signature) — palette + Fraunces (Signature rule)
   {
     id: "katha-tracy-prince",
     name: "Katha Signature — Tracy & Prince",
     type: "postcard-vertical",
     layoutId: "pv-2",
-    backgroundColor: "#FDFCFB",
-    textColor: "#A66363",
-    borderColor: "#E5E5E5",
-    secondaryColor: "#A66363",
-    fontFamily: "'Parisienne', cursive",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Fraunces', serif",
     titleText: "Tracy & Prince",
     subTitleText: "",
     dateText: "",
     slotBorderRadius: "0px",
     slotBorderWidth: "0px",
     slotGap: "24px",
-    slotBgColor: "#F9F9F9",
+    slotBgColor: "#F4EDE3",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Double fine-lined frame border with antique calligraphy and delicate monogram. Formatted specifically for Tracy & Prince."
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
   },
 
   // ─── 8. TRADITION GOLD LUXE (Classic Tier)
