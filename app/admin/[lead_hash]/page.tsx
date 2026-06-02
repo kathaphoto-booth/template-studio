@@ -27,12 +27,13 @@ function buildStudioUrl(sel: Selection): string {
   return `/?${p.toString()}`;
 }
 
-export default async function LeadDetailPage({ params }: { params: { lead_hash: string } }) {
+export default async function LeadDetailPage({ params }: { params: Promise<{ lead_hash: string }> }) {
+  const { lead_hash } = await params;
   if (!supabaseAdmin) notFound();
 
   const [{ data: lead }, { data: selection }] = await Promise.all([
-    supabaseAdmin.from("leads").select("*").eq("lead_hash", params.lead_hash).single(),
-    supabaseAdmin.from("selections").select("*").eq("lead", params.lead_hash).order("selected_at", { ascending: false }).limit(1).maybeSingle(),
+    supabaseAdmin.from("leads").select("*").eq("lead_hash", lead_hash).single(),
+    supabaseAdmin.from("selections").select("*").eq("lead", lead_hash).order("selected_at", { ascending: false }).limit(1).maybeSingle(),
   ]);
 
   if (!lead) notFound();
