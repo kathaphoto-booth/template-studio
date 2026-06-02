@@ -3,9 +3,8 @@
 // and the client gallery (app/gallery/). Edit decoration HERE only — it updates
 // preview, canvas export, AND the gallery thumbnails simultaneously.
 
-// Re-export layout helpers so consumers get everything from one module.
-export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout } from "./layouts.js";
-import { resolveLayout, VIEWBOX, FORMAT_MARGIN } from "./layouts.js";
+export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout } from "./layouts.js";
+import { resolveLayout, VIEWBOX, FORMAT_MARGIN, getModifiedLayout } from "./layouts.js";
 
 // Types
 export interface PhotoboothPreset {
@@ -60,7 +59,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-heirloom-pina-postcard",
     name: "Katha Signature — Heirloom Piña Postcard",
     type: "postcard-vertical",
-    layoutId: "pv-2",
+    layoutId: "pv-1-full",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -104,7 +103,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-loom-frame",
     name: "Katha Signature — Loom Frame",
     type: "strip",
-    backgroundColor: "#EAE2D5",
+    backgroundColor: "#F5F0E8",
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
@@ -115,7 +114,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#EEE6DA",
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "A loom-frame border of nested rules and corner cross-ties, echoing the hardwood frame that holds the warp threads taut."
@@ -125,7 +124,7 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Loom Frame Postcard",
     type: "postcard-vertical",
     layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
+    backgroundColor: "#F5F0E8",
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
@@ -136,7 +135,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#EEE6DA",
     innerSpacing: "60px",
     decorativeSvg: "",
     designerExplanation: "Loom-frame border in iron-bark serif. Postcard variant of the Loom Frame strip."
@@ -146,7 +145,7 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Loom Frame Landscape",
     type: "postcard",
     layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
+    backgroundColor: "#F5F0E8",
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
@@ -157,7 +156,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "18px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#EEE6DA",
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Loom-frame border in iron-bark serif. Landscape postcard variant for three-photo Katha events."
@@ -232,7 +231,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-brass-ring",
     name: "Katha Signature — Brass Ring",
     type: "strip",
-    backgroundColor: "#EAE2D5",
+    backgroundColor: "#E8DED0",
     textColor: "#241E1A",
     borderColor: "#8C382A",
     secondaryColor: "#8C382A",
@@ -243,7 +242,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#DFD2C1",
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing."
@@ -253,7 +252,7 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Brass Ring Postcard",
     type: "postcard-vertical",
     layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
+    backgroundColor: "#E8DED0",
     textColor: "#241E1A",
     borderColor: "#8C382A",
     secondaryColor: "#8C382A",
@@ -264,7 +263,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#DFD2C1",
     innerSpacing: "60px",
     decorativeSvg: "",
     designerExplanation: "The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names."
@@ -274,7 +273,7 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Brass Ring Landscape",
     type: "postcard",
     layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
+    backgroundColor: "#E8DED0",
     textColor: "#241E1A",
     borderColor: "#8C382A",
     secondaryColor: "#8C382A",
@@ -285,7 +284,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "18px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#DFD2C1",
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names."
@@ -1111,7 +1110,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-heirloom-pina-landscape-1sq",
     name: "Katha Signature — Heirloom Piña Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-1-sq",
+    layoutId: "pc-1-full",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -1174,7 +1173,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-knalum-night-landscape-1sq",
     name: "Katha Signature — Knalum Night Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-1-sq",
+    layoutId: "pc-1-full",
     backgroundColor: "#1A1816",
     textColor: "#EAE2D5",
     borderColor: "#2A2622",
@@ -1237,7 +1236,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "wedding-luxe-gold-landscape-1sq",
     name: "Style 1 — Tradition Gold Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-1-sq",
+    layoutId: "pc-1-full",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
     borderColor: "#C5A85C",
@@ -1514,20 +1513,19 @@ export function renderDecorativeSvg(
 
   // Find preset and dynamic layout boundaries
   const preset = PRESETS.find(p => p.id === presetId) || PRESETS.find(p => p.id === baseId) || PRESETS[0];
-  const layout = resolveLayout(preset.layoutId, type);
+  const rawLayout = resolveLayout(preset.layoutId, type);
+  const layout = getModifiedLayout(rawLayout, textPosition);
   const vb = VIEWBOX[type];
   const margin = FORMAT_MARGIN[type];
 
   // Dynamically calculate the textZone ("branding pedestal") bounds
   const tz = {
     x: layout.textZone.x,
-    y: textPosition === "top" ? margin : layout.textZone.y,
+    y: layout.textZone.y,
     w: layout.textZone.w,
     h: layout.textZone.h,
     centerX: layout.textZone.x + layout.textZone.w / 2,
-    centerY: textPosition === "top" 
-      ? margin + layout.textZone.h / 2 
-      : layout.textZone.y + layout.textZone.h / 2
+    centerY: layout.textZone.y + layout.textZone.h / 2
   };
 
   const isGoldPreset = ["wedding-luxe-gold", "wedding-art-deco", "wedding-warm-terracotta", "wedding-royal-crest", "wedding-classic-monogram"].includes(baseId);

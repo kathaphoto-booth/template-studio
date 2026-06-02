@@ -9,7 +9,9 @@
 // ----------------------------------------------------------------------
 
 import React, { useState, useMemo } from "react";
-import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX, LUXURY_FONTS } from "@/lib/templates";
+import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX, LUXURY_FONTS, getModifiedLayout } from "@/lib/templates";
+import { KNarrativeThread } from "@/components/shell/KNarrativeThread";
+import { cn } from "@/lib/utils";
 
 type TierFilter = "all" | "signature" | "classic";
 type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard" | "postcard-square";
@@ -18,15 +20,6 @@ type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard" | "postca
 // "heirloom-pina-postcard" that don't start with "katha-" but still
 // belong to the Signature tier.
 const isSignature = (p: PhotoboothPreset) => p.name.includes("Katha Signature");
-
-// Hand-torn deckle edge masks — rotated by index across Signature thumbnails
-// so no two adjacent tiles share the same torn rhythm. Classic thumbnails
-// stay polished per project memory (feedback_no_fukinsei_in_templates).
-const DECKLE_MASKS = [
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M2,3 L96,1 L98,5 L99,40 L97,72 L98,97 L65,99 L30,98 L4,99 L1,60 L3,28 Z' fill='black'/></svg>\")",
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M3,2 L40,3 L70,1 L98,4 L96,35 L99,68 L97,98 L60,96 L25,99 L1,97 L3,55 L1,20 Z' fill='black'/></svg>\")",
-  "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 100 100'><path d='M1,5 L25,2 L55,4 L85,1 L99,8 L97,40 L98,75 L95,98 L70,96 L40,99 L10,97 L2,70 L4,30 Z' fill='black'/></svg>\")",
-];
 
 // Tile dimensions normalized to a 300px-tall tile (vertical) or 200px-wide (horizontal).
 function tileDims(type: PhotoboothPreset["type"]) {
@@ -47,6 +40,7 @@ function TemplateCanvas({
   date = "",
   venue = "",
   fontFamily = "",
+  textPosition = "bottom",
 }: {
   preset: PhotoboothPreset;
   width: number;
@@ -56,12 +50,14 @@ function TemplateCanvas({
   date?: string;
   venue?: string;
   fontFamily?: string;
+  textPosition?: "bottom" | "top";
 }) {
   const { vb } = tileDims(preset.type);
   const activeFont = fontFamily || preset.fontFamily;
   const isCursive = activeFont.toLowerCase().includes("cursive");
-  const svg = renderDecorativeSvg(preset.id, preset.type, preset.textColor, preset.secondaryColor, preset.borderColor, "bottom");
-  const layout = resolveLayout(preset.layoutId, preset.type);
+  const svg = renderDecorativeSvg(preset.id, preset.type, preset.textColor, preset.secondaryColor, preset.borderColor, textPosition);
+  const rawLayout = resolveLayout(preset.layoutId, preset.type);
+  const layout = getModifiedLayout(rawLayout, textPosition);
   const viewBox = VIEWBOX[preset.type];
 
   return (
@@ -111,12 +107,14 @@ function TemplateCanvas({
           >
             {showText ? (
               <>
-                <div
-                  style={{ fontFamily: activeFont, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
-                  className={isCursive ? "normal-case" : "uppercase tracking-wide"}
-                >
-                  {names || "Your Names"}
-                </div>
+                {names && (
+                  <div
+                    style={{ fontFamily: activeFont, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
+                    className={isCursive ? "normal-case" : "uppercase tracking-wide"}
+                  >
+                    {names}
+                  </div>
+                )}
                 {date && (
                   <div style={{ color: preset.secondaryColor, fontSize: Math.max(7, width * 0.05) }} className="uppercase tracking-widest mt-1">
                     {date}
@@ -153,6 +151,22 @@ export default function GalleryPage() {
   const [tier, setTier] = useState<TierFilter>("all");
   const [format, setFormat] = useState<FormatFilter>("all");
   const [selected, setSelected] = useState<PhotoboothPreset | null>(null);
+  const [textPosition, setTextPosition] = useState<"bottom" | "top">("bottom");
+
+  const COLLECTIONS = [
+    {
+      id: "signature",
+      title: "The Signature Collection",
+      description: "Our premier tier. Hand-loomed concepts reflecting authentic Filipino heritage and Wabi-Sabi philosophy.",
+      filterFn: (p: PhotoboothPreset) => isSignature(p)
+    },
+    {
+      id: "classic",
+      title: "The Classic Atelier",
+      description: "Timeless designs, elegant typography, and traditional wedding aesthetics.",
+      filterFn: (p: PhotoboothPreset) => !isSignature(p)
+    }
+  ];
 
   // Personalization fields (stage 2)
   const [nameOne, setNameOne] = useState("");
@@ -189,6 +203,7 @@ export default function GalleryPage() {
     setDate("");
     setVenue("");
     setSelectedFont(p.fontFamily);
+    setTextPosition("bottom");
     setReferencePhotos([]);
     setNotes("");
     setErrorMsg("");
@@ -299,6 +314,7 @@ export default function GalleryPage() {
       date: date.trim() || null,
       venue: venue.trim() || null,
       fontFamily: selectedFont || null,
+      textPosition: textPosition,
       referencePhotos: referencePhotos.length > 0 ? referencePhotos : null,
       notes: notes.trim() || null,
       lead,
@@ -506,49 +522,70 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* Gallery grid */}
-      <section className="px-6 md:px-12 py-12">
-        <div className="flex flex-wrap justify-center gap-x-8 gap-y-12">
-          {filtered.map((p, i) => {
-            const d = tileDims(p.type);
-            const sig = isSignature(p);
-            const deckleStyle: React.CSSProperties | undefined = sig
-              ? {
-                  WebkitMaskImage: DECKLE_MASKS[i % 3],
-                  maskImage: DECKLE_MASKS[i % 3],
-                  WebkitMaskSize: "100% 100%",
-                  maskSize: "100% 100%",
-                  WebkitMaskRepeat: "no-repeat",
-                  maskRepeat: "no-repeat",
-                }
-              : undefined;
-            return (
-              <button
-                key={p.id}
-                onClick={() => openTemplate(p)}
-                className="group flex flex-col items-center cursor-pointer"
-                style={{ width: 200 }}
+      {/* Gallery collections */}
+      <section className="py-8 md:py-16">
+        {COLLECTIONS.map(collection => {
+          const collectionPresets = filtered.filter(collection.filterFn);
+          if (collectionPresets.length === 0) return null;
+
+          return (
+            <div key={collection.id} className="mb-20">
+              <div className="px-6 md:px-12 mb-10 flex flex-col">
+                <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "'Fraunces', serif" }}>
+                  {collection.title}
+                </h2>
+                <p className="text-[13px] mt-2 text-[#5A5D5A] max-w-lg font-light leading-relaxed">
+                  {collection.description}
+                </p>
+              </div>
+              
+              {/* Horizontal Scroll Container */}
+              <div 
+                className="flex overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-6 md:px-12 gap-x-12"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
-                <div
-                  className="h-[300px] flex items-end justify-center transition-transform duration-300 group-hover:-translate-y-1"
-                  style={deckleStyle}
-                >
-                  <TemplateCanvas preset={p} width={d.w} height={d.h} />
-                </div>
-                <div className="mt-4 text-center">
-                  <div className="text-[13px]" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
-                    {p.name.replace("Katha Signature — ", "")}
-                  </div>
-                  {isSignature(p) && (
-                    <div className="text-[9px] uppercase tracking-[0.2em] mt-1" style={{ color: "#8C382A" }}>
-                      Katha Signature
-                    </div>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
+                <style>{`.flex::-webkit-scrollbar { display: none; }`}</style>
+                {collectionPresets.map((p) => {
+                  const d = tileDims(p.type);
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => openTemplate(p)}
+                      className="group flex-none flex flex-col items-center cursor-pointer snap-start relative focus:outline-none"
+                      style={{ width: 220 }}
+                    >
+                      <div
+                        className="h-[320px] w-full flex items-end justify-center transition-all duration-500 ease-out group-hover:-translate-y-2 group-focus:-translate-y-2 relative"
+                      >
+                        <TemplateCanvas preset={p} width={d.w} height={d.h} />
+                        
+                        {/* Interactive Flip & Reveal overlay */}
+                        <div 
+                          className="absolute inset-x-0 bottom-0 top-auto h-[0%] group-hover:h-full bg-gradient-to-t from-[#241E1A]/95 via-[#241E1A]/90 to-[#241E1A]/80 text-[#EAE2D5] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-center items-center p-6 text-center z-10 overflow-hidden rounded-[2px]"
+                        >
+                           <span className="text-[9px] uppercase tracking-[0.2em] mb-4 pb-2 border-b border-[#EAE2D5]/30">Explore Details</span>
+                           <p className="text-[11.5px] leading-[1.6] font-light opacity-90">
+                             {p.designerExplanation || "An elegant layout carefully balanced for your finest memories."}
+                           </p>
+                        </div>
+                      </div>
+                      <div className="mt-6 text-center w-full px-2 transition-opacity duration-300">
+                        <div className="text-[14px] text-[#241E1A]" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
+                          {p.name.replace("Katha Signature — ", "")}
+                        </div>
+                        {isSignature(p) && (
+                          <div className="text-[9px] uppercase tracking-[0.25em] mt-2 text-[#8C382A]">
+                            Signature
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </section>
 
       {/* Personalization modal */}
@@ -605,6 +642,7 @@ export default function GalleryPage() {
                     date={date}
                     venue={venue}
                     fontFamily={selectedFont}
+                    textPosition={textPosition}
                   />
                 </div>
 
@@ -620,143 +658,210 @@ export default function GalleryPage() {
                     {selected.designerExplanation}
                   </p>
 
-                  <div className="mt-6 space-y-3">
-                    <div className="grid grid-cols-2 gap-3">
-                      <label htmlFor="katha-name-one" className="sr-only">First name</label>
-                      <input id="katha-name-one" value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
-                        className="border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
-                      <label htmlFor="katha-name-two" className="sr-only">Second name</label>
-                      <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name"
-                        className="border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
-                    </div>
-                    <label htmlFor="katha-event-date" className="sr-only">Event date</label>
-                    <input id="katha-event-date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
-                      className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
-                    <label htmlFor="katha-venue" className="sr-only">Venue or location</label>
-                    <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
-                      className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                  <KNarrativeThread
+                    className="mt-6 mb-6"
+                    items={[
+                      {
+                        label: "The Couple",
+                        complete: Boolean(nameOne && nameTwo),
+                        content: (
+                          <div className="grid grid-cols-2 gap-3">
+                            <label htmlFor="katha-name-one" className="sr-only">First name</label>
+                            <input id="katha-name-one" value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
+                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                            <label htmlFor="katha-name-two" className="sr-only">Second name</label>
+                            <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name"
+                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                          </div>
+                        )
+                      },
+                      {
+                        label: "The Event",
+                        complete: Boolean(date && venue),
+                        content: (
+                          <div className="flex flex-col gap-3">
+                            <label htmlFor="katha-event-date" className="sr-only">Event date</label>
+                            <input id="katha-event-date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                            <label htmlFor="katha-venue" className="sr-only">Venue or location</label>
+                            <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                          </div>
+                        )
+                      },
+                      {
+                        label: "Design Preferences",
+                        complete: true,
+                        content: (
+                          <div className="flex flex-col gap-4">
+                            {/* Personalized font picker */}
+                            <div className="flex flex-col gap-1">
+                              <label htmlFor="katha-font-selector" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                                Personalized Font
+                              </label>
+                              <select
+                                id="katha-font-selector"
+                                value={selectedFont}
+                                onChange={(e) => setSelectedFont(e.target.value)}
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A] cursor-pointer"
+                                style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
+                              >
+                                {LUXURY_FONTS.map((font) => (
+                                  <option key={font.css} value={font.css} style={{ fontFamily: font.css }}>
+                                    {font.name}
+                                  </option>
+                                ))}
+                              </select>
+                              {/* Live font preview swatch */}
+                              <div
+                                className="mt-1 px-3 py-3 rounded-sm text-center text-base"
+                                style={{ fontFamily: selectedFont, color: "#241E1A", backgroundColor: "#F5F1EA", border: "1px solid #C4B59D" }}
+                                aria-label={`Font preview: ${selectedFont}`}
+                              >
+                                {names || "Maria & Jose · July 2026"}
+                              </div>
+                            </div>
 
-                    {/* Personalized font picker */}
-                    <div className="flex flex-col gap-1 mt-2">
-                      <label htmlFor="katha-font-selector" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
-                        Personalized Font
-                      </label>
-                      <select
-                        id="katha-font-selector"
-                        value={selectedFont}
-                        onChange={(e) => setSelectedFont(e.target.value)}
-                        className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A] cursor-pointer"
-                        style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
-                      >
-                        {LUXURY_FONTS.map((font) => (
-                          <option key={font.css} value={font.css} style={{ fontFamily: font.css }}>
-                            {font.name}
-                          </option>
-                        ))}
-                      </select>
-                      {/* Live font preview swatch */}
-                      <div
-                        className="mt-1 px-3 py-2 rounded-sm text-center text-base"
-                        style={{ fontFamily: selectedFont, color: "#241E1A", backgroundColor: "#F5F1EA", border: "1px solid #C4B59D" }}
-                        aria-label={`Font preview: ${selectedFont}`}
-                      >
-                        {names || "Maria &amp; Jose · July 2026"}
-                      </div>
-                    </div>
-
-                      {/* Drag & Drop Reference Photos Uploader */}
-                      <div className="flex flex-col gap-1 mt-4">
-                        <label htmlFor="katha-photo-upload" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
-                          Reference Photos (Optional)
-                        </label>
-                      
-                        <div
-                          onDragEnter={handleDrag}
-                          onDragOver={handleDrag}
-                          onDragLeave={handleDrag}
-                          onDrop={handleDrop}
-                          className={`relative border border-dashed rounded-sm p-4 text-center transition-all ${
-                            dragActive ? "border-[#8C382A] bg-[#F2ECE0]" : "border-[#C4B59D] bg-white/50"
-                          }`}
-                          style={{ minHeight: "90px" }}
-                          role="region"
-                          aria-label="Drop zone for reference photos"
-                        >
-                          <input
-                            id="katha-photo-upload"
-                            type="file"
-                            multiple
-                            accept="image/*"
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            aria-label="Upload reference photos"
-                            onChange={(e) => {
-                              if (e.target.files) handleFiles(e.target.files);
-                            }}
-                            disabled={uploading}
-                          />
-                        
-                        <div className="flex flex-col items-center justify-center h-full pointer-events-none">
-                          <svg className="w-5 h-5 mb-1 text-[#9C958A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          {uploading ? (
-                            <p className="text-[11px]" style={{ color: "#5A5D5A" }}>Reading files...</p>
-                          ) : (
-                            <>
-                              <p className="text-[11px] font-medium" style={{ color: "#241E1A" }}>
-                                Drag reference photos here, or <span className="underline text-[#8C382A]">browse</span>
-                              </p>
-                              <p className="text-[9px] mt-0.5" style={{ color: "#9C958A" }}>
-                                Max 3 files (1.5MB each, 2.5MB total)
-                              </p>
-                            </>
-                          )}
-                        </div>
-                        </div>
-
-                        {/* Error message */}
-                        {errorMsg && (
-                          <p role="alert" className="text-[11px] font-medium mt-1 text-[#8C382A]">
-                            {errorMsg}
-                          </p>
-                        )}
-
-                        {/* Thumbnail Preview Grid */}
-                        {referencePhotos.length > 0 && (
-                          <div className="flex gap-2 flex-wrap mt-2" role="list" aria-label="Uploaded reference photos">
-                            {referencePhotos.map((photo, index) => (
-                              <div key={index} role="listitem" className="relative w-14 h-14 border rounded-sm overflow-hidden" style={{ borderColor: "#C4B59D" }}>
-                                <img src={photo} alt={`Reference photo ${index + 1}`} className="w-full h-full object-cover" />
+                            {/* Text Position toggle */}
+                            <div className="flex flex-col gap-1">
+                              <span className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                                Text Position
+                              </span>
+                              <div className="grid grid-cols-2 gap-2 mt-1">
                                 <button
                                   type="button"
-                                  onClick={() => setReferencePhotos(prev => prev.filter((_, i) => i !== index))}
-                                  className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#8C382A] text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
-                                  aria-label={`Remove reference photo ${index + 1}`}
+                                  id="btn-gallery-text-bottom"
+                                  onClick={() => setTextPosition("bottom")}
+                                  className={cn(
+                                    "text-[11px] py-2 font-semibold rounded-xs border uppercase tracking-wider text-center cursor-pointer transition-all",
+                                    textPosition === "bottom"
+                                      ? "text-white shadow-sm"
+                                      : "bg-white text-stone-600 border-stone-250 hover:bg-stone-50"
+                                  )}
+                                  style={{
+                                    backgroundColor: textPosition === "bottom" ? "#8C382A" : "",
+                                    borderColor: textPosition === "bottom" ? "#8C382A" : "#C4B59D"
+                                  }}
                                 >
-                                  ×
+                                  Bottom
+                                </button>
+                                <button
+                                  type="button"
+                                  id="btn-gallery-text-top"
+                                  onClick={() => setTextPosition("top")}
+                                  className={cn(
+                                    "text-[11px] py-2 font-semibold rounded-xs border uppercase tracking-wider text-center cursor-pointer transition-all",
+                                    textPosition === "top"
+                                      ? "text-white shadow-sm"
+                                      : "bg-white text-stone-600 border-stone-250 hover:bg-stone-50"
+                                  )}
+                                  style={{
+                                    backgroundColor: textPosition === "top" ? "#8C382A" : "",
+                                    borderColor: textPosition === "top" ? "#8C382A" : "#C4B59D"
+                                  }}
+                                >
+                                  Top
                                 </button>
                               </div>
-                            ))}
+                            </div>
+                            
+                            {/* Additional Notes */}
+                            <div className="flex flex-col gap-1">
+                              <label htmlFor="katha-notes" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                                Additional Details
+                              </label>
+                              <textarea
+                                id="katha-notes"
+                                value={notes}
+                                onChange={(e) => setNotes(e.target.value)}
+                                placeholder="Anything specific we should know — colour accents, motifs, layout preferences?"
+                                rows={2}
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]"
+                                style={{ borderColor: "#C4B59D", resize: "none" }}
+                              />
+                            </div>
                           </div>
-                        )}
-                      </div>
-
-                    {/* Additional Notes */}
-                    <div className="flex flex-col gap-1 mt-4">
-                      <label htmlFor="katha-notes" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
-                        Additional Details
-                      </label>
-                      <textarea
-                        id="katha-notes"
-                        value={notes}
-                        onChange={(e) => setNotes(e.target.value)}
-                        placeholder="Anything specific we should know — colour accents, motifs, layout preferences?"
-                        rows={2}
-                        className="w-full border px-3 py-2 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]"
-                        style={{ borderColor: "#C4B59D", resize: "none" }}
-                      />
-                    </div>
-                  </div>
+                        )
+                      },
+                      {
+                        label: "Reference Photos (Optional)",
+                        complete: true,
+                        content: (
+                          <div className="flex flex-col gap-1">
+                            <div
+                              onDragEnter={handleDrag}
+                              onDragOver={handleDrag}
+                              onDragLeave={handleDrag}
+                              onDrop={handleDrop}
+                              className={`relative border border-dashed rounded-sm p-4 text-center transition-all ${
+                                dragActive ? "border-[#8C382A] bg-[#F2ECE0]" : "border-[#C4B59D] bg-white/50"
+                              }`}
+                              style={{ minHeight: "90px" }}
+                              role="region"
+                              aria-label="Drop zone for reference photos"
+                            >
+                              <input
+                                id="katha-photo-upload"
+                                type="file"
+                                multiple
+                                accept="image/*"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                aria-label="Upload reference photos"
+                                onChange={(e) => {
+                                  if (e.target.files) handleFiles(e.target.files);
+                                }}
+                                disabled={uploading}
+                              />
+                            
+                              <div className="flex flex-col items-center justify-center h-full pointer-events-none">
+                                <svg className="w-5 h-5 mb-1 text-[#9C958A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                {uploading ? (
+                                  <p className="text-[11px]" style={{ color: "#5A5D5A" }}>Reading files...</p>
+                                ) : (
+                                  <>
+                                    <p className="text-[11px] font-medium" style={{ color: "#241E1A" }}>
+                                      Drag reference photos here, or <span className="underline text-[#8C382A]">browse</span>
+                                    </p>
+                                    <p className="text-[9px] mt-0.5" style={{ color: "#9C958A" }}>
+                                      Max 3 files (1.5MB each, 2.5MB total)
+                                    </p>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+    
+                            {/* Error message */}
+                            {errorMsg && (
+                              <p role="alert" className="text-[11px] font-medium mt-1 text-[#8C382A]">
+                                {errorMsg}
+                              </p>
+                            )}
+    
+                            {/* Thumbnail Preview Grid */}
+                            {referencePhotos.length > 0 && (
+                              <div className="flex gap-2 flex-wrap mt-2" role="list" aria-label="Uploaded reference photos">
+                                {referencePhotos.map((photo, index) => (
+                                  <div key={index} role="listitem" className="relative w-14 h-14 border rounded-sm overflow-hidden" style={{ borderColor: "#C4B59D" }}>
+                                    <img src={photo} alt={`Reference photo ${index + 1}`} className="w-full h-full object-cover" />
+                                    <button
+                                      type="button"
+                                      onClick={() => setReferencePhotos(prev => prev.filter((_, i) => i !== index))}
+                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#8C382A] text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
+                                      aria-label={`Remove reference photo ${index + 1}`}
+                                    >
+                                      ×
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )
+                      }
+                    ]}
+                  />
 
                   <button
                     onClick={confirmSelection}

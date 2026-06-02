@@ -28,7 +28,7 @@ import {
   RotateCcw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat } from "@/lib/templates";
+import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat, getModifiedLayout } from "@/lib/templates";
 import { Turnstile } from '@marsidev/react-turnstile';
 
 
@@ -133,6 +133,35 @@ function drawPaperTexture(
       const rx = Math.random() * width;
       const ry = Math.random() * height;
       ctx.fillRect(rx, ry, 1.5, 2);
+    }
+  } else if (presetId.includes("pina")) {
+    // Katha Signature: Heirloom Piña Fabric Texture
+    // Hand-loomed pineapple fiber cross-hatch with slight organic unevenness
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+    ctx.lineWidth = 0.75;
+    for (let i = 0; i < width; i += 3) {
+      if (Math.random() > 0.1) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+        ctx.stroke();
+      }
+    }
+    for (let j = 0; j < height; j += 3) {
+      if (Math.random() > 0.1) {
+        ctx.beginPath();
+        ctx.moveTo(0, j);
+        ctx.lineTo(width, j);
+        ctx.stroke();
+      }
+    }
+    // Subtle golden woven threads
+    ctx.fillStyle = "rgba(196, 181, 157, 0.08)";
+    for (let i = 0; i < 800; i++) {
+      const rx = Math.random() * width;
+      const ry = Math.random() * height;
+      const length = 4 + Math.random() * 8;
+      ctx.fillRect(rx, ry, length, 1);
     }
   } else {
     // Default high-finish warm letterpress paper pulp
@@ -492,16 +521,20 @@ export default function WorkspacePage() {
   };
 
   const getDerivedNames = () => {
-    if (!partnerOne.trim() && !partnerTwo.trim()) return "STEVEN & CRISTALYN";
-    return `${partnerOne.trim()} ${textSeparator} ${partnerTwo.trim()}`;
+    const p1 = partnerOne.trim();
+    const p2 = partnerTwo.trim();
+    if (!p1 && !p2) return "";
+    if (p1 && !p2) return p1;
+    if (!p1 && p2) return p2;
+    return `${p1} ${textSeparator} ${p2}`;
   };
 
   const getDerivedDate = () => {
-    return weddingDate.trim() || "JULY 25, 2026";
+    return weddingDate.trim();
   };
 
   const getDerivedVenue = () => {
-    return weddingVenue.trim() || "NAPA VALLEY, CALIFORNIA";
+    return weddingVenue.trim();
   };
 
   // Adjust Hex colors to have muted, accurate CMYK target equivalents for fine printed outputs
@@ -614,7 +647,8 @@ export default function WorkspacePage() {
     // all read the same definitions.
     if (layer === "all" || layer === "slots") {
       const isGoldBorder = ["wedding-luxe-gold", "wedding-art-deco", "wedding-warm-terracotta"].includes(currentPreset.id);
-      const layoutDef = resolveLayout(currentPreset.layoutId, activePresetType);
+      const rawLayoutDef = resolveLayout(currentPreset.layoutId, activePresetType);
+      const layoutDef = getModifiedLayout(rawLayoutDef, textPosition);
       const vb = VIEWBOX[activePresetType];
       // Map viewBox units → canvas pixels for the active export
       const sx = cardWidth / vb.w;
@@ -625,12 +659,6 @@ export default function WorkspacePage() {
         let y = s.y * sy;
         let sw = s.w * sx;
         let sh = s.h * sy;
-        // If the user flips text to the top, mirror every slot vertically
-        // so the text zone lands at the top of the canvas. The layout text
-        // zone implicitly sits below the slots; mirroring keeps the look.
-        if (textPosition === "top") {
-          y = cardHeight - y - sh;
-        }
 
         if (layer === "slots") {
           // Standard Opaque Matte slots mask for clip masks (Solid Black)
@@ -688,24 +716,44 @@ export default function WorkspacePage() {
       const namesText = isCursive ? getDerivedNames() : getDerivedNames().toUpperCase();
 
       if (activePresetType === "strip") {
-        const textBaseY = textPosition === "top" ? (190 * scaleFactor) : cardHeight - (310 * scaleFactor);
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
         const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
 
-        // Partner Names
-        ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * scaleFactor}px ${partnerCleanFont}`;
-        ctx.fillStyle = finalTextColor;
-        ctx.fillText(namesText, cardWidth / 2, textBaseY);
+        const dText = getDerivedDate().trim();
+        const vText = getDerivedVenue().trim();
+        const nText = namesText.trim();
+        const hasDate = dText !== "" && dText.toUpperCase() !== "DO NOT INCLUDE EVENT DATE";
+        const hasVenue = vText !== "";
+        const hasNames = nText !== "";
 
-        // Wedding Date
-        ctx.font = `bold ${dateFontSize * scaleFactor}px ${dateCleanFont}`;
-        ctx.fillStyle = finalSecColor;
-        ctx.fillText(getDerivedDate().toUpperCase(), cardWidth / 2, textBaseY + (50 * scaleFactor));
+        let totalTextHeight = 0;
+        if (hasNames) totalTextHeight += partnerFontSize * scaleFactor;
+        if (hasDate) totalTextHeight += (hasNames ? 50 * scaleFactor : dateFontSize * scaleFactor);
+        if (hasVenue) totalTextHeight += (hasDate || hasNames ? 35 * scaleFactor : venueFontSize * scaleFactor);
 
-        // Event Location/Venue
-        ctx.font = `normal ${venueFontSize * scaleFactor}px ${venueCleanFont}`;
-        ctx.fillStyle = finalTextColor;
-        ctx.fillText(getDerivedVenue().toUpperCase(), cardWidth / 2, textBaseY + (85 * scaleFactor));
+        let currentY = textPosition === "top" 
+          ? (190 * scaleFactor) 
+          : cardHeight - (190 * scaleFactor) - totalTextHeight;
+
+        if (hasNames) {
+          ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * scaleFactor}px ${partnerCleanFont}`;
+          ctx.fillStyle = finalTextColor;
+          ctx.fillText(nText, cardWidth / 2, currentY);
+          currentY += 50 * scaleFactor;
+        }
+        
+        if (hasDate) {
+          ctx.font = `bold ${dateFontSize * scaleFactor}px ${dateCleanFont}`;
+          ctx.fillStyle = finalSecColor;
+          ctx.fillText(dText.toUpperCase(), cardWidth / 2, currentY);
+          currentY += 35 * scaleFactor;
+        }
+
+        if (hasVenue) {
+          ctx.font = `normal ${venueFontSize * scaleFactor}px ${venueCleanFont}`;
+          ctx.fillStyle = finalTextColor;
+          ctx.fillText(vText.toUpperCase(), cardWidth / 2, currentY);
+        }
       } else if (activePresetType === "postcard-vertical") {
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
         const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
@@ -713,52 +761,78 @@ export default function WorkspacePage() {
         // Strip whitespaces out to check if date and venue are excluded
         const dText = getDerivedDate().trim();
         const vText = getDerivedVenue().trim();
+        const nText = namesText.trim();
         const hasDate = dText !== "" && dText.toUpperCase() !== "DO NOT INCLUDE EVENT DATE";
         const hasVenue = vText !== "";
+        const hasNames = nText !== "";
 
-        if (!hasDate && !hasVenue) {
-          const textBaseY = textPosition === "top" ? (200 * scaleFactor) : cardHeight - (200 * scaleFactor);
-          ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${(partnerFontSize + 4) * scaleFactor}px ${partnerCleanFont}`;
-          ctx.fillStyle = finalTextColor;
-          ctx.fillText(namesText, cardWidth / 2, textBaseY);
-        } else {
-          const textBaseY = textPosition === "top" ? (140 * scaleFactor) : cardHeight - (280 * scaleFactor);
+        let totalTextHeight = 0;
+        if (hasNames) totalTextHeight += partnerFontSize * scaleFactor;
+        if (hasDate) totalTextHeight += (hasNames ? 45 * scaleFactor : dateFontSize * scaleFactor);
+        if (hasVenue) totalTextHeight += (hasDate || hasNames ? 35 * scaleFactor : venueFontSize * scaleFactor);
+
+        let currentY = textPosition === "top" 
+          ? (140 * scaleFactor) 
+          : cardHeight - (140 * scaleFactor) - totalTextHeight;
+
+        if (hasNames) {
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * scaleFactor}px ${partnerCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(namesText, cardWidth / 2, textBaseY);
+          ctx.fillText(nText, cardWidth / 2, currentY);
+          currentY += 45 * scaleFactor;
+        }
 
-          let offsetY = 45 * scaleFactor;
-          if (hasDate) {
-            ctx.font = `bold ${dateFontSize * scaleFactor}px ${dateCleanFont}`;
-            ctx.fillStyle = finalSecColor;
-            ctx.fillText(dText.toUpperCase(), cardWidth / 2, textBaseY + offsetY);
-            offsetY += 35 * scaleFactor;
-          }
-          if (hasVenue) {
-            ctx.font = `normal ${venueFontSize * scaleFactor}px ${venueCleanFont}`;
-            ctx.fillStyle = finalTextColor;
-            ctx.fillText(vText.toUpperCase(), cardWidth / 2, textBaseY + offsetY);
-          }
+        if (hasDate) {
+          ctx.font = `bold ${dateFontSize * scaleFactor}px ${dateCleanFont}`;
+          ctx.fillStyle = finalSecColor;
+          ctx.fillText(dText.toUpperCase(), cardWidth / 2, currentY);
+          currentY += 35 * scaleFactor;
+        }
+        
+        if (hasVenue) {
+          ctx.font = `normal ${venueFontSize * scaleFactor}px ${venueCleanFont}`;
+          ctx.fillStyle = finalTextColor;
+          ctx.fillText(vText.toUpperCase(), cardWidth / 2, currentY);
         }
       } else {
-        const textBaseY = textPosition === "top" ? 130 : cardHeight - 200;
+        const dText = getDerivedDate().trim();
+        const vText = getDerivedVenue().trim();
+        const nText = namesText.trim();
+        const hasDate = dText !== "" && dText.toUpperCase() !== "DO NOT INCLUDE EVENT DATE";
+        const hasVenue = vText !== "";
+        const hasNames = nText !== "";
+
+        let totalTextHeight = 0;
+        if (hasNames) totalTextHeight += partnerFontSize * 1.5;
+        if (hasDate) totalTextHeight += (hasNames ? 54 : dateFontSize * 1.5);
+        if (hasVenue) totalTextHeight += (hasDate || hasNames ? 41 : venueFontSize * 1.5);
+
+        let currentY = textPosition === "top" 
+          ? 130 
+          : cardHeight - 130 - totalTextHeight;
+
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
         const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
 
-        // Partner Names
-        ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * 1.5}px ${partnerCleanFont}`;
-        ctx.fillStyle = finalTextColor;
-        ctx.fillText(namesText, cardWidth / 2, textBaseY);
+        if (hasNames) {
+          ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * 1.5}px ${partnerCleanFont}`;
+          ctx.fillStyle = finalTextColor;
+          ctx.fillText(nText, cardWidth / 2, currentY);
+          currentY += 54;
+        }
 
-        // Wedding Date
-        ctx.font = `bold ${dateFontSize * 1.5}px ${dateCleanFont}`;
-        ctx.fillStyle = finalSecColor;
-        ctx.fillText(getDerivedDate().toUpperCase(), cardWidth / 2, textBaseY + 54);
+        if (hasDate) {
+          ctx.font = `bold ${dateFontSize * 1.5}px ${dateCleanFont}`;
+          ctx.fillStyle = finalSecColor;
+          ctx.fillText(dText.toUpperCase(), cardWidth / 2, currentY);
+          currentY += 41;
+        }
 
-        // Event Location/Venue
-        ctx.font = `normal ${venueFontSize * 1.5}px ${venueCleanFont}`;
-        ctx.fillStyle = finalTextColor;
-        ctx.fillText(getDerivedVenue().toUpperCase(), cardWidth / 2, textBaseY + 95);
+        if (hasVenue) {
+          ctx.font = `normal ${venueFontSize * 1.5}px ${venueCleanFont}`;
+          ctx.fillStyle = finalTextColor;
+          ctx.fillText(vText.toUpperCase(), cardWidth / 2, currentY);
+        }
       }
     }
 
@@ -908,21 +982,23 @@ export default function WorkspacePage() {
         textPosition === "top" ? "mb-auto" : "mt-auto",
       )}
     >
-      <h3 
-        style={{ 
-          fontFamily: partnerFont,
-          fontSize: `${partnerFontSize}px`,
-          letterSpacing: `${partnerLetterSpacing}px`,
-        }}
-        className={cn(
-          "leading-none",
-          (currentPreset.fontFamily.toLowerCase().includes("cursive") || partnerFont.toLowerCase().includes("cursive")) ? "normal-case" : "uppercase",
-          partnerFontWeight,
-          partnerItalic ? "italic" : ""
-        )}
-      >
-        {getDerivedNames()}
-      </h3>
+      {getDerivedNames() !== "" && (
+        <h3 
+          style={{ 
+            fontFamily: partnerFont,
+            fontSize: `${partnerFontSize}px`,
+            letterSpacing: `${partnerLetterSpacing}px`,
+          }}
+          className={cn(
+            "leading-none",
+            (currentPreset.fontFamily.toLowerCase().includes("cursive") || partnerFont.toLowerCase().includes("cursive")) ? "normal-case" : "uppercase",
+            partnerFontWeight,
+            partnerItalic ? "italic" : ""
+          )}
+        >
+          {getDerivedNames()}
+        </h3>
+      )}
       
       {getDerivedDate() && getDerivedDate().trim() !== "" && getDerivedDate().toUpperCase() !== "DO NOT INCLUDE EVENT DATE" && (
         <p 
@@ -1489,7 +1565,8 @@ export default function WorkspacePage() {
                        this wrapper does NOT add its own padding. */}
                   <div className="absolute inset-0 z-20">
                     {(() => {
-                      const lay = resolveLayout(currentPreset.layoutId, activePresetType);
+                      const rawLay = resolveLayout(currentPreset.layoutId, activePresetType);
+                      const lay = getModifiedLayout(rawLay, textPosition);
                       const vb = VIEWBOX[activePresetType];
                       return lay.slots.map((s: { x: number; y: number; w: number; h: number }, idx: number) => {
                         const left = (s.x / vb.w) * 100;
@@ -1503,11 +1580,7 @@ export default function WorkspacePage() {
                           style={{
                             position: "absolute",
                             left: `${left}%`,
-                            // Vertical reflection when text flips to top — slots
-                            // move down so the text can sit above. The previous
-                            // bottom-anchored flip was a no-op (bottom: 100-y-h
-                            // with height h yields the same vertical span).
-                            top: textPosition === "top" ? `${100 - top - height}%` : `${top}%`,
+                            top: `${top}%`,
                             width: `${width}%`,
                             height: `${height}%`,
                             borderRadius: slotBorderRadius,
