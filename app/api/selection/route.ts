@@ -35,14 +35,14 @@ const FORBIDDEN_WORDS = ["luxury", "premium", "stunning", "amazing"];
 //   • from: 'onboarding@resend.dev' works out of the box (no domain verification)
 //   • once kathabooth.com is verified with Resend, set NOTIFICATION_FROM to
 //     e.g. "Katha <hello@kathabooth.com>"
-//   • to: defaults to kathabooth@gmail.com if NOTIFICATION_EMAIL is unset
+//   • to: defaults to jedgrepo@gmail.com if NOTIFICATION_EMAIL is unset
 async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
   }
 
-  const toAddr = process.env.NOTIFICATION_EMAIL || "kathabooth@gmail.com";
+  const toAddr = process.env.NOTIFICATION_EMAIL || "jedgrepo@gmail.com";
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
   const appUrl = process.env.APP_URL || "https://kathabooth.com";
 
