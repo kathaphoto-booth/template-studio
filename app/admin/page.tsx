@@ -1,5 +1,4 @@
 import { supabaseAdmin } from "@/lib/supabase";
-import { STUDIO_ID } from "@/lib/studio";
 import Link from "next/link";
 
 type Lead = {
@@ -28,10 +27,11 @@ const STATUS_STYLES: Record<string, { background: string; color: string }> = {
 async function getData() {
   if (!supabaseAdmin) return { leads: [], selections: [] };
 
+  // Single-tenant today: every lead belongs to STUDIO_ID. When the schema gains a
+  // studio_id column (SaaS multi-tenancy phase), restore `.eq("studio_id", STUDIO_ID)`.
   const { data: leadsRaw } = await supabaseAdmin
     .from("leads")
     .select("id, client_name, client_email, event_date, lead_hash, status, created_at")
-    .eq("studio_id", STUDIO_ID)
     .order("created_at", { ascending: false });
 
   const leads: Lead[] = leadsRaw ?? [];
