@@ -73,7 +73,7 @@ function drawPaperTexture(
       const ry = Math.random() * height;
       ctx.fillRect(rx, ry, 1.5, 1.5);
     }
-  } else if (["wedding-white-rose", "wedding-editorial", "wedding-botanical-arch", "wedding-hand-painted-hydrangea"].includes(presetId)) {
+  } else if (["rose-whisper", "wedding-editorial", "wedding-botanical-arch", "wedding-hand-painted-hydrangea"].includes(presetId)) {
     // 2. Heavy watercolor / Deckled structured cotton cardstock
     // Draw rich mottled clouds representing raw parchment/cotton pulp
     for (let i = 0; i < 90; i++) {
@@ -1731,7 +1731,7 @@ export default function WorkspacePage() {
                           </div>
 
                           {/* OVERLAPPING 3D ROSE ACCESSORY (Only for bottom-most / third slot) */}
-                          {currentPreset.id === "wedding-white-rose" && idx === 2 && (
+                          {currentPreset.id === "rose-whisper" && idx === 2 && (
                             <div 
                               style={{
                                 position: "absolute",
