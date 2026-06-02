@@ -15,8 +15,8 @@ import { NextRequest, NextResponse } from "next/server";
 // without it). Set it in Vercel env vars before sharing the URL.
 // ──────────────────────────────────────────────────────────────────────
 
-const PROTECTED_PATHS = ["/"];
-const PROTECTED_PREFIXES = ["/api/generate"];
+const PROTECTED_PATHS = ["/", "/admin"];
+const PROTECTED_PREFIXES = ["/api/generate", "/api/admin"];
 
 function isProtected(pathname: string): boolean {
   if (PROTECTED_PATHS.includes(pathname)) return true;
@@ -24,8 +24,25 @@ function isProtected(pathname: string): boolean {
 }
 
 export function middleware(req: NextRequest) {
-  // Passwords / Vercel Authentication temporarily disabled for visual audits as requested by the user
-  return NextResponse.next();
+  const password = process.env.STUDIO_PASSWORD;
+  if (!password) return NextResponse.next(); // bypass when unset (local dev)
+
+  const pathname = req.nextUrl.pathname;
+  if (!isProtected(pathname)) return NextResponse.next();
+
+  const authHeader = req.headers.get("authorization") ?? "";
+  const [scheme, encoded] = authHeader.split(" ");
+  if (scheme === "Basic" && encoded) {
+    const decoded = Buffer.from(encoded, "base64").toString("utf-8");
+    const colonIndex = decoded.indexOf(":");
+    const provided = decoded.slice(colonIndex + 1);
+    if (provided === password) return NextResponse.next();
+  }
+
+  return new NextResponse("Unauthorized", {
+    status: 401,
+    headers: { "WWW-Authenticate": 'Basic realm="Katha Studio"' },
+  });
 }
 
 export const config = {
