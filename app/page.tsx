@@ -28,8 +28,8 @@ import {
   RotateCcw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat, getModifiedLayout } from "@/lib/templates";
-import { Turnstile } from '@marsidev/react-turnstile';
+import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat, getModifiedLayout, LAYOUTS, defaultLayoutFor } from "@/lib/templates";
+
 
 
 // ----------------------------------------------------------------------
@@ -310,11 +310,11 @@ export default function WorkspacePage() {
   const [currentPreset, setCurrentPreset] = useState<PhotoboothPreset>(PRESETS[0]);
 
   // Master customized text inputs representing user's wedding data
-  const [partnerOne, setPartnerOne] = useState("Steven");
-  const [partnerTwo, setPartnerTwo] = useState("Cristalyn");
+  const [partnerOne, setPartnerOne] = useState("");
+  const [partnerTwo, setPartnerTwo] = useState("");
   const [textSeparator, setTextSeparator] = useState("&");
-  const [weddingDate, setWeddingDate] = useState("July 25, 2026");
-  const [weddingVenue, setWeddingVenue] = useState("NAPA VALLEY, CALIFORNIA");
+  const [weddingDate, setWeddingDate] = useState("");
+  const [weddingVenue, setWeddingVenue] = useState("");
 
   // Typography override settings
   const [partnerFont, setPartnerFont] = useState(LUXURY_FONTS[0].css);
@@ -363,6 +363,151 @@ export default function WorkspacePage() {
   // Active Harmony Palette tracking state
   const [activePaletteId, setActivePaletteId] = useState<string | null>(null);
 
+  // Client-to-Admin Local Draft Bridge
+  const [draftSelection, setDraftSelection] = useState<any | null>(null);
+  const [showDraftBanner, setShowDraftBanner] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const selections = JSON.parse(localStorage.getItem("katha_selections") || "[]");
+      if (selections && selections.length > 0) {
+        const latest = selections[0];
+        const params = new URLSearchParams(window.location.search);
+        if (!params.get("names") && !params.get("preset")) {
+          setDraftSelection(latest);
+          setShowDraftBanner(true);
+        }
+      }
+    } catch (e) {}
+  }, []);
+
+  const applyDraftSelection = () => {
+    if (!draftSelection) return;
+    const matchedPreset = PRESETS.find(p => p.id === draftSelection.templateId);
+    if (matchedPreset) {
+      setCurrentPreset(matchedPreset);
+      setBackgroundColor(matchedPreset.backgroundColor);
+      setTextColor(matchedPreset.textColor);
+      setBorderColor(matchedPreset.borderColor);
+      setSecondaryColor(matchedPreset.secondaryColor);
+      setGraphicOpacity(100);
+      setActivePaletteId(null);
+      if (matchedPreset.type) {
+        setActivePresetType(matchedPreset.type as any);
+      }
+      const matchedFont = LUXURY_FONTS.find(f => f.css.toLowerCase() === (draftSelection.fontFamily || matchedPreset.fontFamily).toLowerCase()) || LUXURY_FONTS[0];
+      setPartnerFont(matchedFont.css);
+      setSlotBorderRadius(matchedPreset.slotBorderRadius);
+      setSlotBorderWidth(matchedPreset.slotBorderWidth);
+      setSlotGap(matchedPreset.slotGap);
+      setSlotBgColor(matchedPreset.slotBgColor);
+      setInnerSpacing(matchedPreset.innerSpacing);
+    }
+    const namesVal = draftSelection.names || "";
+    if (namesVal) {
+      let separator = "&";
+      let parts = [namesVal];
+      for (const sep of [" & ", " AND ", " and ", " ♥ ", " ● "]) {
+        if (namesVal.includes(sep)) {
+          separator = sep.trim();
+          parts = namesVal.split(sep);
+          break;
+        }
+      }
+      if (parts[0]) setPartnerOne(parts[0].trim());
+      if (parts[1]) setPartnerTwo(parts[1].trim());
+      setTextSeparator(separator);
+    }
+    if (draftSelection.date) setWeddingDate(draftSelection.date);
+    if (draftSelection.venue) setWeddingVenue(draftSelection.venue);
+    if (draftSelection.textPosition) setTextPosition(draftSelection.textPosition);
+    setShowDraftBanner(false);
+  };
+
+  // Auto-fill and auto-design bridge: parse search params on load
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+
+    // 1. Set layout dynamics first to allow correct slot positioning
+    const layoutParam = params.get("layout");
+    if (layoutParam === "strip" || layoutParam === "postcard" || layoutParam === "postcard-vertical") {
+      setActivePresetType(layoutParam);
+    }
+
+    // 2. Select preset dynamically
+    const presetParam = params.get("preset");
+    if (presetParam) {
+      const matchedPreset = PRESETS.find(p => p.id === presetParam);
+      if (matchedPreset) {
+        setCurrentPreset(matchedPreset);
+        setBackgroundColor(matchedPreset.backgroundColor);
+        setTextColor(matchedPreset.textColor);
+        setBorderColor(matchedPreset.borderColor);
+        setSecondaryColor(matchedPreset.secondaryColor);
+        setGraphicOpacity(100);
+        setActivePaletteId(null);
+        if (matchedPreset.type) {
+          setActivePresetType(matchedPreset.type as any);
+        }
+
+        // Set matching typography based on preset
+        const matchedFont = LUXURY_FONTS.find(f => f.css.toLowerCase() === matchedPreset.fontFamily.toLowerCase()) || LUXURY_FONTS[0];
+        setPartnerFont(matchedFont.css);
+
+        setSlotBorderRadius(matchedPreset.slotBorderRadius);
+        setSlotBorderWidth(matchedPreset.slotBorderWidth);
+        setSlotGap(matchedPreset.slotGap);
+        setSlotBgColor(matchedPreset.slotBgColor);
+        setInnerSpacing(matchedPreset.innerSpacing);
+      }
+    }
+
+    // 3. Set names dynamically
+    const namesParam = params.get("names");
+    if (namesParam) {
+      let separator = "&";
+      let parts = [namesParam];
+      for (const sep of [" & ", " AND ", " and ", " ♥ ", " ● "]) {
+        if (namesParam.includes(sep)) {
+          separator = sep.trim();
+          parts = namesParam.split(sep);
+          break;
+        }
+      }
+      if (parts[0]) setPartnerOne(parts[0].trim());
+      if (parts[1]) setPartnerTwo(parts[1].trim());
+      setTextSeparator(separator);
+    }
+
+    // 4. Set date dynamically
+    const dateParam = params.get("date");
+    if (dateParam) {
+      setWeddingDate(dateParam);
+    }
+
+    // 5. Set venue dynamically
+    const venueParam = params.get("venue");
+    if (venueParam) {
+      setWeddingVenue(venueParam);
+    }
+
+    // 6. Set custom font override dynamically
+    const fontParam = params.get("font");
+    if (fontParam) {
+      const matchedFont = LUXURY_FONTS.find(
+        f => f.css.toLowerCase() === fontParam.toLowerCase() || 
+             f.name.toLowerCase() === fontParam.toLowerCase()
+      );
+      if (matchedFont) {
+        setPartnerFont(matchedFont.css);
+      }
+    }
+  }, []);
+
+
   const applyPalette = (palette: typeof HARMONY_PALETTES[0]) => {
     setBackgroundColor(palette.bg);
     setTextColor(palette.text);
@@ -378,73 +523,6 @@ export default function WorkspacePage() {
     applyPalette(HARMONY_PALETTES[nextIndex]);
   };
 
-  // AI Generation state
-  const [aiModalOpen, setAiModalOpen] = useState(false);
-  const [aiEventName, setAiEventName] = useState("");
-  const [aiFormFactor, setAiFormFactor] = useState<"strip" | "postcard" | "postcard-vertical">("strip");
-  const [aiLoading, setAiLoading] = useState(false);
-  const [aiError, setAiError] = useState("");
-  const [turnstileToken, setTurnstileToken] = useState("");
-
-  const handleGenerateAiTheme = async () => {
-    if (!aiEventName) {
-      setAiError("Please provide an event name.");
-      return;
-    }
-    if (!turnstileToken) {
-      setAiError("Security verification required. Please complete the captcha.");
-      return;
-    }
-    setAiLoading(true);
-    setAiError("");
-    try {
-      const verifyRes = await fetch("/api/verify-turnstile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: turnstileToken })
-      });
-      if (!verifyRes.ok) {
-        throw new Error("Security verification failed. Please try again.");
-      }
-
-      const res = await fetch("/api/generate-theme", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventName: aiEventName, formFactor: aiFormFactor })
-      });
-      if (!res.ok) {
-        throw new Error(await res.text() || "Failed to generate theme");
-      }
-      const data = await res.json();
-      
-      const newPreset: PhotoboothPreset = {
-        ...data,
-        type: aiFormFactor,
-        decorativeSvg: "" // Give it no decorative SVG by default, or maybe generate one?
-      };
-      
-      setActivePresetType(aiFormFactor);
-      
-      // Load preset settings
-      handleSelectPreset(newPreset);
-      
-      // Override the text inputs with the AI generated concepts
-      if (newPreset.titleText) {
-        setPartnerOne(newPreset.titleText);
-        setPartnerTwo("");
-        setTextSeparator("");
-      }
-      if (newPreset.subTitleText !== undefined) setWeddingDate(newPreset.subTitleText);
-      if (newPreset.dateText !== undefined) setWeddingVenue(newPreset.dateText);
-
-      setAiModalOpen(false);
-      setAiEventName("");
-    } catch (e: any) {
-      setAiError(e.message || "An error occurred");
-    } finally {
-      setAiLoading(false);
-    }
-  };
 
   // Sync state on preset changes
   const handleSelectPreset = (preset: PhotoboothPreset) => {
@@ -731,28 +809,32 @@ export default function WorkspacePage() {
         if (hasDate) totalTextHeight += (hasNames ? 50 * scaleFactor : dateFontSize * scaleFactor);
         if (hasVenue) totalTextHeight += (hasDate || hasNames ? 35 * scaleFactor : venueFontSize * scaleFactor);
 
-        let currentY = textPosition === "top" 
-          ? (190 * scaleFactor) 
-          : cardHeight - (190 * scaleFactor) - totalTextHeight;
+        const rawLayout = resolveLayout(currentPreset.layoutId, "strip");
+        const layout = getModifiedLayout(rawLayout, textPosition);
+        const tz = layout.textZone;
+        const textZoneCenterY = (tz.y + tz.h / 2) * scaleFactor;
+        const firstLineHeight = hasNames ? partnerFontSize * scaleFactor : (hasDate ? dateFontSize * scaleFactor : venueFontSize * scaleFactor);
+
+        let currentY = textZoneCenterY - (totalTextHeight / 2) + (firstLineHeight / 2);
 
         if (hasNames) {
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * scaleFactor}px ${partnerCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(nText, cardWidth / 2, currentY);
+          ctx.fillText(nText, (tz.x + tz.w / 2) * scaleFactor, currentY);
           currentY += 50 * scaleFactor;
         }
         
         if (hasDate) {
           ctx.font = `bold ${dateFontSize * scaleFactor}px ${dateCleanFont}`;
           ctx.fillStyle = finalSecColor;
-          ctx.fillText(dText.toUpperCase(), cardWidth / 2, currentY);
+          ctx.fillText(dText.toUpperCase(), (tz.x + tz.w / 2) * scaleFactor, currentY);
           currentY += 35 * scaleFactor;
         }
 
         if (hasVenue) {
           ctx.font = `normal ${venueFontSize * scaleFactor}px ${venueCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(vText.toUpperCase(), cardWidth / 2, currentY);
+          ctx.fillText(vText.toUpperCase(), (tz.x + tz.w / 2) * scaleFactor, currentY);
         }
       } else if (activePresetType === "postcard-vertical") {
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
@@ -771,28 +853,32 @@ export default function WorkspacePage() {
         if (hasDate) totalTextHeight += (hasNames ? 45 * scaleFactor : dateFontSize * scaleFactor);
         if (hasVenue) totalTextHeight += (hasDate || hasNames ? 35 * scaleFactor : venueFontSize * scaleFactor);
 
-        let currentY = textPosition === "top" 
-          ? (140 * scaleFactor) 
-          : cardHeight - (140 * scaleFactor) - totalTextHeight;
+        const rawLayout = resolveLayout(currentPreset.layoutId, "postcard-vertical");
+        const layout = getModifiedLayout(rawLayout, textPosition);
+        const tz = layout.textZone;
+        const textZoneCenterY = (tz.y + tz.h / 2);
+        const firstLineHeight = hasNames ? partnerFontSize * scaleFactor : (hasDate ? dateFontSize * scaleFactor : venueFontSize * scaleFactor);
+
+        let currentY = textZoneCenterY - (totalTextHeight / 2) + (firstLineHeight / 2);
 
         if (hasNames) {
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * scaleFactor}px ${partnerCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(nText, cardWidth / 2, currentY);
+          ctx.fillText(nText, (tz.x + tz.w / 2), currentY);
           currentY += 45 * scaleFactor;
         }
 
         if (hasDate) {
           ctx.font = `bold ${dateFontSize * scaleFactor}px ${dateCleanFont}`;
           ctx.fillStyle = finalSecColor;
-          ctx.fillText(dText.toUpperCase(), cardWidth / 2, currentY);
+          ctx.fillText(dText.toUpperCase(), (tz.x + tz.w / 2), currentY);
           currentY += 35 * scaleFactor;
         }
         
         if (hasVenue) {
           ctx.font = `normal ${venueFontSize * scaleFactor}px ${venueCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(vText.toUpperCase(), cardWidth / 2, currentY);
+          ctx.fillText(vText.toUpperCase(), (tz.x + tz.w / 2), currentY);
         }
       } else {
         const dText = getDerivedDate().trim();
@@ -807,9 +893,13 @@ export default function WorkspacePage() {
         if (hasDate) totalTextHeight += (hasNames ? 54 : dateFontSize * 1.5);
         if (hasVenue) totalTextHeight += (hasDate || hasNames ? 41 : venueFontSize * 1.5);
 
-        let currentY = textPosition === "top" 
-          ? 130 
-          : cardHeight - 130 - totalTextHeight;
+        const rawLayout = resolveLayout(currentPreset.layoutId, "postcard");
+        const layout = getModifiedLayout(rawLayout, textPosition);
+        const tz = layout.textZone;
+        const textZoneCenterY = (tz.y + tz.h / 2);
+        const firstLineHeight = hasNames ? partnerFontSize * 1.5 : (hasDate ? dateFontSize * 1.5 : venueFontSize * 1.5);
+
+        let currentY = textZoneCenterY - (totalTextHeight / 2) + (firstLineHeight / 2);
 
         const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
         const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
@@ -817,21 +907,21 @@ export default function WorkspacePage() {
         if (hasNames) {
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * 1.5}px ${partnerCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(nText, cardWidth / 2, currentY);
+          ctx.fillText(nText, (tz.x + tz.w / 2), currentY);
           currentY += 54;
         }
 
         if (hasDate) {
           ctx.font = `bold ${dateFontSize * 1.5}px ${dateCleanFont}`;
           ctx.fillStyle = finalSecColor;
-          ctx.fillText(dText.toUpperCase(), cardWidth / 2, currentY);
+          ctx.fillText(dText.toUpperCase(), (tz.x + tz.w / 2), currentY);
           currentY += 41;
         }
 
         if (hasVenue) {
           ctx.font = `normal ${venueFontSize * 1.5}px ${venueCleanFont}`;
           ctx.fillStyle = finalTextColor;
-          ctx.fillText(vText.toUpperCase(), cardWidth / 2, currentY);
+          ctx.fillText(vText.toUpperCase(), (tz.x + tz.w / 2), currentY);
         }
       }
     }
@@ -1057,6 +1147,32 @@ export default function WorkspacePage() {
           </div>
         </div>
       </header>
+
+      {showDraftBanner && draftSelection && (
+        <div className="bg-[#FAF1EA] border-b border-[#C4B59D]/50 px-6 py-2.5 flex items-center justify-between text-xs text-stone-800 animate-fade-in relative z-40">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center justify-center bg-[#8C382A]/10 text-[#8C382A] rounded-full w-5 h-5 font-bold text-[10px]">✨</span>
+            <span className="font-light">
+              Found a recent gallery selection for <strong>{draftSelection.names || "Gallery Guest"}</strong> ({draftSelection.templateName}). Load this draft into the template studio?
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={applyDraftSelection}
+              className="bg-stone-900 hover:bg-stone-800 text-white font-bold py-1 px-3 rounded-full uppercase tracking-wider text-[9px] transition-all cursor-pointer"
+            >
+              Apply Selection Draft
+            </button>
+            <button
+              onClick={() => setShowDraftBanner(false)}
+              className="text-stone-400 hover:text-stone-600 font-bold transition-all cursor-pointer text-sm"
+              aria-label="Dismiss draft banner"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Sandbox Catalog Panel */}
       <div id="app-workspace-body" className="flex-1 flex flex-col lg:flex-row min-h-0">
@@ -2096,138 +2212,7 @@ export default function WorkspacePage() {
 
       </div>
 
-      {/* Floating Action Button */}
-      <button
-        onClick={() => setAiModalOpen(true)}
-        className="fixed bottom-6 w-14 h-14 right-6 bg-stone-900 text-[#FAF9F5] rounded-full shadow-xl flex items-center justify-center hover:-translate-y-1 hover:shadow-2xl transition-all z-50 group hover:bg-[#8A7342]"
-        title="Generate AI Theme"
-      >
-        <Sparkles className="w-6 h-6 group-hover:scale-110 transition-transform" />
-      </button>
 
-      {/* AI Theme Modal */}
-      <AnimatePresence>
-        {aiModalOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-md flex flex-col gap-5 border border-[#8A7342]/20"
-            >
-              <div className="flex justify-between items-center pb-3 border-b border-stone-100">
-                <div className="flex items-center gap-2 text-[#8A7342]">
-                  <Sparkles className="w-5 h-5 fill-current" />
-                  <h3 className="font-serif font-bold text-lg text-stone-900">Custom AI Theme</h3>
-                </div>
-                <button
-                  onClick={() => setAiModalOpen(false)}
-                  className="p-1 hover:bg-stone-100 rounded-full text-stone-400 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {aiError && (
-                <div className="p-3 bg-red-50 text-red-600 text-xs font-semibold rounded border border-red-200">
-                  {aiError}
-                </div>
-              )}
-
-              <div className="flex flex-col gap-4">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-stone-500">Event Description</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. A whimsical forest wedding for Emily & David"
-                    value={aiEventName}
-                    onKeyDown={(e) => e.key === "Enter" && handleGenerateAiTheme()}
-                    onChange={(e) => setAiEventName(e.target.value)}
-                    className="w-full border border-stone-200 bg-stone-50 p-2.5 rounded-sm text-sm focus:outline-none focus:border-[#8A7342] focus:bg-white transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-bold uppercase tracking-wider text-stone-500">Form Factor</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <button
-                      onClick={() => setAiFormFactor("strip")}
-                      className={cn(
-                        "py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all text-center flex flex-col items-center justify-center gap-1",
-                        aiFormFactor === "strip"
-                          ? "bg-[#8A7342] text-white border-[#8A7342]"
-                          : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                      )}
-                    >
-                      <div className="w-4 h-12 border border-current opacity-70 mb-1" />
-                      Strip
-                    </button>
-                    <button
-                      onClick={() => setAiFormFactor("postcard")}
-                      className={cn(
-                        "py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all text-center flex flex-col items-center justify-center gap-1",
-                        aiFormFactor === "postcard"
-                          ? "bg-[#8A7342] text-white border-[#8A7342]"
-                          : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                      )}
-                    >
-                      <div className="w-8 h-6 border border-current opacity-70 mb-1 mt-4" />
-                      4x6 H
-                    </button>
-                    <button
-                      onClick={() => setAiFormFactor("postcard-vertical")}
-                      className={cn(
-                        "py-2 text-[10px] font-bold uppercase tracking-widest rounded-sm border transition-all text-center flex flex-col items-center justify-center gap-1",
-                        aiFormFactor === "postcard-vertical"
-                          ? "bg-[#8A7342] text-white border-[#8A7342]"
-                          : "bg-white text-stone-600 border-stone-200 hover:bg-stone-50"
-                      )}
-                    >
-                      <div className="w-6 h-8 border border-current opacity-70 mb-1 mt-2" />
-                      4x6 V
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-2 text-[11px] text-stone-700 italic bg-amber-50 p-2.5 rounded-sm border border-amber-500/20">
-                The AI will generate color pairings, border attributes, spacing measurements, and typography alignments tailored perfectly to your event.
-              </div>
-
-              <div className="flex justify-center mt-2">
-                <Turnstile
-                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITEKEY || ""}
-                  onSuccess={(token) => setTurnstileToken(token)}
-                  options={{ theme: 'light' }}
-                />
-              </div>
-
-              <button
-                onClick={handleGenerateAiTheme}
-                disabled={aiLoading}
-                className="w-full mt-2 bg-stone-900 hover:bg-[#8A7342] disabled:opacity-50 disabled:bg-stone-900 text-white font-bold py-3.5 rounded-sm uppercase tracking-widest text-xs transition-colors flex items-center justify-center gap-2"
-              >
-                {aiLoading ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 animate-spin" />
-                    Generating Theme...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4" />
-                    Generate Custom Design
-                  </>
-                )}
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
     </main>
   );

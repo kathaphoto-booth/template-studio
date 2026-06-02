@@ -44,30 +44,90 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
 
   const toAddr = process.env.NOTIFICATION_EMAIL || "kathabooth@gmail.com";
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
+  const appUrl = process.env.APP_URL || "https://kathabooth.com";
 
-  const subject = `Template chosen — ${s.names || "client"} · ${s.templateName}`;
-  const lines = [
-    `Template:    ${s.templateName}  (${s.templateId})`,
-    `Layout:      ${s.layout}`,
-    `Names:       ${s.names || "—"}`,
-    `Date:        ${s.date || "—"}`,
-    `Venue:       ${s.venue || "—"}`,
-    `Font Family: ${s.fontFamily || "—"}`,
-    s.notes ? `Notes:       ${s.notes}` : null,
-    s.lead ? `Lead token:  ${s.lead}` : null,
-    `Selected:    ${s.selectedAt}`,
+  // Construct secure, dynamic query parameter link to auto-fill the admin room
+  const customizeLink = `${appUrl}/?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
+
+  const subject = `Template Chosen — ${s.names || "Client"} · ${s.templateName}`;
+  
+  const textLines = [
+    `Template:      ${s.templateName} (${s.templateId})`,
+    `Layout Format: ${s.layout.toUpperCase()}`,
+    `Names:         ${s.names || "—"}`,
+    `Event Date:    ${s.date || "—"}`,
+    `Venue/Notes:   ${s.venue || "—"}`,
+    `Selected Font: ${s.fontFamily || "—"}`,
+    s.notes ? `Client Notes:  ${s.notes}` : null,
+    `Selected At:   ${s.selectedAt}`,
+    `Direct Studio Customize Link: ${customizeLink}`
   ].filter(Boolean).join("\n");
 
-  let html = `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;line-height:1.6;color:#241E1A;background:#EAE2D5;padding:24px;border-radius:4px;">${lines}</pre>`;
+  // Premium Wabi-Sabi styled HTML email matching Katha aesthetic
+  let html = `
+    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#FAF9F5; color:#241E1A; line-height:1.6; border: 1px solid #EAE2D5; border-radius:0;">
+      <p style="font-family:'Inter', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#8C382A; margin-bottom: 24px; font-weight:600;">
+        Katha Template Studio Notification
+      </p>
+      
+      <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:22px; letter-spacing:-0.01em; margin-bottom: 30px; color:#241E1A; border-bottom: 1px solid #C4B59D; padding-bottom: 12px;">
+        New Keepake Selection
+      </h2>
+      
+      <table style="width:100%; border-collapse:collapse; margin-bottom:30px; font-size:15px;">
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; width:30%; color:#5A564E;">Client Names</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.names || "—"}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Template Chosen</td>
+          <td style="padding:10px 0; color:#241E1A; font-family:monospace; font-size:13px;">${s.templateName} (${s.templateId})</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Layout Format</td>
+          <td style="padding:10px 0; color:#241E1A; text-transform:uppercase; font-size:13px; letter-spacing:0.05em;">${s.layout}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Event Date</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.date || "—"}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Location / Venue</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.venue || "—"}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Selected Font</td>
+          <td style="padding:10px 0; color:#241E1A; font-style:italic;">${s.fontFamily || "—"}</td>
+        </tr>
+      </table>
+
+      ${s.notes ? `
+        <div style="background-color:#EAE2D5; padding:20px; margin-bottom:30px; border-left:3px solid #8C382A; font-size:14px; font-style:italic; color:#241E1A;">
+          <strong>Client Notes:</strong><br/>
+          "${s.notes}"
+        </div>
+      ` : ""}
+
+      <div style="margin-top:35px; margin-bottom:35px; text-align:center;">
+        <a href="${customizeLink}" style="display:inline-block; font-family:'Inter', sans-serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#FAF9F5; padding:16px 32px; text-decoration:none; border-radius:0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+          Open and Custom Design Keepsake
+        </a>
+      </div>
+
+      <p style="font-size:12px; color:#5A564E; text-align:center; border-top:1px dashed #C4B59D; padding-top:20px; margin-top:30px; font-style:italic;">
+        Clicking the button will open the Admin Studio with the client's names, event date, venue, selected template, and chosen font pre-filled.
+      </p>
+    </div>
+  `;
 
   if (s.referencePhotos && s.referencePhotos.length > 0) {
     html += `
-      <div style="margin-top:20px; font-family: sans-serif;">
+      <div style="max-width:600px; margin:20px auto 0 auto; font-family: sans-serif; padding:0 10px;">
         <h3 style="font-size:14px; color:#241E1A; margin-bottom: 12px; font-weight: 600;">Uploaded Reference Photos:</h3>
         <div style="display:flex; gap:12px; flex-wrap:wrap;">
           ${s.referencePhotos.map((photo, idx) => `
-            <div style="border: 1px solid #C4B59D; border-radius: 4px; padding: 4px; background: white;">
-              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:200px; max-height:200px; object-fit:cover; display:block; border-radius: 2px;" />
+            <div style="border: 1px solid #C4B59D; border-radius: 4px; padding: 4px; background: white; margin-bottom: 10px;">
+              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:180px; max-height:180px; object-fit:cover; display:block; border-radius: 2px;" />
             </div>
           `).join("")}
         </div>
@@ -82,12 +142,13 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       to: toAddr,
       subject,
       html,
-      text: lines + (s.referencePhotos && s.referencePhotos.length > 0 ? `\n\n[Attached reference photos: ${s.referencePhotos.length}]` : ""),
+      text: textLines + (s.referencePhotos && s.referencePhotos.length > 0 ? `\n\n[Attached reference photos: ${s.referencePhotos.length}]` : ""),
     });
     if (error) return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
     return { ok: true, detail: `email sent (id ${data?.id || "?"})` };
   } catch (err: any) {
     return { ok: false, detail: `email exception: ${err?.message || err}` };
+
   }
 }
 

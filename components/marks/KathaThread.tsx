@@ -40,6 +40,7 @@ export function KathaThread({ className }: { className?: string }) {
   const [kthaPathLength, setKthaPathLength] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  const [mounted, setMounted] = useState(false);
   
   // H11 micro-interaction states
   const [hoverOffset, setHoverOffset] = useState(0);
@@ -48,6 +49,10 @@ export function KathaThread({ className }: { className?: string }) {
 
   const { scrollYProgress, scrollY } = useScroll();
   const shouldReduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Hover and calado detection
   useEffect(() => {
@@ -137,6 +142,10 @@ export function KathaThread({ className }: { className?: string }) {
     [0.92, 1],
     [kthaPathLength, 0]
   );
+
+  if (!mounted) {
+    return <div className={cn('pointer-events-none absolute inset-0 z-0 overflow-hidden', className)} />;
+  }
 
   return (
     <div

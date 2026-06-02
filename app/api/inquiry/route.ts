@@ -6,6 +6,7 @@ import { supabaseAdmin } from "@/lib/supabase";
 type InquiryPayload = {
   client_name: string;
   client_email: string;
+  client_phone?: string;
   event_date: string;
 };
 
@@ -23,6 +24,7 @@ async function recordLead(payload: InquiryPayload, leadHash: string) {
       .insert({
         client_name: payload.client_name,
         client_email: payload.client_email,
+        client_phone: payload.client_phone || null,
         event_date: payload.event_date,
         lead_hash: leadHash,
         status: "Inquired",
@@ -53,6 +55,7 @@ async function pingHoneyBook(payload: InquiryPayload, leadHash: string) {
         project_id: "679039857c7a9b001f4098a8",
         client_name: payload.client_name,
         client_email: payload.client_email,
+        client_phone: payload.client_phone || null,
         event_date: payload.event_date,
         lead_hash: leadHash,
         status: "Inquired",
@@ -169,10 +172,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "invalid json" }, { status: 400 });
   }
 
-  // Validate strictly three fields per Phase 1
+  // Validate fields
   const name = body?.client_name?.trim();
   const email = body?.client_email?.trim();
   const date = body?.event_date?.trim();
+  const phone = body?.client_phone?.trim();
 
   if (!name || !email || !date) {
     return NextResponse.json({ ok: false, error: "missing required fields (client_name, client_email, event_date)" }, { status: 400 });
@@ -185,6 +189,7 @@ export async function POST(req: NextRequest) {
     client_name: name,
     client_email: email,
     event_date: date,
+    client_phone: phone || undefined,
   };
 
   // Run database, HoneyBook, and transactional email dispatches in parallel

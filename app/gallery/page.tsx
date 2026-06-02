@@ -171,6 +171,8 @@ export default function GalleryPage() {
   // Personalization fields (stage 2)
   const [nameOne, setNameOne] = useState("");
   const [nameTwo, setNameTwo] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [date, setDate] = useState("");
   const [venue, setVenue] = useState("");
   const [selectedFont, setSelectedFont] = useState("");
@@ -200,6 +202,8 @@ export default function GalleryPage() {
     setSelected(p);
     setNameOne("");
     setNameTwo("");
+    setEmail("");
+    setPhone("");
     setDate("");
     setVenue("");
     setSelectedFont(p.fontFamily);
@@ -303,9 +307,30 @@ export default function GalleryPage() {
 
   const confirmSelection = async () => {
     if (!selected) return;
-    const lead = typeof window !== "undefined"
+    let currentLead = typeof window !== "undefined"
       ? new URLSearchParams(window.location.search).get("lead")
       : null;
+
+    // Organic Inquiry: If no lead exists but email is provided, ping Resend API
+    if (!currentLead && email) {
+      try {
+        const inqRes = await fetch("/api/inquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            client_name: names || "Gallery Guest",
+            client_email: email,
+            client_phone: phone.trim() || undefined,
+            event_date: date.trim() || "TBD",
+          }),
+        });
+        if (inqRes.ok) {
+          const inqData = await inqRes.json();
+          currentLead = inqData.lead_hash;
+        }
+      } catch (e) {}
+    }
+
     const payload = {
       templateId: selected.id,
       templateName: selected.name,
@@ -317,7 +342,7 @@ export default function GalleryPage() {
       textPosition: textPosition,
       referencePhotos: referencePhotos.length > 0 ? referencePhotos : null,
       notes: notes.trim() || null,
-      lead,
+      lead: currentLead,
       selectedAt: new Date().toISOString(),
     };
 
@@ -662,16 +687,22 @@ export default function GalleryPage() {
                     className="mt-6 mb-6"
                     items={[
                       {
-                        label: "The Couple",
-                        complete: Boolean(nameOne && nameTwo),
+                        label: "Client Details",
+                        complete: Boolean(nameOne && email),
                         content: (
                           <div className="grid grid-cols-2 gap-3">
                             <label htmlFor="katha-name-one" className="sr-only">First name</label>
                             <input id="katha-name-one" value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
-                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-name-two" className="sr-only">Second name</label>
-                            <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name"
-                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                            <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name (Optional)"
+                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                            <label htmlFor="katha-email" className="sr-only">Email address</label>
+                            <input id="katha-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
+                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                            <label htmlFor="katha-phone" className="sr-only">Phone number</label>
+                            <input id="katha-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number (Optional)"
+                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -682,10 +713,10 @@ export default function GalleryPage() {
                           <div className="flex flex-col gap-3">
                             <label htmlFor="katha-event-date" className="sr-only">Event date</label>
                             <input id="katha-event-date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-venue" className="sr-only">Venue or location</label>
                             <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -703,7 +734,7 @@ export default function GalleryPage() {
                                 id="katha-font-selector"
                                 value={selectedFont}
                                 onChange={(e) => setSelectedFont(e.target.value)}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A] cursor-pointer"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 cursor-pointer transition-shadow"
                                 style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
                               >
                                 {LUXURY_FONTS.map((font) => (
@@ -733,15 +764,11 @@ export default function GalleryPage() {
                                   id="btn-gallery-text-bottom"
                                   onClick={() => setTextPosition("bottom")}
                                   className={cn(
-                                    "text-[11px] py-2 font-semibold rounded-xs border uppercase tracking-wider text-center cursor-pointer transition-all",
+                                    "text-[11px] py-2 font-bold rounded-xs border uppercase tracking-widest text-center cursor-pointer transition-all",
                                     textPosition === "bottom"
-                                      ? "text-white shadow-sm"
-                                      : "bg-white text-stone-600 border-stone-250 hover:bg-stone-50"
+                                      ? "bg-stone-900 text-white border-stone-900 shadow-sm"
+                                      : "bg-white text-stone-600 border-[#C4B59D] hover:bg-stone-50"
                                   )}
-                                  style={{
-                                    backgroundColor: textPosition === "bottom" ? "#8C382A" : "",
-                                    borderColor: textPosition === "bottom" ? "#8C382A" : "#C4B59D"
-                                  }}
                                 >
                                   Bottom
                                 </button>
@@ -750,15 +777,11 @@ export default function GalleryPage() {
                                   id="btn-gallery-text-top"
                                   onClick={() => setTextPosition("top")}
                                   className={cn(
-                                    "text-[11px] py-2 font-semibold rounded-xs border uppercase tracking-wider text-center cursor-pointer transition-all",
+                                    "text-[11px] py-2 font-bold rounded-xs border uppercase tracking-widest text-center cursor-pointer transition-all",
                                     textPosition === "top"
-                                      ? "text-white shadow-sm"
-                                      : "bg-white text-stone-600 border-stone-250 hover:bg-stone-50"
+                                      ? "bg-stone-900 text-white border-stone-900 shadow-sm"
+                                      : "bg-white text-stone-600 border-[#C4B59D] hover:bg-stone-50"
                                   )}
-                                  style={{
-                                    backgroundColor: textPosition === "top" ? "#8C382A" : "",
-                                    borderColor: textPosition === "top" ? "#8C382A" : "#C4B59D"
-                                  }}
                                 >
                                   Top
                                 </button>
@@ -776,7 +799,7 @@ export default function GalleryPage() {
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Anything specific we should know — colour accents, motifs, layout preferences?"
                                 rows={2}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-[#8C382A]"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow"
                                 style={{ borderColor: "#C4B59D", resize: "none" }}
                               />
                             </div>
@@ -865,10 +888,10 @@ export default function GalleryPage() {
 
                   <button
                     onClick={confirmSelection}
-                    className="mt-6 w-full py-3 text-xs uppercase tracking-[0.2em] rounded-full cursor-pointer transition-opacity hover:opacity-90"
-                    style={{ backgroundColor: "#8C382A", color: "#EAE2D5" }}
+                    className="mt-6 w-full py-4 text-xs uppercase tracking-[0.2em] rounded-full cursor-pointer transition-transform hover:scale-[0.98] active:scale-95 shadow-lg shadow-stone-900/20"
+                    style={{ backgroundColor: "#1c1917", color: "#FBF9F5" }}
                   >
-                    Choose this style
+                    Submit Design Inquiry
                   </button>
                   <div className="mt-4 text-center">
                     <p className="text-[11px] leading-relaxed" style={{ color: "#9C958A" }}>

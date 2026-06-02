@@ -508,7 +508,7 @@ export const PRESETS: PhotoboothPreset[] = [
 
   // ─── 8. MINIMAL LINEN ROSE (Classic Tier)
   {
-    id: "wedding-white-rose",
+    id: "rose-whisper",
     name: "Style 2 — Minimal Linen Rose",
     type: "strip",
     backgroundColor: "#FAF9F6",
@@ -528,7 +528,7 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Deckled ivory paper backdrop adorned with a hand-sketched classic cream and white rose nested gracefully above the text."
   },
   {
-    id: "wedding-white-rose-postcard",
+    id: "rose-whisper-postcard",
     name: "Style 2 — Minimal Linen Rose Postcard",
     type: "postcard-vertical",
     layoutId: "pv-2",
@@ -549,7 +549,7 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Deckled ivory paper backdrop adorned with a hand-sketched classic rose nested gracefully above the text. Postcard vertical format."
   },
   {
-    id: "wedding-white-rose-landscape",
+    id: "rose-whisper-landscape",
     name: "Style 2 — Linen Rose Landscape",
     type: "postcard",
     layoutId: "pc-3-v",
@@ -1392,8 +1392,8 @@ const DECORATION_ALIASES: Record<string, string> = {
   "wedding-luxe-gold-postcard":     "wedding-luxe-gold",
   "wedding-luxe-gold-landscape":    "wedding-luxe-gold",
 
-  "wedding-white-rose-postcard":    "wedding-white-rose",
-  "wedding-white-rose-landscape":   "wedding-white-rose",
+  "rose-whisper-postcard":    "rose-whisper",
+  "rose-whisper-landscape":   "rose-whisper",
 
   "wedding-warm-terracotta-postcard": "wedding-warm-terracotta",
   "wedding-warm-terracotta-landscape": "wedding-warm-terracotta",
@@ -1685,7 +1685,7 @@ export function renderDecorativeSvg(
         <rect x="${margin / 4 + 8}" y="${margin / 4 + 8}" width="${vb.w - 2 * margin / 4 - 16}" height="${vb.h - 2 * margin / 4 - 16}" fill="none" stroke="${strokeColor}" stroke-width="0.5" opacity="0.8" />
       `;
 
-    case "wedding-white-rose":
+    case "rose-whisper":
       return `
         <!-- Ivory linen border -->
         <rect x="${margin / 4}" y="${margin / 4}" width="${vb.w - 2 * margin / 4}" height="${vb.h - 2 * margin / 4}" fill="none" stroke="${secondaryColor}" stroke-dasharray="8 6" stroke-width="1.5" opacity="0.5" />
