@@ -2,7 +2,33 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase";
 
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export async function POST(req: NextRequest) {
+  const password = process.env.STUDIO_PASSWORD;
+  if (password) {
+    const authHeader = req.headers.get("authorization") ?? "";
+    const [scheme, encoded] = authHeader.split(" ");
+    if (scheme !== "Basic" || !encoded) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+    const decoded = Buffer.from(encoded, "base64").toString("utf-8");
+    const provided = decoded.split(":")[1];
+    if (provided !== password) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+  }
+
+  // TODO(P0.2 - SaaS Phase): Refactor admin routes to use lead.id (UUID) in the URL instead of lead_hash. 
+  // The lead_hash acts as a bearer token and should only be resolved server-side for selection queries.
+
   let body: { lead_hash?: string; message?: string };
   try {
     body = await req.json();
@@ -49,6 +75,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: emailError.message }, { status: 500 });
   }
 
+  await supabaseAdmin
+    .from("leads")
+    .update({ preview_sent_at: new Date().toISOString() })
+    .eq("lead_hash", lead_hash);
+
   return NextResponse.json({ ok: true });
 }
 
@@ -63,13 +94,13 @@ function buildPreviewEmail(name: string, message?: string): string {
       </h2>
       <p style="font-size:16px;margin:0 0 20px;">Dear ${name},</p>
       ${message
-        ? `<p style="font-size:15px;font-style:italic;margin:0 0 28px;padding:16px 20px;border-left:3px solid #C4B59D;background:rgba(196,181,157,0.12);">${message}</p>`
+        ? `<p style="font-size:15px;font-style:italic;margin:0 0 28px;padding:16px 20px;border-left:3px solid #C4B59D;background:rgba(196,181,157,0.12);">${escapeHtml(message)}</p>`
         : ""}
       <p style="font-size:15px;margin:0 0 32px;color:#3a3530;">
         We have finished crafting your photo booth design. Our team will reach out with the final file and any next steps for your event.
       </p>
       <p style="font-size:13px;color:#5A564E;border-top:1px dashed #C4B59D;padding-top:20px;margin:0 0 24px;font-style:italic;">
-        Rooted by perseverance, crafted for generations.
+        A photo experience designed with intention.
       </p>
       <p style="font-family:'Inter',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#5A564E;margin:0;">
         Warmly,<br/>The Katha Team

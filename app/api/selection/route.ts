@@ -71,7 +71,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       </p>
       
       <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:22px; letter-spacing:-0.01em; margin-bottom: 30px; color:#241E1A; border-bottom: 1px solid #C4B59D; padding-bottom: 12px;">
-        New Keepake Selection
+        New Template Selection
       </h2>
       
       <table style="width:100%; border-collapse:collapse; margin-bottom:30px; font-size:15px;">
@@ -110,7 +110,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
 
       <div style="margin-top:35px; margin-bottom:35px; text-align:center;">
         <a href="${customizeLink}" style="display:inline-block; font-family:'Inter', sans-serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#FAF9F5; padding:16px 32px; text-decoration:none; border-radius:0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-          Open and Custom Design Keepsake
+          Open in Studio
         </a>
       </div>
 

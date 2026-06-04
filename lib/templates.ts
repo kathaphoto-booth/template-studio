@@ -1314,7 +1314,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Generative signature theme representing pure unrefined raw silk paths running continuously. Features delicate threadlines that subtly overlay slots."
+    designerExplanation: "Generative signature theme representing pure unrefined structural thread paths running continuously. Features delicate threadlines that subtly overlay slots."
   },
   {
     id: "katha-woven-silk-postcard",
@@ -1335,7 +1335,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Generative signature theme representing raw silk paths in a 4x6 vertical postcard format."
+    designerExplanation: "Generative signature theme representing structural thread paths in a 4x6 vertical postcard format."
   },
   {
     id: "katha-woven-silk-landscape",
@@ -1356,7 +1356,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Generative signature theme representing raw silk paths in a 6x4 landscape postcard format."
+    designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
   },
 ];
 
@@ -1602,7 +1602,7 @@ export function renderDecorativeSvg(
 
     case "katha-woven-silk":
       return `
-        <!-- Outer Raw Silk double-line canvas border -->
+        <!-- Outer structural thread double-line canvas border -->
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
         <rect x="${margin / 3 + 8}" y="${margin / 3 + 8}" width="${vb.w - 2 * margin / 3 - 16}" height="${vb.h - 2 * margin / 3 - 16}" fill="none" stroke="${secondaryColor}" stroke-width="0.6" opacity="0.6" />
         

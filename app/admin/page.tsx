@@ -5,6 +5,7 @@ type Lead = {
   id: string;
   client_name: string;
   client_email: string;
+  client_phone: string | null;
   event_date: string | null;
   lead_hash: string;
   status: string;
@@ -29,10 +30,16 @@ async function getData() {
 
   // Single-tenant today: every lead belongs to STUDIO_ID. When the schema gains a
   // studio_id column (SaaS multi-tenancy phase), restore `.eq("studio_id", STUDIO_ID)`.
-  const { data: leadsRaw } = await supabaseAdmin
+  const { data: leadsRaw, error } = await supabaseAdmin
     .from("leads")
-    .select("id, client_name, client_email, event_date, lead_hash, status, created_at")
+    .select("id, client_name, client_email, client_phone, event_date, lead_hash, status, created_at")
     .order("created_at", { ascending: false });
+    // TODO(P2.4 - SaaS Phase): Implement pagination via standard SQL OFFSET + LIMIT 
+    // to prevent performance degradation when thousands of leads exist.
+
+  if (error) {
+    throw new Error(error.message);
+  }
 
   const leads: Lead[] = leadsRaw ?? [];
 
@@ -46,31 +53,32 @@ async function getData() {
 }
 
 export default async function AdminPage() {
-  const { leads, selections } = await getData();
+  try {
+    const { leads, selections } = await getData();
 
-  const selectionByLead = Object.fromEntries(selections.map((s) => [s.lead, s]));
+    const selectionByLead = Object.fromEntries(selections.map((s) => [s.lead, s]));
 
-  return (
+    return (
     <div>
       <div style={{ marginBottom: "32px", display: "flex", alignItems: "baseline", gap: "16px" }}>
         <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: "28px", fontWeight: 400, margin: 0, color: "#EAE2D5", letterSpacing: "-0.02em" }}>
           Leads
         </h1>
-        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#5A5D5A" }}>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9C958A" }}>
           {leads.length} {leads.length === 1 ? "inquiry" : "inquiries"}
         </span>
       </div>
 
       {leads.length === 0 ? (
-        <p style={{ color: "#5A5D5A", fontStyle: "italic", fontSize: "15px" }}>
+        <p style={{ color: "#9C958A", fontStyle: "italic", fontSize: "15px" }}>
           No leads yet. Share the gallery link to get started.
         </p>
       ) : (
         <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
           <thead>
             <tr style={{ borderBottom: "1px solid rgba(196,181,157,0.2)" }}>
-              {["Client", "Email", "Event Date", "Template", "Status", "Submitted"].map((h) => (
-                <th key={h} style={{ textAlign: "left", padding: "0 16px 12px 0", fontFamily: "'Inter', sans-serif", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.2em", color: "#5A5D5A", fontWeight: 500 }}>
+              {["Client", "Email", "Phone", "Event Date", "Template", "Status", "Submitted"].map((h) => (
+                <th key={h} style={{ textAlign: "left", padding: "0 16px 12px 0", fontFamily: "'Inter', sans-serif", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.2em", color: "#9C958A", fontWeight: 500 }}>
                   {h}
                 </th>
               ))}
@@ -84,7 +92,7 @@ export default async function AdminPage() {
                 <tr key={lead.id} style={{ borderBottom: "1px solid rgba(196,181,157,0.08)" }}>
                   <td style={{ padding: "16px 16px 16px 0" }}>
                     <Link
-                      href={`/admin/${lead.lead_hash}`}
+                      href={`/admin/${lead.id}`}
                       style={{ color: "#EAE2D5", textDecoration: "none", fontWeight: 500 }}
                     >
                       {lead.client_name}
@@ -93,18 +101,21 @@ export default async function AdminPage() {
                   <td style={{ padding: "16px 16px 16px 0", color: "#9C958A", fontSize: "13px" }}>
                     {lead.client_email}
                   </td>
+                  <td style={{ padding: "16px 16px 16px 0", color: "#9C958A", fontSize: "13px" }}>
+                    {lead.client_phone ?? "—"}
+                  </td>
                   <td style={{ padding: "16px 16px 16px 0", color: "#C4B59D" }}>
                     {lead.event_date ?? "—"}
                   </td>
                   <td style={{ padding: "16px 16px 16px 0", color: "#9C958A", fontSize: "13px" }}>
-                    {sel ? sel.template_name : <span style={{ color: "#5A5D5A", fontStyle: "italic" }}>not yet chosen</span>}
+                    {sel ? sel.template_name : <span style={{ color: "#9C958A", fontStyle: "italic" }}>not yet chosen</span>}
                   </td>
                   <td style={{ padding: "16px 16px 16px 0" }}>
                     <span style={{ ...style, fontFamily: "'Inter', sans-serif", fontSize: "10px", textTransform: "uppercase", letterSpacing: "0.15em", padding: "3px 10px", display: "inline-block" }}>
                       {lead.status}
                     </span>
                   </td>
-                  <td style={{ padding: "16px 0", color: "#5A5D5A", fontSize: "12px", fontFamily: "'Inter', sans-serif" }}>
+                  <td style={{ padding: "16px 0", color: "#9C958A", fontSize: "12px", fontFamily: "'Inter', sans-serif" }}>
                     {new Date(lead.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                   </td>
                 </tr>
@@ -115,4 +126,12 @@ export default async function AdminPage() {
       )}
     </div>
   );
+  } catch (err: any) {
+    return (
+      <div style={{ color: "#8C382A", padding: "40px", backgroundColor: "rgba(140,56,42,0.1)", border: "1px solid #8C382A", borderRadius: 0 }}>
+        <h2 style={{ fontFamily: "'Fraunces', serif", margin: "0 0 16px 0" }}>Failed to load leads</h2>
+        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", margin: 0 }}>{err.message}</p>
+      </div>
+    );
+  }
 }

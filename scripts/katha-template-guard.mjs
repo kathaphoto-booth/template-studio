@@ -63,7 +63,8 @@ const FORBIDDEN_VOCAB = [
   "luxury", "premium", "stunning", "amazing", "unforgettable", "journey",
   "vibe", "curated", "instagrammable", "once-in-a-lifetime", "keepsake",
   "antigravity", "agentic", "alpha-transparent", "automation pipeline",
-  "verification algorithm",
+  "verification algorithm", "handloomed", "heirloom artistry", "raw silk", 
+  "fabric of the keepsake"
 ];
 
 // ── split the PRESETS array into individual object blocks ──

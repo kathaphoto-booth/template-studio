@@ -1,9 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
-const VALID_STATUSES = ["Inquired", "Selected", "In-Design", "Approved"] as const;
+import { LEAD_STATUSES } from "@/lib/constants";
 
 export async function PATCH(req: NextRequest) {
+  const password = process.env.STUDIO_PASSWORD;
+  if (password) {
+    const authHeader = req.headers.get("authorization") ?? "";
+    const [scheme, encoded] = authHeader.split(" ");
+    if (scheme !== "Basic" || !encoded) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+    const decoded = Buffer.from(encoded, "base64").toString("utf-8");
+    const provided = decoded.split(":")[1];
+    if (provided !== password) {
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+  }
+  
+  // TODO(P0.3 - SaaS Phase): Status PATCH currently trusts middleware for auth. Add defense-in-depth
+  // if middleware matcher ever drifts.
+  
   let body: { lead_hash?: string; status?: string };
   try {
     body = await req.json();
@@ -15,8 +32,8 @@ export async function PATCH(req: NextRequest) {
   if (!lead_hash || !status) {
     return NextResponse.json({ ok: false, error: "lead_hash and status are required" }, { status: 400 });
   }
-  if (!VALID_STATUSES.includes(status as any)) {
-    return NextResponse.json({ ok: false, error: `status must be one of: ${VALID_STATUSES.join(", ")}` }, { status: 400 });
+  if (!LEAD_STATUSES.includes(status as any)) {
+    return NextResponse.json({ ok: false, error: `status must be one of: ${LEAD_STATUSES.join(", ")}` }, { status: 400 });
   }
 
   if (!supabaseAdmin) {
@@ -25,7 +42,7 @@ export async function PATCH(req: NextRequest) {
 
   const { error } = await supabaseAdmin
     .from("leads")
-    .update({ status })
+    .update({ status, updated_at: new Date().toISOString() })
     .eq("lead_hash", lead_hash);
 
   if (error) {

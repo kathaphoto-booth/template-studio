@@ -27,16 +27,16 @@ function buildStudioUrl(sel: Selection): string {
   return `/?${p.toString()}`;
 }
 
-export default async function LeadDetailPage({ params }: { params: Promise<{ lead_hash: string }> }) {
-  const { lead_hash } = await params;
-  if (!supabaseAdmin) notFound();
+export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
+    if (!supabaseAdmin) notFound();
 
-  const [{ data: lead }, { data: selection }] = await Promise.all([
-    supabaseAdmin.from("leads").select("*").eq("lead_hash", lead_hash).single(),
-    supabaseAdmin.from("selections").select("*").eq("lead", lead_hash).order("selected_at", { ascending: false }).limit(1).maybeSingle(),
-  ]);
+    const { data: lead, error: leadError } = await supabaseAdmin.from("leads").select("*").eq("id", id).single();
+    if (leadError) throw new Error(leadError.message);
+    if (!lead) notFound();
 
-  if (!lead) notFound();
+    const { data: selection } = await supabaseAdmin.from("selections").select("*").eq("lead", lead.lead_hash).order("selected_at", { ascending: false }).limit(1).maybeSingle();
 
   const brief: [string, string][] = [
     ["Template", selection?.template_name ?? "—"],
@@ -64,7 +64,11 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ lea
       </p>
 
       {/* Status pipeline — Client Component */}
-      <StatusPipeline currentStatus={lead.status} leadHash={lead.lead_hash} />
+      <StatusPipeline
+        currentStatus={lead.status}
+        leadHash={lead.lead_hash}
+        authToken={Buffer.from(`admin:${process.env.STUDIO_PASSWORD ?? ""}`).toString("base64")}
+      />
 
       {/* Client brief */}
       <div style={{ marginBottom: "40px" }}>
@@ -126,4 +130,17 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ lea
       <SendPreview leadHash={lead.lead_hash} />
     </div>
   );
+  } catch (err: any) {
+    return (
+      <div style={{ maxWidth: "800px" }}>
+        <Link href="/admin" style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", color: "#5A5D5A", textDecoration: "none", display: "inline-block", marginBottom: "32px" }}>
+          ← All Leads
+        </Link>
+        <div style={{ color: "#8C382A", padding: "40px", backgroundColor: "rgba(140,56,42,0.1)", border: "1px solid #8C382A", borderRadius: 0 }}>
+          <h2 style={{ fontFamily: "'Fraunces', serif", margin: "0 0 16px 0" }}>Failed to load lead details</h2>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", margin: 0 }}>{err.message}</p>
+        </div>
+      </div>
+    );
+  }
 }

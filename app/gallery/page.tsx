@@ -157,13 +157,13 @@ export default function GalleryPage() {
     {
       id: "signature",
       title: "The Signature Collection",
-      description: "Our premier tier. Hand-loomed concepts reflecting authentic Filipino heritage and Wabi-Sabi philosophy.",
+      description: "Our signature tier. Concepts reflecting ancestral Filipino heritage and Wabi-Sabi philosophy.",
       filterFn: (p: PhotoboothPreset) => isSignature(p)
     },
     {
       id: "classic",
       title: "The Classic Atelier",
-      description: "Timeless designs, elegant typography, and traditional wedding aesthetics.",
+      description: "Timeless designs, elegant typography, and traditional wedding details.",
       filterFn: (p: PhotoboothPreset) => !isSignature(p)
     }
   ];
@@ -393,7 +393,7 @@ export default function GalleryPage() {
           {/* Right column — tier + format filters + result count, right-aligned on md+ */}
           <div className="md:col-span-5 flex flex-col items-center md:items-end gap-3">
             {/* Tier filter */}
-            <div className="inline-flex p-1" style={{ backgroundColor: "#E0D7C7" }}>
+            <div className="inline-flex p-1" style={{ backgroundColor: "#C4B59D" }}>
               {([
                 ["all", "All styles"],
                 ["classic", "Classic"],
@@ -415,7 +415,7 @@ export default function GalleryPage() {
             </div>
 
             {/* Format filter */}
-            <div className="inline-flex flex-wrap justify-center md:justify-end p-1" style={{ backgroundColor: "#E0D7C7" }}>
+            <div className="inline-flex flex-wrap justify-center md:justify-end p-1" style={{ backgroundColor: "#C4B59D" }}>
               {([
                 ["all", "All formats"],
                 ["strip", "2×6 Strip"],
@@ -458,19 +458,19 @@ export default function GalleryPage() {
         }}
       />
 
-      {/* Katha Keepsakes Showcase — Bespoke Finalist Showcase */}
+      {/* Katha Editions Showcase — Bespoke Finalist Showcase */}
       <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "#332A24", backgroundColor: "#1A1816" }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#A35C44" }}>Designed & Finalized Keepsakes</p>
-            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Keepsakes</h2>
+            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#A35C44" }}>COMMISSIONED EDITIONS</p>
+            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Editions</h2>
             <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
-              Behold our live keepsakes as personalized by actual clients. These designs embody the true spirit of handloomed heirloom artistry—where raw silk threads, fine-ruled double frames, and gold-shimmer gradients gently trace over the photo edges, weaving your moments directly into the fabric of the keepsake.
+              Behold the studio's commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event's identity is presented flawlessly.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-12 items-stretch">
-            {/* Keepsake Card 1: Steven & Cristalyn */}
+            {/* Edition Card 1: Steven & Cristalyn */}
             {(() => {
               const p = PRESETS.find(pr => pr.id === "wedding-luxe-gold");
               if (!p) return null;
@@ -495,7 +495,7 @@ export default function GalleryPage() {
                       <span className="text-[9px] uppercase tracking-widest font-mono text-amber-400">Style 1 — Classic Tier</span>
                       <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Fraunces', serif" }}>Tradition Gold Luxe</h3>
                       <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
-                        Designed for Steven & Cristalyn. Concentric rules in luxurious gold-foil shimmer, featuring floating corner tie-ins that gently overlay the edges of your memories.
+                        Designed for Steven & Cristalyn. Concentric rules in delicate gold-foil shimmer, featuring floating corner tie-ins that gently overlay the edges of your memories.
                       </p>
                     </div>
                     <div className="mt-4 pt-4 border-t border-neutral-800 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-neutral-300 font-mono">
@@ -507,7 +507,7 @@ export default function GalleryPage() {
               );
             })()}
 
-            {/* Keepsake Card 2: Tracy & Prince */}
+            {/* Edition Card 2: Tracy & Prince */}
             {(() => {
               const p = PRESETS.find(pr => pr.id === "katha-tracy-prince");
               if (!p) return null;
@@ -627,7 +627,7 @@ export default function GalleryPage() {
           <div
             id="katha-modal"
             className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl"
-            style={{ backgroundColor: confirmed ? "#B5B8A3" : "#FBF9F5" }}
+            style={{ backgroundColor: confirmed ? "#B5B8A3" : "#EAE2D5" }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -673,7 +673,7 @@ export default function GalleryPage() {
 
                 {/* Personalize form */}
                 <div className="flex flex-col">
-                  <p className="text-[11px] uppercase tracking-[0.25em]" style={{ color: "#9C958A" }}>
+                  <p className="text-[11px] uppercase tracking-[0.25em]" style={{ color: "#5A564E" }}>
                     {isSignature(selected) ? "Katha Signature" : "Classic Collection"}
                   </p>
                   <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "'Fraunces', serif" }}>
@@ -693,16 +693,16 @@ export default function GalleryPage() {
                           <div className="grid grid-cols-2 gap-3">
                             <label htmlFor="katha-name-one" className="sr-only">First name</label>
                             <input id="katha-name-one" value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
-                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-name-two" className="sr-only">Second name</label>
                             <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name (Optional)"
-                              className="border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-email" className="sr-only">Email address</label>
                             <input id="katha-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
-                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-phone" className="sr-only">Phone number</label>
                             <input id="katha-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number (Optional)"
-                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -713,10 +713,10 @@ export default function GalleryPage() {
                           <div className="flex flex-col gap-3">
                             <label htmlFor="katha-event-date" className="sr-only">Event date</label>
                             <input id="katha-event-date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-venue" className="sr-only">Venue or location</label>
                             <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow" style={{ borderColor: "#C4B59D" }} />
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -727,14 +727,14 @@ export default function GalleryPage() {
                           <div className="flex flex-col gap-4">
                             {/* Personalized font picker */}
                             <div className="flex flex-col gap-1">
-                              <label htmlFor="katha-font-selector" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                              <label htmlFor="katha-font-selector" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#5A564E" }}>
                                 Personalized Font
                               </label>
                               <select
                                 id="katha-font-selector"
                                 value={selectedFont}
                                 onChange={(e) => setSelectedFont(e.target.value)}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 cursor-pointer transition-shadow"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A] cursor-pointer transition-shadow"
                                 style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
                               >
                                 {LUXURY_FONTS.map((font) => (
@@ -746,7 +746,7 @@ export default function GalleryPage() {
                               {/* Live font preview swatch */}
                               <div
                                 className="mt-1 px-3 py-3 rounded-sm text-center text-base"
-                                style={{ fontFamily: selectedFont, color: "#241E1A", backgroundColor: "#F5F1EA", border: "1px solid #C4B59D" }}
+                                style={{ fontFamily: selectedFont, color: "#241E1A", backgroundColor: "#EAE2D5", border: "1px solid #C4B59D" }}
                                 aria-label={`Font preview: ${selectedFont}`}
                               >
                                 {names || "Maria & Jose · July 2026"}
@@ -755,7 +755,7 @@ export default function GalleryPage() {
 
                             {/* Text Position toggle */}
                             <div className="flex flex-col gap-1">
-                              <span className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                              <span className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#5A564E" }}>
                                 Text Position
                               </span>
                               <div className="grid grid-cols-2 gap-2 mt-1">
@@ -790,7 +790,7 @@ export default function GalleryPage() {
                             
                             {/* Additional Notes */}
                             <div className="flex flex-col gap-1">
-                              <label htmlFor="katha-notes" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#9C958A" }}>
+                              <label htmlFor="katha-notes" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#5A564E" }}>
                                 Additional Details
                               </label>
                               <textarea
@@ -799,7 +799,7 @@ export default function GalleryPage() {
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Anything specific we should know — colour accents, motifs, layout preferences?"
                                 rows={2}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-white focus:outline-none focus:ring-1 focus:ring-stone-900 transition-shadow"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A] transition-shadow"
                                 style={{ borderColor: "#C4B59D", resize: "none" }}
                               />
                             </div>
@@ -817,7 +817,7 @@ export default function GalleryPage() {
                               onDragLeave={handleDrag}
                               onDrop={handleDrop}
                               className={`relative border border-dashed rounded-sm p-4 text-center transition-all ${
-                                dragActive ? "border-[#8C382A] bg-[#F2ECE0]" : "border-[#C4B59D] bg-white/50"
+                                dragActive ? "border-[#8C382A] bg-[#EAE2D5]" : "border-[#C4B59D] bg-[#EAE2D5]/30"
                               }`}
                               style={{ minHeight: "90px" }}
                               role="region"
@@ -871,7 +871,7 @@ export default function GalleryPage() {
                                     <button
                                       type="button"
                                       onClick={() => setReferencePhotos(prev => prev.filter((_, i) => i !== index))}
-                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#8C382A] text-white text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
+                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#8C382A] text-[#EAE2D5] text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
                                       aria-label={`Remove reference photo ${index + 1}`}
                                     >
                                       ×
@@ -888,17 +888,16 @@ export default function GalleryPage() {
 
                   <button
                     onClick={confirmSelection}
-                    className="mt-6 w-full py-4 text-xs uppercase tracking-[0.2em] rounded-full cursor-pointer transition-transform hover:scale-[0.98] active:scale-95 shadow-lg shadow-stone-900/20"
-                    style={{ backgroundColor: "#1c1917", color: "#FBF9F5" }}
+                    disabled={!nameOne.trim() || !email.trim()}
+                    className="mt-6 w-full py-4 text-xs uppercase tracking-[0.2em] rounded-none transition-transform hover:scale-[0.98] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100 cursor-pointer"
+                    style={{ backgroundColor: "#111112", color: "#EAE2D5" }}
                   >
                     Submit Design Inquiry
                   </button>
                   <div className="mt-4 text-center">
-                    <p className="text-[11px] leading-relaxed" style={{ color: "#9C958A" }}>
-                      <span className="font-semibold" style={{ color: "#8C382A", letterSpacing: "0.05em" }}>KATHA Draft Preview</span>
-                      {" "}— This canvas is a preliminary guide: a visual heirloom-in-progress crafted to align our shared vision.
-                      Your final piece will be meticulously hand-finished by Katha. Details, fonts, and decorative elements
-                      are fully adjustable before we begin weaving the final design together.
+                    <p className="text-[11px] leading-relaxed" style={{ color: "#5A564E" }}>
+                      <span className="font-semibold" style={{ color: "#8C382A", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
+                      {" "}— This canvas is a preliminary layout designed to align our shared design direction. Your final piece will be meticulously finished by our studio team. Details, fonts, and structural elements are fully adjustable before we lock the final design for production.
                     </p>
                   </div>
                 </div>

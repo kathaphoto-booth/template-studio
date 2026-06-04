@@ -11,3 +11,7 @@ tsconfig.tsbuildinfo
 exports/*.png
 exports/*.pdf
 
+# Local chat logs
+chat_memory.jsonl
+
+
