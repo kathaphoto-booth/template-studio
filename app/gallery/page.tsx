@@ -182,6 +182,7 @@ export default function GalleryPage() {
   const [errorMsg, setErrorMsg] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [error, setError] = useState("");
 
   const filtered = useMemo(() => {
     return PRESETS.filter((p) => {
@@ -211,6 +212,7 @@ export default function GalleryPage() {
     setReferencePhotos([]);
     setNotes("");
     setErrorMsg("");
+    setError("");
     setConfirmed(false);
     // Move focus into modal after render
     setTimeout(() => {
@@ -351,6 +353,7 @@ export default function GalleryPage() {
       localStorage.setItem("katha_selections", JSON.stringify([payload, ...prev].slice(0, 50)));
     } catch {}
 
+    setError("");
     try {
       const res = await fetch("/api/selection", {
         method: "POST",
@@ -360,9 +363,13 @@ export default function GalleryPage() {
       if (res.ok || res.status === 202) {
         setConfirmed(true);
         return;
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || 'Submission failed. Please try again.');
       }
-    } catch {}
-    setConfirmed(true);
+    } catch {
+      setError('Submission failed. Please try again.');
+    }
   };
 
   // Close modal on Escape
@@ -698,8 +705,13 @@ export default function GalleryPage() {
                             <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name (Optional)"
                               className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-email" className="sr-only">Email address</label>
-                            <input id="katha-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
-                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                            <div className="col-span-2">
+                              <input id="katha-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              {email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) && (
+                                <p className="text-xs mt-1" style={{ color: '#8C382A' }}>Please enter a valid email address.</p>
+                              )}
+                            </div>
                             <label htmlFor="katha-phone" className="sr-only">Phone number</label>
                             <input id="katha-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number (Optional)"
                               className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
@@ -888,12 +900,13 @@ export default function GalleryPage() {
 
                   <button
                     onClick={confirmSelection}
-                    disabled={!nameOne.trim() || !email.trim()}
+                    disabled={!nameOne.trim() || !email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())}
                     className="mt-6 w-full py-4 text-xs uppercase tracking-[0.2em] rounded-none transition-transform hover:scale-[0.98] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100 cursor-pointer"
                     style={{ backgroundColor: "#111112", color: "#EAE2D5" }}
                   >
                     Submit Design Inquiry
                   </button>
+                  {error && <p className="text-sm mt-2 text-center" style={{color:'#8C382A'}}>{error}</p>}
                   <div className="mt-4 text-center">
                     <p className="text-[11px] leading-relaxed" style={{ color: "#5A564E" }}>
                       <span className="font-semibold" style={{ color: "#8C382A", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
