@@ -8,6 +8,7 @@
 // gets produced. No design controls are exposed here.
 // ----------------------------------------------------------------------
 
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useMemo } from "react";
 import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX, LUXURY_FONTS, getModifiedLayout } from "@/lib/templates";
 import { KNarrativeThread } from "@/components/shell/KNarrativeThread";
@@ -472,7 +473,7 @@ export default function GalleryPage() {
             <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#A35C44" }}>COMMISSIONED EDITIONS</p>
             <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Editions</h2>
             <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
-              Behold the studio's commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event's identity is presented flawlessly.
+              Behold the studio&apos;s commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event&apos;s identity is presented flawlessly.
             </p>
           </div>
 

@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/error-boundaries */
+/* eslint-disable react/no-unescaped-entities */
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";

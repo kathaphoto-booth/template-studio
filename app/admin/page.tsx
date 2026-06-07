@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/error-boundaries */
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 

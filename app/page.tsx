@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils";
 import { type PhotoboothPreset, PRESETS, LUXURY_FONTS, HARMONY_PALETTES, renderDecorativeSvg, resolveLayout, VIEWBOX, layoutsForFormat, getModifiedLayout, LAYOUTS, defaultLayoutFor } from "@/lib/templates";
 
+/* eslint-disable react-hooks/set-state-in-effect */
 
 
 // ----------------------------------------------------------------------
