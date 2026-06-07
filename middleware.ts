@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { timingSafeEqual } from "crypto";
 
 // ──────────────────────────────────────────────────────────────────────
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
@@ -25,7 +26,12 @@ function isProtected(pathname: string): boolean {
 
 export function middleware(req: NextRequest) {
   const password = process.env.STUDIO_PASSWORD;
-  if (!password) return NextResponse.next(); // bypass when unset (local dev)
+  if (!password) {
+    if (process.env.NODE_ENV === "production") {
+      return new NextResponse("Server configuration error — contact administrator", { status: 503 });
+    }
+    return NextResponse.next(); // local dev only
+  }
 
   const pathname = req.nextUrl.pathname;
   if (!isProtected(pathname)) return NextResponse.next();
@@ -36,7 +42,10 @@ export function middleware(req: NextRequest) {
     const decoded = Buffer.from(encoded, "base64").toString("utf-8");
     const colonIndex = decoded.indexOf(":");
     const provided = decoded.slice(colonIndex + 1);
-    if (provided === password) return NextResponse.next();
+    const authBuf = Buffer.from(provided, "utf-8");
+    const passBuf = Buffer.from(password, "utf-8");
+    const match = authBuf.length === passBuf.length && timingSafeEqual(authBuf, passBuf);
+    if (match) return NextResponse.next();
   }
 
   return new NextResponse("Unauthorized", {
