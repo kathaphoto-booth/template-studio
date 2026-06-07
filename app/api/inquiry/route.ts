@@ -72,14 +72,13 @@ async function pingHoneyBook(payload: InquiryPayload, leadHash: string) {
 }
 
 // 3. Transactional Enrichment Email to Client via Resend
-async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string) {
+async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string, baseUrl: string) {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return { ok: false, detail: "resend email not configured (skipped)" };
   }
 
-  const appUrl = process.env.APP_URL || "http://localhost:3000";
-  const galleryLink = `${appUrl}/gallery?lead=${leadHash}`;
+  const galleryLink = `${baseUrl}/gallery?lead=${leadHash}`;
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
 
   const subject = "Rooted by perseverance, crafted for generations — Katha Photo Booth";
@@ -165,6 +164,12 @@ The Katha Team
 
 // ── POST API Handler ──
 export async function POST(req: NextRequest) {
+  const appUrl = process.env.APP_URL;
+  if (!appUrl && process.env.NODE_ENV === 'production') {
+    return NextResponse.json({error:'Server configuration error'},{status:503});
+  }
+  const baseUrl = appUrl ?? 'http://localhost:3000';
+
   let body: any;
   try {
     body = await req.json();
@@ -173,21 +178,25 @@ export async function POST(req: NextRequest) {
   }
 
   // Validate fields
-  const name = body?.client_name?.trim();
-  const email = body?.client_email?.trim();
+  const name = body?.client_name;
+  const email = body?.client_email;
   const date = body?.event_date?.trim();
   const phone = body?.client_phone?.trim();
 
-  if (!name || !email || !date) {
-    return NextResponse.json({ ok: false, error: "missing required fields (client_name, client_email, event_date)" }, { status: 400 });
-  }
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!name || name.trim().length < 2) return NextResponse.json({error:'Name required (min 2 chars)'},{status:400});
+  if (!email || !EMAIL_REGEX.test(email.trim())) return NextResponse.json({error:'Valid email required'},{status:400});
+  if (!date) return NextResponse.json({error:'missing required fields (event_date)'},{status:400});
+  
+  const cleanName = name.trim();
+  const cleanEmail = email.trim().toLowerCase();
 
   // Generate unique cryptographic lead hash (16 bytes)
   const leadHash = crypto.randomBytes(16).toString("hex");
 
   const payload: InquiryPayload = {
-    client_name: name,
-    client_email: email,
+    client_name: cleanName,
+    client_email: cleanEmail,
     event_date: date,
     client_phone: phone || undefined,
   };
@@ -196,7 +205,7 @@ export async function POST(req: NextRequest) {
   const results = await Promise.all([
     recordLead(payload, leadHash).then((r) => ({ target: "database", ...r })),
     pingHoneyBook(payload, leadHash).then((r) => ({ target: "honeybook", ...r })),
-    sendEnrichmentEmail(payload, leadHash).then((r) => ({ target: "email", ...r })),
+    sendEnrichmentEmail(payload, leadHash, baseUrl).then((r) => ({ target: "email", ...r })),
   ]);
 
   const anyOk = results.some((r) => r.ok);
