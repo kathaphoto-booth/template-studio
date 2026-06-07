@@ -25,15 +25,16 @@ const STATUS_STYLES: Record<string, { background: string; color: string }> = {
   Approved:   { background: "#241E1A",           color: "#EAE2D5" },
 };
 
-async function getData() {
-  if (!supabaseAdmin) return { leads: [], selections: [] };
+async function getData(page: number, LEADS_PER_PAGE: number) {
+  if (!supabaseAdmin) return { leads: [], selections: [], count: 0 };
 
   // Single-tenant today: every lead belongs to STUDIO_ID. When the schema gains a
   // studio_id column (SaaS multi-tenancy phase), restore `.eq("studio_id", STUDIO_ID)`.
-  const { data: leadsRaw, error } = await supabaseAdmin
+  const { data: leadsRaw, error, count } = await supabaseAdmin
     .from("leads")
-    .select("id, client_name, client_email, client_phone, event_date, lead_hash, status, created_at")
-    .order("created_at", { ascending: false });
+    .select("id, client_name, client_email, client_phone, event_date, lead_hash, status, created_at", { count: 'exact' })
+    .order("created_at", { ascending: false })
+    .range(page * LEADS_PER_PAGE, (page + 1) * LEADS_PER_PAGE - 1);
     // TODO(P2.4 - SaaS Phase): Implement pagination via standard SQL OFFSET + LIMIT 
     // to prevent performance degradation when thousands of leads exist.
 
@@ -49,12 +50,16 @@ async function getData() {
     : [];
 
   const selections: Selection[] = selectionsRaw ?? [];
-  return { leads, selections };
+  return { leads, selections, count: count ?? 0 };
 }
 
-export default async function AdminPage() {
+export default async function AdminPage(props: { searchParams: Promise<{ page?: string }> }) {
   try {
-    const { leads, selections } = await getData();
+    const searchParams = await props.searchParams;
+    const page = parseInt(searchParams.page || "0", 10);
+    const LEADS_PER_PAGE = 50;
+    const { leads, selections, count } = await getData(page, LEADS_PER_PAGE);
+    const totalPages = Math.ceil(count / LEADS_PER_PAGE);
 
     const selectionByLead = Object.fromEntries(selections.map((s) => [s.lead, s]));
 
@@ -123,6 +128,34 @@ export default async function AdminPage() {
             })}
           </tbody>
         </table>
+      )}
+      
+      {count > LEADS_PER_PAGE && (
+        <div style={{ marginTop: "32px", display: "flex", justifyContent: "center", alignItems: "center", gap: "24px" }}>
+          {page > 0 ? (
+            <Link href={`?page=${page - 1}`} style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#241E1A", textDecoration: "none", padding: "8px 16px", border: "1px solid #C4B59D", borderRadius: 0, backgroundColor: "#EAE2D5" }}>
+              Previous
+            </Link>
+          ) : (
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#C4B59D", padding: "8px 16px", border: "1px solid rgba(196,181,157,0.3)", borderRadius: 0, cursor: "not-allowed", backgroundColor: "rgba(234,226,213,0.5)" }}>
+              Previous
+            </span>
+          )}
+          
+          <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9C958A", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+            Page {page + 1} of {totalPages}
+          </span>
+          
+          {page < totalPages - 1 ? (
+            <Link href={`?page=${page + 1}`} style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#241E1A", textDecoration: "none", padding: "8px 16px", border: "1px solid #C4B59D", borderRadius: 0, backgroundColor: "#EAE2D5" }}>
+              Next
+            </Link>
+          ) : (
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", textTransform: "uppercase", letterSpacing: "0.15em", color: "#C4B59D", padding: "8px 16px", border: "1px solid rgba(196,181,157,0.3)", borderRadius: 0, cursor: "not-allowed", backgroundColor: "rgba(234,226,213,0.5)" }}>
+              Next
+            </span>
+          )}
+        </div>
       )}
     </div>
   );
