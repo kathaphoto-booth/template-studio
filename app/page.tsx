@@ -933,100 +933,110 @@ export default function WorkspacePage() {
   const handleDownload = async () => {
     const baseSlug = getDerivedNames().toLowerCase().replace(/[^a-z0-9]/g, "_");
 
-    if (exportMode === "composite") {
-      // Standard Flat Screen download
-      const canvas = await generateTemplateCanvas("all");
-      if (!canvas) return;
-
-      const dataUrl = canvas.toDataURL("image/png");
-      const downloadNode = document.createElement("a");
-      downloadNode.href = dataUrl;
-      downloadNode.download = `${baseSlug}_wedding_overlay_composite.png`;
-      downloadNode.click();
-    } else if (exportMode === "layers") {
-      // Professional Layer separation (Background, Slots, Text, and Vectors) as separate transparent PNG outputs
-      const layersConfig: { key: "background" | "slots" | "text" | "vectors"; suffix: string }[] = [
-        { key: "background", suffix: "1_background" },
-        { key: "slots", suffix: "2_photo_slots_mask" },
-        { key: "text", suffix: "3_text_stationery" },
-        { key: "vectors", suffix: "4_decorative_vectors" }
-      ];
-
-      for (let i = 0; i < layersConfig.length; i++) {
-        const item = layersConfig[i];
-        // Timeout separates the requests elegantly to guarantee concurrent download registration is bypassable
-        setTimeout(async () => {
-          const canvas = await generateTemplateCanvas(item.key);
-          if (!canvas) return;
-
-          const dataUrl = canvas.toDataURL("image/png");
-          const downloadNode = document.createElement("a");
-          downloadNode.href = dataUrl;
-          downloadNode.download = `${baseSlug}_layer_${item.suffix}.png`;
-          downloadNode.click();
-        }, i * 180);
-      }
-    } else if (exportMode === "luma-overlay") {
-      // Alpha-transparent overlay for Luma Booth: decoration + text on transparent bg.
-      // This is the single PNG that Luma composites on top of photos during the event.
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        const scaleFactor = 3.0;
-        const cw = activePresetType === "strip" ? 600 * scaleFactor : (activePresetType === "postcard-vertical" ? 1200 : 1800);
-        const ch = activePresetType === "strip" ? 1800 * scaleFactor : (activePresetType === "postcard-vertical" ? 1800 : 1200);
-        canvas.width = cw;
-        canvas.height = ch;
-        ctx.clearRect(0, 0, cw, ch);
-
-        // Draw decoration layer (vectors/frames)
-        const vecCanvas = await generateTemplateCanvas("vectors");
-        if (vecCanvas) ctx.drawImage(vecCanvas, 0, 0);
-
-        // Draw text layer
-        const txtCanvas = await generateTemplateCanvas("text");
-        if (txtCanvas) ctx.drawImage(txtCanvas, 0, 0);
+    try {
+      if (exportMode === "composite") {
+        // Standard Flat Screen download
+        const canvas = await generateTemplateCanvas("all");
+        if (!canvas) return;
 
         const dataUrl = canvas.toDataURL("image/png");
         const downloadNode = document.createElement("a");
         downloadNode.href = dataUrl;
-        downloadNode.download = `${baseSlug}_luma_overlay_alpha.png`;
+        downloadNode.download = `${baseSlug}_wedding_overlay_composite.png`;
         downloadNode.click();
-      }
-    } else if (exportMode === "pdf-print") {
-      // High-Fidelity 300DPI printed PDF formulation (Color managed / CMYK calibration optimization)
-      const isStrip = activePresetType === "strip";
-      const isPVertical = activePresetType === "postcard-vertical";
-      const w = isStrip ? 2 : (isPVertical ? 4 : 6);
-      const h = isStrip ? 6 : (isPVertical ? 6 : 4);
+      } else if (exportMode === "layers") {
+        // Professional Layer separation (Background, Slots, Text, and Vectors) as separate transparent PNG outputs
+        const layersConfig: { key: "background" | "slots" | "text" | "vectors"; suffix: string }[] = [
+          { key: "background", suffix: "1_background" },
+          { key: "slots", suffix: "2_photo_slots_mask" },
+          { key: "text", suffix: "3_text_stationery" },
+          { key: "vectors", suffix: "4_decorative_vectors" }
+        ];
 
-      const doc = new jsPDF({
-        orientation: (isStrip || isPVertical) ? "portrait" : "landscape",
-        unit: "in",
-        format: (isStrip || isPVertical) ? [isStrip ? 2 : 4, 6] : [6, 4]
-      });
+        for (let i = 0; i < layersConfig.length; i++) {
+          const item = layersConfig[i];
+          // Timeout separates the requests elegantly to guarantee concurrent download registration is bypassable
+          setTimeout(async () => {
+            try {
+              const canvas = await generateTemplateCanvas(item.key);
+              if (!canvas) return;
 
-      if (pdfLayoutType === "multi-page") {
-        // Multi-page separate layers representation
-        const layersList: ("background" | "slots" | "text" | "vectors")[] = ["background", "slots", "text", "vectors"];
-        for (let i = 0; i < layersList.length; i++) {
-          if (i > 0) doc.addPage();
-          const layerCanvas = await generateTemplateCanvas(layersList[i]);
-          if (layerCanvas) {
-            const imgData = layerCanvas.toDataURL("image/png");
+              const dataUrl = canvas.toDataURL("image/png");
+              const downloadNode = document.createElement("a");
+              downloadNode.href = dataUrl;
+              downloadNode.download = `${baseSlug}_layer_${item.suffix}.png`;
+              downloadNode.click();
+            } catch (err) {
+              console.error("Export layer failure:", err);
+              alert('Failed to generate export. Please try a different preset or check your browser console.');
+            }
+          }, i * 180);
+        }
+      } else if (exportMode === "luma-overlay") {
+        // Alpha-transparent overlay for Luma Booth: decoration + text on transparent bg.
+        // This is the single PNG that Luma composites on top of photos during the event.
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          const scaleFactor = 3.0;
+          const cw = activePresetType === "strip" ? 600 * scaleFactor : (activePresetType === "postcard-vertical" ? 1200 : 1800);
+          const ch = activePresetType === "strip" ? 1800 * scaleFactor : (activePresetType === "postcard-vertical" ? 1800 : 1200);
+          canvas.width = cw;
+          canvas.height = ch;
+          ctx.clearRect(0, 0, cw, ch);
+
+          // Draw decoration layer (vectors/frames)
+          const vecCanvas = await generateTemplateCanvas("vectors");
+          if (vecCanvas) ctx.drawImage(vecCanvas, 0, 0);
+
+          // Draw text layer
+          const txtCanvas = await generateTemplateCanvas("text");
+          if (txtCanvas) ctx.drawImage(txtCanvas, 0, 0);
+
+          const dataUrl = canvas.toDataURL("image/png");
+          const downloadNode = document.createElement("a");
+          downloadNode.href = dataUrl;
+          downloadNode.download = `${baseSlug}_luma_overlay_alpha.png`;
+          downloadNode.click();
+        }
+      } else if (exportMode === "pdf-print") {
+        // High-Fidelity 300DPI printed PDF formulation (Color managed / CMYK calibration optimization)
+        const isStrip = activePresetType === "strip";
+        const isPVertical = activePresetType === "postcard-vertical";
+        const w = isStrip ? 2 : (isPVertical ? 4 : 6);
+        const h = isStrip ? 6 : (isPVertical ? 6 : 4);
+
+        const doc = new jsPDF({
+          orientation: (isStrip || isPVertical) ? "portrait" : "landscape",
+          unit: "in",
+          format: (isStrip || isPVertical) ? [isStrip ? 2 : 4, 6] : [6, 4]
+        });
+
+        if (pdfLayoutType === "multi-page") {
+          // Multi-page separate layers representation
+          const layersList: ("background" | "slots" | "text" | "vectors")[] = ["background", "slots", "text", "vectors"];
+          for (let i = 0; i < layersList.length; i++) {
+            if (i > 0) doc.addPage();
+            const layerCanvas = await generateTemplateCanvas(layersList[i]);
+            if (layerCanvas) {
+              const imgData = layerCanvas.toDataURL("image/png");
+              doc.addImage(imgData, "PNG", 0, 0, w, h, undefined, "FAST");
+            }
+          }
+        } else {
+          // Single composite page
+          const canvas = await generateTemplateCanvas("all");
+          if (canvas) {
+            const imgData = canvas.toDataURL("image/png");
             doc.addImage(imgData, "PNG", 0, 0, w, h, undefined, "FAST");
           }
         }
-      } else {
-        // Single composite page
-        const canvas = await generateTemplateCanvas("all");
-        if (canvas) {
-          const imgData = canvas.toDataURL("image/png");
-          doc.addImage(imgData, "PNG", 0, 0, w, h, undefined, "FAST");
-        }
-      }
 
-      doc.save(`${baseSlug}_wedding_overlay_cmyk_print.pdf`);
+        doc.save(`${baseSlug}_wedding_overlay_cmyk_print.pdf`);
+      }
+    } catch (err) {
+      console.error("Export failure:", err);
+      alert('Failed to generate export. Please try a different preset or check your browser console.');
     }
   };
 
