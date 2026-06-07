@@ -1035,7 +1035,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "2px",
     slotBorderWidth: "1.5px",
     slotGap: "20px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Three photos trace an L on a piña-fiber ground, with the open corner cradling a champagne calado divider."
@@ -1056,7 +1056,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "20px",
-    slotBgColor: "#E0D7C7",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names."
