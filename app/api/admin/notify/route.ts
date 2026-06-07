@@ -40,6 +40,10 @@ export async function POST(req: NextRequest) {
   if (!lead_hash) {
     return NextResponse.json({ ok: false, error: "lead_hash is required" }, { status: 400 });
   }
+  const LEAD_HASH_REGEX = /^[a-f0-9]{32}$/;
+  if (!LEAD_HASH_REGEX.test(lead_hash)) {
+    return NextResponse.json({ ok: false, error: "Invalid identifier" }, { status: 400 });
+  }
 
   if (!supabaseAdmin) {
     return NextResponse.json({ ok: false, error: "database not configured" }, { status: 500 });

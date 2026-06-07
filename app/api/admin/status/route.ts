@@ -32,6 +32,10 @@ export async function PATCH(req: NextRequest) {
   if (!lead_hash || !status) {
     return NextResponse.json({ ok: false, error: "lead_hash and status are required" }, { status: 400 });
   }
+  const LEAD_HASH_REGEX = /^[a-f0-9]{32}$/;
+  if (!LEAD_HASH_REGEX.test(lead_hash)) {
+    return NextResponse.json({ ok: false, error: "Invalid identifier" }, { status: 400 });
+  }
   if (!LEAD_STATUSES.includes(status as any)) {
     return NextResponse.json({ ok: false, error: `status must be one of: ${LEAD_STATUSES.join(", ")}` }, { status: 400 });
   }

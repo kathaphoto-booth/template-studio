@@ -30,6 +30,15 @@ type Selection = {
 
 const FORBIDDEN_WORDS = ["luxury", "premium", "stunning", "amazing"];
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 // ── Dispatch target #1: email via Resend SDK ──────────────────────────
 // Sender notes:
 //   • from: 'onboarding@resend.dev' works out of the box (no domain verification)
@@ -77,34 +86,34 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       <table style="width:100%; border-collapse:collapse; margin-bottom:30px; font-size:15px;">
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; width:30%; color:#5A564E;">Client Names</td>
-          <td style="padding:10px 0; color:#241E1A;">${s.names || "—"}</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.names ? escapeHtml(s.names) : "—"}</td>
         </tr>
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Template Chosen</td>
-          <td style="padding:10px 0; color:#241E1A; font-family:monospace; font-size:13px;">${s.templateName} (${s.templateId})</td>
+          <td style="padding:10px 0; color:#241E1A; font-family:monospace; font-size:13px;">${escapeHtml(s.templateName)} (${escapeHtml(s.templateId)})</td>
         </tr>
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Layout Format</td>
-          <td style="padding:10px 0; color:#241E1A; text-transform:uppercase; font-size:13px; letter-spacing:0.05em;">${s.layout}</td>
+          <td style="padding:10px 0; color:#241E1A; text-transform:uppercase; font-size:13px; letter-spacing:0.05em;">${escapeHtml(s.layout)}</td>
         </tr>
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Event Date</td>
-          <td style="padding:10px 0; color:#241E1A;">${s.date || "—"}</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.date ? escapeHtml(s.date) : "—"}</td>
         </tr>
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Location / Venue</td>
-          <td style="padding:10px 0; color:#241E1A;">${s.venue || "—"}</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.venue ? escapeHtml(s.venue) : "—"}</td>
         </tr>
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Selected Font</td>
-          <td style="padding:10px 0; color:#241E1A; font-style:italic;">${s.fontFamily || "—"}</td>
+          <td style="padding:10px 0; color:#241E1A; font-style:italic;">${s.fontFamily ? escapeHtml(s.fontFamily) : "—"}</td>
         </tr>
       </table>
 
       ${s.notes ? `
         <div style="background-color:#EAE2D5; padding:20px; margin-bottom:30px; border-left:3px solid #8C382A; font-size:14px; font-style:italic; color:#241E1A;">
           <strong>Client Notes:</strong><br/>
-          "${s.notes}"
+          "${s.notes ? escapeHtml(s.notes) : ""}"
         </div>
       ` : ""}
 
