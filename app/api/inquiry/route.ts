@@ -88,7 +88,7 @@ Dear ${payload.client_name},
 
 Thank you for reaching out to Katha. We have recorded your event inquiry for ${payload.event_date}.
 
-A DSLR photo booth designed like a wooden loom, capturing portraits that feel less like prints and more like passed-down keepsakes.
+A DSLR photo booth designed like a wooden loom, capturing portraits that feel less like prints and more like passed-down heirlooms.
 
 To help us tailor the backdrop, typography, and print outlines to the narrative of your room, we invite you to explore our dynamic design catalog and choose your template:
 
@@ -121,7 +121,7 @@ The Katha Team
       </p>
       
       <p style="font-size:16px; margin-bottom:20px;">
-        A Katha photo booth is built like a wooden loom. The abacá textile frames, the unbleached ecru fibers, and the hand-finished KTHA maker's mark exist for one purpose: to weave your shared memory directly into a passed-down keepsake.
+        A Katha photo booth is built like a wooden loom. The abacá textile frames, the unbleached ecru fibers, and the hand-finished KTHA maker's mark exist for one purpose: to weave your shared memory directly into a passed-down heirloom.
       </p>
       
       <p style="font-size:16px; margin-bottom:30px;">
