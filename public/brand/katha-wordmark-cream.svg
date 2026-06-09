@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 50">
+  <defs>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/>
+    </filter>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;display=swap');
+      .wordmark {
+        font-family: 'Fraunces', serif;
+        font-size: 44px;
+        fill: #F0EAD6;
+        filter: url(#shadow);
+      }
+    </style>
+  </defs>
+  <text x="2" y="40" class="wordmark">katha</text>
+</svg>

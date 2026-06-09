@@ -8,6 +8,13 @@ type InquiryPayload = {
   client_email: string;
   client_phone?: string;
   event_date: string;
+  venue?: string;
+  event_type?: string;
+  guest_count?: string;
+  indoors_outdoors?: string;
+  referral?: string;
+  selected_package?: string;
+  addons?: string[];
 };
 
 // ── Outbound Dispatch targets ──
@@ -57,6 +64,13 @@ async function pingHoneyBook(payload: InquiryPayload, leadHash: string) {
         client_email: payload.client_email,
         client_phone: payload.client_phone || null,
         event_date: payload.event_date,
+        venue: payload.venue || null,
+        event_type: payload.event_type || null,
+        guest_count: payload.guest_count || null,
+        indoors_outdoors: payload.indoors_outdoors || null,
+        referral: payload.referral || null,
+        selected_package: payload.selected_package || null,
+        addons: payload.addons || [],
         lead_hash: leadHash,
         status: "Inquired",
       }),
@@ -78,7 +92,7 @@ async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string, ba
     return { ok: false, detail: "resend email not configured (skipped)" };
   }
 
-  const galleryLink = `${baseUrl}/gallery?lead=${leadHash}`;
+  const galleryLink = `${baseUrl}/portal/${leadHash}/template-design`;
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
 
   const subject = "Rooted by perseverance, crafted for generations — Katha Photo Booth";
@@ -199,6 +213,13 @@ export async function POST(req: NextRequest) {
     client_email: cleanEmail,
     event_date: date,
     client_phone: phone || undefined,
+    venue: body?.venue?.trim(),
+    event_type: body?.event_type?.trim(),
+    guest_count: body?.guest_count?.trim(),
+    indoors_outdoors: body?.indoors_outdoors?.trim(),
+    referral: body?.referral?.trim(),
+    selected_package: body?.selected_package?.trim(),
+    addons: body?.addons,
   };
 
   // Run database, HoneyBook, and transactional email dispatches in parallel

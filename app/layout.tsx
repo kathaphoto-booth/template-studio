@@ -16,8 +16,12 @@ const playfair = Playfair_Display({
 import { KathaThread } from '@/components/marks/KathaThread';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://book.kathabooth.com'),
   title: 'Katha Template Studio',
   description: 'Photo strip and postcard template library and designer for Katha Photo Booth.',
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

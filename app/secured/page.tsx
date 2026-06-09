@@ -1,43 +1,120 @@
 import { Metadata } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
-
-const playfair = Playfair_Display({ subsets: ['latin'] });
-const inter = Inter({ subsets: ['latin'] });
+import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Request Received | Katha Booth',
-  description: 'Your inquiry has been securely submitted.',
+  title: 'Inquiry Received | Katha Booth',
+  description: 'Your inquiry is received. Now choose your edition.',
 };
+
+// ──────────────────────────────────────────────────────────────────────
+// /secured — HoneyBook custom-redirect landing (post-inquiry).
+// The continuity bridge: every inquirer leaves with a path into the
+// Template Designer. One Loko Rust CTA per viewport — this is it.
+// Ma negative space; calado dots are the only rule line; sharp corners.
+// ──────────────────────────────────────────────────────────────────────
+
+const KTHA_MARK_PATH =
+  'M 40,0 L 40,12 M 40,6 L 46,0 M 40,6 L 46,12 ' + // K
+  'M 50,0 L 56,0 M 53,0 L 53,12 ' + // T
+  'M 60,0 L 60,12 M 60,6 L 66,6 M 66,0 L 66,12 ' + // H
+  'M 70,12 L 73,0 L 76,12 M 71.5,8 L 74.5,8'; // A
 
 export default function SecuredPage() {
   return (
-    <div className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#E8E2D9] blur-3xl mix-blend-multiply" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#E8E2D9] blur-3xl mix-blend-multiply" />
-      </div>
+    <main
+      className="min-h-screen flex flex-col items-center justify-center px-6 py-20 text-center"
+      style={{ backgroundColor: '#EAE2D5', color: '#241E1A' }}
+    >
+      <div className="max-w-xl mx-auto">
+        <p
+          className="text-[11px] uppercase tracking-[0.3em]"
+          style={{ color: '#5A564E', fontFamily: "'Inter', sans-serif" }}
+        >
+          Katha Photo Booth
+        </p>
 
-      <div className="max-w-2xl mx-auto space-y-8 relative z-10 bg-white/40 p-12 rounded-3xl border border-[#E8E2D9]/50 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur-sm">
-        <div className="w-16 h-16 mx-auto mb-8 relative">
-          <div className="absolute inset-0 border-[1.5px] border-[#3A3A3A] rounded-full opacity-20" />
-          <svg className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[#3A3A3A]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 13l4 4L19 7" />
+        <h1
+          className="mt-6 text-4xl md:text-5xl"
+          style={{
+            fontFamily: "'Fraunces', Georgia, serif",
+            fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96",
+            letterSpacing: '-0.015em',
+          }}
+        >
+          Your inquiry is received
+        </h1>
+
+        {/* Calado divider — drawn-thread openwork; the only rule line allowed */}
+        <div
+          aria-hidden
+          className="calado-divider mx-auto mt-8 h-[6px] w-40"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='6' viewBox='0 0 48 6'><circle cx='4' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='14' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='24' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='34' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='44' cy='3' r='0.9' fill='%23C4B59D'/></svg>\")",
+            backgroundRepeat: 'repeat-x',
+            backgroundPosition: 'center',
+          }}
+        />
+
+        <div
+          className="mt-8 space-y-3 text-lg leading-relaxed"
+          style={{ fontFamily: "'EB Garamond', Georgia, serif", color: '#5A564E' }}
+        >
+          <p>Your details are in the studio&apos;s hands. We respond within one business day.</p>
+          <p style={{ color: '#241E1A' }}>Now choose your edition.</p>
+        </div>
+
+        <Link
+          href="/template-design"
+          className="mt-10 inline-block px-10 py-4 text-xs uppercase tracking-[0.2em] transition-transform hover:scale-[0.98] active:scale-95"
+          style={{
+            backgroundColor: '#8C382A',
+            color: '#EAE2D5',
+            fontFamily: "'Inter', sans-serif",
+          }}
+        >
+          Begin shaping your edition
+        </Link>
+
+        <p
+          className="mt-4 text-[12px]"
+          style={{ fontFamily: "'EB Garamond', Georgia, serif", color: '#6E6A62' }}
+        >
+          Browse the template library and personalize the details — we attach your design to this inquiry.
+        </p>
+
+        {/* KTHA brass-ring closing stroke — permission to leave the loom */}
+        <div className="mt-16 flex justify-center" aria-hidden>
+          <svg width="120" height="40" viewBox="36 -4 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              className="ktha-draw"
+              d={KTHA_MARK_PATH}
+              stroke="#241E1A"
+              strokeWidth="1.1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </div>
-
-        <h1 className={`${playfair.className} text-4xl md:text-5xl text-[#3A3A3A] font-medium tracking-tight`}>
-          Request Received
-        </h1>
-        
-        <div className="w-12 h-[1px] bg-[#3A3A3A]/20 mx-auto" />
-
-        <div className={`${inter.className} space-y-4 text-[#5A5A5A] text-lg leading-relaxed max-w-lg mx-auto font-light`}>
-          <p>Thank you for choosing Katha Booth.</p>
-          <p>Your request has been securely submitted.</p>
-          <p className="pt-2 font-medium text-[#3A3A3A]">Katha will be in touch with you momentarily.</p>
-        </div>
+        <span className="sr-only" role="status">
+          Katha maker&apos;s mark — complete
+        </span>
       </div>
-    </div>
+
+      {/* CSS-only draw of the maker's mark; reduced-motion shows it complete */}
+      <style>{`
+        .ktha-draw {
+          stroke-dasharray: 160;
+          stroke-dashoffset: 160;
+          animation: ktha-stroke 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+        }
+        @keyframes ktha-stroke {
+          to { stroke-dashoffset: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .ktha-draw { animation: none; stroke-dashoffset: 0; }
+        }
+      `}</style>
+    </main>
   );
 }

@@ -13,6 +13,28 @@ import React, { useState, useMemo } from "react";
 import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX, LUXURY_FONTS, getModifiedLayout } from "@/lib/templates";
 import { KNarrativeThread } from "@/components/shell/KNarrativeThread";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+
+// KTHA brass-ring mark — drawn as the closing stroke on confirmation.
+const KTHA_MARK_PATH =
+  "M 40,0 L 40,12 M 40,6 L 46,0 M 40,6 L 46,12 " + // K
+  "M 50,0 L 56,0 M 53,0 L 53,12 " + // T
+  "M 60,0 L 60,12 M 60,6 L 66,6 M 66,0 L 66,12 " + // H
+  "M 70,12 L 73,0 L 76,12 M 71.5,8 L 74.5,8"; // A
+
+// Filter changes glide via the View Transitions API when available.
+function withViewTransition(update: () => void) {
+  if (typeof document !== "undefined" && "startViewTransition" in document) {
+    (document as Document & { startViewTransition: (cb: () => void) => void }).startViewTransition(update);
+  } else {
+    update();
+  }
+}
+
+// One client reference photo: `preview` renders the thumbnail locally;
+// `value` is what ships in the payload — a Storage path (refs/<uuid>.<ext>)
+// when the presigned upload succeeds, or legacy base64 as fallback.
+type ReferencePhoto = { preview: string; value: string };
 
 type TierFilter = "all" | "signature" | "classic";
 type FormatFilter = "all" | "strip" | "postcard-vertical" | "postcard" | "postcard-square";
@@ -178,7 +200,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
   const [date, setDate] = useState("");
   const [venue, setVenue] = useState("");
   const [selectedFont, setSelectedFont] = useState("");
-  const [referencePhotos, setReferencePhotos] = useState<string[]>([]);
+  const [referencePhotos, setReferencePhotos] = useState<ReferencePhoto[]>([]);
   const [notes, setNotes] = useState("");
   const [uploading, setUploading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -223,25 +245,51 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
     }, 50);
   };
 
-  const handleFiles = (files: FileList) => {
+  // Reads one file as base64 (legacy fallback when Storage is unavailable).
+  const readAsDataUrl = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) =>
+        typeof e.target?.result === "string" ? resolve(e.target.result) : reject(new Error("read failed"));
+      reader.onerror = () => reject(new Error("read failed"));
+      reader.readAsDataURL(file);
+    });
+
+  // Primary path: presigned upload into the private `katha-references`
+  // bucket — only the Storage path travels in the payload, never base64.
+  const uploadToStorage = async (file: File): Promise<string | null> => {
+    try {
+      if (!supabase) return null;
+      const res = await fetch("/api/upload-url", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contentType: file.type }),
+      });
+      if (!res.ok) return null;
+      const { path, token } = await res.json();
+      if (!path || !token) return null;
+      const { error } = await supabase.storage
+        .from("katha-references")
+        .uploadToSignedUrl(path, token, file);
+      if (error) return null;
+      return path;
+    } catch {
+      return null;
+    }
+  };
+
+  const handleFiles = async (files: FileList) => {
     setErrorMsg("");
     const maxFiles = 3;
     const maxSize = 1.5 * 1024 * 1024; // 1.5MB per file
-    const maxTotalSize = 2.5 * 1024 * 1024; // 2.5MB total
 
-    const newPhotos = [...referencePhotos];
-    
-    if (newPhotos.length + files.length > maxFiles) {
+    if (referencePhotos.length + files.length > maxFiles) {
       setErrorMsg(`You can upload a maximum of ${maxFiles} reference photos.`);
       return;
     }
 
-    let sizeSum = 0;
-    newPhotos.forEach(p => {
-      sizeSum += p.length * 0.75;
-    });
-
-    Array.from(files).forEach((file) => {
+    const targets = Array.from(files);
+    for (const file of targets) {
       if (!file.type.startsWith("image/")) {
         setErrorMsg("Only image files (JPEG, PNG, WEBP) are supported.");
         return;
@@ -250,44 +298,27 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
         setErrorMsg(`Each file must be under 1.5MB. "${file.name}" is too large.`);
         return;
       }
-      sizeSum += file.size;
-    });
-
-    if (sizeSum > maxTotalSize) {
-      setErrorMsg("Total upload size is limited to 2.5MB. Please choose smaller or compressed images.");
-      return;
     }
+    if (targets.length === 0) return;
 
     setUploading(true);
-    let loaded = 0;
-    const targets = Array.from(files);
-
-    if (targets.length === 0) {
+    const added: ReferencePhoto[] = [];
+    try {
+      for (const file of targets) {
+        const path = await uploadToStorage(file);
+        if (path) {
+          added.push({ preview: URL.createObjectURL(file), value: path });
+        } else {
+          const dataUrl = await readAsDataUrl(file);
+          added.push({ preview: dataUrl, value: dataUrl });
+        }
+      }
+      setReferencePhotos((prev) => [...prev, ...added]);
+    } catch {
+      setErrorMsg("Failed to read one or more files.");
+    } finally {
       setUploading(false);
-      return;
     }
-
-    targets.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result && typeof e.target.result === "string") {
-          newPhotos.push(e.target.result);
-        }
-        loaded++;
-        if (loaded === targets.length) {
-          setReferencePhotos(newPhotos);
-          setUploading(false);
-        }
-      };
-      reader.onerror = () => {
-        setErrorMsg("Failed to read one or more files.");
-        loaded++;
-        if (loaded === targets.length) {
-          setUploading(false);
-        }
-      };
-      reader.readAsDataURL(file);
-    });
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -342,10 +373,17 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
       venue: venue.trim() || null,
       fontFamily: selectedFont || null,
       textPosition: textPosition,
-      referencePhotos: referencePhotos.length > 0 ? referencePhotos : null,
+      referencePhotos: referencePhotos.length > 0 ? referencePhotos.map((p) => p.value) : null,
       notes: notes.trim() || null,
       lead: currentLead,
       selectedAt: new Date().toISOString(),
+      // Full interactive design state → selections.configuration (jsonb)
+      configuration: {
+        customFont: selectedFont || selected.fontFamily,
+        textPosition,
+        tier: isSignature(selected) ? "signature" : "classic",
+        layoutId: selected.layoutId ?? null,
+      },
     };
 
     try {
@@ -408,7 +446,8 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
               ] as [TierFilter, string][]).map(([key, label]) => (
                 <button
                   key={key}
-                  onClick={() => setTier(key)}
+                  onClick={() => withViewTransition(() => setTier(key))}
+                  aria-pressed={tier === key}
                   className="px-4 py-1.5 text-xs uppercase tracking-widest transition-colors cursor-pointer"
                   style={
                     tier === key
@@ -432,7 +471,8 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
               ] as [FormatFilter, string][]).map(([key, label]) => (
                 <button
                   key={key}
-                  onClick={() => setFormat(key)}
+                  onClick={() => withViewTransition(() => setFormat(key))}
+                  aria-pressed={format === key}
                   className="px-3.5 py-1.5 text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
                   style={
                     format === key
@@ -606,7 +646,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                           {p.name.replace("Katha Signature — ", "")}
                         </div>
                         {isSignature(p) && (
-                          <div className="text-[9px] uppercase tracking-[0.25em] mt-2 text-[#8C382A]">
+                          <div className="text-[9px] uppercase tracking-[0.25em] mt-2 text-[#A35C44]">
                             Signature
                           </div>
                         )}
@@ -648,23 +688,53 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
 
             {confirmed ? (
               <div className="px-8 py-16 text-center">
-                <div className="text-3xl" style={{ fontFamily: "'Fraunces', serif", color: "#241E1A" }}>Thank you</div>
+                {/* KTHA brass-ring closing stroke — permission to leave the loom */}
+                <div className="flex justify-center mb-6" aria-hidden>
+                  <svg width="110" height="36" viewBox="36 -4 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      className="ktha-confirm-draw"
+                      d={KTHA_MARK_PATH}
+                      stroke="#241E1A"
+                      strokeWidth="1.1"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <span className="sr-only" role="status" aria-live="polite">
+                  Katha maker&apos;s mark — complete
+                </span>
+                <div className="text-3xl" style={{ fontFamily: "'Fraunces', serif", color: "#241E1A" }}>Your design is saved</div>
                 <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#241E1A" }}>
-                  Your choice of <strong>{selected.name.replace("Katha Signature — ", "")}</strong> has been saved.
+                  <strong>{selected.name.replace("Katha Signature — ", "")}</strong> is attached to your inquiry.
                   Katha will reach out to finalize the details and send your proof.
                 </p>
                 <button
                   onClick={() => setSelected(null)}
-                  className="mt-8 px-6 py-2 text-xs uppercase tracking-widest rounded-full cursor-pointer"
+                  className="mt-8 px-6 py-2 text-xs uppercase tracking-widest rounded-none cursor-pointer"
                   style={{ backgroundColor: "#241E1A", color: "#EAE2D5" }}
                 >
                   Back to gallery
                 </button>
+                <style>{`
+                  .ktha-confirm-draw {
+                    stroke-dasharray: 160;
+                    stroke-dashoffset: 160;
+                    animation: ktha-confirm-stroke 2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+                  }
+                  @keyframes ktha-confirm-stroke { to { stroke-dashoffset: 0; } }
+                  @media (prefers-reduced-motion: reduce) {
+                    .ktha-confirm-draw { animation: none; stroke-dashoffset: 0; }
+                  }
+                `}</style>
               </div>
             ) : (
-              <div className="grid md:grid-cols-2 gap-8 p-8">
-                {/* Live preview */}
-                <div className="flex items-center justify-center">
+              <div className="grid md:grid-cols-[11fr_9fr] gap-8 p-8">
+                {/* Live preview — sticky canvas (55) on a champagne wash */}
+                <div
+                  className="flex items-center justify-center md:sticky md:top-8 md:self-start py-6"
+                  style={{ backgroundColor: "rgba(196,181,157,0.1)" }}
+                >
                   <TemplateCanvas
                     preset={selected}
                     width={selected.type === "strip" ? 150 : 260}
@@ -700,21 +770,21 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                           <div className="grid grid-cols-2 gap-3">
                             <label htmlFor="katha-name-one" className="sr-only">First name</label>
                             <input id="katha-name-one" value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
-                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-name-two" className="sr-only">Second name</label>
                             <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name (Optional)"
-                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-email" className="sr-only">Email address</label>
                             <div className="col-span-2">
                               <input id="katha-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                               {email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) && (
-                                <p className="text-xs mt-1" style={{ color: '#8C382A' }}>Please enter a valid email address.</p>
+                                <p className="text-xs mt-1" style={{ color: '#5A5D5A' }}>Please enter a valid email address.</p>
                               )}
                             </div>
                             <label htmlFor="katha-phone" className="sr-only">Phone number</label>
                             <input id="katha-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number (Optional)"
-                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -725,10 +795,10 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                           <div className="flex flex-col gap-3">
                             <label htmlFor="katha-event-date" className="sr-only">Event date</label>
                             <input id="katha-event-date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-venue" className="sr-only">Venue or location</label>
                             <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A]" style={{ borderColor: "#C4B59D" }} />
+                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -746,7 +816,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                 id="katha-font-selector"
                                 value={selectedFont}
                                 onChange={(e) => setSelectedFont(e.target.value)}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A] cursor-pointer transition-shadow"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A] cursor-pointer transition-shadow"
                                 style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
                               >
                                 {LUXURY_FONTS.map((font) => (
@@ -775,6 +845,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                   type="button"
                                   id="btn-gallery-text-bottom"
                                   onClick={() => setTextPosition("bottom")}
+                                  aria-pressed={textPosition === "bottom"}
                                   className={cn(
                                     "text-[11px] py-2 font-bold rounded-xs border uppercase tracking-widest text-center cursor-pointer transition-all",
                                     textPosition === "bottom"
@@ -788,6 +859,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                   type="button"
                                   id="btn-gallery-text-top"
                                   onClick={() => setTextPosition("top")}
+                                  aria-pressed={textPosition === "top"}
                                   className={cn(
                                     "text-[11px] py-2 font-bold rounded-xs border uppercase tracking-widest text-center cursor-pointer transition-all",
                                     textPosition === "top"
@@ -811,7 +883,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Anything specific we should know — colour accents, motifs, layout preferences?"
                                 rows={2}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#8C382A] transition-shadow"
+                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A] transition-shadow"
                                 style={{ borderColor: "#C4B59D", resize: "none" }}
                               />
                             </div>
@@ -829,7 +901,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                               onDragLeave={handleDrag}
                               onDrop={handleDrop}
                               className={`relative border border-dashed rounded-sm p-4 text-center transition-all ${
-                                dragActive ? "border-[#8C382A] bg-[#EAE2D5]" : "border-[#C4B59D] bg-[#EAE2D5]/30"
+                                dragActive ? "border-[#B5B8A3] bg-[#EAE2D5]" : "border-[#C4B59D] bg-[#EAE2D5]/30"
                               }`}
                               style={{ minHeight: "90px" }}
                               role="region"
@@ -857,7 +929,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                 ) : (
                                   <>
                                     <p className="text-[11px] font-medium" style={{ color: "#241E1A" }}>
-                                      Drag reference photos here, or <span className="underline text-[#8C382A]">browse</span>
+                                      Drag reference photos here, or <span className="underline text-[#241E1A]">browse</span>
                                     </p>
                                     <p className="text-[9px] mt-0.5" style={{ color: "#9C958A" }}>
                                       Max 3 files (1.5MB each, 2.5MB total)
@@ -869,7 +941,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
     
                             {/* Error message */}
                             {errorMsg && (
-                              <p role="alert" className="text-[11px] font-medium mt-1 text-[#8C382A]">
+                              <p role="alert" className="text-[11px] font-medium mt-1 text-[#5A5D5A]">
                                 {errorMsg}
                               </p>
                             )}
@@ -879,11 +951,11 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                               <div className="flex gap-2 flex-wrap mt-2" role="list" aria-label="Uploaded reference photos">
                                 {referencePhotos.map((photo, index) => (
                                   <div key={index} role="listitem" className="relative w-14 h-14 border rounded-sm overflow-hidden" style={{ borderColor: "#C4B59D" }}>
-                                    <img src={photo} alt={`Reference photo ${index + 1}`} className="w-full h-full object-cover" />
+                                    <img src={photo.preview} alt={`Reference photo ${index + 1}`} className="w-full h-full object-cover" />
                                     <button
                                       type="button"
                                       onClick={() => setReferencePhotos(prev => prev.filter((_, i) => i !== index))}
-                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#8C382A] text-[#EAE2D5] text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
+                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#111112] text-[#EAE2D5] text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
                                       aria-label={`Remove reference photo ${index + 1}`}
                                     >
                                       ×
@@ -902,14 +974,14 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                     onClick={confirmSelection}
                     disabled={!nameOne.trim() || !email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())}
                     className="mt-6 w-full py-4 text-xs uppercase tracking-[0.2em] rounded-none transition-transform hover:scale-[0.98] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100 cursor-pointer"
-                    style={{ backgroundColor: "#111112", color: "#EAE2D5" }}
+                    style={{ backgroundColor: "#8C382A", color: "#EAE2D5" }}
                   >
                     Submit Design Inquiry
                   </button>
-                  {error && <p className="text-sm mt-2 text-center" style={{color:'#8C382A'}}>{error}</p>}
+                  {error && <p className="text-sm mt-2 text-center" style={{color:'#5A5D5A'}}>{error}</p>}
                   <div className="mt-4 text-center">
                     <p className="text-[11px] leading-relaxed" style={{ color: "#5A564E" }}>
-                      <span className="font-semibold" style={{ color: "#8C382A", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
+                      <span className="font-semibold" style={{ color: "#A35C44", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
                       {" "}— This canvas is a preliminary layout designed to align our shared design direction. Your final piece will be meticulously finished by our studio team. Details, fonts, and structural elements are fully adjustable before we lock the final design for production.
                     </p>
                   </div>

@@ -17,7 +17,9 @@
     "guard:detect": "impeccable detect app lib --json"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^5.2.1",
+    "@radix-ui/react-dialog": "^1.1.16",
     "@supabase/supabase-js": "^2.106.2",
     "autoprefixer": "^10.4.21",
     "class-variance-authority": "^0.7.1",
@@ -36,6 +38,7 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "4.1.11",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",

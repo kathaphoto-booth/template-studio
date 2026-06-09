@@ -1683,14 +1683,8 @@ export default function WorkspacePage() {
                   />
                   {textPosition === "top" && stationeryTextElement}
  
-                  {/* THE PHOTO MOUNT SLOTS — data-driven from lib/layouts.js
-                       Slot rectangles, including L/Γ shapes, come from the
-                       resolved layout. Absolute positioning via viewBox-relative
-                       percentages so the same data renders identically in the
-                       studio preview, the canvas export, and the gallery.
-                       NB: layout coords already include the 60u safe margin so
-                       this wrapper does NOT add its own padding. */}
-                  <div className="absolute inset-0 z-20">
+                  {/* THE PHOTO MOUNT SLOTS — data-driven from lib/layouts.js */}
+                  <div className="flex-1 relative z-20 w-full h-full">
                     {(() => {
                       const rawLay = resolveLayout(currentPreset.layoutId, activePresetType);
                       const lay = getModifiedLayout(rawLay, textPosition);

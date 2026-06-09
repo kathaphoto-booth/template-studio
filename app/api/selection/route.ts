@@ -26,7 +26,29 @@ type Selection = {
   notes?: string | null;
   lead?: string | null;
   selectedAt: string;
+  // Full interactive design state (font, text position, tier, future knobs).
+  // Persisted as a single JSONB column — no per-knob schema churn.
+  configuration?: Record<string, unknown> | null;
 };
+
+// Reference photos arrive either as Storage paths (refs/<uuid>.<ext>) or
+// legacy inline base64 (data:image/...). Storage paths get short-lived
+// signed URLs for the notification email; base64 passes through as-is.
+async function resolveReferenceUrls(photos: string[] | null | undefined): Promise<string[]> {
+  if (!photos || photos.length === 0) return [];
+  const resolved: string[] = [];
+  for (const p of photos) {
+    if (p.startsWith("data:")) {
+      resolved.push(p);
+    } else if (supabaseAdmin) {
+      const { data } = await supabaseAdmin.storage
+        .from("katha-references")
+        .createSignedUrl(p, 60 * 60 * 24 * 7); // 7 days
+      if (data?.signedUrl) resolved.push(data.signedUrl);
+    }
+  }
+  return resolved;
+}
 
 const FORBIDDEN_WORDS = ["luxury", "premium", "stunning", "amazing"];
 
@@ -129,14 +151,15 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
     </div>
   `;
 
-  if (s.referencePhotos && s.referencePhotos.length > 0) {
+  const referenceUrls = await resolveReferenceUrls(s.referencePhotos);
+  if (referenceUrls.length > 0) {
     html += `
       <div style="max-width:600px; margin:20px auto 0 auto; font-family: sans-serif; padding:0 10px;">
         <h3 style="font-size:14px; color:#241E1A; margin-bottom: 12px; font-weight: 600;">Uploaded Reference Photos:</h3>
         <div style="display:flex; gap:12px; flex-wrap:wrap;">
-          ${s.referencePhotos.map((photo, idx) => `
-            <div style="border: 1px solid #C4B59D; border-radius: 4px; padding: 4px; background: white; margin-bottom: 10px;">
-              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:180px; max-height:180px; object-fit:cover; display:block; border-radius: 2px;" />
+          ${referenceUrls.map((photo, idx) => `
+            <div style="border: 1px solid #C4B59D; padding: 4px; background: #EAE2D5; margin-bottom: 10px;">
+              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:180px; max-height:180px; object-fit:cover; display:block;" />
             </div>
           `).join("")}
         </div>
@@ -247,6 +270,7 @@ async function dispatchSupabase(s: Selection): Promise<{ ok: boolean; detail: st
         notes: s.notes,
         lead: s.lead,
         selected_at: s.selectedAt,
+        configuration: s.configuration ?? {},
       });
 
     if (error) {
@@ -292,6 +316,11 @@ export async function POST(req: NextRequest) {
     notes: body.notes ? String(body.notes).slice(0, 2000) : null,
     lead: body.lead ? String(body.lead).slice(0, 200) : null,
     selectedAt: new Date().toISOString(),
+    configuration:
+      body.configuration && typeof body.configuration === "object" && !Array.isArray(body.configuration)
+        && JSON.stringify(body.configuration).length <= 10_000
+        ? body.configuration
+        : null,
   };
 
   // Fan out to dispatch targets in parallel; report each result
