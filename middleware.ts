@@ -8,8 +8,8 @@ import { timingSafeEqual } from "crypto";
 // PROTECTED   /          → studio UI (admin tweak)
 //             /api/generate, /api/generate-theme → AI cost surface
 //
-// PUBLIC      /gallery   → client-facing template picker
-//             /api/selection → client submits their pick (POST only)
+// PUBLIC      /portal/[id]/template-design   → client-facing template gallery
+//             /api/selection                 → client submits their pick (POST only)
 //
 // Set STUDIO_PASSWORD in env. Username can be anything (we ignore it).
 // If STUDIO_PASSWORD is unset, gate is bypassed (so local dev still works
