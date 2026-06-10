@@ -3,8 +3,8 @@
 // and the client gallery (app/gallery/). Edit decoration HERE only — it updates
 // preview, canvas export, AND the gallery thumbnails simultaneously.
 
-export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout } from "./layouts.js";
-import { resolveLayout, VIEWBOX, FORMAT_MARGIN, getModifiedLayout } from "./layouts.js";
+import { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout, FORMAT_MARGIN } from "./layouts.js";
+export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout };
 
 // Types
 export interface PhotoboothPreset {
@@ -54,6 +54,69 @@ export const PRESETS: PhotoboothPreset[] = [
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Unbleached piña-fiber ground with a fine calado openwork divider drawn in champagne thread. Iron-bark serif set with quiet restraint."
+  },
+  {
+    id: "katha-editorial-void",
+    name: "Katha Signature — The Editorial Void",
+    type: "strip",
+    layoutId: "strip-3",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration."
+  },
+  {
+    id: "katha-editorial-void-postcard",
+    name: "Katha Signature — The Editorial Void Postcard",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru."
+  },
+  {
+    id: "katha-editorial-void-landscape",
+    name: "Katha Signature — The Editorial Void Landscape",
+    type: "postcard",
+    layoutId: "pc-3-v",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
   },
   {
     id: "katha-heirloom-pina-postcard",
@@ -297,7 +360,7 @@ export const PRESETS: PhotoboothPreset[] = [
     type: "strip",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#EAE2D5",
+    borderColor: "#C4B59D",
     secondaryColor: "#5A5D5A",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
@@ -318,7 +381,7 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#EAE2D5",
+    borderColor: "#C4B59D",
     secondaryColor: "#5A5D5A",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
@@ -339,7 +402,7 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-v",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#EAE2D5",
+    borderColor: "#C4B59D",
     secondaryColor: "#5A5D5A",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
@@ -449,8 +512,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "strip-3",
     backgroundColor: "#FAF6F0",
     textColor: "#544634",
-    borderColor: "#C5A85C",
-    secondaryColor: "#C5A85C",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
     fontFamily: "'Cinzel', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
@@ -470,8 +533,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pv-2",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#C5A85C",
-    secondaryColor: "#C5A85C",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -491,8 +554,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-v",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#C5A85C",
-    secondaryColor: "#C5A85C",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -1023,7 +1086,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "heirloom-pina-L",
     name: "Katha Signature — Heirloom Piña L-Shape",
     type: "postcard",
-    layoutId: "pc-H",
+    layoutId: "pc-L",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -1044,7 +1107,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "loom-frame-invL",
     name: "Katha Signature — Loom Frame Γ-Shape",
     type: "postcard",
-    layoutId: "pc-I",
+    layoutId: "pc-invL",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#241E1A",
@@ -1065,7 +1128,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "editorial-landscape-L",
     name: "Style 8 — Editorial L-Shape Landscape",
     type: "postcard",
-    layoutId: "pc-H",
+    layoutId: "pc-L",
     backgroundColor: "#FCFCFC",
     textColor: "#121212",
     borderColor: "#E5E5E5",
@@ -1086,7 +1149,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "capiz-sage-invL",
     name: "Katha Signature — Capiz Sage Γ-Shape Landscape",
     type: "postcard",
-    layoutId: "pc-I",
+    layoutId: "pc-invL",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#9FA38F",
@@ -1110,7 +1173,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-heirloom-pina-landscape-1sq",
     name: "Katha Signature — Heirloom Piña Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-1-full",
+    layoutId: "pc-1-sq",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -1173,7 +1236,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-knalum-night-landscape-1sq",
     name: "Katha Signature — Knalum Night Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-1-full",
+    layoutId: "pc-1-sq",
     backgroundColor: "#1A1816",
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
@@ -1233,14 +1296,77 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "T’nalak soil-black — three square photos in a row, raw-fiber ecru lettering."
   },
   {
+    id: "katha-editorial-void-landscape-1sq",
+    name: "Katha Signature — The Editorial Void Landscape 1 Square",
+    type: "postcard",
+    layoutId: "pc-1-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean centered square photo layout floating on a massive expanse of Piña Ecru."
+  },
+  {
+    id: "katha-editorial-void-landscape-2sq",
+    name: "Katha Signature — The Editorial Void Landscape 2 Squares",
+    type: "postcard",
+    layoutId: "pc-2-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
+  },
+  {
+    id: "katha-editorial-void-landscape-3sq",
+    name: "Katha Signature — The Editorial Void Landscape 3 Squares",
+    type: "postcard",
+    layoutId: "pc-3-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+  },
+  {
     id: "wedding-luxe-gold-landscape-1sq",
     name: "Style 1 — Tradition Gold Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-1-full",
+    layoutId: "pc-1-sq",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#C5A85C",
-    secondaryColor: "#C5A85C",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -1260,8 +1386,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-2-sq",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#C5A85C",
-    secondaryColor: "#C5A85C",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -1281,8 +1407,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-sq",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#C5A85C",
-    secondaryColor: "#C5A85C",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -1424,6 +1550,11 @@ const DECORATION_ALIASES: Record<string, string> = {
   "katha-knalum-night-landscape-1sq":   "katha-knalum-night",
   "katha-knalum-night-landscape-2sq":   "katha-knalum-night",
   "katha-knalum-night-landscape-3sq":   "katha-knalum-night",
+  "katha-editorial-void-postcard":      "katha-editorial-void",
+  "katha-editorial-void-landscape":     "katha-editorial-void",
+  "katha-editorial-void-landscape-1sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-2sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-3sq": "katha-editorial-void",
   "wedding-luxe-gold-landscape-1sq":    "wedding-luxe-gold",
   "wedding-luxe-gold-landscape-2sq":    "wedding-luxe-gold",
   "wedding-luxe-gold-landscape-3sq":    "wedding-luxe-gold",
@@ -1479,7 +1610,7 @@ export const HARMONY_PALETTES = [
     name: "Midnight Onyx",
     bg: "#111111",
     text: "#FFFFFF",
-    secondary: "#C5A85C",
+    secondary: "#766023",
     border: "#333333",
     slotBg: "#1A1A1A",
   },
@@ -1534,17 +1665,19 @@ export function renderDecorativeSvg(
   const defs = `
     <defs>
       <linearGradient id="svg-gold-shimmer" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#C5A85C" />
+        <stop offset="0%" stop-color="#766023" />
         <stop offset="25%" stop-color="#F3E5BE" />
         <stop offset="50%" stop-color="#A58238" />
         <stop offset="75%" stop-color="#FFF3CD" />
-        <stop offset="100%" stop-color="#C5A85C" />
+        <stop offset="100%" stop-color="#766023" />
       </linearGradient>
     </defs>
   `;
 
   // Render SVG elements anchored ONLY to the canvas edges (relative to margin) or to the dynamic tz pedestal boundaries.
   switch (baseId) {
+    case "katha-editorial-void":
+      return "";
     case "katha-heirloom-pina":
       return `
         <!-- Dual calado champagne borders -->
@@ -1643,6 +1776,10 @@ export function renderDecorativeSvg(
 
     case "katha-binakul-weave":
       return `
+        <!-- Media slots boundaries to ensure visibility in LumaBooth overlays -->
+        ` + layout.slots.map((s: any) => `
+          <rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" fill="none" stroke="${borderColor}" stroke-width="1.5" />
+        `).join("") + `
         <!-- Inactive Inabel abacá borders -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.55" />
         <!-- Mathematical optical binakul whirlpools in corners to confuse malevolent spirits -->
