@@ -1,4 +1,3 @@
-import figmaAssets from "./figma-assets.json" with { type: "json" };
 // Katha Template Studio — shared template catalog (SINGLE SOURCE OF TRUTH).
 // PRESETS + renderDecorativeSvg are consumed by BOTH the studio (app/page.tsx)
 // and the client gallery (app/gallery/). Edit decoration HERE only — it updates
@@ -8,21 +7,13 @@ import { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, d
 export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout };
 
 // Types
-export interface TemplateComponent {
-  type: string;
-  anchor?: string;     // e.g. "textPedestal", "center", "none"
-  scale?: number;
-  color?: string;      // e.g. "secondaryColor", "strokeColor", or hex
-  opacity?: number;
-  inset?: number;
-  offsetY?: number;
-  strokeWidth?: number;
-}
-
 export interface PhotoboothPreset {
   id: string;
   name: string;
   type: "strip" | "postcard" | "postcard-vertical";
+  // OPTIONAL — references a layout in lib/layouts.js. If omitted, the default
+  // layout for `type` is used. This makes every preset render with declarative
+  // slot geometry rather than hand-computed math.
   layoutId?: string;
   backgroundColor: string;
   textColor: string;
@@ -39,7 +30,6 @@ export interface PhotoboothPreset {
   innerSpacing: string;
   decorativeSvg: string;
   designerExplanation: string;
-  decorations?: TemplateComponent[];
 }
 
 // ─── 15 AESTHETIC FAMILIES (SINGLE SOURCE OF TRUTH) ───────────────────────────
@@ -63,7 +53,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaSingleFrame" }, { type: "CaladoDivider" } ],
     designerExplanation: "Unbleached piña-fiber ground with a fine calado openwork divider drawn in champagne thread. Iron-bark serif set with quiet restraint."
   },
   {
@@ -76,7 +65,7 @@ export const PRESETS: PhotoboothPreset[] = [
     borderColor: "#111112",
     secondaryColor: "#1A1816",
     fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Form",
+    titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
     slotBorderRadius: "0px",
@@ -85,8 +74,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "EditorialVoidDivider" } ],
-    designerExplanation: "An uncompromising execution of negative space. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration."
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration."
   },
   {
     id: "katha-editorial-void-postcard",
@@ -98,7 +86,7 @@ export const PRESETS: PhotoboothPreset[] = [
     borderColor: "#111112",
     secondaryColor: "#1A1816",
     fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Form",
+    titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
     slotBorderRadius: "0px",
@@ -107,8 +95,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "EditorialVoidDivider" } ],
-    designerExplanation: "An uncompromising execution of negative space. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru."
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru."
   },
   {
     id: "katha-editorial-void-landscape",
@@ -120,7 +107,7 @@ export const PRESETS: PhotoboothPreset[] = [
     borderColor: "#111112",
     secondaryColor: "#1A1816",
     fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Form",
+    titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
     slotBorderRadius: "0px",
@@ -129,14 +116,13 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "EditorialVoidDivider" } ],
-    designerExplanation: "An uncompromising execution of negative space. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
   },
   {
     id: "katha-heirloom-pina-postcard",
     name: "Katha Signature — Heirloom Piña Postcard",
     type: "postcard-vertical",
-    layoutId: "pv-2",
+    layoutId: "pv-1-full",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
@@ -151,7 +137,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaSingleFrame" }, { type: "CaladoDivider" } ],
     designerExplanation: "The Heirloom Piña strip rendered as a 4×6 postcard. Piña-fiber ecru ground with a champagne double-frame and calado openwork divider."
   },
   {
@@ -173,7 +158,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaSingleFrame" }, { type: "CaladoDivider" } ],
     designerExplanation: "Unbleached piña-fiber ground with a fine calado openwork divider. Landscape postcard variant."
   },
 
@@ -196,7 +180,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "LoomFrame" } ],
     designerExplanation: "A loom-frame border of nested rules and corner cross-ties, echoing the hardwood frame that holds the warp threads taut."
   },
   {
@@ -218,7 +201,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "LoomFrame" } ],
     designerExplanation: "Loom-frame border in iron-bark serif. Postcard variant of the Loom Frame strip."
   },
   {
@@ -240,7 +222,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "LoomFrame" } ],
     designerExplanation: "Loom-frame border in iron-bark serif. Landscape postcard variant for three-photo Katha events."
   },
 
@@ -263,7 +244,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaSingleFrame" }, { type: "LokoRustAccent", offsetY: 10 } ],
     designerExplanation: "T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single loko-root rust rule — the dreamweaver's tri-color."
   },
   {
@@ -285,7 +265,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaSingleFrame" }, { type: "LokoRustAccent", offsetY: 10 } ],
     designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. 4×6 postcard variant."
   },
   {
@@ -307,7 +286,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaSingleFrame" }, { type: "LokoRustAccent", offsetY: 10 } ],
     designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. Landscape postcard variant."
   },
 
@@ -330,10 +308,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [
-      { type: "KathaSingleFrame" },
-      { type: "BrassRing", anchor: "textPedestal", offsetY: -30 }
-    ],
     designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing."
   },
   {
@@ -355,7 +329,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "BrassRing" } ],
     designerExplanation: "The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names."
   },
   {
@@ -377,7 +350,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "BrassRing" } ],
     designerExplanation: "The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names."
   },
 
@@ -386,9 +358,9 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-binakul-weave",
     name: "Katha Signature — Binakul Weave",
     type: "strip",
-    backgroundColor: "#C4B59D",
+    backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#241E1A",
+    borderColor: "#C4B59D",
     secondaryColor: "#5A5D5A",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
@@ -397,10 +369,9 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#C4B59D",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "BinakulCorners" } ],
     designerExplanation: "Ilocos binakul optical weave at the corners — apotropaic geometry meant to confuse malevolent spirits, woven quietly at low contrast."
   },
   {
@@ -408,9 +379,9 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Binakul Weave Postcard",
     type: "postcard-vertical",
     layoutId: "pv-2",
-    backgroundColor: "#C4B59D",
+    backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#241E1A",
+    borderColor: "#C4B59D",
     secondaryColor: "#5A5D5A",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
@@ -419,10 +390,9 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#C4B59D",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "BinakulCorners" } ],
     designerExplanation: "Ilocos binakul optical weave at the corners. Apotropaic geometry for a 4x6 vertical postcard."
   },
   {
@@ -430,9 +400,9 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Binakul Weave Landscape",
     type: "postcard",
     layoutId: "pc-3-v",
-    backgroundColor: "#C4B59D",
+    backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#241E1A",
+    borderColor: "#C4B59D",
     secondaryColor: "#5A5D5A",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
@@ -441,10 +411,9 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "18px",
-    slotBgColor: "#C4B59D",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "BinakulCorners" } ],
     designerExplanation: "Ilocos binakul optical weave at the corners. Landscape variant."
   },
 
@@ -453,10 +422,10 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "katha-capiz-sage",
     name: "Katha Signature — Capiz Sage",
     type: "strip",
-    backgroundColor: "#B5B8A3",
+    backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#241E1A",
-    secondaryColor: "#5A5D5A",
+    borderColor: "#9C958A",
+    secondaryColor: "#6E6A62",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
@@ -464,10 +433,9 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#B5B8A3",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "CapizLattice" } ],
     designerExplanation: "Capiz-shell windowpane lattice rendered in sage — the translucent pane that filters lowland light into a soft, even glow."
   },
   {
@@ -475,10 +443,10 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Capiz Sage Postcard",
     type: "postcard-vertical",
     layoutId: "pv-2",
-    backgroundColor: "#B5B8A3",
+    backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#241E1A",
-    secondaryColor: "#5A5D5A",
+    borderColor: "#9C958A",
+    secondaryColor: "#6E6A62",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
@@ -486,10 +454,9 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#B5B8A3",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "CapizLattice" } ],
     designerExplanation: "Capiz windowpane in sage green. 4×6 vertical postcard variant."
   },
   {
@@ -497,10 +464,10 @@ export const PRESETS: PhotoboothPreset[] = [
     name: "Katha Signature — Capiz Sage Landscape",
     type: "postcard",
     layoutId: "pc-3-v",
-    backgroundColor: "#B5B8A3",
+    backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#241E1A",
-    secondaryColor: "#5A5D5A",
+    borderColor: "#9C958A",
+    secondaryColor: "#6E6A62",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
@@ -508,10 +475,9 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "18px",
-    slotBgColor: "#B5B8A3",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "CapizLattice" } ],
     designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
   },
 
@@ -535,7 +501,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaDoubleFrame" } ],
     designerExplanation: "Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
   },
 
@@ -559,7 +524,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F4EDE3",
     innerSpacing: "26px",
     decorativeSvg: "",
-    decorations: [ { type: "GoldFoilFrame" } ],
     designerExplanation: "Double gold foil fine outline detailing around each slot. Clean Roman serif display, providing timeless heirloom appeal."
   },
   {
@@ -581,7 +545,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F4EDE3",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "GoldFoilFrame" } ],
     designerExplanation: "Double gold-foil hairline frame with crisp corner accents. A 4×6 postcard distillation of the Tradition Gold strip."
   },
   {
@@ -603,7 +566,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F4EDE3",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "GoldFoilFrame" } ],
     designerExplanation: "Tradition Gold rendered horizontal: gold-foil hairline frame, three photos in a row, formal Cinzel display."
   },
 
@@ -626,7 +588,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EDEDE9",
     innerSpacing: "24px",
     decorativeSvg: "",
-    decorations: [ { type: "LinenRose", anchor: "topCenter", offsetY: 20 } ],
     designerExplanation: "Deckled ivory paper backdrop adorned with a hand-sketched classic cream and white rose nested gracefully above the text."
   },
   {
@@ -648,7 +609,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EDEDE9",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "LinenRose", anchor: "topCenter", offsetY: 20 } ],
     designerExplanation: "Deckled ivory paper backdrop adorned with a hand-sketched classic rose nested gracefully above the text. Postcard vertical format."
   },
   {
@@ -670,7 +630,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EDEDE9",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "LinenRose", anchor: "topCenter", offsetY: 20 } ],
     designerExplanation: "Linen-paper ground with a hand-sketched English rose. Landscape postcard variant — three stacked moments side by side."
   },
 
@@ -693,7 +652,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#9A543E",
     innerSpacing: "26px",
     decorativeSvg: "",
-    decorations: [ { type: "TerracottaLeaf", anchor: "bottomCenter" } ],
     designerExplanation: "Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours."
   },
   {
@@ -715,7 +673,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#9A543E",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "TerracottaLeaf", anchor: "bottomCenter" } ],
     designerExplanation: "Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Postcard format."
   },
   {
@@ -737,7 +694,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#9A543E",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "TerracottaLeaf", anchor: "bottomCenter" } ],
     designerExplanation: "Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Landscape format."
   },
 
@@ -760,7 +716,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#222222",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "GatsbyChevron" } ],
     designerExplanation: "Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons and tall typography."
   },
   {
@@ -782,7 +737,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#222222",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "GatsbyChevron" } ],
     designerExplanation: "Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Postcard vertical format."
   },
   {
@@ -804,7 +758,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#222222",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "GatsbyChevron" } ],
     designerExplanation: "Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Landscape postcard format."
   },
 
@@ -827,7 +780,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F5F5",
     innerSpacing: "36px",
     decorativeSvg: "",
-    decorations: [ { type: "HauteGalleryMargins" } ],
     designerExplanation: "Extremely spacious high-fashion gallery margins and thin borders paired with tracked wide, clean-lined display fonts."
   },
   {
@@ -849,7 +801,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F5F5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "HauteGalleryMargins" } ],
     designerExplanation: "Generous gallery margins with a single hairline rule and wide-tracked Italiana display. Quiet, modernist."
   },
   {
@@ -871,7 +822,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F5F5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "HauteGalleryMargins" } ],
     designerExplanation: "Editorial gallery margins, hairline rule, wide-tracked display. Landscape postcard for cinematic three-photo storytelling."
   },
 
@@ -894,7 +844,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EFECE3",
     innerSpacing: "26px",
     decorativeSvg: "",
-    decorations: [ { type: "VictorianLace" } ],
     designerExplanation: "Fine Victorian scalloped curves and lace-like dotted alignments evoking elegant hand-crocheted silk ribbons."
   },
   {
@@ -916,7 +865,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EFECE3",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "VictorianLace" } ],
     designerExplanation: "Fine Victorian scalloped curves and lace-like dotted alignments. Postcard vertical format."
   },
   {
@@ -938,7 +886,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EFECE3",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "VictorianLace" } ],
     designerExplanation: "Fine Victorian scalloped curves and lace-like dotted alignments. Landscape format."
   },
 
@@ -961,7 +908,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#FAFAF8",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "ImperialCrest", anchor: "textPedestal" } ],
     designerExplanation: "Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal design under the photo slots."
   },
   {
@@ -983,7 +929,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#FAFAF8",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "ImperialCrest", anchor: "textPedestal" } ],
     designerExplanation: "Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal. Postcard vertical format."
   },
   {
@@ -1005,7 +950,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#FAFAF8",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "ImperialCrest", anchor: "textPedestal" } ],
     designerExplanation: "Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal. Landscape format."
   },
 
@@ -1028,9 +972,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F3ED",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [
-      { type: "BotanicalArch" }
-    ],
     designerExplanation: "Canva style double fine-lined cathedral arch framing. Features high-curved slots and minimalist organic grass sprigs."
   },
   {
@@ -1052,7 +993,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F3ED",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "BotanicalArch" } ],
     designerExplanation: "Double fine-lined cathedral arch framing wrapping vertical slots. Postcard vertical format."
   },
   {
@@ -1074,7 +1014,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F3ED",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "BotanicalArch" } ],
     designerExplanation: "Double fine-lined cathedral arch crowning three photo slots. Landscape variant of the Delicate Fine-Line Arch."
   },
 
@@ -1097,7 +1036,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F2ECE0",
     innerSpacing: "24px",
     decorativeSvg: "",
-    decorations: [ { type: "DeckledWaxSeal", anchor: "textPedestal", offsetY: -20 } ],
     designerExplanation: "Etsy bestseller deckled-edge paper base carrying an intimate calligraphic handwriting signature and simulated copper wax-seal monogram."
   },
   {
@@ -1119,7 +1057,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F2ECE0",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "DeckledWaxSeal", anchor: "textPedestal", offsetY: -20 } ],
     designerExplanation: "Etsy bestseller deckled-edge paper carrying calligraphic handwriting and simulated copper wax-seal. Postcard format."
   },
   {
@@ -1141,10 +1078,8 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F2ECE0",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "DeckledWaxSeal", anchor: "textPedestal", offsetY: -20 } ],
     designerExplanation: "Etsy bestseller deckled-edge paper carrying calligraphic handwriting and simulated copper wax-seal. Landscape postcard format."
   },
-
 
   // ─── ASYMMETRICAL EDITORIAL SPECIFIC DESIGNS (LEGACY ALIGNMENTS) ──────────
   {
@@ -1166,7 +1101,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "HeirloomPinaPattern" }, { type: "CaladoDivider" } ],
     designerExplanation: "Three photos trace an L on a piña-fiber ground, with the open corner cradling a champagne calado divider."
   },
   {
@@ -1188,8 +1122,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "LoomMortiseCorners" } ],
-    designerExplanation: "Inverted-L arrangement framed by the loom-bark border. The typography perfectly fills the bottom-left negative space."
+    designerExplanation: "Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names."
   },
   {
     id: "editorial-landscape-L",
@@ -1210,8 +1143,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F5F5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "EditorialVoidDivider" } ],
-    designerExplanation: "Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Italiana display filling the negative space."
+    designerExplanation: "Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Italiana display."
   },
   {
     id: "capiz-sage-invL",
@@ -1232,12 +1164,32 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#E4DCCE",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "CapizLattice" } ],
-    designerExplanation: "Capiz windowpane in sage. Inverted-L photo arrangement with the open corner perfectly filled by typography."
+    designerExplanation: "Capiz windowpane in sage. Inverted-L photo arrangement with the open corner reserved for the names."
   },
 
-  // ─── SQUARE LANDSCAPE VARIANTS (2×, 3× — 550×550 slots) ─────────────────────────
+  // ─── SQUARE LANDSCAPE VARIANTS (1×, 2×, 3× — 550×550 slots) ─────────────────────────
   // — Katha Signature families first —
+  {
+    id: "katha-heirloom-pina-landscape-1sq",
+    name: "Katha Signature — Heirloom Piña Landscape 1 Square",
+    type: "postcard",
+    layoutId: "pc-1-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Fraunces', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "MANILA",
+    slotBorderRadius: "2px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Piña-fiber ecru ground — a single centered square focal photo, wide branding pedestal below."
+  },
   {
     id: "katha-heirloom-pina-landscape-2sq",
     name: "Katha Signature — Heirloom Piña Landscape 2 Squares",
@@ -1257,7 +1209,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "HeirloomPinaPattern" }, { type: "CaladoDivider" } ],
     designerExplanation: "Piña-fiber ecru ground — two square photos balanced across the canvas."
   },
   {
@@ -1279,8 +1230,28 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "HeirloomPinaPattern" }, { type: "CaladoDivider" } ],
     designerExplanation: "Piña-fiber ecru ground — three square photos in a row with champagne thread accents."
+  },
+  {
+    id: "katha-knalum-night-landscape-1sq",
+    name: "Katha Signature — Knalum Night Landscape 1 Square",
+    type: "postcard",
+    layoutId: "pc-1-sq",
+    backgroundColor: "#1A1816",
+    textColor: "#EAE2D5",
+    borderColor: "#241E1A",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Fraunces', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "LAKE SEBU",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#241E1A",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "T’nalak soil-black ground — one square focal photo centered, loko-root rust accent text band."
   },
   {
     id: "katha-knalum-night-landscape-2sq",
@@ -1301,7 +1272,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaDoubleFrame" } ],
     designerExplanation: "T’nalak soil-black — two square photos, ecru lettering with loko-root rust accent."
   },
   {
@@ -1323,8 +1293,28 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaDoubleFrame" } ],
     designerExplanation: "T’nalak soil-black — three square photos in a row, raw-fiber ecru lettering."
+  },
+  {
+    id: "katha-editorial-void-landscape-1sq",
+    name: "Katha Signature — The Editorial Void Landscape 1 Square",
+    type: "postcard",
+    layoutId: "pc-1-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Fraunces', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean centered square photo layout floating on a massive expanse of Piña Ecru."
   },
   {
     id: "katha-editorial-void-landscape-2sq",
@@ -1336,7 +1326,7 @@ export const PRESETS: PhotoboothPreset[] = [
     borderColor: "#111112",
     secondaryColor: "#1A1816",
     fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Form",
+    titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
     slotBorderRadius: "0px",
@@ -1345,8 +1335,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "EditorialVoidDivider" } ],
-    designerExplanation: "An uncompromising execution of negative space. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
   },
   {
     id: "katha-editorial-void-landscape-3sq",
@@ -1358,7 +1347,7 @@ export const PRESETS: PhotoboothPreset[] = [
     borderColor: "#111112",
     secondaryColor: "#1A1816",
     fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Form",
+    titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
     slotBorderRadius: "0px",
@@ -1367,8 +1356,28 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "EditorialVoidDivider" } ],
-    designerExplanation: "An uncompromising execution of negative space. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+  },
+  {
+    id: "wedding-luxe-gold-landscape-1sq",
+    name: "Style 1 — Tradition Gold Landscape 1 Square",
+    type: "postcard",
+    layoutId: "pc-1-sq",
+    backgroundColor: "#FAF6F0",
+    textColor: "#1C1917",
+    borderColor: "#766023",
+    secondaryColor: "#766023",
+    fontFamily: "'Cinzel', serif",
+    titleText: "STEVEN & CRISTALYN",
+    subTitleText: "JULY 25, 2026",
+    dateText: "NAPA VALLEY, CALIFORNIA",
+    slotBorderRadius: "4px",
+    slotBorderWidth: "3px",
+    slotGap: "18px",
+    slotBgColor: "#F4EDE3",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Tradition Gold — one square focal photo, gold-foil hairline frame."
   },
   {
     id: "wedding-luxe-gold-landscape-2sq",
@@ -1389,7 +1398,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F4EDE3",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaDoubleFrame" } ],
     designerExplanation: "Tradition Gold — two square photos, gold-foil detail, formal Cinzel display."
   },
   {
@@ -1411,7 +1419,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F4EDE3",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "KathaDoubleFrame" } ],
     designerExplanation: "Tradition Gold — three square photos in a row, gold-foil hairline, formal Roman display."
   },
   // ─── 16. WOVEN SILK (Katha Signature — generative agent concept)
@@ -1433,7 +1440,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "WovenSilkMotif" } ],
     designerExplanation: "Generative signature theme representing pure unrefined structural thread paths running continuously. Features delicate threadlines that subtly overlay slots."
   },
   {
@@ -1455,7 +1461,6 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    decorations: [ { type: "WovenSilkMotif" } ],
     designerExplanation: "Generative signature theme representing structural thread paths in a 4x6 vertical postcard format."
   },
   {
@@ -1477,1101 +1482,8 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    decorations: [ { type: "WovenSilkMotif" } ],
     designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
   },
-  {
-    id: "katha-minimalist-pure-white-strip",
-    name: "Katha Minimalist — Warm Ecru 3-Strip",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Form",
-    subTitleText: "MMXXVI",
-    dateText: "MANILA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "2px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Ultra-minimalist Piña Ecru foundation. Zero outer frame, relying strictly on severe Obsidian Weave media slot borders to ground the composition."
-  },
-  {
-    id: "katha-minimalist-pure-black-strip",
-    name: "Katha Minimalist — Obsidian Void 4-Strip",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#111112",
-    textColor: "#C4B59D",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'JetBrains Mono', monospace",
-    titleText: "THE VOID",
-    subTitleText: "2026",
-    dateText: "TOKYO",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#111112",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Deepest Obsidian environment. Media slot boundaries are defined solely by warm Champagne Heirloom architectural hairlines."
-  },
-  {
-    id: "katha-minimalist-ecru-void-pv",
-    name: "Katha Minimalist — Ecru Void Stack",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'EB Garamond', serif",
-    titleText: "MARIA & LUIS",
-    subTitleText: "MMXXVI",
-    dateText: "MAKATI",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "60px",
-    decorativeSvg: "",
-    designerExplanation: "Unbleached Piña Ecru background. Borderless layout relying entirely on thin obsidian slot frames to preserve negative space."
-  },
-  {
-    id: "katha-minimalist-obsidian-pv",
-    name: "Katha Minimalist — Obsidian Stack",
-    type: "postcard-vertical",
-    layoutId: "pv-3",
-    backgroundColor: "#111112",
-    textColor: "#C4B59D",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
-    titleText: "G & P",
-    subTitleText: "WINTER",
-    dateText: "2026",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1px",
-    slotGap: "24px",
-    slotBgColor: "#111112",
-    innerSpacing: "60px",
-    decorativeSvg: "",
-    designerExplanation: "Dark-mode vertical layout. Champagne Heirloom slot borders provide the only structural anchors against the Obsidian Weave canvas."
-  },
-  {
-    id: "katha-minimalist-loko-rust-pc",
-    name: "Katha Minimalist — Loko Rust Split",
-    type: "postcard",
-    layoutId: "pc-2-split",
-    backgroundColor: "#EAE2D5",
-    textColor: "#8C382A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Inter', sans-serif",
-    titleText: "MODERN",
-    subTitleText: "ROMANCE",
-    dateText: "08.15",
-    slotBorderRadius: "4px",
-    slotBorderWidth: "2px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Warm Piña Ecru landscape featuring stark Loko Rust accents. Media slots are gently radiused but outlined."
-  },
-  {
-    id: "katha-minimalist-slate-pc",
-    name: "Katha Minimalist — Abel Slate Squares",
-    type: "postcard",
-    layoutId: "pc-2-sq",
-    backgroundColor: "#5A5D5A",
-    textColor: "#C4B59D",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
-    titleText: "T O G E T H E R",
-    subTitleText: "A CELEBRATION",
-    dateText: "2026",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1px",
-    slotGap: "24px",
-    slotBgColor: "#5A5D5A",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Abel Slate canvas defined strictly by warm Champagne Heirloom slot squares. An exercise in brutalist harmony."
-  },
-  {
-    id: "katha-minimalist-champagne-pc",
-    name: "Katha Minimalist — Champagne Columns",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#C4B59D",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'EB Garamond', serif",
-    titleText: "THE UNION",
-    subTitleText: "FALL 2026",
-    dateText: "PARIS",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "2px",
-    slotGap: "18px",
-    slotBgColor: "#C4B59D",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Three pure black-outlined vertical columns commanding a vast expanse of Champagne Heirloom."
-  },
-  {
-    id: "katha-minimalist-sage-pc",
-    name: "Katha Minimalist — Capiz Sage Grid",
-    type: "postcard",
-    layoutId: "pc-3-sq",
-    backgroundColor: "#B5B8A3",
-    textColor: "#EAE2D5",
-    borderColor: "#EAE2D5",
-    secondaryColor: "#EAE2D5",
-    fontFamily: "'JetBrains Mono', monospace",
-    titleText: "01.01",
-    subTitleText: "NEW YEAR",
-    dateText: "MANILA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#B5B8A3",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Capiz Sage foundation with three perfectly spaced squares framed in warm Piña Ecru."
-  },
-  {
-    id: "katha-minimalist-terracotta-pv",
-    name: "Katha Minimalist — Terracotta Earth",
-    type: "postcard-vertical",
-    layoutId: "pv-3",
-    backgroundColor: "#A35C44",
-    textColor: "#C4B59D",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
-    titleText: "WARMTH",
-    subTitleText: "SUMMER",
-    dateText: "2026",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "2px",
-    slotGap: "24px",
-    slotBgColor: "#A35C44",
-    innerSpacing: "60px",
-    decorativeSvg: "",
-    designerExplanation: "Rich Terracotta Earth layout. Warm Champagne Heirloom slot bounds provide structure without outer template containment."
-  },
-  {
-    id: "katha-minimalist-monochrome-strip",
-    name: "Katha Minimalist — High Contrast Ecru Strip",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Inter', sans-serif",
-    titleText: "A & E",
-    subTitleText: "THE VOWS",
-    dateText: "NYC",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "4px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "High-contrast design on Piña Ecru. Thick 4px Obsidian Weave borders encase the media slots, demanding visual hierarchy over warm negative space."
-  }
-,
-  {
-    id: "katha-ql-genuine-0",
-    name: "Quiet Lux — Genuine Variation 0",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign0", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-1",
-    name: "Quiet Lux — Genuine Variation 1",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign1", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-2",
-    name: "Quiet Lux — Genuine Variation 2",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign2", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-3",
-    name: "Quiet Lux — Genuine Variation 3",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign3", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-4",
-    name: "Quiet Lux — Genuine Variation 4",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign4", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-5",
-    name: "Quiet Lux — Genuine Variation 5",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign5", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-6",
-    name: "Quiet Lux — Genuine Variation 6",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign6", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-7",
-    name: "Quiet Lux — Genuine Variation 7",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign7", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-8",
-    name: "Quiet Lux — Genuine Variation 8",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign8", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-9",
-    name: "Quiet Lux — Genuine Variation 9",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign9", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-10",
-    name: "Quiet Lux — Genuine Variation 10",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign10", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-11",
-    name: "Quiet Lux — Genuine Variation 11",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign11", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-12",
-    name: "Quiet Lux — Genuine Variation 12",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign12", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-13",
-    name: "Quiet Lux — Genuine Variation 13",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign13", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-14",
-    name: "Quiet Lux — Genuine Variation 14",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign14", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-15",
-    name: "Quiet Lux — Genuine Variation 15",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign15", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-16",
-    name: "Quiet Lux — Genuine Variation 16",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign16", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-17",
-    name: "Quiet Lux — Genuine Variation 17",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign17", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-18",
-    name: "Quiet Lux — Genuine Variation 18",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign18", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-19",
-    name: "Quiet Lux — Genuine Variation 19",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign19", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-20",
-    name: "Quiet Lux — Genuine Variation 20",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign20", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-21",
-    name: "Quiet Lux — Genuine Variation 21",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign21", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-22",
-    name: "Quiet Lux — Genuine Variation 22",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign22", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-23",
-    name: "Quiet Lux — Genuine Variation 23",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign23", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-24",
-    name: "Quiet Lux — Genuine Variation 24",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign24", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-25",
-    name: "Quiet Lux — Genuine Variation 25",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign25", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-26",
-    name: "Quiet Lux — Genuine Variation 26",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign26", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-27",
-    name: "Quiet Lux — Genuine Variation 27",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign27", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-28",
-    name: "Quiet Lux — Genuine Variation 28",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign28", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-29",
-    name: "Quiet Lux — Genuine Variation 29",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign29", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-30",
-    name: "Quiet Lux — Genuine Variation 30",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign30", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-31",
-    name: "Quiet Lux — Genuine Variation 31",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign31", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-32",
-    name: "Quiet Lux — Genuine Variation 32",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign32", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-33",
-    name: "Quiet Lux — Genuine Variation 33",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign33", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-34",
-    name: "Quiet Lux — Genuine Variation 34",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign34", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-35",
-    name: "Quiet Lux — Genuine Variation 35",
-    type: "strip",
-    layoutId: "strip-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#111112",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign35", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #111112."
-  },
-  {
-    id: "katha-ql-genuine-36",
-    name: "Quiet Lux — Genuine Variation 36",
-    type: "strip",
-    layoutId: "strip-3",
-    backgroundColor: "#111112",
-    textColor: "#EAE2D5",
-    borderColor: "#EAE2D5",
-    secondaryColor: "#EAE2D5",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#111112",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign36", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #EAE2D5."
-  },
-  {
-    id: "katha-ql-genuine-37",
-    name: "Quiet Lux — Genuine Variation 37",
-    type: "strip",
-    layoutId: "strip-4",
-    backgroundColor: "#111112",
-    textColor: "#EAE2D5",
-    borderColor: "#EAE2D5",
-    secondaryColor: "#EAE2D5",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#111112",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign37", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #EAE2D5."
-  },
-  {
-    id: "katha-ql-genuine-38",
-    name: "Quiet Lux — Genuine Variation 38",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#111112",
-    textColor: "#EAE2D5",
-    borderColor: "#EAE2D5",
-    secondaryColor: "#EAE2D5",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#111112",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign38", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #EAE2D5."
-  },
-  {
-    id: "katha-ql-genuine-39",
-    name: "Quiet Lux — Genuine Variation 39",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#111112",
-    textColor: "#EAE2D5",
-    borderColor: "#EAE2D5",
-    secondaryColor: "#EAE2D5",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Quiet Lux",
-    subTitleText: "MMXXVI",
-    dateText: "KATHA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#111112",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    decorations: [ { type: "QuietLuxDesign39", anchor: "textCenter" } ],
-    designerExplanation: "Genuine procedurally generated quiet lux geometry referencing the Etsy screenshots DNA, rendered in #EAE2D5."
-  }
-
 ];
 
 
@@ -2632,14 +1544,18 @@ const DECORATION_ALIASES: Record<string, string> = {
   "wedding-decked-monogram-landscape": "wedding-decked-monogram",
 
   // Square-slot landscape aliases
+  "katha-heirloom-pina-landscape-1sq":  "katha-heirloom-pina",
   "katha-heirloom-pina-landscape-2sq":  "katha-heirloom-pina",
   "katha-heirloom-pina-landscape-3sq":  "katha-heirloom-pina",
+  "katha-knalum-night-landscape-1sq":   "katha-knalum-night",
   "katha-knalum-night-landscape-2sq":   "katha-knalum-night",
   "katha-knalum-night-landscape-3sq":   "katha-knalum-night",
   "katha-editorial-void-postcard":      "katha-editorial-void",
   "katha-editorial-void-landscape":     "katha-editorial-void",
+  "katha-editorial-void-landscape-1sq": "katha-editorial-void",
   "katha-editorial-void-landscape-2sq": "katha-editorial-void",
   "katha-editorial-void-landscape-3sq": "katha-editorial-void",
+  "wedding-luxe-gold-landscape-1sq":    "wedding-luxe-gold",
   "wedding-luxe-gold-landscape-2sq":    "wedding-luxe-gold",
   "wedding-luxe-gold-landscape-3sq":    "wedding-luxe-gold",
 };
@@ -2758,112 +1674,6 @@ export function renderDecorativeSvg(
     </defs>
   `;
 
-  // --- ART DIRECTOR FRAMEWORK (Component-based rendering) ---
-  if (preset.decorations && preset.decorations.length > 0) {
-    let svgOutput = defs;
-    preset.decorations.forEach(comp => {
-      const compColor = comp.color === "secondaryColor" ? secondaryColor : 
-                        comp.color === "strokeColor" ? strokeColor :
-                        comp.color === "textColor" ? color :
-                        comp.color === "borderColor" ? borderColor : 
-                        (comp.color || secondaryColor);
-                        
-      const opacityStr = comp.opacity !== undefined ? `opacity="${comp.opacity}"` : '';
-      const sw = comp.strokeWidth || 1;
-      
-      // Resolve anchor Y
-      let anchorY = vb.h / 2;
-      let yMultiplier = textPosition === 'bottom' ? -1 : 1; // negative means move up
-      
-      if (comp.anchor === "textPedestal") {
-         anchorY = textPosition === 'bottom' ? tz.y + (comp.offsetY || 0) : tz.y + tz.h + (comp.offsetY || 0);
-      } else if (comp.anchor === "textCenter") {
-         anchorY = tz.centerY + (comp.offsetY || 0);
-      } else if (comp.offsetY) {
-         anchorY += comp.offsetY;
-      }
-
-      switch (comp.type) {
-        case "KathaDoubleFrame": {
-          const inset1 = comp.inset || (margin / 3);
-          const inset2 = inset1 + 8;
-          svgOutput += `
-            <rect x="${inset1}" y="${inset1}" width="${vb.w - 2 * inset1}" height="${vb.h - 2 * inset1}" fill="none" stroke="${compColor}" stroke-width="${sw * 1.5}" ${opacityStr} />
-            <rect x="${inset2}" y="${inset2}" width="${vb.w - 2 * inset1 - 16}" height="${vb.h - 2 * inset1 - 16}" fill="none" stroke="${compColor}" stroke-width="${sw * 0.6}" opacity="${comp.opacity ? comp.opacity * 0.55 : 0.55}" />
-          `;
-          break;
-        }
-        case "KathaSingleFrame": {
-          const inset = comp.inset || (margin / 2);
-          svgOutput += `
-            <rect x="${inset}" y="${inset}" width="${vb.w - 2 * inset}" height="${vb.h - 2 * inset}" fill="none" stroke="${compColor}" stroke-width="${sw * 1.5}" ${opacityStr} />
-          `;
-          break;
-        }
-        case "CaladoDivider": {
-          const scale = comp.scale || 1;
-          svgOutput += `
-            <g transform="translate(${vb.w / 2}, ${anchorY}) scale(${scale})" stroke="${compColor}" stroke-width="${sw * 1.4}" fill="${compColor}" ${opacityStr}>
-              <line x1="-150" y1="0" x2="-26" y2="0" stroke-dasharray="1.5 7" stroke-linecap="round" />
-              <line x1="26" y1="0" x2="150" y2="0" stroke-dasharray="1.5 7" stroke-linecap="round" />
-              <path d="M -16,0 L 0,-9 L 16,0 L 0,9 Z" fill="none" stroke-width="${sw * 1.1}" />
-              <circle cx="0" cy="0" r="2.4" />
-            </g>
-          `;
-          break;
-        }
-        case "BrassRing": {
-          const scale = comp.scale || 1;
-          svgOutput += `
-            <g transform="translate(${vb.w / 2}, ${anchorY}) scale(${scale})" fill="none" stroke="${compColor}" ${opacityStr}>
-              <circle cx="0" cy="0" r="22" stroke-width="${sw * 2}" />
-              <circle cx="0" cy="0" r="14" stroke-width="${sw * 0.75}" opacity="0.6" />
-            </g>
-          `;
-          break;
-        }
-        case "LoomMortiseCorners": {
-           const inset = comp.inset || (margin / 2);
-           svgOutput += `
-             <g stroke="${compColor}" stroke-width="${sw * 1.6}" ${opacityStr}>
-               <line x1="${inset}" y1="${inset - 10}" x2="${inset}" y2="${inset + 20}" />
-               <line x1="${inset - 10}" y1="${inset}" x2="${inset + 20}" y2="${inset}" />
-               <line x1="${vb.w - inset}" y1="${inset - 10}" x2="${vb.w - inset}" y2="${inset + 20}" />
-               <line x1="${vb.w - inset - 20}" y1="${inset}" x2="${vb.w - inset + 10}" y2="${inset}" />
-               <line x1="${inset}" y1="${vb.h - inset - 20}" x2="${inset}" y2="${vb.h - inset + 10}" />
-               <line x1="${inset - 10}" y1="${vb.h - inset}" x2="${inset + 20}" y2="${vb.h - inset}" />
-               <line x1="${vb.w - inset}" y1="${vb.h - inset - 20}" x2="${vb.w - inset}" y2="${vb.h - inset + 10}" />
-               <line x1="${vb.w - inset - 20}" y1="${vb.h - inset}" x2="${vb.w - inset + 10}" y2="${vb.h - inset}" />
-             </g>
-           `;
-           break;
-        }
-        default: {
-          if (figmaAssets && (figmaAssets as any)[comp.type]) {
-            const asset = (figmaAssets as any)[comp.type];
-            svgOutput += `
-              <g transform="translate(${vb.w / 2}, ${anchorY}) scale(${comp.scale || 1})" ${opacityStr}>
-                ${asset.svg}
-              </g>
-            `;
-          }
-          break;
-        }
-
-        case "BotanicalArch": {
-           const m = comp.inset || (margin / 2);
-           svgOutput += `
-             <path d="M ${m},${textPosition === 'bottom' ? tz.y - 10 : vb.h - m} L ${m},${margin + (vb.w - margin) / 2} A ${(vb.w - margin) / 2},${(vb.w - margin) / 2} 0 0,1 ${vb.w - m},${margin + (vb.w - margin) / 2} L ${vb.w - m},${textPosition === 'bottom' ? tz.y - 10 : vb.h - m} Z" fill="none" stroke="${compColor}" stroke-width="${sw * 2}" ${opacityStr} />
-             <path d="M ${m + 6},${textPosition === 'bottom' ? tz.y - 6 : vb.h - m - 6} L ${m + 6},${margin + 6 + (vb.w - margin - 12) / 2} A ${(vb.w - margin - 12) / 2},${(vb.w - margin - 12) / 2} 0 0,1 ${vb.w - m - 6},${margin + 6 + (vb.w - margin - 12) / 2} L ${vb.w - m - 6},${textPosition === 'bottom' ? tz.y - 6 : vb.h - m - 6} Z" fill="none" stroke="${compColor}" stroke-width="${sw * 0.75}" opacity="0.6" />
-           `;
-           break;
-        }
-      }
-    });
-    return svgOutput;
-  }
-
-  // --- LEGACY FALLBACK (Hardcoded Switch) ---
   // Render SVG elements anchored ONLY to the canvas edges (relative to margin) or to the dynamic tz pedestal boundaries.
   switch (baseId) {
     case "katha-editorial-void":
@@ -3097,7 +1907,6 @@ export function renderDecorativeSvg(
           <circle cx="0" cy="4" r="28" stroke="${secondaryColor}" stroke-width="1" />
         </g>
       `;
-
 
     default:
       return defs + `
