@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { timingSafeEqual } from "crypto";
+
+// Constant-time string compare. Node's crypto.timingSafeEqual is unavailable
+// in the edge runtime (throws at request time), so we do it by hand.
+function safeEqual(a: string, b: string): boolean {
+  const len = Math.max(a.length, b.length);
+  let diff = a.length === b.length ? 0 : 1;
+  for (let i = 0; i < len; i++) diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+  return diff === 0;
+}
 
 // ──────────────────────────────────────────────────────────────────────
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
@@ -42,10 +50,7 @@ export function middleware(req: NextRequest) {
     const decoded = Buffer.from(encoded, "base64").toString("utf-8");
     const colonIndex = decoded.indexOf(":");
     const provided = decoded.slice(colonIndex + 1);
-    const authBuf = Buffer.from(provided, "utf-8");
-    const passBuf = Buffer.from(password, "utf-8");
-    const match = authBuf.length === passBuf.length && timingSafeEqual(authBuf, passBuf);
-    if (match) return NextResponse.next();
+    if (safeEqual(provided, password)) return NextResponse.next();
   }
 
   return new NextResponse("Unauthorized", {
