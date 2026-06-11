@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { timingSafeEqual } from "crypto";
+
 
 // ──────────────────────────────────────────────────────────────────────
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
@@ -16,7 +16,7 @@ import { timingSafeEqual } from "crypto";
 // without it). Set it in Vercel env vars before sharing the URL.
 // ──────────────────────────────────────────────────────────────────────
 
-const PROTECTED_PATHS = ["/", "/admin"];
+const PROTECTED_PATHS = ["/studio", "/admin"];
 const PROTECTED_PREFIXES = ["/api/generate", "/api/admin"];
 
 function isProtected(pathname: string): boolean {
@@ -42,10 +42,11 @@ export function middleware(req: NextRequest) {
     const decoded = Buffer.from(encoded, "base64").toString("utf-8");
     const colonIndex = decoded.indexOf(":");
     const provided = decoded.slice(colonIndex + 1);
-    const authBuf = Buffer.from(provided, "utf-8");
-    const passBuf = Buffer.from(password, "utf-8");
-    const match = authBuf.length === passBuf.length && timingSafeEqual(authBuf, passBuf);
-    if (match) return NextResponse.next();
+    
+    // Simple comparison since crypto.timingSafeEqual is not supported in edge runtime
+    if (provided === password) {
+      return NextResponse.next();
+    }
   }
 
   return new NextResponse("Unauthorized", {

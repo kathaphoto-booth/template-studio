@@ -78,7 +78,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
   const appUrl = process.env.APP_URL || "https://kathabooth.com";
 
   // Construct secure, dynamic query parameter link to auto-fill the admin room
-  const customizeLink = `${appUrl}/?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
+  const customizeLink = `${appUrl}/studio?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
 
   const subject = `Template Chosen — ${s.names || "Client"} · ${s.templateName}`;
   

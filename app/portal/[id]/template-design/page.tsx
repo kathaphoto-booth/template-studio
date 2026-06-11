@@ -9,18 +9,12 @@
 // ----------------------------------------------------------------------
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIEWBOX, LUXURY_FONTS, getModifiedLayout } from "@/lib/templates";
 import { KNarrativeThread } from "@/components/shell/KNarrativeThread";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 
-// KTHA brass-ring mark — drawn as the closing stroke on confirmation.
-const KTHA_MARK_PATH =
-  "M 40,0 L 40,12 M 40,6 L 46,0 M 40,6 L 46,12 " + // K
-  "M 50,0 L 56,0 M 53,0 L 53,12 " + // T
-  "M 60,0 L 60,12 M 60,6 L 66,6 M 66,0 L 66,12 " + // H
-  "M 70,12 L 73,0 L 76,12 M 71.5,8 L 74.5,8"; // A
 
 // Filter changes glide via the View Transitions API when available.
 function withViewTransition(update: () => void) {
@@ -174,8 +168,22 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
   const { id } = React.use(params);
   const [tier, setTier] = useState<TierFilter>("all");
   const [format, setFormat] = useState<FormatFilter>("all");
+  const [showFormats, setShowFormats] = useState(false);
   const [selected, setSelected] = useState<PhotoboothPreset | null>(null);
   const [textPosition, setTextPosition] = useState<"bottom" | "top">("bottom");
+
+  // One ref per collection row for the ‹/› carousel arrows
+  const signatureScrollRef = useRef<HTMLDivElement>(null);
+  const classicScrollRef = useRef<HTMLDivElement>(null);
+  const COLLECTION_REFS: Record<string, React.RefObject<HTMLDivElement | null>> = {
+    signature: signatureScrollRef,
+    classic: classicScrollRef,
+  };
+
+  const scrollCollection = (collectionId: string, dir: "left" | "right") => {
+    const el = COLLECTION_REFS[collectionId]?.current;
+    if (el) el.scrollBy({ left: dir === "right" ? 480 : -480, behavior: "smooth" });
+  };
 
   const COLLECTIONS = [
     {
@@ -222,6 +230,12 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
   }, [tier, format]);
 
   const names = [nameOne.trim(), nameTwo.trim()].filter(Boolean).join("  &  ");
+
+  const selectedVariants = useMemo(() => {
+    if (!selected) return [];
+    const targetKey = selected.layoutId || selected.type;
+    return PRESETS.filter(p => (p.layoutId || p.type) === targetKey);
+  }, [selected]);
 
   const openTemplate = (p: PhotoboothPreset) => {
     setSelected(p);
@@ -419,70 +433,86 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
 
   return (
     <main className="min-h-screen" style={{ backgroundColor: "#EAE2D5", color: "#241E1A" }}>
+      {/* Whisper Translucency Frame for client gallery */}
+      <div className="l-frame-top" />
+      <div className="l-frame-left" />
       {/* Header — asymmetric 7/5 (Fukinsei): title weights the loom-frame; filters drift to the right edge */}
-      <header className="px-6 md:px-12 py-10" style={{ borderColor: "#C4B59D" }}>
+      <header className="px-6 md:px-12 pt-24 md:pt-40 pb-16 md:pb-28" style={{ borderColor: "#C4B59D" }}>
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:items-end">
           {/* Left column — eyebrow + display H1 + lede */}
-          <div className="md:col-span-7 text-center md:text-left">
-            <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "#5A564E" }}>
-              Katha Photo Booth
-            </p>
-            <h1 className="mt-3 text-3xl md:text-5xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "0.01em" }}>
+          <div className="md:col-span-7 text-left">
+            <div className="mb-6">
+              <img src="/brand/wordmark.png" alt="Katha Photo Booth" className="h-16 md:h-24 w-auto object-contain -ml-2 mix-blend-multiply" />
+            </div>
+            <h1 className="mt-3 text-4xl md:text-6xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "0.01em" }}>
               Choose your style
             </h1>
-            <p className="mt-3 text-sm max-w-xl mx-auto md:mx-0" style={{ color: "#5A5D5A" }}>
+            <p className="mt-4 text-sm max-w-xl" style={{ color: "#5A5D5A" }}>
               Browse our template library and choose the one that feels like you. We&apos;ll personalize the details together.
             </p>
           </div>
 
-          {/* Right column — tier + format filters + result count, right-aligned on md+ */}
-          <div className="md:col-span-5 flex flex-col items-center md:items-end gap-3">
-            {/* Tier filter */}
-            <div className="inline-flex p-1" style={{ backgroundColor: "#C4B59D" }}>
+          {/* Right column — tier filter + REFINE CURATION + result count, right-aligned */}
+          <div className="md:col-span-5 flex flex-col items-start md:items-end gap-4">
+            {/* Tier filter — inline pill row */}
+            <div className="inline-flex" style={{ gap: "1.5rem" }}>
               {([
-                ["all", "All styles"],
-                ["classic", "Classic"],
-                ["signature", "Katha Signature"],
+                ["all", "ALL STYLES"],
+                ["classic", "CLASSIC"],
+                ["signature", "KATHA SIGNATURE"],
               ] as [TierFilter, string][]).map(([key, label]) => (
                 <button
                   key={key}
                   onClick={() => withViewTransition(() => setTier(key))}
                   aria-pressed={tier === key}
-                  className="px-4 py-1.5 text-xs uppercase tracking-widest transition-colors cursor-pointer"
-                  style={
-                    tier === key
-                      ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
-                      : { color: "#5A5D5A" }
-                  }
+                  className="text-[11px] uppercase tracking-widest transition-colors cursor-pointer bg-transparent border-none p-0"
+                  style={{
+                    color: tier === key ? "#241E1A" : "#5A564E",
+                    fontWeight: tier === key ? 600 : 400,
+                    letterSpacing: "0.18em",
+                  }}
                 >
                   {label}
                 </button>
               ))}
             </div>
 
-            {/* Format filter */}
-            <div className="inline-flex flex-wrap justify-center md:justify-end p-1" style={{ backgroundColor: "#C4B59D" }}>
-              {([
-                ["all", "All formats"],
-                ["strip", "2×6 Strip"],
-                ["postcard-vertical", "4×6 Postcard"],
-                ["postcard", "6×4 Landscape"],
-                ["postcard-square", "6×4 Square"],
-              ] as [FormatFilter, string][]).map(([key, label]) => (
-                <button
-                  key={key}
-                  onClick={() => withViewTransition(() => setFormat(key))}
-                  aria-pressed={format === key}
-                  className="px-3.5 py-1.5 text-[11px] uppercase tracking-widest transition-colors cursor-pointer"
-                  style={
-                    format === key
-                      ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
-                      : { color: "#5A5D5A" }
-                  }
-                >
-                  {label}
-                </button>
-              ))}
+            {/* REFINE CURATION — collapsible format filter */}
+            <div className="flex flex-col items-start md:items-end gap-2 w-full">
+              <button
+                onClick={() => setShowFormats(v => !v)}
+                className="text-[11px] uppercase tracking-[0.2em] cursor-pointer bg-transparent border-none p-0 flex items-center gap-2"
+                style={{ color: "#5A564E" }}
+                aria-expanded={showFormats}
+              >
+                REFINE CURATION
+                <span style={{ fontSize: "10px", opacity: 0.7 }}>{showFormats ? "▲" : "▼"}</span>
+              </button>
+              {showFormats && (
+                <div className="flex flex-wrap justify-start md:justify-end gap-2">
+                  {([
+                    ["all", "All formats"],
+                    ["strip", "2×6 Strip"],
+                    ["postcard-vertical", "4×6 Postcard"],
+                    ["postcard", "6×4 Landscape"],
+                    ["postcard-square", "6×4 Square"],
+                  ] as [FormatFilter, string][]).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => withViewTransition(() => setFormat(key))}
+                      aria-pressed={format === key}
+                      className="px-3 py-1 text-[10px] uppercase tracking-widest transition-colors cursor-pointer"
+                      style={
+                        format === key
+                          ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
+                          : { backgroundColor: "#C4B59D", color: "#241E1A" }
+                      }
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Result count */}
@@ -493,23 +523,11 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
         </div>
       </header>
 
-      {/* Calado divider — drawn-thread openwork; the only rule line allowed */}
-      <div
-        aria-hidden
-        className="mx-6 md:mx-12 h-[6px]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='6' viewBox='0 0 48 6'><circle cx='4' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='14' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='24' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='34' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='44' cy='3' r='0.9' fill='%23C4B59D'/></svg>\")",
-          backgroundRepeat: "repeat-x",
-          backgroundPosition: "center",
-        }}
-      />
-
       {/* Katha Editions Showcase — Bespoke Finalist Showcase */}
       <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "#332A24", backgroundColor: "#1A1816" }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#A35C44" }}>COMMISSIONED EDITIONS</p>
+            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#9C958A" }}>COMMISSIONED EDITIONS</p>
             <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Editions</h2>
             <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
               Behold the studio&apos;s commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event&apos;s identity is presented flawlessly.
@@ -597,26 +615,62 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
       {/* Gallery collections */}
       <section className="py-8 md:py-16">
         {COLLECTIONS.map(collection => {
-          const collectionPresets = filtered.filter(collection.filterFn);
+          const collectionPresetsAll = filtered.filter(collection.filterFn);
+          
+          // Group by layout variant, taking only the first one
+          const groups: Record<string, PhotoboothPreset[]> = {};
+          collectionPresetsAll.forEach(p => {
+             const key = p.layoutId || p.type;
+             if (!groups[key]) groups[key] = [];
+             groups[key].push(p);
+          });
+          const collectionPresets = Object.values(groups).map(g => g[0]);
+          
           if (collectionPresets.length === 0) return null;
 
+          const scrollRef = COLLECTION_REFS[collection.id];
           return (
             <div key={collection.id} className="mb-20">
-              <div className="px-6 md:px-12 mb-10 flex flex-col">
-                <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "'Fraunces', serif" }}>
-                  {collection.title}
-                </h2>
-                <p className="text-[13px] mt-2 text-[#5A5D5A] max-w-lg font-light leading-relaxed">
-                  {collection.description}
-                </p>
+              {/* Collection header with ‹/› arrow navigation */}
+              <div className="px-6 md:px-12 mb-10 flex flex-row items-end justify-between">
+                <div>
+                  <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "'Fraunces', serif" }}>
+                    {collection.title}
+                  </h2>
+                  <p className="text-[13px] mt-2 text-[#5A5D5A] max-w-lg font-light leading-relaxed">
+                    {collection.description}
+                  </p>
+                </div>
+                {/* Carousel arrows */}
+                <div className="flex items-center gap-3 flex-none ml-6 pb-1">
+                  <button
+                    id={`btn-scroll-${collection.id}-prev`}
+                    onClick={() => scrollCollection(collection.id, "left")}
+                    aria-label={`Scroll ${collection.title} left`}
+                    className="w-9 h-9 flex items-center justify-center cursor-pointer transition-colors"
+                    style={{ border: "1px solid #C4B59D", color: "#241E1A", backgroundColor: "transparent" }}
+                  >
+                    <span style={{ fontSize: "14px", lineHeight: 1 }}>‹</span>
+                  </button>
+                  <button
+                    id={`btn-scroll-${collection.id}-next`}
+                    onClick={() => scrollCollection(collection.id, "right")}
+                    aria-label={`Scroll ${collection.title} right`}
+                    className="w-9 h-9 flex items-center justify-center cursor-pointer transition-colors"
+                    style={{ border: "1px solid #C4B59D", color: "#241E1A", backgroundColor: "transparent" }}
+                  >
+                    <span style={{ fontSize: "14px", lineHeight: 1 }}>›</span>
+                  </button>
+                </div>
               </div>
-              
+
               {/* Horizontal Scroll Container */}
-              <div 
+              <div
+                ref={scrollRef as React.RefObject<HTMLDivElement>}
+                id={`scroll-track-${collection.id}`}
                 className="flex overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-6 md:px-12 gap-x-12"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
               >
-                <style>{`.flex::-webkit-scrollbar { display: none; }`}</style>
                 {collectionPresets.map((p) => {
                   const d = tileDims(p.type);
                   return (
@@ -630,23 +684,23 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                         className="h-[320px] w-full flex items-end justify-center transition-all duration-500 ease-out group-hover:-translate-y-2 group-focus:-translate-y-2 relative"
                       >
                         <TemplateCanvas preset={p} width={d.w} height={d.h} />
-                        
-                        {/* Interactive Flip & Reveal overlay */}
-                        <div 
+
+                        {/* Interactive hover reveal overlay */}
+                        <div
                           className="absolute inset-x-0 bottom-0 top-auto h-[0%] group-hover:h-full bg-gradient-to-t from-[#241E1A]/95 via-[#241E1A]/90 to-[#241E1A]/80 text-[#EAE2D5] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-center items-center p-6 text-center z-10 overflow-hidden rounded-[2px]"
                         >
-                           <span className="text-[9px] uppercase tracking-[0.2em] mb-4 pb-2 border-b border-[#EAE2D5]/30">Explore Details</span>
-                           <p className="text-[11.5px] leading-[1.6] font-light opacity-90">
-                             {p.designerExplanation || "An elegant layout carefully balanced for your finest memories."}
-                           </p>
+                          <span className="text-[9px] uppercase tracking-[0.2em] mb-4 pb-2 border-b border-[#EAE2D5]/30">Explore Details</span>
+                          <p className="text-[11.5px] leading-[1.6] font-light opacity-90">
+                            {p.designerExplanation || "An elegant layout carefully balanced for your finest memories."}
+                          </p>
                         </div>
                       </div>
-                      <div className="mt-6 text-center w-full px-2 transition-opacity duration-300">
+                      <div className="mt-6 text-center w-full px-2">
                         <div className="text-[14px] text-[#241E1A]" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
                           {p.name.replace("Katha Signature — ", "")}
                         </div>
                         {isSignature(p) && (
-                          <div className="text-[9px] uppercase tracking-[0.25em] mt-2 text-[#A35C44]">
+                          <div className="text-[9px] uppercase tracking-[0.25em] mt-2" style={{ color: "#5A564E" }}>
                             Signature
                           </div>
                         )}
@@ -688,18 +742,9 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
 
             {confirmed ? (
               <div className="px-8 py-16 text-center">
-                {/* KTHA brass-ring closing stroke — permission to leave the loom */}
-                <div className="flex justify-center mb-6" aria-hidden>
-                  <svg width="110" height="36" viewBox="36 -4 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      className="ktha-confirm-draw"
-                      d={KTHA_MARK_PATH}
-                      stroke="#241E1A"
-                      strokeWidth="1.1"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                {/* Brand Confirmation Logomark */}
+                <div className="flex justify-center mb-8" aria-hidden>
+                  <img src="/brand/logomark.png" alt="KTHA Confirmation" className="h-28 w-auto object-contain mix-blend-multiply opacity-90" />
                 </div>
                 <span className="sr-only" role="status" aria-live="polite">
                   Katha maker&apos;s mark — complete
@@ -759,6 +804,40 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                   <p className="mt-3 text-[13px] leading-relaxed" style={{ color: "#5A5D5A" }}>
                     {selected.designerExplanation}
                   </p>
+
+                  {selectedVariants.length > 1 && (
+                    <div className="mt-6 mb-2">
+                      <label className="block text-[10px] uppercase tracking-[0.2em] font-medium mb-3" style={{ color: "#241E1A" }}>
+                        Style Variant
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedVariants.map(variant => {
+                          const isSelected = variant.id === selected.id;
+                          return (
+                            <button
+                              key={variant.id}
+                              type="button"
+                              onClick={() => {
+                                setSelected(variant);
+                                setSelectedFont(variant.fontFamily);
+                              }}
+                              title={variant.name.replace("Katha Signature — ", "")}
+                              className="relative flex items-center justify-center w-8 h-8 rounded-full cursor-pointer transition-transform hover:scale-110"
+                              style={{ 
+                                backgroundColor: variant.backgroundColor, 
+                                border: isSelected ? `1.5px solid #241E1A` : `1px solid rgba(0,0,0,0.1)`,
+                                outline: isSelected ? '1px solid #241E1A' : 'none',
+                                outlineOffset: '2px',
+                              }}
+                              aria-label={`Select ${variant.name}`}
+                            >
+                               <div className="w-4 h-4 rounded-full" style={{ backgroundColor: variant.textColor }} />
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   <KNarrativeThread
                     className="mt-6 mb-6"
@@ -921,7 +1000,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                               />
                             
                               <div className="flex flex-col items-center justify-center h-full pointer-events-none">
-                                <svg className="w-5 h-5 mb-1 text-[#9C958A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5 mb-1 text-[#5A564E]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 {uploading ? (
@@ -931,7 +1010,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                     <p className="text-[11px] font-medium" style={{ color: "#241E1A" }}>
                                       Drag reference photos here, or <span className="underline text-[#241E1A]">browse</span>
                                     </p>
-                                    <p className="text-[9px] mt-0.5" style={{ color: "#9C958A" }}>
+                                    <p className="text-[9px] mt-0.5" style={{ color: "#5A564E" }}>
                                       Max 3 files (1.5MB each, 2.5MB total)
                                     </p>
                                   </>
@@ -981,7 +1060,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                   {error && <p className="text-sm mt-2 text-center" style={{color:'#5A5D5A'}}>{error}</p>}
                   <div className="mt-4 text-center">
                     <p className="text-[11px] leading-relaxed" style={{ color: "#5A564E" }}>
-                      <span className="font-semibold" style={{ color: "#A35C44", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
+                      <span className="font-semibold" style={{ color: "#241E1A", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
                       {" "}— This canvas is a preliminary layout designed to align our shared design direction. Your final piece will be meticulously finished by our studio team. Details, fonts, and structural elements are fully adjustable before we lock the final design for production.
                     </p>
                   </div>

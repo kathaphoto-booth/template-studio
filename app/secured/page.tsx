@@ -25,6 +25,9 @@ export default function SecuredPage() {
       className="min-h-screen flex flex-col items-center justify-center px-6 py-20 text-center"
       style={{ backgroundColor: '#EAE2D5', color: '#241E1A' }}
     >
+      {/* Barong Weave L-Frame */}
+      <div className="l-frame-top" />
+      <div className="l-frame-left" />
       <div className="max-w-xl mx-auto">
         <p
           className="text-[11px] uppercase tracking-[0.3em]"
@@ -44,17 +47,8 @@ export default function SecuredPage() {
           Your inquiry is received
         </h1>
 
-        {/* Calado divider — drawn-thread openwork; the only rule line allowed */}
-        <div
-          aria-hidden
-          className="calado-divider mx-auto mt-8 h-[6px] w-40"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='6' viewBox='0 0 48 6'><circle cx='4' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='14' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='24' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='34' cy='3' r='0.9' fill='%23C4B59D'/><circle cx='44' cy='3' r='0.9' fill='%23C4B59D'/></svg>\")",
-            backgroundRepeat: 'repeat-x',
-            backgroundPosition: 'center',
-          }}
-        />
+        {/* Ma — the calado divider is replaced by negative space (wabi-sabi) */}
+        <div className="mt-8" />
 
         <div
           className="mt-8 space-y-3 text-lg leading-relaxed"
