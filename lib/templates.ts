@@ -119,27 +119,6 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
   },
   {
-    id: "katha-heirloom-pina-postcard",
-    name: "Katha Signature — Heirloom Piña Postcard",
-    type: "postcard-vertical",
-    layoutId: "pv-1-full",
-    backgroundColor: "#EAE2D5",
-    textColor: "#241E1A",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
-    dateText: "MANILA",
-    slotBorderRadius: "2px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "60px",
-    decorativeSvg: "",
-    designerExplanation: "The Heirloom Piña strip rendered as a 4×6 postcard. Piña-fiber ecru ground with a champagne double-frame and calado openwork divider."
-  },
-  {
     id: "katha-heirloom-pina-landscape",
     name: "Katha Signature — Heirloom Piña Landscape",
     type: "postcard",
@@ -1167,29 +1146,8 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Capiz windowpane in sage. Inverted-L photo arrangement with the open corner reserved for the names."
   },
 
-  // ─── SQUARE LANDSCAPE VARIANTS (1×, 2×, 3× — 550×550 slots) ─────────────────────────
+  // ─── SQUARE LANDSCAPE VARIANTS (2×, 3× — 550×550 slots) ─────────────────────────
   // — Katha Signature families first —
-  {
-    id: "katha-heirloom-pina-landscape-1sq",
-    name: "Katha Signature — Heirloom Piña Landscape 1 Square",
-    type: "postcard",
-    layoutId: "pc-1-sq",
-    backgroundColor: "#EAE2D5",
-    textColor: "#241E1A",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
-    dateText: "MANILA",
-    slotBorderRadius: "2px",
-    slotBorderWidth: "1.5px",
-    slotGap: "18px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Piña-fiber ecru ground — a single centered square focal photo, wide branding pedestal below."
-  },
   {
     id: "katha-heirloom-pina-landscape-2sq",
     name: "Katha Signature — Heirloom Piña Landscape 2 Squares",
@@ -1231,27 +1189,6 @@ export const PRESETS: PhotoboothPreset[] = [
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "Piña-fiber ecru ground — three square photos in a row with champagne thread accents."
-  },
-  {
-    id: "katha-knalum-night-landscape-1sq",
-    name: "Katha Signature — Knalum Night Landscape 1 Square",
-    type: "postcard",
-    layoutId: "pc-1-sq",
-    backgroundColor: "#1A1816",
-    textColor: "#EAE2D5",
-    borderColor: "#241E1A",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
-    dateText: "LAKE SEBU",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "18px",
-    slotBgColor: "#241E1A",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "T’nalak soil-black ground — one square focal photo centered, loko-root rust accent text band."
   },
   {
     id: "katha-knalum-night-landscape-2sq",
@@ -1296,27 +1233,6 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "T’nalak soil-black — three square photos in a row, raw-fiber ecru lettering."
   },
   {
-    id: "katha-editorial-void-landscape-1sq",
-    name: "Katha Signature — The Editorial Void Landscape 1 Square",
-    type: "postcard",
-    layoutId: "pc-1-sq",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#1A1816",
-    fontFamily: "'Fraunces', serif",
-    titleText: "A Study in Ma",
-    subTitleText: "MMXXVI",
-    dateText: "MANILA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "18px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "An uncompromising execution of Ma. Severe, clean centered square photo layout floating on a massive expanse of Piña Ecru."
-  },
-  {
     id: "katha-editorial-void-landscape-2sq",
     name: "Katha Signature — The Editorial Void Landscape 2 Squares",
     type: "postcard",
@@ -1357,27 +1273,6 @@ export const PRESETS: PhotoboothPreset[] = [
     innerSpacing: "28px",
     decorativeSvg: "",
     designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
-  },
-  {
-    id: "wedding-luxe-gold-landscape-1sq",
-    name: "Style 1 — Tradition Gold Landscape 1 Square",
-    type: "postcard",
-    layoutId: "pc-1-sq",
-    backgroundColor: "#FAF6F0",
-    textColor: "#1C1917",
-    borderColor: "#766023",
-    secondaryColor: "#766023",
-    fontFamily: "'Cinzel', serif",
-    titleText: "STEVEN & CRISTALYN",
-    subTitleText: "JULY 25, 2026",
-    dateText: "NAPA VALLEY, CALIFORNIA",
-    slotBorderRadius: "4px",
-    slotBorderWidth: "3px",
-    slotGap: "18px",
-    slotBgColor: "#F4EDE3",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "Tradition Gold — one square focal photo, gold-foil hairline frame."
   },
   {
     id: "wedding-luxe-gold-landscape-2sq",

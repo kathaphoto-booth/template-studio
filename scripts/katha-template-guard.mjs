@@ -9,7 +9,7 @@
 //
 // TWO-TIER MODEL (this is the whole trick):
 //   • Katha Signature presets  (id ^katha- / name "Katha Signature —")
-//       → held to the 11-token Katha palette + Fraunces display.
+//       → held to the Katha palette (10 brand tokens + 2 ecru-safe text) + Fraunces display.
 //   • Classic presets          (everything else)
 //       → intentionally polished/symmetric wedding aesthetics. EXEMPT from
 //         Katha brand chrome (see .impeccable/ignore.md → classic-template-tier).
@@ -23,12 +23,13 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
+import { LAYOUTS } from "../lib/layouts.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = resolve(__dirname, "../lib/templates.ts");
 const text = readFileSync(SRC, "utf8");
 
-// ── CANON (DESIGN_SYSTEM.v2.md — 11 tokens) + documented in-use tints ──
+// ── CANON (DESIGN_SYSTEM.v2.md — 10 brand tokens + 2 ecru-safe text) + documented in-use tints ──
 const CANON = new Set([
   "#111112", "#eae2d5", "#9c958a", "#c4b59d", "#241e1a",   // UI tokens
   "#1a1816", "#8c382a", "#a35c44", "#5a5d5a", "#b5b8a3",   // narrative tokens
@@ -114,6 +115,24 @@ let sig = 0, classic = 0;
 
 for (const b of blocks) {
   const id = field(b, "id") || "(unknown)";
+
+  // layout-law cross-check (decisions.md 2026-06-11) — BOTH tiers, the slot
+  // law is catalog-wide: layoutId must resolve, its format must match the
+  // preset type, and the resolved layout must obey the 2/3/4-slot law.
+  const layoutId = field(b, "layoutId");
+  if (layoutId) {
+    const layout = LAYOUTS[layoutId];
+    const type = field(b, "type");
+    if (!layout)
+      P0.push(`${id} · layoutId "${layoutId}" — dangling ref, no such layout in LAYOUTS`);
+    else {
+      if (type && layout.format !== type)
+        P0.push(`${id} · layoutId "${layoutId}" is format "${layout.format}" but preset type is "${type}"`);
+      if (layout.slotCount < 2 || layout.slotCount > 4)
+        P0.push(`${id} · layout "${layoutId}" has ${layout.slotCount} slot(s) — violates the 2/3/4-slot law`);
+    }
+  }
+
   if (!isSignature(b)) { classic++; continue; }
   sig++;
 
