@@ -1,9 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const rawBody = await req.text();
+    const signature = req.headers.get("x-honeybook-signature");
+    const secret = process.env.HONEYBOOK_WEBHOOK_SECRET;
+
+    if (secret && signature) {
+      const hmac = crypto.createHmac("sha256", secret);
+      const digest = hmac.update(rawBody).digest("hex");
+      // Use timing-safe equality to prevent timing attacks on the webhook signature
+      try {
+        const sigBuffer = Buffer.from(signature, "hex");
+        const digestBuffer = Buffer.from(digest, "hex");
+        
+        if (sigBuffer.length !== digestBuffer.length || !crypto.timingSafeEqual(sigBuffer, digestBuffer)) {
+          console.error("[Webhook] Invalid HoneyBook signature.");
+          return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+        }
+      } catch (e) {
+        console.error("[Webhook] Signature buffer conversion failed.");
+        return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+      }
+    } else if (process.env.NODE_ENV === "production") {
+      console.error("[Webhook] Missing HoneyBook signature or secret.");
+      return NextResponse.json({ ok: false, error: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = JSON.parse(rawBody);
     console.log("[Webhook] Received HoneyBook event:", JSON.stringify(body, null, 2));
 
     // Identify event type

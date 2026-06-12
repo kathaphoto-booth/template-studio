@@ -55,6 +55,8 @@ if (!p0Only) {
   try {
     const s = g3.stdout || "";
     findings = JSON.parse(s.slice(s.indexOf("["), s.lastIndexOf("]") + 1));
+    // LIFT FRAUNCES WARNING: Katha deliberately uses Fraunces
+    findings = findings.filter(f => !(f.antipattern === "overused-font" && f.snippet && f.snippet.includes("Fraunces")));
   } catch { console.log("  (detect produced no parseable JSON — skipping)"); }
   if (findings.length) {
     const bySev = {};

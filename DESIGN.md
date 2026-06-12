@@ -31,7 +31,7 @@ typography:
     fontWeight: 400
     lineHeight: 1.6
   label:
-    fontFamily: "Inter, system-ui, sans-serif"
+    fontFamily: "Libre Franklin, system-ui, sans-serif"
     fontSize: "0.8125rem"
     fontWeight: 500
     letterSpacing: "0.12em"
@@ -111,7 +111,7 @@ moment. Treating it as a UI state (filter chips, toggles) breaks the spell.
 - **Display (Fraunces):** carved, grounded, asymmetric, `SOFT 100 WONK 1`. One terminal
   pressed slightly deeper, as if into wood. Tracking −0.015em. Never weight 700.
 - **Body (EB Garamond):** long-form copy, 1.6 line-height.
-- **Label (Inter):** UI labels, nav, buttons. Uppercase, +0.12em tracking.
+- **Label (Libre Franklin):** UI labels, nav, buttons. Uppercase, +0.12em tracking.
 - **Mono (JetBrains Mono):** metadata, ordinals, stamps. +0.04em.
 
 **The Carved-Wood Rule.** Cormorant Garamond is forbidden as a display face — it is too

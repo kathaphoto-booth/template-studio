@@ -118,7 +118,7 @@ The Katha Team
 
   const htmlBody = `
     <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius: 4px;">
-      <p style="font-family:'Inter', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.25em; color:#5A564E; margin-bottom: 30px;">
+      <p style="font-family:'Libre Franklin', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.25em; color:#5A564E; margin-bottom: 30px;">
         Katha Photo Booth
       </p>
       
@@ -143,7 +143,7 @@ The Katha Team
       </p>
       
       <div style="margin-bottom:35px; text-align:center;">
-        <a href="${galleryLink}" style="display:inline-block; font-family:'Inter', sans-serif; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#EAE2D5; padding:16px 32px; text-decoration:none; border-radius:0;">
+        <a href="${galleryLink}" style="display:inline-block; font-family:'Libre Franklin', sans-serif; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#EAE2D5; padding:16px 32px; text-decoration:none; border-radius:0;">
           Select Your Template Style
         </a>
       </div>
@@ -152,7 +152,7 @@ The Katha Team
         Details, fonts, and print outlines are fully adjustable. At your own pace, choose the blueprint that speaks to you.
       </p>
       
-      <p style="margin-top:30px; font-family:'Inter', sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:#5A564E;">
+      <p style="margin-top:30px; font-family:'Libre Franklin', sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:#5A564E;">
         Warmly,<br/>
         The Katha Team
       </p>
@@ -179,10 +179,12 @@ The Katha Team
 // ── POST API Handler ──
 export async function POST(req: NextRequest) {
   const appUrl = process.env.APP_URL;
-  if (!appUrl && process.env.NODE_ENV === 'production') {
+  const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined;
+  const baseUrl = appUrl || vercelUrl || 'http://localhost:3000';
+
+  if (!appUrl && !vercelUrl && process.env.NODE_ENV === 'production') {
     return NextResponse.json({error:'Server configuration error'},{status:503});
   }
-  const baseUrl = appUrl ?? 'http://localhost:3000';
 
   let body: any;
   try {

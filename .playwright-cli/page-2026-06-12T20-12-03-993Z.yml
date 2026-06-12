@@ -1,0 +1,670 @@
+- generic [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - paragraph [ref=e6]: Katha Photo Booth
+        - heading "Choose your style" [level=1] [ref=e7]
+        - paragraph [ref=e8]: Browse our template library and choose the one that feels like you. We'll personalize the details together.
+      - generic [ref=e9]:
+        - generic [ref=e10]:
+          - button "All styles" [pressed] [ref=e11] [cursor=pointer]
+          - button "Classic" [ref=e12] [cursor=pointer]
+          - button "Katha Signature" [ref=e13] [cursor=pointer]
+        - generic [ref=e14]:
+          - button "All formats" [pressed] [ref=e15] [cursor=pointer]
+          - button "2×6 Strip" [ref=e16] [cursor=pointer]
+          - button "4×6 Postcard" [ref=e17] [cursor=pointer]
+          - button "6×4 Landscape" [ref=e18] [cursor=pointer]
+          - button "6×4 Square" [ref=e19] [cursor=pointer]
+        - paragraph [ref=e20]: 63 templates
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - paragraph [ref=e25]: COMMISSIONED EDITIONS
+        - heading "Katha Editions" [level=2] [ref=e26]
+        - paragraph [ref=e27]: Behold the studio's commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event's identity is presented flawlessly.
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - generic [ref=e32]:
+            - generic [ref=e36]:
+              - generic [ref=e37]: Steven & Cristalyn
+              - generic [ref=e38]: JULY 25, 2026
+              - generic [ref=e39]: NAPA VALLEY, CALIFORNIA
+            - img
+          - generic [ref=e40]:
+            - text: Classic Tier
+            - heading "Tradition Gold Luxe" [level=3] [ref=e41]
+            - paragraph [ref=e42]: Concentric rules in delicate gold-foil shimmer with floating corner tie-ins.
+        - generic [ref=e43]:
+          - generic [ref=e46]:
+            - generic [ref=e50]: Tracy & Prince
+            - img
+          - generic [ref=e51]:
+            - text: Signature Tier
+            - heading "Tracy & Prince Signature" [level=3] [ref=e52]
+            - paragraph [ref=e53]: Romantic Parisian calligraphy bounded by a dual-line concentric framework.
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - heading "The Signature Collection" [level=2] [ref=e57]
+          - paragraph [ref=e58]: Our signature tier. Concepts reflecting ancestral Filipino heritage and Wabi-Sabi philosophy.
+        - generic [ref=e60]:
+          - button "Scroll left" [ref=e61] [cursor=pointer]:
+            - img [ref=e62]
+          - generic [ref=e64]:
+            - button "Explore Details Unbleached piña-fiber ground with a fine calado openwork divider drawn in champagne thread. Iron-bark serif set with quiet restraint. Heirloom Piña Signature" [ref=e66] [cursor=pointer]:
+              - generic [ref=e67]:
+                - generic [ref=e68]:
+                  - img
+                - generic [ref=e73]:
+                  - generic [ref=e74]: Explore Details
+                  - paragraph [ref=e75]: Unbleached piña-fiber ground with a fine calado openwork divider drawn in champagne thread. Iron-bark serif set with quiet restraint.
+              - generic [ref=e76]:
+                - generic [ref=e77]: Heirloom Piña
+                - generic [ref=e78]: Signature
+            - button "Explore Details An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration. The Editorial Void Signature" [ref=e80] [cursor=pointer]:
+              - generic [ref=e81]:
+                - generic [ref=e82]:
+                  - img
+                - generic [ref=e87]:
+                  - generic [ref=e88]: Explore Details
+                  - paragraph [ref=e89]: An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration.
+              - generic [ref=e90]:
+                - generic [ref=e91]: The Editorial Void
+                - generic [ref=e92]: Signature
+            - button "Explore Details An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru. The Editorial Void Postcard Signature" [ref=e94] [cursor=pointer]:
+              - generic [ref=e95]:
+                - generic [ref=e96]:
+                  - img
+                - generic [ref=e100]:
+                  - generic [ref=e101]: Explore Details
+                  - paragraph [ref=e102]: An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru.
+              - generic [ref=e103]:
+                - generic [ref=e104]: The Editorial Void Postcard
+                - generic [ref=e105]: Signature
+            - button "Explore Details An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru. The Editorial Void Landscape Signature" [ref=e107] [cursor=pointer]:
+              - generic [ref=e108]:
+                - generic [ref=e109]:
+                  - img
+                - generic [ref=e114]:
+                  - generic [ref=e115]: Explore Details
+                  - paragraph [ref=e116]: An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru.
+              - generic [ref=e117]:
+                - generic [ref=e118]: The Editorial Void Landscape
+                - generic [ref=e119]: Signature
+            - button "Explore Details Unbleached piña-fiber ground with a fine calado openwork divider. Landscape postcard variant. Heirloom Piña Landscape Signature" [ref=e121] [cursor=pointer]:
+              - generic [ref=e122]:
+                - generic [ref=e123]:
+                  - img
+                - generic [ref=e128]:
+                  - generic [ref=e129]: Explore Details
+                  - paragraph [ref=e130]: Unbleached piña-fiber ground with a fine calado openwork divider. Landscape postcard variant.
+              - generic [ref=e131]:
+                - generic [ref=e132]: Heirloom Piña Landscape
+                - generic [ref=e133]: Signature
+            - button "Explore Details A loom-frame border of nested rules and corner cross-ties, echoing the hardwood frame that holds the warp threads taut. Loom Frame Signature" [ref=e135] [cursor=pointer]:
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - img
+                - generic [ref=e142]:
+                  - generic [ref=e143]: Explore Details
+                  - paragraph [ref=e144]: A loom-frame border of nested rules and corner cross-ties, echoing the hardwood frame that holds the warp threads taut.
+              - generic [ref=e145]:
+                - generic [ref=e146]: Loom Frame
+                - generic [ref=e147]: Signature
+            - button "Explore Details Loom-frame border in iron-bark serif. Postcard variant of the Loom Frame strip. Loom Frame Postcard Signature" [ref=e149] [cursor=pointer]:
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - img
+                - generic [ref=e155]:
+                  - generic [ref=e156]: Explore Details
+                  - paragraph [ref=e157]: Loom-frame border in iron-bark serif. Postcard variant of the Loom Frame strip.
+              - generic [ref=e158]:
+                - generic [ref=e159]: Loom Frame Postcard
+                - generic [ref=e160]: Signature
+            - button "Explore Details Loom-frame border in iron-bark serif. Landscape postcard variant for three-photo Katha events. Loom Frame Landscape Signature" [ref=e162] [cursor=pointer]:
+              - generic [ref=e163]:
+                - generic [ref=e164]:
+                  - img
+                - generic [ref=e169]:
+                  - generic [ref=e170]: Explore Details
+                  - paragraph [ref=e171]: Loom-frame border in iron-bark serif. Landscape postcard variant for three-photo Katha events.
+              - generic [ref=e172]:
+                - generic [ref=e173]: Loom Frame Landscape
+                - generic [ref=e174]: Signature
+            - button "Explore Details T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single loko-root rust rule — the dreamweaver's tri-color. Knalum Night Signature" [ref=e176] [cursor=pointer]:
+              - generic [ref=e177]:
+                - generic [ref=e178]:
+                  - img
+                - generic [ref=e183]:
+                  - generic [ref=e184]: Explore Details
+                  - paragraph [ref=e185]: T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single loko-root rust rule — the dreamweaver's tri-color.
+              - generic [ref=e186]:
+                - generic [ref=e187]: Knalum Night
+                - generic [ref=e188]: Signature
+            - button "Explore Details T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. 4×6 postcard variant. Knalum Night Postcard Signature" [ref=e190] [cursor=pointer]:
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - img
+                - generic [ref=e196]:
+                  - generic [ref=e197]: Explore Details
+                  - paragraph [ref=e198]: T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. 4×6 postcard variant.
+              - generic [ref=e199]:
+                - generic [ref=e200]: Knalum Night Postcard
+                - generic [ref=e201]: Signature
+            - button "Explore Details T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. Landscape postcard variant. Knalum Night Landscape Signature" [ref=e203] [cursor=pointer]:
+              - generic [ref=e204]:
+                - generic [ref=e205]:
+                  - img
+                - generic [ref=e210]:
+                  - generic [ref=e211]: Explore Details
+                  - paragraph [ref=e212]: T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. Landscape postcard variant.
+              - generic [ref=e213]:
+                - generic [ref=e214]: Knalum Night Landscape
+                - generic [ref=e215]: Signature
+            - button "Explore Details The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing. Brass Ring Signature" [ref=e217] [cursor=pointer]:
+              - generic [ref=e218]:
+                - generic [ref=e219]:
+                  - img
+                - generic [ref=e224]:
+                  - generic [ref=e225]: Explore Details
+                  - paragraph [ref=e226]: The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing.
+              - generic [ref=e227]:
+                - generic [ref=e228]: Brass Ring
+                - generic [ref=e229]: Signature
+            - button "Explore Details The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names. Brass Ring Postcard Signature" [ref=e231] [cursor=pointer]:
+              - generic [ref=e232]:
+                - generic [ref=e233]:
+                  - img
+                - generic [ref=e237]:
+                  - generic [ref=e238]: Explore Details
+                  - paragraph [ref=e239]: The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names.
+              - generic [ref=e240]:
+                - generic [ref=e241]: Brass Ring Postcard
+                - generic [ref=e242]: Signature
+            - button "Explore Details The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names. Brass Ring Landscape Signature" [ref=e244] [cursor=pointer]:
+              - generic [ref=e245]:
+                - generic [ref=e246]:
+                  - img
+                - generic [ref=e251]:
+                  - generic [ref=e252]: Explore Details
+                  - paragraph [ref=e253]: The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names.
+              - generic [ref=e254]:
+                - generic [ref=e255]: Brass Ring Landscape
+                - generic [ref=e256]: Signature
+            - button "Explore Details Ilocos binakul optical weave at the corners — apotropaic geometry meant to confuse malevolent spirits, woven quietly at low contrast. Binakul Weave Signature" [ref=e258] [cursor=pointer]:
+              - generic [ref=e259]:
+                - generic [ref=e260]:
+                  - img
+                - generic [ref=e265]:
+                  - generic [ref=e266]: Explore Details
+                  - paragraph [ref=e267]: Ilocos binakul optical weave at the corners — apotropaic geometry meant to confuse malevolent spirits, woven quietly at low contrast.
+              - generic [ref=e268]:
+                - generic [ref=e269]: Binakul Weave
+                - generic [ref=e270]: Signature
+            - button "Explore Details Ilocos binakul optical weave at the corners. Apotropaic geometry for a 4x6 vertical postcard. Binakul Weave Postcard Signature" [ref=e272] [cursor=pointer]:
+              - generic [ref=e273]:
+                - generic [ref=e274]:
+                  - img
+                - generic [ref=e278]:
+                  - generic [ref=e279]: Explore Details
+                  - paragraph [ref=e280]: Ilocos binakul optical weave at the corners. Apotropaic geometry for a 4x6 vertical postcard.
+              - generic [ref=e281]:
+                - generic [ref=e282]: Binakul Weave Postcard
+                - generic [ref=e283]: Signature
+            - button "Explore Details Ilocos binakul optical weave at the corners. Landscape variant. Binakul Weave Landscape Signature" [ref=e285] [cursor=pointer]:
+              - generic [ref=e286]:
+                - generic [ref=e287]:
+                  - img
+                - generic [ref=e292]:
+                  - generic [ref=e293]: Explore Details
+                  - paragraph [ref=e294]: Ilocos binakul optical weave at the corners. Landscape variant.
+              - generic [ref=e295]:
+                - generic [ref=e296]: Binakul Weave Landscape
+                - generic [ref=e297]: Signature
+            - button "Explore Details Capiz-shell windowpane lattice rendered in sage — the translucent pane that filters lowland light into a soft, even glow. Capiz Sage Signature" [ref=e299] [cursor=pointer]:
+              - generic [ref=e300]:
+                - generic [ref=e301]:
+                  - img
+                - generic [ref=e306]:
+                  - generic [ref=e307]: Explore Details
+                  - paragraph [ref=e308]: Capiz-shell windowpane lattice rendered in sage — the translucent pane that filters lowland light into a soft, even glow.
+              - generic [ref=e309]:
+                - generic [ref=e310]: Capiz Sage
+                - generic [ref=e311]: Signature
+            - button "Explore Details Capiz windowpane in sage green. 4×6 vertical postcard variant. Capiz Sage Postcard Signature" [ref=e313] [cursor=pointer]:
+              - generic [ref=e314]:
+                - generic [ref=e315]:
+                  - img
+                - generic [ref=e319]:
+                  - generic [ref=e320]: Explore Details
+                  - paragraph [ref=e321]: Capiz windowpane in sage green. 4×6 vertical postcard variant.
+              - generic [ref=e322]:
+                - generic [ref=e323]: Capiz Sage Postcard
+                - generic [ref=e324]: Signature
+            - button "Explore Details Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature. Capiz Sage Landscape Signature" [ref=e326] [cursor=pointer]:
+              - generic [ref=e327]:
+                - generic [ref=e328]:
+                  - img
+                - generic [ref=e333]:
+                  - generic [ref=e334]: Explore Details
+                  - paragraph [ref=e335]: Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature.
+              - generic [ref=e336]:
+                - generic [ref=e337]: Capiz Sage Landscape
+                - generic [ref=e338]: Signature
+            - button "Explore Details Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince. Tracy & Prince Signature" [ref=e340] [cursor=pointer]:
+              - generic [ref=e341]:
+                - generic [ref=e342]:
+                  - img
+                - generic [ref=e346]:
+                  - generic [ref=e347]: Explore Details
+                  - paragraph [ref=e348]: Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince.
+              - generic [ref=e349]:
+                - generic [ref=e350]: Tracy & Prince
+                - generic [ref=e351]: Signature
+            - button "Explore Details Three photos trace an L on a piña-fiber ground, with the open corner cradling a champagne calado divider. Heirloom Piña L-Shape Signature" [ref=e353] [cursor=pointer]:
+              - generic [ref=e354]:
+                - generic [ref=e355]:
+                  - img
+                - generic [ref=e360]:
+                  - generic [ref=e361]: Explore Details
+                  - paragraph [ref=e362]: Three photos trace an L on a piña-fiber ground, with the open corner cradling a champagne calado divider.
+              - generic [ref=e363]:
+                - generic [ref=e364]: Heirloom Piña L-Shape
+                - generic [ref=e365]: Signature
+            - button "Explore Details Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names. Loom Frame Γ-Shape Signature" [ref=e367] [cursor=pointer]:
+              - generic [ref=e368]:
+                - generic [ref=e369]:
+                  - img
+                - generic [ref=e374]:
+                  - generic [ref=e375]: Explore Details
+                  - paragraph [ref=e376]: Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names.
+              - generic [ref=e377]:
+                - generic [ref=e378]: Loom Frame Γ-Shape
+                - generic [ref=e379]: Signature
+            - button "Explore Details Capiz windowpane in sage. Inverted-L photo arrangement with the open corner reserved for the names. Capiz Sage Γ-Shape Landscape Signature" [ref=e381] [cursor=pointer]:
+              - generic [ref=e382]:
+                - generic [ref=e383]:
+                  - img
+                - generic [ref=e388]:
+                  - generic [ref=e389]: Explore Details
+                  - paragraph [ref=e390]: Capiz windowpane in sage. Inverted-L photo arrangement with the open corner reserved for the names.
+              - generic [ref=e391]:
+                - generic [ref=e392]: Capiz Sage Γ-Shape Landscape
+                - generic [ref=e393]: Signature
+            - button "Explore Details Piña-fiber ecru ground — two square photos balanced across the canvas. Heirloom Piña Landscape 2 Squares Signature" [ref=e395] [cursor=pointer]:
+              - generic [ref=e396]:
+                - generic [ref=e397]:
+                  - img
+                - generic [ref=e401]:
+                  - generic [ref=e402]: Explore Details
+                  - paragraph [ref=e403]: Piña-fiber ecru ground — two square photos balanced across the canvas.
+              - generic [ref=e404]:
+                - generic [ref=e405]: Heirloom Piña Landscape 2 Squares
+                - generic [ref=e406]: Signature
+            - button "Explore Details Piña-fiber ecru ground — three square photos in a row with champagne thread accents. Heirloom Piña Landscape 3 Squares Signature" [ref=e408] [cursor=pointer]:
+              - generic [ref=e409]:
+                - generic [ref=e410]:
+                  - img
+                - generic [ref=e415]:
+                  - generic [ref=e416]: Explore Details
+                  - paragraph [ref=e417]: Piña-fiber ecru ground — three square photos in a row with champagne thread accents.
+              - generic [ref=e418]:
+                - generic [ref=e419]: Heirloom Piña Landscape 3 Squares
+                - generic [ref=e420]: Signature
+            - button "Explore Details T’nalak soil-black — two square photos, ecru lettering with loko-root rust accent. Knalum Night Landscape 2 Squares Signature" [ref=e422] [cursor=pointer]:
+              - generic [ref=e423]:
+                - generic [ref=e424]:
+                  - img
+                - generic [ref=e428]:
+                  - generic [ref=e429]: Explore Details
+                  - paragraph [ref=e430]: T’nalak soil-black — two square photos, ecru lettering with loko-root rust accent.
+              - generic [ref=e431]:
+                - generic [ref=e432]: Knalum Night Landscape 2 Squares
+                - generic [ref=e433]: Signature
+            - button "Explore Details T’nalak soil-black — three square photos in a row, raw-fiber ecru lettering. Knalum Night Landscape 3 Squares Signature" [ref=e435] [cursor=pointer]:
+              - generic [ref=e436]:
+                - generic [ref=e437]:
+                  - img
+                - generic [ref=e442]:
+                  - generic [ref=e443]: Explore Details
+                  - paragraph [ref=e444]: T’nalak soil-black — three square photos in a row, raw-fiber ecru lettering.
+              - generic [ref=e445]:
+                - generic [ref=e446]: Knalum Night Landscape 3 Squares
+                - generic [ref=e447]: Signature
+            - button "Explore Details An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru. The Editorial Void Landscape 2 Squares Signature" [ref=e449] [cursor=pointer]:
+              - generic [ref=e450]:
+                - generic [ref=e451]:
+                  - img
+                - generic [ref=e455]:
+                  - generic [ref=e456]: Explore Details
+                  - paragraph [ref=e457]: An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru.
+              - generic [ref=e458]:
+                - generic [ref=e459]: The Editorial Void Landscape 2 Squares
+                - generic [ref=e460]: Signature
+            - button "Explore Details An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru. The Editorial Void Landscape 3 Squares Signature" [ref=e462] [cursor=pointer]:
+              - generic [ref=e463]:
+                - generic [ref=e464]:
+                  - img
+                - generic [ref=e469]:
+                  - generic [ref=e470]: Explore Details
+                  - paragraph [ref=e471]: An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru.
+              - generic [ref=e472]:
+                - generic [ref=e473]: The Editorial Void Landscape 3 Squares
+                - generic [ref=e474]: Signature
+            - button "Explore Details Generative signature theme representing pure unrefined structural thread paths running continuously. Features delicate threadlines that subtly overlay slots. Woven Silk Signature" [ref=e476] [cursor=pointer]:
+              - generic [ref=e477]:
+                - generic [ref=e478]:
+                  - img
+                - generic [ref=e483]:
+                  - generic [ref=e484]: Explore Details
+                  - paragraph [ref=e485]: Generative signature theme representing pure unrefined structural thread paths running continuously. Features delicate threadlines that subtly overlay slots.
+              - generic [ref=e486]:
+                - generic [ref=e487]: Woven Silk
+                - generic [ref=e488]: Signature
+            - button "Explore Details Generative signature theme representing structural thread paths in a 4x6 vertical postcard format. Woven Silk Postcard Signature" [ref=e490] [cursor=pointer]:
+              - generic [ref=e491]:
+                - generic [ref=e492]:
+                  - img
+                - generic [ref=e496]:
+                  - generic [ref=e497]: Explore Details
+                  - paragraph [ref=e498]: Generative signature theme representing structural thread paths in a 4x6 vertical postcard format.
+              - generic [ref=e499]:
+                - generic [ref=e500]: Woven Silk Postcard
+                - generic [ref=e501]: Signature
+            - button "Explore Details Generative signature theme representing structural thread paths in a 6x4 landscape postcard format. Woven Silk Landscape Signature" [ref=e503] [cursor=pointer]:
+              - generic [ref=e504]:
+                - generic [ref=e505]:
+                  - img
+                - generic [ref=e510]:
+                  - generic [ref=e511]: Explore Details
+                  - paragraph [ref=e512]: Generative signature theme representing structural thread paths in a 6x4 landscape postcard format.
+              - generic [ref=e513]:
+                - generic [ref=e514]: Woven Silk Landscape
+                - generic [ref=e515]: Signature
+          - button "Scroll right" [ref=e516] [cursor=pointer]:
+            - img [ref=e517]
+      - generic [ref=e519]:
+        - generic [ref=e520]:
+          - heading "The Classic Atelier" [level=2] [ref=e521]
+          - paragraph [ref=e522]: Timeless designs, elegant typography, and traditional wedding details.
+        - generic [ref=e524]:
+          - button "Scroll left" [ref=e525] [cursor=pointer]:
+            - img [ref=e526]
+          - generic [ref=e528]:
+            - button "Explore Details Double gold foil fine outline detailing around each slot. Clean Roman serif display, providing timeless heirloom appeal. Style 1 — Tradition Gold Luxe" [ref=e530] [cursor=pointer]:
+              - generic [ref=e531]:
+                - generic [ref=e532]:
+                  - img
+                - generic [ref=e537]:
+                  - generic [ref=e538]: Explore Details
+                  - paragraph [ref=e539]: Double gold foil fine outline detailing around each slot. Clean Roman serif display, providing timeless heirloom appeal.
+              - generic [ref=e541]: Style 1 — Tradition Gold Luxe
+            - button "Explore Details Double gold-foil hairline frame with crisp corner accents. A 4×6 postcard distillation of the Tradition Gold strip. Style 1 — Tradition Gold Postcard" [ref=e543] [cursor=pointer]:
+              - generic [ref=e544]:
+                - generic [ref=e545]:
+                  - img
+                - generic [ref=e549]:
+                  - generic [ref=e550]: Explore Details
+                  - paragraph [ref=e551]: Double gold-foil hairline frame with crisp corner accents. A 4×6 postcard distillation of the Tradition Gold strip.
+              - generic [ref=e553]: Style 1 — Tradition Gold Postcard
+            - 'button "Explore Details Tradition Gold rendered horizontal: gold-foil hairline frame, three photos in a row, formal Cinzel display. Style 1 — Tradition Gold Landscape" [ref=e555] [cursor=pointer]':
+              - generic [ref=e556]:
+                - generic [ref=e557]:
+                  - img
+                - generic [ref=e562]:
+                  - generic [ref=e563]: Explore Details
+                  - paragraph [ref=e564]: "Tradition Gold rendered horizontal: gold-foil hairline frame, three photos in a row, formal Cinzel display."
+              - generic [ref=e566]: Style 1 — Tradition Gold Landscape
+            - button "Explore Details Deckled ivory paper backdrop adorned with a hand-sketched classic cream and white rose nested gracefully above the text. Style 2 — Minimal Linen Rose" [ref=e568] [cursor=pointer]:
+              - generic [ref=e569]:
+                - generic [ref=e570]:
+                  - img
+                - generic [ref=e575]:
+                  - generic [ref=e576]: Explore Details
+                  - paragraph [ref=e577]: Deckled ivory paper backdrop adorned with a hand-sketched classic cream and white rose nested gracefully above the text.
+              - generic [ref=e579]: Style 2 — Minimal Linen Rose
+            - button "Explore Details Deckled ivory paper backdrop adorned with a hand-sketched classic rose nested gracefully above the text. Postcard vertical format. Style 2 — Minimal Linen Rose Postcard" [ref=e581] [cursor=pointer]:
+              - generic [ref=e582]:
+                - generic [ref=e583]:
+                  - img
+                - generic [ref=e587]:
+                  - generic [ref=e588]: Explore Details
+                  - paragraph [ref=e589]: Deckled ivory paper backdrop adorned with a hand-sketched classic rose nested gracefully above the text. Postcard vertical format.
+              - generic [ref=e591]: Style 2 — Minimal Linen Rose Postcard
+            - button "Explore Details Linen-paper ground with a hand-sketched English rose. Landscape postcard variant — three stacked moments side by side. Style 2 — Linen Rose Landscape" [ref=e593] [cursor=pointer]:
+              - generic [ref=e594]:
+                - generic [ref=e595]:
+                  - img
+                - generic [ref=e600]:
+                  - generic [ref=e601]: Explore Details
+                  - paragraph [ref=e602]: Linen-paper ground with a hand-sketched English rose. Landscape postcard variant — three stacked moments side by side.
+              - generic [ref=e604]: Style 2 — Linen Rose Landscape
+            - button "Explore Details Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Style 4 — Earthen Clay Sunset" [ref=e606] [cursor=pointer]:
+              - generic [ref=e607]:
+                - generic [ref=e608]:
+                  - img
+                - generic [ref=e613]:
+                  - generic [ref=e614]: Explore Details
+                  - paragraph [ref=e615]: Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours.
+              - generic [ref=e617]: Style 4 — Earthen Clay Sunset
+            - button "Explore Details Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Postcard format. Style 4 — Earthen Clay Sunset Postcard" [ref=e619] [cursor=pointer]:
+              - generic [ref=e620]:
+                - generic [ref=e621]:
+                  - img
+                - generic [ref=e625]:
+                  - generic [ref=e626]: Explore Details
+                  - paragraph [ref=e627]: Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Postcard format.
+              - generic [ref=e629]: Style 4 — Earthen Clay Sunset Postcard
+            - button "Explore Details Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Landscape format. Style 4 — Earthen Clay Sunset Landscape" [ref=e631] [cursor=pointer]:
+              - generic [ref=e632]:
+                - generic [ref=e633]:
+                  - img
+                - generic [ref=e638]:
+                  - generic [ref=e639]: Explore Details
+                  - paragraph [ref=e640]: Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Landscape format.
+              - generic [ref=e642]: Style 4 — Earthen Clay Sunset Landscape
+            - button "Explore Details Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons and tall typography. Style 5 — Gatsby Midnight Gold" [ref=e644] [cursor=pointer]:
+              - generic [ref=e645]:
+                - generic [ref=e646]:
+                  - img
+                - generic [ref=e651]:
+                  - generic [ref=e652]: Explore Details
+                  - paragraph [ref=e653]: Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons and tall typography.
+              - generic [ref=e655]: Style 5 — Gatsby Midnight Gold
+            - button "Explore Details Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Postcard vertical format. Style 5 — Gatsby Midnight Gold Postcard" [ref=e657] [cursor=pointer]:
+              - generic [ref=e658]:
+                - generic [ref=e659]:
+                  - img
+                - generic [ref=e663]:
+                  - generic [ref=e664]: Explore Details
+                  - paragraph [ref=e665]: Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Postcard vertical format.
+              - generic [ref=e667]: Style 5 — Gatsby Midnight Gold Postcard
+            - button "Explore Details Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Landscape postcard format. Style 5 — Gatsby Midnight Gold Landscape" [ref=e669] [cursor=pointer]:
+              - generic [ref=e670]:
+                - generic [ref=e671]:
+                  - img
+                - generic [ref=e676]:
+                  - generic [ref=e677]: Explore Details
+                  - paragraph [ref=e678]: Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Landscape postcard format.
+              - generic [ref=e680]: Style 5 — Gatsby Midnight Gold Landscape
+            - button "Explore Details Extremely spacious high-fashion gallery margins and thin borders paired with tracked wide, clean-lined display fonts. Style 8 — Haute Gallery Editorial" [ref=e682] [cursor=pointer]:
+              - generic [ref=e683]:
+                - generic [ref=e684]:
+                  - img
+                - generic [ref=e689]:
+                  - generic [ref=e690]: Explore Details
+                  - paragraph [ref=e691]: Extremely spacious high-fashion gallery margins and thin borders paired with tracked wide, clean-lined display fonts.
+              - generic [ref=e693]: Style 8 — Haute Gallery Editorial
+            - button "Explore Details Generous gallery margins with a single hairline rule and wide-tracked Italiana display. Quiet, modernist. Style 8 — Editorial Postcard" [ref=e695] [cursor=pointer]:
+              - generic [ref=e696]:
+                - generic [ref=e697]:
+                  - img
+                - generic [ref=e701]:
+                  - generic [ref=e702]: Explore Details
+                  - paragraph [ref=e703]: Generous gallery margins with a single hairline rule and wide-tracked Italiana display. Quiet, modernist.
+              - generic [ref=e705]: Style 8 — Editorial Postcard
+            - button "Explore Details Editorial gallery margins, hairline rule, wide-tracked display. Landscape postcard for cinematic three-photo storytelling. Style 8 — Editorial Landscape" [ref=e707] [cursor=pointer]:
+              - generic [ref=e708]:
+                - generic [ref=e709]:
+                  - img
+                - generic [ref=e714]:
+                  - generic [ref=e715]: Explore Details
+                  - paragraph [ref=e716]: Editorial gallery margins, hairline rule, wide-tracked display. Landscape postcard for cinematic three-photo storytelling.
+              - generic [ref=e718]: Style 8 — Editorial Landscape
+            - button "Explore Details Fine Victorian scalloped curves and lace-like dotted alignments evoking elegant hand-crocheted silk ribbons. Style 10 — Victorian Cream Lace" [ref=e720] [cursor=pointer]:
+              - generic [ref=e721]:
+                - generic [ref=e722]:
+                  - img
+                - generic [ref=e727]:
+                  - generic [ref=e728]: Explore Details
+                  - paragraph [ref=e729]: Fine Victorian scalloped curves and lace-like dotted alignments evoking elegant hand-crocheted silk ribbons.
+              - generic [ref=e731]: Style 10 — Victorian Cream Lace
+            - button "Explore Details Fine Victorian scalloped curves and lace-like dotted alignments. Postcard vertical format. Style 10 — Victorian Cream Lace Postcard" [ref=e733] [cursor=pointer]:
+              - generic [ref=e734]:
+                - generic [ref=e735]:
+                  - img
+                - generic [ref=e739]:
+                  - generic [ref=e740]: Explore Details
+                  - paragraph [ref=e741]: Fine Victorian scalloped curves and lace-like dotted alignments. Postcard vertical format.
+              - generic [ref=e743]: Style 10 — Victorian Cream Lace Postcard
+            - button "Explore Details Fine Victorian scalloped curves and lace-like dotted alignments. Landscape format. Style 10 — Victorian Cream Lace Landscape" [ref=e745] [cursor=pointer]:
+              - generic [ref=e746]:
+                - generic [ref=e747]:
+                  - img
+                - generic [ref=e752]:
+                  - generic [ref=e753]: Explore Details
+                  - paragraph [ref=e754]: Fine Victorian scalloped curves and lace-like dotted alignments. Landscape format.
+              - generic [ref=e756]: Style 10 — Victorian Cream Lace Landscape
+            - button "Explore Details Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal design under the photo slots. Style 12 — Imperial Crest Seal" [ref=e758] [cursor=pointer]:
+              - generic [ref=e759]:
+                - generic [ref=e760]:
+                  - img
+                - generic [ref=e765]:
+                  - generic [ref=e766]: Explore Details
+                  - paragraph [ref=e767]: Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal design under the photo slots.
+              - generic [ref=e769]: Style 12 — Imperial Crest Seal
+            - button "Explore Details Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal. Postcard vertical format. Style 12 — Imperial Crest Postcard" [ref=e771] [cursor=pointer]:
+              - generic [ref=e772]:
+                - generic [ref=e773]:
+                  - img
+                - generic [ref=e777]:
+                  - generic [ref=e778]: Explore Details
+                  - paragraph [ref=e779]: Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal. Postcard vertical format.
+              - generic [ref=e781]: Style 12 — Imperial Crest Postcard
+            - button "Explore Details Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal. Landscape format. Style 12 — Imperial Crest Landscape" [ref=e783] [cursor=pointer]:
+              - generic [ref=e784]:
+                - generic [ref=e785]:
+                  - img
+                - generic [ref=e790]:
+                  - generic [ref=e791]: Explore Details
+                  - paragraph [ref=e792]: Nobility Stationery theme featuring royal gold borders and a stately circular dynamic seal. Landscape format.
+              - generic [ref=e794]: Style 12 — Imperial Crest Landscape
+            - button "Explore Details Canva style double fine-lined cathedral arch framing. Features high-curved slots and minimalist organic grass sprigs. Style 14 — Delicate Fine-Line Arch" [ref=e796] [cursor=pointer]:
+              - generic [ref=e797]:
+                - generic [ref=e798]:
+                  - img
+                - generic [ref=e803]:
+                  - generic [ref=e804]: Explore Details
+                  - paragraph [ref=e805]: Canva style double fine-lined cathedral arch framing. Features high-curved slots and minimalist organic grass sprigs.
+              - generic [ref=e807]: Style 14 — Delicate Fine-Line Arch
+            - button "Explore Details Double fine-lined cathedral arch framing wrapping vertical slots. Postcard vertical format. Style 14 — Delicate Fine-Line Arch Postcard" [ref=e809] [cursor=pointer]:
+              - generic [ref=e810]:
+                - generic [ref=e811]:
+                  - img
+                - generic [ref=e815]:
+                  - generic [ref=e816]: Explore Details
+                  - paragraph [ref=e817]: Double fine-lined cathedral arch framing wrapping vertical slots. Postcard vertical format.
+              - generic [ref=e819]: Style 14 — Delicate Fine-Line Arch Postcard
+            - button "Explore Details Double fine-lined cathedral arch crowning three photo slots. Landscape variant of the Delicate Fine-Line Arch. Style 14 — Botanical Arch Landscape" [ref=e821] [cursor=pointer]:
+              - generic [ref=e822]:
+                - generic [ref=e823]:
+                  - img
+                - generic [ref=e828]:
+                  - generic [ref=e829]: Explore Details
+                  - paragraph [ref=e830]: Double fine-lined cathedral arch crowning three photo slots. Landscape variant of the Delicate Fine-Line Arch.
+              - generic [ref=e832]: Style 14 — Botanical Arch Landscape
+            - button "Explore Details Etsy bestseller deckled-edge paper base carrying an intimate calligraphic handwriting signature and simulated copper wax-seal monogram. Style 19 — Deckled Wax Seal" [ref=e834] [cursor=pointer]:
+              - generic [ref=e835]:
+                - generic [ref=e836]:
+                  - img
+                - generic [ref=e841]:
+                  - generic [ref=e842]: Explore Details
+                  - paragraph [ref=e843]: Etsy bestseller deckled-edge paper base carrying an intimate calligraphic handwriting signature and simulated copper wax-seal monogram.
+              - generic [ref=e845]: Style 19 — Deckled Wax Seal
+            - button "Explore Details Etsy bestseller deckled-edge paper carrying calligraphic handwriting and simulated copper wax-seal. Postcard format. Style 19 — Deckled Wax Seal Postcard" [ref=e847] [cursor=pointer]:
+              - generic [ref=e848]:
+                - generic [ref=e849]:
+                  - img
+                - generic [ref=e853]:
+                  - generic [ref=e854]: Explore Details
+                  - paragraph [ref=e855]: Etsy bestseller deckled-edge paper carrying calligraphic handwriting and simulated copper wax-seal. Postcard format.
+              - generic [ref=e857]: Style 19 — Deckled Wax Seal Postcard
+            - button "Explore Details Etsy bestseller deckled-edge paper carrying calligraphic handwriting and simulated copper wax-seal. Landscape postcard format. Style 19 — Deckled Wax Seal Landscape" [ref=e859] [cursor=pointer]:
+              - generic [ref=e860]:
+                - generic [ref=e861]:
+                  - img
+                - generic [ref=e866]:
+                  - generic [ref=e867]: Explore Details
+                  - paragraph [ref=e868]: Etsy bestseller deckled-edge paper carrying calligraphic handwriting and simulated copper wax-seal. Landscape postcard format.
+              - generic [ref=e870]: Style 19 — Deckled Wax Seal Landscape
+            - button "Explore Details Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Italiana display. Style 8 — Editorial L-Shape Landscape" [ref=e872] [cursor=pointer]:
+              - generic [ref=e873]:
+                - generic [ref=e874]:
+                  - img
+                - generic [ref=e879]:
+                  - generic [ref=e880]: Explore Details
+                  - paragraph [ref=e881]: Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Italiana display.
+              - generic [ref=e883]: Style 8 — Editorial L-Shape Landscape
+            - button "Explore Details Tradition Gold — two square photos, gold-foil detail, formal Cinzel display. Style 1 — Tradition Gold Landscape 2 Squares" [ref=e885] [cursor=pointer]:
+              - generic [ref=e886]:
+                - generic [ref=e887]:
+                  - img
+                - generic [ref=e891]:
+                  - generic [ref=e892]: Explore Details
+                  - paragraph [ref=e893]: Tradition Gold — two square photos, gold-foil detail, formal Cinzel display.
+              - generic [ref=e895]: Style 1 — Tradition Gold Landscape 2 Squares
+            - button "Explore Details Tradition Gold — three square photos in a row, gold-foil hairline, formal Roman display. Style 1 — Tradition Gold Landscape 3 Squares" [ref=e897] [cursor=pointer]:
+              - generic [ref=e898]:
+                - generic [ref=e899]:
+                  - img
+                - generic [ref=e904]:
+                  - generic [ref=e905]: Explore Details
+                  - paragraph [ref=e906]: Tradition Gold — three square photos in a row, gold-foil hairline, formal Roman display.
+              - generic [ref=e908]: Style 1 — Tradition Gold Landscape 3 Squares
+          - button "Scroll right" [ref=e909] [cursor=pointer]:
+            - img [ref=e910]
+  - generic [ref=e912]:
+    - img "Impeccable live mode - agent not polling" [ref=e913]:
+      - img [ref=e915]
+    - generic [ref=e918]:
+      - button "Pick element" [ref=e919] [cursor=pointer]:
+        - img [ref=e920]
+        - generic: Pick
+      - button "Insert new element" [ref=e922] [cursor=pointer]:
+        - img [ref=e923]
+        - generic: Insert
+      - button "Detect anti-patterns" [ref=e924] [cursor=pointer]:
+        - img [ref=e925]
+        - generic: Detect
+      - button "Toggle DESIGN.md panel" [ref=e928] [cursor=pointer]:
+        - generic: DESIGN.md
+      - generic "Steer the page" [ref=e934] [cursor=pointer]:
+        - generic:
+          - img
+        - textbox "Steer the page" [active] [ref=e935]:
+          - /placeholder: Steer…
+        - button "Voice input" [ref=e936]:
+          - img [ref=e937]
+      - button "Exit live mode" [ref=e941] [cursor=pointer]:
+        - img [ref=e942]
+  - generic:
+    - generic:
+      - complementary:
+        - generic:
+          - generic: DESIGN.md
+          - generic:
+            - button "Visual"
+            - button "Raw"
+          - button "Close panel": ✕
+        - generic:
+          - generic: No design system data available.

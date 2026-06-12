@@ -1,5 +1,7 @@
 "use client";
 
+import { mapFontToVar } from "@/lib/font-mapper";
+
 // ----------------------------------------------------------------------
 // CLIENT-FACING TEMPLATE GALLERY
 // Vibe-first: clients browse text-free design thumbnails, pick a style,
@@ -14,6 +16,7 @@ import { PRESETS, renderDecorativeSvg, type PhotoboothPreset, resolveLayout, VIE
 import { KNarrativeThread } from "@/components/shell/KNarrativeThread";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
+import { Carousel } from "@/components/ui/Carousel";
 
 // KTHA brass-ring mark — drawn as the closing stroke on confirmation.
 const KTHA_MARK_PATH =
@@ -86,7 +89,7 @@ function TemplateCanvas({
   return (
     <div
       style={{ width, height, backgroundColor: preset.backgroundColor }}
-      className="relative overflow-hidden shadow-md ring-1 ring-black/5"
+      className="relative overflow-hidden  ring-1 ring-black/5"
     >
       {/* Photo slots — absolute-positioned from layout data */}
       {layout.slots.map((s: { x: number; y: number; w: number; h: number }, i: number) => {
@@ -132,7 +135,7 @@ function TemplateCanvas({
               <>
                 {names && (
                   <div
-                    style={{ fontFamily: activeFont, fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
+                    style={{ fontFamily: mapFontToVar(activeFont), fontSize: Math.max(11, width * 0.11), lineHeight: 1.05 }}
                     className={isCursive ? "normal-case" : "uppercase tracking-wide"}
                   >
                     {names}
@@ -207,6 +210,16 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
   const [dragActive, setDragActive] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [saveWarning, setSaveWarning] = useState<string | null>(null);
+  const objectUrls = React.useRef<Set<string>>(new Set());
+
+  React.useEffect(() => {
+    const urls = objectUrls.current;
+    return () => {
+      urls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     return PRESETS.filter((p) => {
@@ -307,7 +320,9 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
       for (const file of targets) {
         const path = await uploadToStorage(file);
         if (path) {
-          added.push({ preview: URL.createObjectURL(file), value: path });
+          const previewUrl = URL.createObjectURL(file);
+          objectUrls.current.add(previewUrl);
+          added.push({ preview: previewUrl, value: path });
         } else {
           const dataUrl = await readAsDataUrl(file);
           added.push({ preview: dataUrl, value: dataUrl });
@@ -342,6 +357,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
 
   const confirmSelection = async () => {
     if (!selected) return;
+    setIsSubmitting(true);
     let currentLead = id === "guest" ? null : id;
 
     // Organic Inquiry: If no lead exists but email is provided, ping Resend API
@@ -371,7 +387,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
       names: names || null,
       date: date.trim() || null,
       venue: venue.trim() || null,
-      fontFamily: selectedFont || null,
+      fontFamily: mapFontToVar(selectedFont) || null,
       textPosition: textPosition,
       referencePhotos: referencePhotos.length > 0 ? referencePhotos.map((p) => p.value) : null,
       notes: notes.trim() || null,
@@ -392,6 +408,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
     } catch {}
 
     setError("");
+    setSaveWarning(null);
     try {
       const res = await fetch("/api/selection", {
         method: "POST",
@@ -399,22 +416,61 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
         body: JSON.stringify(payload),
       });
       if (res.ok || res.status === 202) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 202 || data.ok === false) {
+          setSaveWarning("We had trouble syncing the choice to our servers, but your design direction is saved locally in this browser.");
+        }
         setConfirmed(true);
+        setIsSubmitting(false);
         return;
       } else {
         const data = await res.json().catch(() => ({}));
         setError(data.error || 'Submission failed. Please try again.');
+        setIsSubmitting(false);
       }
     } catch {
       setError('Submission failed. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
-  // Close modal on Escape
+  // Focus trap and Escape to close
   React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape" && selected) setSelected(null); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    if (!selected) return;
+    const modal = document.getElementById("katha-modal");
+    if (!modal) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelected(null);
+        return;
+      }
+      if (e.key === "Tab") {
+        const focusableElements = Array.from(
+          modal.querySelectorAll('button:not([disabled]), [href]:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"]):not([disabled])')
+        ).filter((el) => !(el as any).disabled) as HTMLElement[];
+
+        if (focusableElements.length === 0) return;
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === firstElement) {
+            lastElement?.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === lastElement) {
+            firstElement?.focus();
+            e.preventDefault();
+          }
+        }
+      }
+    };
+    
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [selected]);
 
   return (
@@ -424,13 +480,13 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:items-end">
           {/* Left column — eyebrow + display H1 + lede */}
           <div className="md:col-span-7 text-center md:text-left">
-            <p className="text-[11px] uppercase tracking-[0.3em]" style={{ color: "#5A564E" }}>
+            <p className="text-[11px] uppercase tracking-[0.12em]" style={{ color: "#5A564E" }}>
               Katha Photo Booth
             </p>
-            <h1 className="mt-3 text-3xl md:text-5xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "0.01em" }}>
+            <h1 className="mt-3 text-3xl md:text-5xl" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "-0.015em", lineHeight: 1.02 }}>
               Choose your style
             </h1>
-            <p className="mt-3 text-sm max-w-xl mx-auto md:mx-0" style={{ color: "#5A5D5A" }}>
+            <p className="mt-3 text-sm max-w-xl mx-auto md:mx-0 leading-relaxed" style={{ color: "#5A564E" }}>
               Browse our template library and choose the one that feels like you. We&apos;ll personalize the details together.
             </p>
           </div>
@@ -452,7 +508,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                   style={
                     tier === key
                       ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
-                      : { color: "#5A5D5A" }
+                      : { color: "#241E1A" }
                   }
                 >
                   {label}
@@ -477,7 +533,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                   style={
                     format === key
                       ? { backgroundColor: "#241E1A", color: "#EAE2D5" }
-                      : { color: "#5A5D5A" }
+                      : { color: "#241E1A" }
                   }
                 >
                   {label}
@@ -506,26 +562,27 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
       />
 
       {/* Katha Editions Showcase — Bespoke Finalist Showcase */}
-      <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "#332A24", backgroundColor: "#1A1816" }}>
+      <section className="px-6 md:px-12 py-16 border-b text-neutral-100" style={{ borderColor: "rgba(196, 181, 157, 0.2)", backgroundColor: "#1A1816" }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[10px] uppercase tracking-[0.3em]" style={{ color: "#A35C44" }}>COMMISSIONED EDITIONS</p>
-            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "'Fraunces', Georgia, serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96" }}>Katha Editions</h2>
-            <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80">
+            <p className="text-[10px] uppercase tracking-[0.3em] font-mono" style={{ color: "#9C958A" }}>COMMISSIONED EDITIONS</p>
+            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "-0.015em" }}>Katha Editions</h2>
+            <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80 font-serif">
               Behold the studio&apos;s commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event&apos;s identity is presented flawlessly.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12 items-stretch">
-            {/* Edition Card 1: Steven & Cristalyn */}
+          <div className="flex flex-col gap-32 md:gap-40 mt-20">
+            {/* Edition 1: Steven & Cristalyn (Clean Left) */}
             {(() => {
               const p = PRESETS.find(pr => pr.id === "wedding-luxe-gold");
               if (!p) return null;
               const d = tileDims(p.type);
               return (
-                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 backdrop-blur-sm shadow-xl group transition-all duration-300" style={{ border: "1px solid rgba(156,149,138,0.4)" }}>
-                  <div className="flex justify-center items-center flex-none">
-                    <div className="relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] bg-black p-1 rounded-[3px]">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center w-full max-w-5xl mx-auto group">
+                  {/* Image container: clean presentation */}
+                  <div className="w-full md:col-span-7 flex justify-center md:justify-start">
+                    <div className="bg-[#EAE2D5] p-3 shadow-2xl ring-1 ring-black/5 w-fit">
                       <TemplateCanvas
                         preset={p}
                         width={d.w * 1.5}
@@ -537,36 +594,32 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col justify-between py-2">
-                    <div>
-                      <span className="text-[9px] uppercase tracking-widest font-mono text-amber-400">Style 1 — Classic Tier</span>
-                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Fraunces', serif" }}>Tradition Gold Luxe</h3>
-                      <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
-                        Designed for Steven & Cristalyn. Concentric rules in delicate gold-foil shimmer, featuring floating corner tie-ins that gently overlay the edges of your memories.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-neutral-800 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-neutral-300 font-mono">
-                      <div><strong className="text-neutral-400 font-normal">FONT:</strong> Cinzel (Roman Serif)</div>
-                      <div><strong className="text-neutral-400 font-normal">FORMAT:</strong> 2×6 Photostrip</div>
-                    </div>
+                  {/* Text container: distilled to pure essence */}
+                  <div className="w-full md:col-span-5 p-4 md:p-8">
+                    <span className="text-[9px] uppercase tracking-[0.2em] font-mono text-[#C4B59D]">Classic Tier</span>
+                    <h3 className="mt-3 text-4xl font-normal text-[#EAE2D5]" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1", letterSpacing: "-0.015em" }}>Tradition Gold Luxe</h3>
+                    <p className="mt-4 text-xs text-[#9C958A] leading-relaxed font-light font-serif">
+                      Concentric rules in delicate gold-foil shimmer with floating corner tie-ins.
+                    </p>
                   </div>
                 </div>
               );
             })()}
 
-            {/* Edition Card 2: Tracy & Prince */}
+            {/* Edition 2: Tracy & Prince (Clean Right) */}
             {(() => {
               const p = PRESETS.find(pr => pr.id === "katha-tracy-prince");
               if (!p) return null;
               const d = tileDims(p.type);
               return (
-                <div className="flex flex-col md:flex-row gap-6 p-6 rounded-sm bg-neutral-900/60 backdrop-blur-sm shadow-xl group transition-all duration-300" style={{ border: "1px solid rgba(156,149,138,0.4)" }}>
-                  <div className="flex justify-center items-center flex-none">
-                    <div className="relative shadow-2xl transition-transform duration-500 group-hover:scale-[1.02] bg-black p-1 rounded-[3px]">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center w-full max-w-5xl mx-auto group">
+                  {/* Image container: clean presentation */}
+                  <div className="w-full md:col-span-7 flex justify-center md:justify-end md:order-2">
+                    <div className="bg-[#EAE2D5] p-3 shadow-2xl ring-1 ring-black/5 flex justify-end w-fit">
                       <TemplateCanvas
                         preset={p}
-                        width={d.w * 1.0}
-                        height={d.h * 1.0}
+                        width={d.w * 1.5}
+                        height={d.h * 1.5}
                         showText
                         names="Tracy & Prince"
                         date=""
@@ -574,18 +627,13 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                       />
                     </div>
                   </div>
-                  <div className="flex flex-col justify-between py-2">
-                    <div>
-                      <span className="text-[9px] uppercase tracking-widest font-mono text-rose-400">Katha Signature Tier</span>
-                      <h3 className="mt-1 text-xl font-medium text-neutral-100" style={{ fontFamily: "'Fraunces', serif" }}>Tracy & Prince Signature</h3>
-                      <p className="mt-3 text-xs text-neutral-400 leading-relaxed font-light">
-                        Designed for Tracy & Prince. Features romantic Parisian calligraphy resting on a delicate branding pedestal, bounded by a dual-line concentric framework that gently draws the concentric borders over the image edges.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-4 border-t border-neutral-800 flex flex-wrap gap-x-4 gap-y-2 text-[10px] text-neutral-300 font-mono">
-                      <div><strong className="text-neutral-400 font-normal">FONT:</strong> Parisienne (Calligraphy)</div>
-                      <div><strong className="text-neutral-400 font-normal">FORMAT:</strong> 4×6 Postcard</div>
-                    </div>
+                  {/* Text container: distilled to pure essence */}
+                  <div className="w-full md:col-span-5 p-4 md:p-8 md:order-1">
+                    <span className="text-[9px] uppercase tracking-[0.2em] font-mono text-[#C4B59D]">Signature Tier</span>
+                    <h3 className="mt-3 text-4xl font-normal text-[#EAE2D5]" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1", letterSpacing: "-0.015em" }}>Tracy & Prince Signature</h3>
+                    <p className="mt-4 text-xs text-[#9C958A] leading-relaxed font-light font-serif">
+                      Romantic Parisian calligraphy bounded by a dual-line concentric framework.
+                    </p>
                   </div>
                 </div>
               );
@@ -603,7 +651,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
           return (
             <div key={collection.id} className="mb-20">
               <div className="px-6 md:px-12 mb-10 flex flex-col">
-                <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "'Fraunces', serif" }}>
+                <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "var(--font-fraunces), serif" }}>
                   {collection.title}
                 </h2>
                 <p className="text-[13px] mt-2 text-[#5A5D5A] max-w-lg font-light leading-relaxed">
@@ -611,49 +659,44 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                 </p>
               </div>
               
-              {/* Horizontal Scroll Container */}
-              <div 
-                className="flex overflow-x-auto snap-x snap-mandatory pb-8 pt-4 px-6 md:px-12 gap-x-12"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                <style>{`.flex::-webkit-scrollbar { display: none; }`}</style>
-                {collectionPresets.map((p) => {
-                  const d = tileDims(p.type);
-                  return (
-                    <button
-                      key={p.id}
-                      onClick={() => openTemplate(p)}
-                      className="group flex-none flex flex-col items-center cursor-pointer snap-start relative focus:outline-none"
-                      style={{ width: 220 }}
-                    >
-                      <div
-                        className="h-[320px] w-full flex items-end justify-center transition-all duration-500 ease-out group-hover:-translate-y-2 group-focus:-translate-y-2 relative"
+              <div className="px-6 md:px-12">
+                <Carousel dark={false}>
+                  {collectionPresets.map((p) => {
+                    const d = tileDims(p.type);
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => openTemplate(p)}
+                        className="group flex flex-col items-center cursor-pointer snap-start relative focus:outline-none w-full max-w-[280px]"
                       >
-                        <TemplateCanvas preset={p} width={d.w} height={d.h} />
-                        
-                        {/* Interactive Flip & Reveal overlay */}
-                        <div 
-                          className="absolute inset-x-0 bottom-0 top-auto h-[0%] group-hover:h-full bg-gradient-to-t from-[#241E1A]/95 via-[#241E1A]/90 to-[#241E1A]/80 text-[#EAE2D5] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-center items-center p-6 text-center z-10 overflow-hidden rounded-[2px]"
+                        <div
+                          className="h-[360px] w-full flex items-center justify-center transition-all duration-500 ease-out group-hover:-translate-y-1 group-focus:-translate-y-1 relative bg-[#FAF9F5] border border-[#D5CDBD] shadow-sm p-6"
                         >
-                           <span className="text-[9px] uppercase tracking-[0.2em] mb-4 pb-2 border-b border-[#EAE2D5]/30">Explore Details</span>
-                           <p className="text-[11.5px] leading-[1.6] font-light opacity-90">
-                             {p.designerExplanation || "An elegant layout carefully balanced for your finest memories."}
-                           </p>
-                        </div>
-                      </div>
-                      <div className="mt-6 text-center w-full px-2 transition-opacity duration-300">
-                        <div className="text-[14px] text-[#241E1A]" style={{ fontFamily: "'Fraunces', Georgia, serif" }}>
-                          {p.name.replace("Katha Signature — ", "")}
-                        </div>
-                        {isSignature(p) && (
-                          <div className="text-[9px] uppercase tracking-[0.25em] mt-2 text-[#A35C44]">
-                            Signature
+                          <TemplateCanvas preset={p} width={d.w * 0.9} height={d.h * 0.9} />
+                          
+                          <div 
+                            className="absolute inset-x-0 bottom-0 top-auto h-[0%] group-hover:h-full bg-gradient-to-t from-[#241E1A]/95 via-[#241E1A]/90 to-[#241E1A]/80 text-[#EAE2D5] opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out flex flex-col justify-center items-center p-6 text-center z-10 overflow-hidden rounded-none"
+                          >
+                             <span className="text-[9px] uppercase tracking-[0.2em] mb-4 pb-2 border-b border-[#EAE2D5]/30">Explore Details</span>
+                             <p className="text-[11.5px] leading-[1.6] font-light opacity-90">
+                               {p.designerExplanation || "An elegant layout carefully balanced for your finest memories."}
+                             </p>
                           </div>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+                        </div>
+                        <div className="mt-5 text-center w-full px-2 transition-opacity duration-300">
+                          <div className="text-[15px] text-[#241E1A]" style={{ fontFamily: "var(--font-fraunces), serif" }}>
+                            {p.name.replace("Katha Signature — ", "")}
+                          </div>
+                          {isSignature(p) && (
+                            <div className="text-[9px] uppercase tracking-[0.25em] mt-2 text-[#8C857B] font-medium">
+                              Signature
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </Carousel>
               </div>
             </div>
           );
@@ -664,23 +707,26 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
       {selected && (
         <div
           id="katha-modal-backdrop"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="katha-modal-title"
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
           style={{ backgroundColor: "rgba(26,24,22,0.55)" }}
           onClick={() => setSelected(null)}
         >
           <div
             id="katha-modal"
-            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-sm shadow-2xl"
-            style={{ backgroundColor: confirmed ? "#B5B8A3" : "#EAE2D5" }}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="katha-modal-title"
+            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+            style={{
+              backgroundColor: confirmed ? "#1A1816" : "#EAE2D5",
+              boxShadow: confirmed ? "6px 6px 0 0 rgba(196, 181, 157, 0.2)" : "6px 6px 0 0 #C4B59D"
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelected(null)}
-              className="absolute right-4 top-4 text-2xl leading-none cursor-pointer"
-              style={{ color: "#5A5D5A" }}
+              className="absolute right-2 top-2 z-50 w-12 h-12 flex items-center justify-center text-3xl leading-none cursor-pointer rounded-full md:right-4 md:top-4 transition-colors hover:bg-black/5"
+              style={{ color: confirmed ? "#9C958A" : "#5A564E" }}
               aria-label="Close template preview"
             >
               ×
@@ -694,7 +740,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                     <path
                       className="ktha-confirm-draw"
                       d={KTHA_MARK_PATH}
-                      stroke="#241E1A"
+                      stroke={saveWarning ? "#A35C44" : "#EAE2D5"}
                       strokeWidth="1.1"
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -704,15 +750,23 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                 <span className="sr-only" role="status" aria-live="polite">
                   Katha maker&apos;s mark — complete
                 </span>
-                <div className="text-3xl" style={{ fontFamily: "'Fraunces', serif", color: "#241E1A" }}>Your design is saved</div>
-                <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#241E1A" }}>
-                  <strong>{selected.name.replace("Katha Signature — ", "")}</strong> is attached to your inquiry.
-                  Katha will reach out to finalize the details and send your proof.
+                <div className="text-3xl" style={{ fontFamily: "var(--font-fraunces), serif", color: "#EAE2D5" }}>Your design is saved</div>
+                <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#9C958A" }}>
+                  {saveWarning ? (
+                    <>
+                      <strong style={{ color: "#EAE2D5" }}>{selected.name.replace("Katha Signature — ", "")}</strong> is saved in your browser cache. {saveWarning}
+                    </>
+                  ) : (
+                    <>
+                      <strong style={{ color: "#EAE2D5" }}>{selected.name.replace("Katha Signature — ", "")}</strong> is attached to your inquiry.
+                      Katha will reach out to finalize the details and send your proof.
+                    </>
+                  )}
                 </p>
                 <button
                   onClick={() => setSelected(null)}
                   className="mt-8 px-6 py-2 text-xs uppercase tracking-widest rounded-none cursor-pointer"
-                  style={{ backgroundColor: "#241E1A", color: "#EAE2D5" }}
+                  style={{ backgroundColor: "#EAE2D5", color: "#1A1816" }}
                 >
                   Back to gallery
                 </button>
@@ -729,23 +783,27 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                 `}</style>
               </div>
             ) : (
-              <div className="grid md:grid-cols-[11fr_9fr] gap-8 p-8">
-                {/* Live preview — sticky canvas (55) on a champagne wash */}
+              <div className="flex flex-col md:grid md:grid-cols-[11fr_9fr] gap-6 md:gap-8 p-4 md:p-8">
+                {/* Live preview — sticky canvas on a champagne wash */}
                 <div
-                  className="flex items-center justify-center md:sticky md:top-8 md:self-start py-6"
-                  style={{ backgroundColor: "rgba(196,181,157,0.1)" }}
+                  className="relative md:sticky md:top-0 z-20 flex items-center justify-center self-center md:self-start w-full py-4 md:py-6 border-b md:border-b-0 border-[#C4B59D]/30 shadow-sm md:shadow-none"
+                  style={{ backgroundColor: "#EAE2D5" }}
                 >
-                  <TemplateCanvas
-                    preset={selected}
-                    width={selected.type === "strip" ? 150 : 260}
-                    height={selected.type === "strip" ? 450 : selected.type === "postcard-vertical" ? 390 : 173}
-                    showText
-                    names={names}
-                    date={date}
-                    venue={venue}
-                    fontFamily={selectedFont}
-                    textPosition={textPosition}
-                  />
+                  <div className="h-[280px] md:h-auto overflow-visible flex items-start justify-center pt-2">
+                    <div className="transform scale-[0.6] origin-top md:scale-100 md:transform-none">
+                      <TemplateCanvas
+                        preset={selected}
+                        width={selected.type === "strip" ? 150 : 260}
+                        height={selected.type === "strip" ? 450 : selected.type === "postcard-vertical" ? 390 : 173}
+                        showText
+                        names={names}
+                        date={date}
+                        venue={venue}
+                        fontFamily={selectedFont}
+                        textPosition={textPosition}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Personalize form */}
@@ -753,10 +811,10 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                   <p className="text-[11px] uppercase tracking-[0.25em]" style={{ color: "#5A564E" }}>
                     {isSignature(selected) ? "Katha Signature" : "Classic Collection"}
                   </p>
-                  <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "'Fraunces', serif" }}>
+                  <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "var(--font-fraunces), serif" }}>
                     {selected.name.replace("Katha Signature — ", "")}
                   </h2>
-                  <p className="mt-3 text-[13px] leading-relaxed" style={{ color: "#5A5D5A" }}>
+                  <p className="mt-3 text-[13px] leading-relaxed" style={{ color: "#5A564E" }}>
                     {selected.designerExplanation}
                   </p>
 
@@ -767,24 +825,24 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                         label: "Client Details",
                         complete: Boolean(nameOne && email),
                         content: (
-                          <div className="grid grid-cols-2 gap-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <label htmlFor="katha-name-one" className="sr-only">First name</label>
-                            <input id="katha-name-one" value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
-                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
+                            <input id="katha-name-one" maxLength={50} value={nameOne} onChange={(e) => setNameOne(e.target.value)} placeholder="First name"
+                              className="border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-name-two" className="sr-only">Second name</label>
-                            <input id="katha-name-two" value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name (Optional)"
-                              className="border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
+                            <input id="katha-name-two" maxLength={50} value={nameTwo} onChange={(e) => setNameTwo(e.target.value)} placeholder="Second name (Optional)"
+                              className="border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-email" className="sr-only">Email address</label>
-                            <div className="col-span-2">
-                              <input id="katha-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
+                            <div className="col-span-1 md:col-span-2">
+                              <input id="katha-email" type="email" maxLength={100} value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
+                                className="w-full border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                               {email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) && (
-                                <p className="text-xs mt-1" style={{ color: '#5A5D5A' }}>Please enter a valid email address.</p>
+                                <p className="text-xs mt-1" style={{ color: '#241E1A' }}>Please enter a valid email address.</p>
                               )}
                             </div>
                             <label htmlFor="katha-phone" className="sr-only">Phone number</label>
-                            <input id="katha-phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number (Optional)"
-                              className="col-span-2 border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
+                            <input id="katha-phone" type="tel" maxLength={20} value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone number (Optional)"
+                              className="col-span-1 md:col-span-2 border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -792,13 +850,13 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                         label: "The Event",
                         complete: Boolean(date && venue),
                         content: (
-                          <div className="flex flex-col gap-3">
+                          <div className="flex flex-col gap-4">
                             <label htmlFor="katha-event-date" className="sr-only">Event date</label>
-                            <input id="katha-event-date" value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
+                            <input id="katha-event-date" maxLength={50} value={date} onChange={(e) => setDate(e.target.value)} placeholder="Event date (e.g. July 25, 2026)"
+                              className="w-full border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                             <label htmlFor="katha-venue" className="sr-only">Venue or location</label>
-                            <input id="katha-venue" value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
-                              className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
+                            <input id="katha-venue" maxLength={100} value={venue} onChange={(e) => setVenue(e.target.value)} placeholder="Venue / location"
+                              className="w-full border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A]" style={{ borderColor: "#C4B59D" }} />
                           </div>
                         )
                       },
@@ -816,8 +874,8 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                 id="katha-font-selector"
                                 value={selectedFont}
                                 onChange={(e) => setSelectedFont(e.target.value)}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A] cursor-pointer transition-shadow"
-                                style={{ borderColor: "#C4B59D", fontFamily: selectedFont }}
+                                className="w-full border px-3 py-3 text-sm  bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A] cursor-pointer transition-shadow"
+                                style={{ borderColor: "#C4B59D", fontFamily: mapFontToVar(selectedFont) }}
                               >
                                 {LUXURY_FONTS.map((font) => (
                                   <option key={font.css} value={font.css} style={{ fontFamily: font.css }}>
@@ -827,8 +885,8 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                               </select>
                               {/* Live font preview swatch */}
                               <div
-                                className="mt-1 px-3 py-3 rounded-sm text-center text-base"
-                                style={{ fontFamily: selectedFont, color: "#241E1A", backgroundColor: "#EAE2D5", border: "1px solid #C4B59D" }}
+                                className="mt-1 px-3 py-3  text-center text-base"
+                                style={{ fontFamily: mapFontToVar(selectedFont), color: "#241E1A", backgroundColor: "#EAE2D5", border: "1px solid #C4B59D" }}
                                 aria-label={`Font preview: ${selectedFont}`}
                               >
                                 {names || "Maria & Jose · July 2026"}
@@ -837,20 +895,20 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
 
                             {/* Text Position toggle */}
                             <div className="flex flex-col gap-1">
-                              <span className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#5A564E" }}>
+                              <span id="text-position-label" className="text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: "#5A564E" }}>
                                 Text Position
                               </span>
-                              <div className="grid grid-cols-2 gap-2 mt-1">
+                              <div role="group" aria-labelledby="text-position-label" className="grid grid-cols-2 gap-2 mt-1">
                                 <button
                                   type="button"
                                   id="btn-gallery-text-bottom"
                                   onClick={() => setTextPosition("bottom")}
                                   aria-pressed={textPosition === "bottom"}
                                   className={cn(
-                                    "text-[11px] py-2 font-bold rounded-xs border uppercase tracking-widest text-center cursor-pointer transition-all",
+                                    "text-[11px] py-2 font-bold  border uppercase tracking-widest text-center cursor-pointer transition-all",
                                     textPosition === "bottom"
-                                      ? "bg-stone-900 text-white border-stone-900 shadow-sm"
-                                      : "bg-white text-stone-600 border-[#C4B59D] hover:bg-stone-50"
+                                      ? "bg-[#241E1A] text-[#EAE2D5] border-[#241E1A]"
+                                      : "bg-[#EAE2D5]/30 text-[#241E1A] border-[#C4B59D] hover:bg-[#EAE2D5]/50"
                                   )}
                                 >
                                   Bottom
@@ -861,10 +919,10 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                   onClick={() => setTextPosition("top")}
                                   aria-pressed={textPosition === "top"}
                                   className={cn(
-                                    "text-[11px] py-2 font-bold rounded-xs border uppercase tracking-widest text-center cursor-pointer transition-all",
+                                    "text-[11px] py-2 font-bold  border uppercase tracking-widest text-center cursor-pointer transition-all",
                                     textPosition === "top"
-                                      ? "bg-stone-900 text-white border-stone-900 shadow-sm"
-                                      : "bg-white text-stone-600 border-[#C4B59D] hover:bg-stone-50"
+                                      ? "bg-[#241E1A] text-[#EAE2D5] border-[#241E1A]"
+                                      : "bg-[#EAE2D5]/30 text-[#241E1A] border-[#C4B59D] hover:bg-[#EAE2D5]/50"
                                   )}
                                 >
                                   Top
@@ -879,11 +937,12 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                               </label>
                               <textarea
                                 id="katha-notes"
+                                maxLength={500}
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Anything specific we should know — colour accents, motifs, layout preferences?"
                                 rows={2}
-                                className="w-full border px-3 py-3 text-sm rounded-sm bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A] transition-shadow"
+                                className="w-full border px-4 py-4 text-base bg-[#EAE2D5]/30 focus:outline-none focus:ring-1 focus:ring-[#241E1A] transition-shadow"
                                 style={{ borderColor: "#C4B59D", resize: "none" }}
                               />
                             </div>
@@ -900,7 +959,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                               onDragOver={handleDrag}
                               onDragLeave={handleDrag}
                               onDrop={handleDrop}
-                              className={`relative border border-dashed rounded-sm p-4 text-center transition-all ${
+                              className={`relative border border-dashed  p-4 text-center transition-all ${
                                 dragActive ? "border-[#B5B8A3] bg-[#EAE2D5]" : "border-[#C4B59D] bg-[#EAE2D5]/30"
                               }`}
                               style={{ minHeight: "90px" }}
@@ -925,7 +984,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
                                 {uploading ? (
-                                  <p className="text-[11px]" style={{ color: "#5A5D5A" }}>Reading files...</p>
+                                  <p className="text-[11px]]" style={{ color: "#5A564E" }}>Reading files...</p>
                                 ) : (
                                   <>
                                     <p className="text-[11px] font-medium" style={{ color: "#241E1A" }}>
@@ -941,7 +1000,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
     
                             {/* Error message */}
                             {errorMsg && (
-                              <p role="alert" className="text-[11px] font-medium mt-1 text-[#5A5D5A]">
+                              <p role="alert" className="text-[11px] font-medium mt-1 text-[#241E1A]">
                                 {errorMsg}
                               </p>
                             )}
@@ -950,12 +1009,18 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
                             {referencePhotos.length > 0 && (
                               <div className="flex gap-2 flex-wrap mt-2" role="list" aria-label="Uploaded reference photos">
                                 {referencePhotos.map((photo, index) => (
-                                  <div key={index} role="listitem" className="relative w-14 h-14 border rounded-sm overflow-hidden" style={{ borderColor: "#C4B59D" }}>
+                                  <div key={index} role="listitem" className="relative w-14 h-14 border  overflow-hidden" style={{ borderColor: "#C4B59D" }}>
                                     <img src={photo.preview} alt={`Reference photo ${index + 1}`} className="w-full h-full object-cover" />
                                     <button
                                       type="button"
-                                      onClick={() => setReferencePhotos(prev => prev.filter((_, i) => i !== index))}
-                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#111112] text-[#EAE2D5] text-[9px] w-3.5 h-3.5 rounded-full flex items-center justify-center transition-colors"
+                                      onClick={() => {
+                                        setReferencePhotos(prev => prev.filter((_, i) => i !== index));
+                                        if (photo.preview.startsWith("blob:")) {
+                                          URL.revokeObjectURL(photo.preview);
+                                          objectUrls.current.delete(photo.preview);
+                                        }
+                                      }}
+                                      className="absolute top-0.5 right-0.5 bg-[#241E1A]/80 hover:bg-[#111112] text-[#EAE2D5] text-[9px] w-3.5 h-3.5  flex items-center justify-center transition-colors"
                                       aria-label={`Remove reference photo ${index + 1}`}
                                     >
                                       ×
@@ -972,16 +1037,15 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
 
                   <button
                     onClick={confirmSelection}
-                    disabled={!nameOne.trim() || !email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())}
-                    className="mt-6 w-full py-4 text-xs uppercase tracking-[0.2em] rounded-none transition-transform hover:scale-[0.98] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:active:scale-100 cursor-pointer"
-                    style={{ backgroundColor: "#8C382A", color: "#EAE2D5" }}
+                    disabled={isSubmitting || !nameOne.trim() || !email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())}
+                    className="mt-6 w-full py-4 text-xs uppercase tracking-[0.12em] rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-[#8C382A] hover:bg-[#6E2C20] text-[#EAE2D5]"
                   >
-                    Submit Design Inquiry
+                    {isSubmitting ? "Submitting..." : "Submit Design Inquiry"}
                   </button>
-                  {error && <p className="text-sm mt-2 text-center" style={{color:'#5A5D5A'}}>{error}</p>}
+                  {error && <p className="text-sm mt-2 text-center text-[#A35C44]" role="alert">{error}</p>}
                   <div className="mt-4 text-center">
                     <p className="text-[11px] leading-relaxed" style={{ color: "#5A564E" }}>
-                      <span className="font-semibold" style={{ color: "#A35C44", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
+                      <span className="font-semibold" style={{ color: "#241E1A", letterSpacing: "0.05em" }}>KATHA STUDIO DRAFT</span>
                       {" "}— This canvas is a preliminary layout designed to align our shared design direction. Your final piece will be meticulously finished by our studio team. Details, fonts, and structural elements are fully adjustable before we lock the final design for production.
                     </p>
                   </div>

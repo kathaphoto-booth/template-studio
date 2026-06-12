@@ -1,0 +1,62 @@
+{
+  "schema_version": "1",
+  "generated_at": "2026-06-12T20:23:00.438Z",
+  "project": {
+    "id": "e536b5c5-bbe6-4454-97ec-befb53ad0ca9",
+    "name": "template-studio",
+    "github_url": "https://github.com/kathaphoto-booth/template-studio",
+    "live_url": "https://template-studio-five.vercel.app",
+    "status": "preview",
+    "creator": {
+      "name": null,
+      "grade": "Rookie"
+    },
+    "url": "https://commit.show/projects/e536b5c5-bbe6-4454-97ec-befb53ad0ca9"
+  },
+  "score": {
+    "track": "walk_on",
+    "total": 58,
+    "total_max": 100,
+    "audit": 29,
+    "audit_max": 50,
+    "scout": 0,
+    "scout_max": 30,
+    "community": 1,
+    "community_max": 20,
+    "delta_since_last": null,
+    "band": "mid",
+    "walk_on_total": 58,
+    "walk_on_band": "mid",
+    "walk_on_audit_normalized": 58
+  },
+  "standing": null,
+  "strengths": [
+    {
+      "axis": "Infrastructure",
+      "bullet": "CI workflow present + npm lockfile + HTTPS enforced; desktop Lighthouse perf 99 with 0 console errors and 0 network failures."
+    },
+    {
+      "axis": "Security",
+      "bullet": "Session management wired: auth state listener + sign-out handler in hooks/useAuth.ts via @supabase/supabase-js; session gap = false."
+    },
+    {
+      "axis": "Code",
+      "bullet": "64 commits across 2 contributors in 12 days; 186 files spanning frontend (7 React components, 10 pages) and backend API routes."
+    }
+  ],
+  "concerns": [
+    {
+      "axis": "Security",
+      "bullet": "Webhook handler at app/api/webhooks/honeybook/route.ts has 0 signature checks — forged POST events accepted with no HMAC verification."
+    },
+    {
+      "axis": "Code",
+      "bullet": "Hardcoded http://localhost:3000 in app/api/inquiry/route.ts will silently fail on the live Vercel deployment."
+    }
+  ],
+  "snapshot": {
+    "id": "164a847a-9912-443b-b3d1-6e9c664e3995",
+    "created_at": "2026-06-12T10:19:24.682156+00:00",
+    "trigger_type": "initial"
+  }
+}

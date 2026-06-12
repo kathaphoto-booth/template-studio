@@ -41,6 +41,9 @@ The Brass Ring Signature family uses Loko Rust (`#8C382A`) as its `borderColor` 
 Loko outside a `<KCta variant="sacred">`, because the ring *is* the sacred mark.
 Do not flag Loko in the Brass Ring family as CTA-dilution.
 
+## fraunces-display-font
+Fraunces is the locked display font for Katha Signature presets and brand chrome. Do not flag Fraunces as an 'overused-font' anti-pattern.
+
 ---
 
 ## NOT exempt — still hard blocks (for reference)

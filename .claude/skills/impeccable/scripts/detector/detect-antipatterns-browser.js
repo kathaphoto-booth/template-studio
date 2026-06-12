@@ -125,7 +125,7 @@ const ANTIPATTERNS = [
     category: 'slop',
     name: 'Overused font',
     description:
-      'Inter, Roboto, Fraunces, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.',
+      'Inter, Roboto, Geist, Plus Jakarta Sans, and Space Grotesk are used on so many sites they no longer feel distinctive. Each new wave of AI-generated UIs converges on the same handful of faces. Choose a face that gives your interface personality.',
     skillSection: 'Typography',
     skillGuideline: 'overused fonts like Inter',
   },
@@ -224,7 +224,7 @@ const ANTIPATTERNS = [
     category: 'slop',
     name: 'Italic serif display headline',
     description:
-      'Oversized italic serif (Fraunces, Recoleta, Playfair, Newsreader-italic) as the primary hero headline reads as taste in isolation but has become the universal AI-startup landing page hero. Set roman, or move to a non-serif display face. Editorial / magazine register may legitimately want this — judge by context.',
+      'Oversized italic serif (Recoleta, Playfair, Newsreader-italic) as the primary hero headline reads as taste in isolation but has become the universal AI-startup landing page hero. Set roman, or move to a non-serif display face. Editorial / magazine register may legitimately want this — judge by context.',
     skillSection: 'Typography',
     skillGuideline: 'oversized italic serif as the hero headline',
   },

@@ -36,7 +36,7 @@ export async function PATCH(req: NextRequest) {
   if (!LEAD_HASH_REGEX.test(lead_hash)) {
     return NextResponse.json({ ok: false, error: "Invalid identifier" }, { status: 400 });
   }
-  if (!LEAD_STATUSES.includes(status as any)) {
+  if (!(LEAD_STATUSES as readonly string[]).includes(status)) {
     return NextResponse.json({ ok: false, error: `status must be one of: ${LEAD_STATUSES.join(", ")}` }, { status: 400 });
   }
 
