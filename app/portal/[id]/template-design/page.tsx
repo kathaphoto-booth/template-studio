@@ -725,7 +725,7 @@ export default function TemplateDesignPage({ params }: { params: Promise<{ id: s
           >
             <button
               onClick={() => setSelected(null)}
-              className="absolute right-2 top-2 z-50 w-12 h-12 flex items-center justify-center text-3xl leading-none cursor-pointer rounded-full md:right-4 md:top-4 transition-colors hover:bg-black/5"
+              className="absolute right-2 top-2 z-50 w-12 h-12 flex items-center justify-center text-3xl leading-none cursor-pointer rounded-none md:right-4 md:top-4 transition-colors hover:bg-black/5"
               style={{ color: confirmed ? "#9C958A" : "#5A564E" }}
               aria-label="Close template preview"
             >
