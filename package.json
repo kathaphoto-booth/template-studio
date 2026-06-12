@@ -14,7 +14,8 @@
     "guard:ci": "node scripts/katha-guard.mjs --p0-only",
     "guard:templates": "node scripts/katha-template-guard.mjs",
     "guard:layout": "node scripts/validate-spec.mjs",
-    "guard:detect": "impeccable detect app lib --json"
+    "guard:detect": "impeccable detect app lib --json",
+    "figma:sync": "node --env-file=.env scripts/sync_figma.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
@@ -38,6 +39,7 @@
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.2.9",
     "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "4.1.11",
     "@tailwindcss/typography": "^0.5.19",
