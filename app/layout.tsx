@@ -4,12 +4,6 @@ import './globals.css'; // Global styles
 
 import { fontClassNames } from '@/lib/fonts';
 
-import { Fraunces } from 'next/font/google';
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-display',
-  axes: ['SOFT', 'WONK'],
-});
 
 import { KathaThread } from '@/components/marks/KathaThread';
 

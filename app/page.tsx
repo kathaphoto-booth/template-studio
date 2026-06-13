@@ -1,6 +1,7 @@
 'use client';
+/* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
-import { PRESETS, resolveLayout, VIEWBOX, getModifiedLayout } from '@/lib/templates';
+import { PRESETS, resolveLayout, VIEWBOX, getModifiedLayout, type PhotoboothPreset } from '@/lib/templates';
 
 // ─── CANONICAL PRESETS FOR THE COMMISSIONED EDITIONS SHOWCASE ────────────────
 const SELECTED_PRESETS_IDS = [
@@ -38,7 +39,7 @@ function mapFontToVar(fontStr: string | null | undefined): string {
 }
 
 // Simplified high fidelity slot preview component
-function TemplatePreview({ preset }: { preset: any }) {
+function TemplatePreview({ preset }: { preset: PhotoboothPreset }) {
   const rawLayout = resolveLayout(preset.layoutId, preset.type);
   const layout = getModifiedLayout(rawLayout, "bottom");
   const viewBoxSize = VIEWBOX[preset.type];
@@ -63,7 +64,7 @@ function TemplatePreview({ preset }: { preset: any }) {
               top: `${top}%`,
               width: `${w}%`,
               height: `${h}%`,
-              backgroundColor: preset.slotBgColor || "#D5CDBD",
+              backgroundColor: preset.slotBgColor || "#C4B59D",
               border: `1.5px solid ${preset.borderColor || "#241E1A"}`,
             }}
           />
@@ -434,6 +435,9 @@ export default function Homepage() {
           color: var(--ecru);
         }
         .voices {
+          background-image: none; background-color: var(--ink);
+        }
+        .commissioned-editions {
           background-image: linear-gradient(rgba(26, 24, 22, 0.93), rgba(26, 24, 22, 0.965)), url("/brand/brand/katha-embroidery-bg.jpg");
           background-size: auto, 720px;
         }
@@ -487,7 +491,7 @@ export default function Homepage() {
 
         footer.site {
           background-color: var(--ink);
-          background-image: linear-gradient(rgba(17, 17, 18, 0.88), rgba(17, 17, 18, 0.94)), url("/brand/brand/velvet-shadow-bg.jpeg"); /* replaced legacy OAX names */
+          background-image: linear-gradient(rgba(17, 17, 18, 0.88), rgba(17, 17, 18, 0.94)), url("/brand/brand/velvet-obsidian-bg.jpeg"); /* replaced legacy OAX names */
           background-size: auto, cover;
           padding-block: clamp(80px, 11vh, 140px) clamp(48px, 6vh, 72px);
           color: var(--ecru);
@@ -770,7 +774,7 @@ export default function Homepage() {
                         className={`edition-card bg-[#EAE2D5] p-3 text-[#241E1A] hover:-translate-y-1 transition-transform duration-300 flex flex-col justify-between ${isStrip ? 'fmt-strip' : 'fmt-postcard'} ${isSignature ? 'tier-signature' : 'tier-classic'}`}
                       >
                         <div>
-                          <div className="aspect-ratio-wrapper mb-4 relative overflow-hidden bg-[#FAF9F5] border border-[#D5CDBD] shadow-sm p-4" style={{ aspectRatio: isStrip ? '2/6' : isPostcardVert ? '4/6' : '6/4' }}>
+                          <div className="aspect-ratio-wrapper mb-4 relative overflow-hidden bg-[#EAE2D5] border border-[#C4B59D] p-4" style={{ aspectRatio: isStrip ? '2/6' : isPostcardVert ? '4/6' : '6/4' }}>
                             <TemplatePreview preset={preset} />
                           </div>
                           <h4 className="font-serif text-lg font-normal text-[#241E1A]">{preset.name.replace("Katha Signature — ", "").replace("Katha Classic — ", "")}</h4>

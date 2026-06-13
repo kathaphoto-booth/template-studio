@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { jsPDF } from "jspdf";
 import { motion, AnimatePresence } from "motion/react";
