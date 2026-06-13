@@ -1,0 +1,40 @@
+/* ==================================================
+   S&D BOOTHS - CINEMATIC OVERRIDE
+   ================================================== */
+
+/* 1. HERO FULL BLEED ENFORCEMENT (Step 4) */
+/* Removes the generic rounded corners from all image/video blocks in the hero */
+[data-section-id="6a1a7d2b43cc4c1fe0cca7ab"] .sqs-video-background,
+[data-section-id="6a1a7d2b43cc4c1fe0cca7ab"] .sqs-block-image img,
+[data-section-id="6a1a7d2b43cc4c1fe0cca7ab"] .fluid-engine {
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important; /* Forces true full-bleed */
+}
+
+/* 2. CINEMATIC TYPOGRAPHY HOOK (Step 4) */
+/* Overrides the hero text to be an elegant editorial hook */
+[data-section-id="6a1a7d2b43cc4c1fe0cca7ab"] h1 {
+    font-family: 'Ogg', 'Editorial New', 'Fraunces', serif !important;
+    font-size: clamp(3rem, 8vw, 7rem) !important;
+    color: #F8F5EE !important; /* Ecru / Warm White */
+    text-align: center;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-transform: none;
+    text-shadow: 0px 4px 20px rgba(0,0,0,0.6); /* Guarantees readability over video */
+}
+
+/* 3. SECONDARY GALLERY CAROUSEL FADES (Step 6) */
+/* Enforces slow, ease-in-out cinematic cross-fades on Squarespace Auto-Layout carousels */
+.user-items-list-carousel .list-item {
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* 4. GLOBAL AESTHETICS (Step 7) */
+/* Strip remaining template borders site-wide */
+.sqs-block, .page-section {
+    border: none !important;
+}

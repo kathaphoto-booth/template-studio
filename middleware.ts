@@ -24,7 +24,7 @@ function safeEqual(a: string, b: string): boolean {
 // without it). Set it in Vercel env vars before sharing the URL.
 // ──────────────────────────────────────────────────────────────────────
 
-const PROTECTED_PATHS = ["/", "/admin"];
+const PROTECTED_PATHS = ["/studio", "/admin"];
 const PROTECTED_PREFIXES = ["/api/generate", "/api/admin"];
 
 function isProtected(pathname: string): boolean {

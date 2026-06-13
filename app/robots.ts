@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/admin/', '/portal/'],
+      disallow: ['/api/', '/admin/'],
     },
     sitemap: 'https://book.kathabooth.com/sitemap.xml',
   };

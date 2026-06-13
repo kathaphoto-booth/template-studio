@@ -4,6 +4,13 @@ import './globals.css'; // Global styles
 
 import { fontClassNames } from '@/lib/fonts';
 
+import { Fraunces } from 'next/font/google';
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-display',
+  axes: ['SOFT', 'WONK'],
+});
+
 import { KathaThread } from '@/components/marks/KathaThread';
 
 export const metadata: Metadata = {
@@ -37,6 +44,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           </filter>
         </svg>
         <KathaThread className="fixed inset-0 z-0 pointer-events-none" />
+        
+        {/* Whisper Translucency Frame */}
+
+        
         {children}
       </body>
     </html>
