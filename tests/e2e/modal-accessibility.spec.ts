@@ -14,7 +14,7 @@ test.describe('Modal Layout & Accessibility Verification', () => {
   test('verify personalization modal', async ({ page }) => {
     // 1. Navigate
     await page.setViewportSize({ width: 375, height: 667 });
-    await page.goto('http://localhost:3002/portal/guest/template-design');
+    await page.goto('/portal/guest/template-design');
 
     // 2. Open Modal
     const cards = page.getByRole('button', { name: /explore details/i });
