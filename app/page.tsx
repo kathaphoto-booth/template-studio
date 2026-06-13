@@ -872,15 +872,15 @@ export default function Homepage() {
               </div>
               <div className="grid12">
                 <blockquote className="quote c-1-7 reveal">
-                  <p>“From selection to installation, Katha was attentive, professional, and a refined presence during our reception.”</p>
+                  <p>From selection to installation, Katha was attentive, professional, and a refined presence during our reception.</p>
                   <footer>VIVIAN V.</footer>
                 </blockquote>
                 <blockquote className="quote c-6-7 reveal d2">
-                  <p>“Everyone at my wedding was delighted. The team is so friendly. We highly recommend them.”</p>
+                  <p>Everyone at my wedding was delighted. The team is so friendly. We highly recommend them.</p>
                   <footer>SCARLETH B.</footer>
                 </blockquote>
                 <blockquote className="quote c-3-8 reveal d3">
-                  <p>“The images are simply on another level. The smoothing is subtle and luminous. Everyone looked like the best version of themselves.”</p>
+                  <p>The images are simply on another level. The smoothing is subtle and luminous. Everyone looked like the best version of themselves.</p>
                   <footer>GLADYS G.</footer>
                 </blockquote>
               </div>
