@@ -282,6 +282,15 @@ export default function Homepage() {
         #t-signature:checked ~ * .t-signature-btn { border-color: var(--champagne); background-color: rgba(196, 181, 157, 0.25); color: #EAE2D5; }
         #t-classic:checked ~ * .t-classic-btn { border-color: var(--champagne); background-color: rgba(196, 181, 157, 0.25); color: #EAE2D5; }
 
+        /* Zero-JS Filter Controls Keyboard Focus States */
+        #f-all:focus-visible ~ * .f-all-btn { outline: 2px solid var(--champagne); outline-offset: 2px; }
+        #f-strip:focus-visible ~ * .f-strip-btn { outline: 2px solid var(--champagne); outline-offset: 2px; }
+        #f-postcard:focus-visible ~ * .f-postcard-btn { outline: 2px solid var(--champagne); outline-offset: 2px; }
+
+        #t-all:focus-visible ~ * .t-all-btn { outline: 2px solid var(--champagne); outline-offset: 2px; }
+        #t-signature:focus-visible ~ * .t-signature-btn { outline: 2px solid var(--champagne); outline-offset: 2px; }
+        #t-classic:focus-visible ~ * .t-classic-btn { outline: 2px solid var(--champagne); outline-offset: 2px; }
+
         /* Zero-JS Show/Hide filtering mechanics */
         .edition-card { display: block; }
         #f-strip:checked ~ * .edition-card:not(.fmt-strip) { display: none !important; }
@@ -292,7 +301,7 @@ export default function Homepage() {
         /* General layout styles adapted from index.html */
         .page { position: relative; z-index: 1; }
         .wrap { width: min(100% - clamp(40px, 8vw, 180px), 1720px); margin-inline: auto; }
-        .kicker { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ecru-soft); }
+        .kicker { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ecru-mute); }
         .dark .kicker { color: var(--sequin); }
         h2.display { font-size: clamp(2.1rem, 4.2vw, 3.8rem); font-weight: 400; max-width: 18ch; }
         h3.display { font-size: clamp(1.5rem, 2.4vw, 2.2rem); font-weight: 430; }
@@ -352,7 +361,7 @@ export default function Homepage() {
         .mat-iron::before { background: var(--iron); }
         .cap {
           font-size: 0.72rem; letter-spacing: 0.04em;
-          color: var(--ecru-soft);
+          color: var(--ecru-mute);
           margin-top: 0.95rem; padding-top: 0.6rem; max-width: 34ch;
           border-top: 1px solid rgba(196, 181, 157, 0.75);
         }
@@ -377,12 +386,12 @@ export default function Homepage() {
           position: absolute; top: clamp(96px, 14vh, 200px); right: clamp(8px, 1.4vw, 26px);
           writing-mode: vertical-rl;
           font-size: 0.7rem; letter-spacing: 0.3em;
-          color: var(--ecru-soft); text-transform: uppercase;
+          color: var(--ecru-mute); text-transform: uppercase;
           pointer-events: none; display: none;
         }
         .stamp {
           font-size: 0.7rem; letter-spacing: 0.04em;
-          text-transform: uppercase; color: var(--ecru-soft);
+          text-transform: uppercase; color: var(--ecru-mute);
         }
 
         .hero { padding-top: clamp(64px, 9vh, 140px); }
@@ -420,12 +429,12 @@ export default function Homepage() {
         }
         .step .ord {
           font-size: 0.78rem; letter-spacing: 0.04em;
-          color: var(--ecru-soft);
+          color: var(--ecru-mute);
         }
         .step h3 { margin-bottom: 0.5rem; }
         .step .cap-line {
           font-size: 0.72rem; letter-spacing: 0.04em;
-          color: var(--ecru-soft); margin-top: 0.9rem;
+          color: var(--ecru-mute); margin-top: 0.9rem;
         }
         .seal { display: inline-flex; align-items: center; gap: 0.9rem; margin-top: 2.4rem; }
         .seal img { height: 34px; width: auto; }
@@ -443,8 +452,18 @@ export default function Homepage() {
         }
         .voices .body-copy { color: var(--sequin); }
         .quote {
-          border-left: 2px solid var(--terracotta);
-          padding-left: clamp(1.4rem, 3vw, 2.6rem);
+          position: relative;
+          padding-left: clamp(1.6rem, 3vw, 2.8rem);
+        }
+        .quote::before {
+          content: "“";
+          position: absolute;
+          left: 0;
+          top: -0.2em;
+          font-family: var(--font-fraunces), Georgia, serif;
+          font-size: clamp(2.6rem, 4vw, 3.6rem);
+          line-height: 1;
+          color: var(--terracotta);
         }
         .quote p {
           font-style: italic; font-size: clamp(1.2rem, 1.9vw, 1.55rem); line-height: 1.5;
