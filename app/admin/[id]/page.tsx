@@ -65,11 +65,16 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
         {lead.client_email}{lead.client_phone ? ` · ${lead.client_phone}` : ""}
       </p>
 
-      {/* Status pipeline — Client Component */}
+      {/* Status pipeline — Client Component.
+          NOTE: do NOT pass the Studio password down as a prop. Client-component
+          props are serialized into the RSC payload and ship to the browser —
+          embedding `admin:<STUDIO_PASSWORD>` here previously leaked the master
+          credential into the page HTML. The PATCH to /api/admin/status is
+          same-origin, so the browser re-attaches the cached Basic-auth header
+          automatically (same as SendPreview's call to /api/admin/notify). */}
       <StatusPipeline
         currentStatus={lead.status}
         leadHash={lead.lead_hash}
-        authToken={Buffer.from(`admin:${process.env.STUDIO_PASSWORD ?? ""}`).toString("base64")}
       />
 
       {/* Client brief */}

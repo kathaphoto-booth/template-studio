@@ -30,11 +30,13 @@ body::after {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 1;
+  z-index: -1;
   filter: url(#katha-patina);
   background-color: var(--color-katha-pina-ecru);
   opacity: 0.04;
   mix-blend-mode: multiply;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -68,3 +70,183 @@ body::after {
   animation: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Whisper Translucency Frame Architecture */
+.l-frame-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 12px;
+  background-color: rgba(234, 226, 213, 0.45); /* Piña Ecru base */
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L8,8 M8,0 L0,8' stroke='rgba(196, 181, 157, 0.3)' stroke-width='0.5'/%3E%3C/svg%3E");
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99;
+  pointer-events: none;
+  /* Softly fade out to the right so it doesn't create a hard box */
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+}
+
+.l-frame-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 100vh;
+  background-color: rgba(234, 226, 213, 0.45); /* Piña Ecru base */
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L8,8 M8,0 L0,8' stroke='rgba(196, 181, 157, 0.3)' stroke-width='0.5'/%3E%3C/svg%3E");
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99;
+  pointer-events: none;
+  /* Softly fade out to the bottom so it doesn't create a hard box */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+}
+
+@media (min-width: 768px) {
+  .l-frame-top {
+    height: 16px;
+  }
+  .l-frame-left {
+    width: 16px;
+  }
+}
+
+/* =========================================
+   PRIMARY FILTERS: Horizontal Swipe Track
+   ========================================= */
+.tier-swipe-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding: 12px 0 24px 0;
+  border-bottom: 0.5px solid rgba(196, 181, 157, 0.3);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tier-swipe-track::-webkit-scrollbar {
+  display: none;
+}
+
+.tier-swipe-track a {
+  scroll-snap-align: start;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--color-katha-iron-bark);
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.tier-swipe-track a[aria-current="true"] {
+  opacity: 1;
+  font-weight: 500;
+}
+
+.tier-swipe-track a:focus-visible {
+  outline: 2px solid var(--color-katha-champagne-heirloom);
+  outline-offset: 4px;
+}
+
+/* =========================================
+   SECONDARY FILTERS: Native Drawer
+   ========================================= */
+.filter-drawer {
+  margin: 16px 0 32px 0;
+}
+
+.filter-drawer summary {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-katha-iron-bark);
+  opacity: 0.7;
+  padding-bottom: 8px;
+}
+
+.filter-drawer summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-drawer summary:focus-visible {
+  outline: 2px solid var(--color-katha-champagne-heirloom);
+  outline-offset: 4px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+  padding-top: 24px;
+  border-top: 0.5px solid rgba(196, 181, 157, 0.3);
+}
+
+/* =========================================
+   FILTER OPTIONS & TYPOGRAPHY
+   ========================================= */
+.whisper-label {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--color-katha-ecru-muted);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: var(--color-katha-iron-bark);
+  opacity: 0.4;
+  transition: all 0.2s ease;
+}
+
+.filter-link[aria-current="true"] {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.filter-link:focus-visible {
+  outline: 2px solid var(--color-katha-champagne-heirloom);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   GALLERY AUTO-FIT & EMPTY STATE
+   ========================================= */
+.empty-state-whisper {
+  grid-column: 1 / -1;
+  padding: 64px 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  color: var(--color-katha-ecru-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.reset-curation-btn {
+  display: inline-block;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-katha-iron-bark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-katha-iron-bark);
+}
