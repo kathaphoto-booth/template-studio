@@ -42,6 +42,9 @@ test.describe('F7: Template Selection - Tier 1 Happy Path', () => {
 
     await modal.getByLabel('First name').fill('Ana');
     await modal.getByLabel('Email address').fill('ana.reyes@example.com');
+    // New serviceTier gate: submit stays disabled until an installation is chosen.
+    await expect(modal.getByRole('button', { name: 'Submit Design Inquiry' })).toBeDisabled();
+    await modal.getByRole('button', { name: /Signature Installation/i }).click();
     await modal.getByRole('button', { name: 'Submit Design Inquiry' }).click();
 
     await expect(modal.getByText('Your design is saved')).toBeVisible();

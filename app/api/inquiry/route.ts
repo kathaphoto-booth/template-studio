@@ -88,42 +88,42 @@ async function pingHoneyBook(payload: InquiryPayload, leadHash: string) {
 // 3. Transactional Enrichment Email to Client via Resend
 async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string, baseUrl: string) {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    return { ok: false, detail: "resend email not configured (skipped)" };
-  }
 
   const galleryLink = `${baseUrl}/portal/${leadHash}/template-design`;
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
 
-  const subject = "Rooted by perseverance, crafted for generations — Katha Photo Booth";
+  const subject = "Your Katha design link — choose your template";
 
   const textBody = `
 Dear ${payload.client_name},
 
 Thank you for reaching out to Katha. We have recorded your event inquiry for ${payload.event_date}.
 
-A DSLR photo booth designed like a wooden loom, capturing portraits that feel less like prints and more like passed-down heirlooms.
+Katha runs two DSLR installations — weathered oak and modern white frames — printing archival matte portraiture on site.
 
-To help us tailor the backdrop, typography, and print outlines to the narrative of your room, we invite you to explore our dynamic design catalog and choose your template:
+To tailor the backdrop, typography, and print layout to your event, choose your template here:
 
 ${galleryLink}
 
-You can select a style, add customized lettering, and upload up to three reference photos at your own pace.
-
-Rooted by perseverance, crafted for generations.
+You can set a style, add custom lettering, and upload up to three reference photos at your own pace.
 
 Warmly,
 The Katha Team
   `.trim();
 
+  if (!apiKey) {
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: payload.client_email, subject });
+    return { ok: false, detail: "resend email not configured (skipped)" };
+  }
+
   const htmlBody = `
-    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius: 4px;">
+    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius:0;">
       <p style="font-family:'Libre Franklin', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.25em; color:#5A564E; margin-bottom: 30px;">
         Katha Photo Booth
       </p>
       
       <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:24px; letter-spacing:-0.01em; margin-bottom: 24px; color:#241E1A;">
-        Rooted by perseverance, crafted for generations.
+        Choose your template.
       </h2>
       
       <p style="font-size:16px; margin-bottom:20px;">
@@ -131,15 +131,11 @@ The Katha Team
       </p>
       
       <p style="font-size:16px; margin-bottom:20px;">
-        Thank you for starting this dialogue with Katha. We have successfully recorded your event inquiry for the date of <strong>${payload.event_date}</strong>.
-      </p>
-      
-      <p style="font-size:16px; margin-bottom:20px;">
-        A Katha photo booth is built like a wooden loom. The abacá textile frames, the unbleached ecru fibers, and the hand-finished KTHA maker's mark exist for one purpose: to weave your shared memory directly into a passed-down heirloom.
+        Thank you for reaching out to Katha. We have recorded your event inquiry for <strong>${payload.event_date}</strong>.
       </p>
       
       <p style="font-size:16px; margin-bottom:30px;">
-        To help us shape the backdrops, layout geometry, and typography for your event, we invite you to browse the template gallery and finalize your aesthetic blueprint:
+        Katha runs two DSLR installations — weathered oak and modern white frames — printing archival matte portraiture on site. To tailor the backdrop, layout geometry, and typography to your event, choose your template below.
       </p>
       
       <div style="margin-bottom:35px; text-align:center;">
@@ -169,9 +165,13 @@ The Katha Team
       text: textBody,
     });
 
-    if (error) return { ok: false, detail: `email failed: ${error.message}` };
+    if (error) {
+      if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: payload.client_email, subject });
+      return { ok: false, detail: `email failed: ${error.message}` };
+    }
     return { ok: true, detail: "enrichment email sent successfully" };
   } catch (err: any) {
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: payload.client_email, subject });
     return { ok: false, detail: `email exception: ${err?.message || err}` };
   }
 }
