@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase";
+import { isServiceTierId, getServiceTier } from "@/lib/serviceTiers";
 
 
 // ──────────────────────────────────────────────────────────────────────
@@ -29,6 +30,8 @@ type Selection = {
   // Full interactive design state (font, text position, tier, future knobs).
   // Persisted as a single JSONB column — no per-knob schema churn.
   configuration?: Record<string, unknown> | null;
+  serviceTier?: string | null; // ServiceTierId; validated below
+  address?: string | null;     // PII — server-only
 };
 
 // Reference photos arrive either as Storage paths (refs/<uuid>.<ext>) or
@@ -66,16 +69,16 @@ function escapeHtml(str: string): string {
 //   • from: 'onboarding@resend.dev' works out of the box (no domain verification)
 //   • once kathabooth.com is verified with Resend, set NOTIFICATION_FROM to
 //     e.g. "Katha <hello@kathabooth.com>"
-//   • to: defaults to jedgrepo@gmail.com if NOTIFICATION_EMAIL is unset
+//   • to: defaults to kathabooth@gmail.com if NOTIFICATION_EMAIL is unset
 async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: string }> {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
-  }
 
-  const toAddr = process.env.NOTIFICATION_EMAIL || "jedgrepo@gmail.com";
+  const toAddr = process.env.NOTIFICATION_EMAIL || "kathabooth@gmail.com";
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
   const appUrl = process.env.APP_URL || "https://kathabooth.com";
+
+  const tier = s.serviceTier ? getServiceTier(s.serviceTier) : undefined;
+  const tierLabel = tier ? `${tier.name} · ${tier.architecture} — $${tier.price.toLocaleString()}` : "—";
 
   // Construct secure, dynamic query parameter link to auto-fill the admin room
   const customizeLink = `${appUrl}/studio?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
@@ -90,9 +93,16 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
     `Venue/Notes:   ${s.venue || "—"}`,
     `Selected Font: ${s.fontFamily || "—"}`,
     s.notes ? `Client Notes:  ${s.notes}` : null,
+    `Service Tier:  ${tierLabel}`,
+    `Venue Address: ${s.address || "—"}`,
     `Selected At:   ${s.selectedAt}`,
     `Direct Studio Customize Link: ${customizeLink}`
   ].filter(Boolean).join("\n");
+
+  if (!apiKey) {
+    console.log("[email:mock]", { to: toAddr, subject, text: textLines });
+    return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
+  }
 
   // Premium Wabi-Sabi styled HTML email matching Katha aesthetic
   let html = `
@@ -129,6 +139,14 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
         <tr style="border-bottom:1px dashed #EAE2D5;">
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Selected Font</td>
           <td style="padding:10px 0; color:#241E1A; font-style:italic;">${s.fontFamily ? escapeHtml(s.fontFamily) : "—"}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Service Tier</td>
+          <td style="padding:10px 0; color:#241E1A;">${escapeHtml(tierLabel)}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Venue Address</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.address ? escapeHtml(s.address) : "—"}</td>
         </tr>
       </table>
 
@@ -176,9 +194,13 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       html,
       text: textLines + (s.referencePhotos && s.referencePhotos.length > 0 ? `\n\n[Attached reference photos: ${s.referencePhotos.length}]` : ""),
     });
-    if (error) return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
+    if (error) {
+      console.log("[email:mock]", { to: toAddr, subject, text: textLines });
+      return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
+    }
     return { ok: true, detail: `email sent (id ${data?.id || "?"})` };
   } catch (err: any) {
+    console.log("[email:mock]", { to: toAddr, subject, text: textLines });
     return { ok: false, detail: `email exception: ${err?.message || err}` };
 
   }
@@ -271,6 +293,8 @@ async function dispatchSupabase(s: Selection): Promise<{ ok: boolean; detail: st
         lead: s.lead,
         selected_at: s.selectedAt,
         configuration: s.configuration ?? {},
+        service_tier: s.serviceTier,
+        address: s.address,
       });
 
     if (error) {
@@ -302,6 +326,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "payload rejected" }, { status: 400 });
   }
 
+  if (body?.serviceTier && !isServiceTierId(body.serviceTier)) {
+    return NextResponse.json({ ok: false, error: "invalid serviceTier" }, { status: 400 });
+  }
+
   const selection: Selection = {
     templateId: String(body.templateId).slice(0, 100),
     templateName: String(body.templateName).slice(0, 200),
@@ -321,6 +349,9 @@ export async function POST(req: NextRequest) {
         && JSON.stringify(body.configuration).length <= 10_000
         ? body.configuration
         : null,
+    serviceTier:
+      body.serviceTier && isServiceTierId(body.serviceTier) ? body.serviceTier : null,
+    address: body.address ? String(body.address).slice(0, 500) : null,
   };
 
   // Fan out to dispatch targets in parallel; report each result
