@@ -100,7 +100,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
   ].filter(Boolean).join("\n");
 
   if (!apiKey) {
-    console.log("[email:mock]", { to: toAddr, subject, text: textLines });
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: toAddr, subject });
     return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
   }
 
@@ -195,12 +195,12 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       text: textLines + (s.referencePhotos && s.referencePhotos.length > 0 ? `\n\n[Attached reference photos: ${s.referencePhotos.length}]` : ""),
     });
     if (error) {
-      console.log("[email:mock]", { to: toAddr, subject, text: textLines });
+      if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: toAddr, subject });
       return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
     }
     return { ok: true, detail: `email sent (id ${data?.id || "?"})` };
   } catch (err: any) {
-    console.log("[email:mock]", { to: toAddr, subject, text: textLines });
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: toAddr, subject });
     return { ok: false, detail: `email exception: ${err?.message || err}` };
 
   }

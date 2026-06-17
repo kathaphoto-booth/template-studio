@@ -88,9 +88,6 @@ async function pingHoneyBook(payload: InquiryPayload, leadHash: string) {
 // 3. Transactional Enrichment Email to Client via Resend
 async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string, baseUrl: string) {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    return { ok: false, detail: "resend email not configured (skipped)" };
-  }
 
   const galleryLink = `${baseUrl}/portal/${leadHash}/template-design`;
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
@@ -113,6 +110,11 @@ You can set a style, add custom lettering, and upload up to three reference phot
 Warmly,
 The Katha Team
   `.trim();
+
+  if (!apiKey) {
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: payload.client_email, subject });
+    return { ok: false, detail: "resend email not configured (skipped)" };
+  }
 
   const htmlBody = `
     <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius:0;">
@@ -163,9 +165,13 @@ The Katha Team
       text: textBody,
     });
 
-    if (error) return { ok: false, detail: `email failed: ${error.message}` };
+    if (error) {
+      if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: payload.client_email, subject });
+      return { ok: false, detail: `email failed: ${error.message}` };
+    }
     return { ok: true, detail: "enrichment email sent successfully" };
   } catch (err: any) {
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: payload.client_email, subject });
     return { ok: false, detail: `email exception: ${err?.message || err}` };
   }
 }

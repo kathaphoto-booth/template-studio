@@ -1094,15 +1094,18 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                   <button
                     onClick={confirmSelection}
                     disabled={isSubmitting || !nameOne.trim() || !email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) || !serviceTier}
+                    aria-describedby={!serviceTier ? "katha-submit-hint" : undefined}
                     className="mt-6 w-full py-4 text-xs uppercase tracking-[0.12em] rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-[#8C382A] hover:bg-[#6E2C20] text-[#EAE2D5]"
                   >
                     {isSubmitting ? "Submitting..." : "Submit Design Inquiry"}
                   </button>
-                  {!serviceTier && (
-                    <p className="text-[11px] mt-2 text-center" style={{ color: "#5A564E" }}>
-                      Select an installation above to submit your design inquiry.
-                    </p>
-                  )}
+                  <div aria-live="polite">
+                    {!serviceTier && (
+                      <p id="katha-submit-hint" className="text-[11px] mt-2 text-center" style={{ color: "#5A564E" }}>
+                        Select an installation above to submit your design inquiry.
+                      </p>
+                    )}
+                  </div>
                   {error && <p className="text-sm mt-2 text-center text-[#A35C44]" role="alert">{error}</p>}
                   <div className="mt-4 text-center">
                     <p className="text-[11px] leading-relaxed" style={{ color: "#5A564E" }}>

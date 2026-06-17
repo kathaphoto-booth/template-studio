@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -12,12 +12,30 @@ export default function InquirePage() {
   const [error, setError] = useState("");
   const [portalLink, setPortalLink] = useState<string | null>(null);
 
-  const valid =
-    name.trim().length >= 2 && EMAIL_RE.test(email.trim()) && date.trim().length > 0;
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  // Move focus to the success heading so screen-reader / keyboard users are
+  // told the inquiry succeeded (the view fully swaps and would otherwise drop
+  // focus to <body> with no announcement).
+  useEffect(() => {
+    if (portalLink) headingRef.current?.focus();
+  }, [portalLink]);
+
+  function validate(): string {
+    if (name.trim().length < 2) return "Please enter your name.";
+    if (!EMAIL_RE.test(email.trim())) return "Please enter a valid email address.";
+    if (date.trim().length === 0) return "Please choose your event date.";
+    return "";
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!valid || busy) return;
+    if (busy) return;
+    const problem = validate();
+    if (problem) {
+      setError(problem);
+      return;
+    }
     setBusy(true);
     setError("");
     try {
@@ -59,11 +77,14 @@ export default function InquirePage() {
       >
         <div style={{ maxWidth: 560 }}>
           <h1
+            ref={headingRef}
+            tabIndex={-1}
             style={{
               fontFamily: "Fraunces, serif",
               fontWeight: 400,
               fontSize: "2rem",
               letterSpacing: "-0.015em",
+              outline: "none",
             }}
           >
             Thank you.
@@ -218,7 +239,7 @@ export default function InquirePage() {
           <p
             role="alert"
             style={{
-              color: "#A35C44",
+              color: "#241E1A",
               fontFamily: "'EB Garamond', serif",
               margin: 0,
             }}
@@ -228,9 +249,9 @@ export default function InquirePage() {
         )}
         <button
           type="submit"
-          disabled={!valid || busy}
+          disabled={busy}
           style={{
-            background: valid ? "#8C382A" : "#9C958A",
+            background: "#8C382A",
             color: "#EAE2D5",
             fontFamily: "Inter, sans-serif",
             fontSize: ".78rem",
@@ -239,7 +260,8 @@ export default function InquirePage() {
             padding: "1rem",
             border: "none",
             borderRadius: 0,
-            cursor: valid ? "pointer" : "not-allowed",
+            opacity: busy ? 0.6 : 1,
+            cursor: busy ? "not-allowed" : "pointer",
           }}
         >
           {busy ? "Sending…" : "Begin"}

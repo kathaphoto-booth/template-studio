@@ -25,3 +25,9 @@ test("portal 404s on an unknown lead_hash", async ({ page }) => {
   );
   expect(res?.status()).toBe(404);
 });
+
+test("portal renders (200) for the guest passthrough id", async ({ page }) => {
+  // Proves the 404 above is attributable to the lookup miss, not blanket 404ing.
+  const res = await page.goto("/portal/guest/template-design");
+  expect(res?.status()).toBe(200);
+});
