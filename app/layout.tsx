@@ -4,9 +4,6 @@ import './globals.css'; // Global styles
 
 import { fontClassNames } from '@/lib/fonts';
 
-
-import { KathaThread } from '@/components/marks/KathaThread';
-
 export const metadata: Metadata = {
   metadataBase: new URL('https://book.kathabooth.com'),
   title: 'Katha Template Studio',
@@ -37,8 +34,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             <feColorMatrix values="0 0 0 0 0.141  0 0 0 0 0.118  0 0 0 0 0.102  0 0 0 0.12 0" />
           </filter>
         </svg>
-        <KathaThread className="fixed inset-0 z-0 pointer-events-none" />
-        
+
         {/* Whisper Translucency Frame */}
 
         

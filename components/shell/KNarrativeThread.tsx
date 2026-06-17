@@ -10,9 +10,6 @@ import { cn } from '@/lib/utils';
  *   • Filled (Iron Bark) when `complete` is true
  *   • Outline-only when pending
  *
- * When ALL items are complete, a small brass-ring stamp with "KTHA"
- * appears at the bottom of the thread — a seal of completion.
- *
  * The connecting line uses Piña Ecru at stroke-width 1,
  * evoking the warp thread of a Piña loom.
  */
@@ -39,7 +36,6 @@ const DOT_CX = 12;
 const DOT_START_Y = 12;
 
 export function KNarrativeThread({ items, className }: KNarrativeThreadProps) {
-  const allComplete = items.length > 0 && items.every((item) => item.complete);
   const completedCount = items.filter((item) => item.complete).length;
 
   return (
@@ -66,30 +62,12 @@ export function KNarrativeThread({ items, className }: KNarrativeThreadProps) {
                 />
               </svg>
               
-              {/* Thread line (connects to next item or brass ring) */}
-              {(!isLast || allComplete) && (
+              {/* Thread line (connects to next item) */}
+              {!isLast && (
                 <div className="absolute top-4 bottom-0 w-px" style={{ backgroundColor: 'var(--katha-pina-ecru)' }} />
               )}
-              {isLast && !allComplete && (
+              {isLast && (
                 <div className="absolute top-4 bottom-4 w-px" style={{ backgroundColor: 'var(--katha-pina-ecru)' }} />
-              )}
-              
-              {/* Brass ring (only on last item if complete) */}
-              {isLast && allComplete && (
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 z-10">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" role="img" aria-label="Katha maker's mark — complete">
-                    <circle cx="14" cy="14" r="13" stroke="var(--katha-champagne-heirloom)" strokeWidth="1.5" />
-                    <text
-                      x="14"
-                      y="17"
-                      textAnchor="middle"
-                      fill="var(--katha-champagne-heirloom)"
-                      style={{ fontFamily: 'var(--font-mono, "JetBrains Mono", monospace)', fontSize: '7px', letterSpacing: '0.08em' }}
-                    >
-                      KTHA
-                    </text>
-                  </svg>
-                </div>
               )}
             </div>
 
