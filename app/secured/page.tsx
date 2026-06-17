@@ -13,12 +13,6 @@ export const metadata: Metadata = {
 // Ma negative space; calado dots are the only rule line; sharp corners.
 // ──────────────────────────────────────────────────────────────────────
 
-const KTHA_MARK_PATH =
-  'M 40,0 L 40,12 M 40,6 L 46,0 M 40,6 L 46,12 ' + // K
-  'M 50,0 L 56,0 M 53,0 L 53,12 ' + // T
-  'M 60,0 L 60,12 M 60,6 L 66,6 M 66,0 L 66,12 ' + // H
-  'M 70,12 L 73,0 L 76,12 M 71.5,8 L 74.5,8'; // A
-
 export default function SecuredPage() {
   return (
     <main
@@ -76,39 +70,7 @@ export default function SecuredPage() {
         >
           Browse the template library and personalize the details — we attach your design to this inquiry.
         </p>
-
-        {/* KTHA brass-ring closing stroke — permission to leave the loom */}
-        <div className="mt-16 flex justify-center" aria-hidden>
-          <svg width="120" height="40" viewBox="36 -4 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              className="ktha-draw"
-              d={KTHA_MARK_PATH}
-              stroke="#241E1A"
-              strokeWidth="1.1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <span className="sr-only" role="status">
-          Katha maker&apos;s mark — complete
-        </span>
       </div>
-
-      {/* CSS-only draw of the maker's mark; reduced-motion shows it complete */}
-      <style>{`
-        .ktha-draw {
-          stroke-dasharray: 160;
-          stroke-dashoffset: 160;
-          animation: ktha-stroke 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
-        }
-        @keyframes ktha-stroke {
-          to { stroke-dashoffset: 0; }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .ktha-draw { animation: none; stroke-dashoffset: 0; }
-        }
-      `}</style>
     </main>
   );
 }

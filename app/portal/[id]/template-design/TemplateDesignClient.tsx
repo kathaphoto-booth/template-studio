@@ -19,13 +19,6 @@ import { supabase } from "@/lib/supabase";
 import { SERVICE_TIERS } from "@/lib/serviceTiers";
 import { Carousel } from "@/components/ui/Carousel";
 
-// KTHA brass-ring mark — drawn as the closing stroke on confirmation.
-const KTHA_MARK_PATH =
-  "M 40,0 L 40,12 M 40,6 L 46,0 M 40,6 L 46,12 " + // K
-  "M 50,0 L 56,0 M 53,0 L 53,12 " + // T
-  "M 60,0 L 60,12 M 60,6 L 66,6 M 66,0 L 66,12 " + // H
-  "M 70,12 L 73,0 L 76,12 M 71.5,8 L 74.5,8"; // A
-
 // Filter changes glide via the View Transitions API when available.
 function withViewTransition(update: () => void) {
   if (typeof document !== "undefined" && "startViewTransition" in document) {
@@ -740,23 +733,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
 
             {confirmed ? (
               <div className="px-8 py-16 text-center">
-                {/* KTHA brass-ring closing stroke — permission to leave the loom */}
-                <div className="flex justify-center mb-6" aria-hidden>
-                  <svg width="110" height="36" viewBox="36 -4 44 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      className="ktha-confirm-draw"
-                      d={KTHA_MARK_PATH}
-                      stroke={saveWarning ? "#A35C44" : "#EAE2D5"}
-                      strokeWidth="1.1"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <span className="sr-only" role="status" aria-live="polite">
-                  Katha maker&apos;s mark — complete
-                </span>
-                <div className="text-3xl" style={{ fontFamily: "var(--font-fraunces), serif", color: "#EAE2D5" }}>Your design is saved</div>
+                <div className="text-3xl" role="status" aria-live="polite" style={{ fontFamily: "var(--font-fraunces), serif", color: "#EAE2D5" }}>Your design is saved</div>
                 <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#9C958A" }}>
                   {saveWarning ? (
                     <>
@@ -776,17 +753,6 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                 >
                   Back to gallery
                 </button>
-                <style>{`
-                  .ktha-confirm-draw {
-                    stroke-dasharray: 160;
-                    stroke-dashoffset: 160;
-                    animation: ktha-confirm-stroke 2s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-                  }
-                  @keyframes ktha-confirm-stroke { to { stroke-dashoffset: 0; } }
-                  @media (prefers-reduced-motion: reduce) {
-                    .ktha-confirm-draw { animation: none; stroke-dashoffset: 0; }
-                  }
-                `}</style>
               </div>
             ) : (
               <div className="flex flex-col md:grid md:grid-cols-[11fr_9fr] gap-6 md:gap-8 p-4 md:p-8">

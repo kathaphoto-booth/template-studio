@@ -200,7 +200,7 @@ export default function Homepage() {
         .site-nav, .foot-nav, label, button, .u-link, .sacred-link {
           font-family: var(--font-sans), sans-serif;
         }
-        .mono, .kicker, .stamp, .ord, .index, .cap, .foot-meta, .makers-mark .mono {
+        .mono, .kicker, .stamp, .ord, .index, .cap, .foot-meta {
           font-family: var(--font-jetbrains), monospace;
         }
 
@@ -526,8 +526,6 @@ export default function Homepage() {
           margin-top: clamp(64px, 9vh, 110px);
           display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap;
         }
-        .makers-mark { display: inline-flex; align-items: center; gap: 0.8rem; color: var(--champagne); }
-        .makers-mark .mono { letter-spacing: 0.22em; color: var(--champagne); }
 
         /* Reveal transitions */
         html.js .reveal {
@@ -904,7 +902,7 @@ export default function Homepage() {
                 href="mailto:kathabooth@gmail.com?subject=Commission%20Inquiry"
                 style={{ backgroundColor: '#8C382A' }}
               >
-                Commission KTHA
+                Commission
               </a>
               
               <br />
@@ -929,13 +927,6 @@ export default function Homepage() {
             </div>
             <div className="foot-bottom">
               <span className="foot-meta text-[#9C958A]">© 2026 Katha Photo Booth</span>
-              <span className="makers-mark" role="img" aria-label="Katha maker's mark, complete">
-                <svg width={200} height={24} viewBox="0 0 200 24" aria-hidden="true" focusable="false">
-                  <line x1={0} y1={12} x2={158} y2={12} stroke="#C4B59D" strokeWidth={1}></line>
-                  <circle cx={172} cy={12} r={6} fill="none" stroke="#C4B59D" strokeWidth={1}></circle>
-                </svg>
-                <span className="mono text-[#C4B59D]">KTHA</span>
-              </span>
             </div>
           </div>
         </footer>
