@@ -13,22 +13,31 @@ function safeEqual(a: string, b: string): boolean {
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
 // simple HTTP Basic auth check.
 //
-// PROTECTED   /          → studio UI (admin tweak)
-//             /api/generate, /api/generate-theme → AI cost surface
+// PROTECTED   /studio, /studio/*       → studio UI (admin tweak)
+//             /admin,  /admin/*        → lead list + per-lead detail (PII)
+//             /api/admin/*             → admin mutations (status, notify)
+//             /api/generate*           → AI cost surface (future)
 //
-// PUBLIC      /portal/[id]/template-design   → client-facing template gallery
-//             /api/selection                 → client submits their pick (POST only)
+// PUBLIC      /                        → marketing homepage (Fable 6 port)
+//             /portal/[id]/...         → client-facing template gallery
+//             /api/selection, /api/inquiry, /api/upload-url, /api/webhooks/*
 //
 // Set STUDIO_PASSWORD in env. Username can be anything (we ignore it).
 // If STUDIO_PASSWORD is unset, gate is bypassed (so local dev still works
 // without it). Set it in Vercel env vars before sharing the URL.
 // ──────────────────────────────────────────────────────────────────────
 
-const PROTECTED_PATHS = ["/studio", "/admin"];
-const PROTECTED_PREFIXES = ["/api/generate", "/api/admin"];
+// Exact path OR any sub-path under these bases is protected. Sub-path match
+// uses the `base + "/"` boundary so "/admin" never accidentally matches
+// "/administrator" — and, critically, "/admin/<lead-uuid>" IS gated (the
+// earlier exact-match list let it through, leaking lead PII to anon callers).
+const PROTECTED_BASES = ["/studio", "/admin", "/api/admin"];
+// Loose string prefixes — anything starting with these is protected. Kept
+// loose so "/api/generate" also covers a future "/api/generate-theme".
+const PROTECTED_PREFIXES = ["/api/generate"];
 
 function isProtected(pathname: string): boolean {
-  if (PROTECTED_PATHS.includes(pathname)) return true;
+  if (PROTECTED_BASES.some((b) => pathname === b || pathname.startsWith(b + "/"))) return true;
   return PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
 }
 
