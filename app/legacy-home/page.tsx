@@ -455,26 +455,7 @@ export default function Homepage() {
         .vince-dark .kicker, .vince-dark .cap, .vince-dark .body-copy { color: var(--katha-vince-taupe); }
         .vince-dark .display { color: var(--katha-vince-cream); }
         
-        .barong-texture {
-          position: relative;
-        }
-        .barong-texture::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          z-index: 0;
-          background-image: url("/textures/barong-white-canonical.jpg");
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
-          mix-blend-mode: multiply;
-          opacity: 0.15;
-          pointer-events: none;
-        }
-        .barong-texture > * {
-          position: relative;
-          z-index: 1;
-        }
+
 
         .voices {
           background-image: none; background-color: var(--ink);
@@ -660,7 +641,7 @@ export default function Homepage() {
           </section>
 
           {/* 2. PHILOSOPHY SECTION (7/5 Grid) */}
-          <section className="section philosophy barong-texture" style={{ backgroundColor: '#EAE2D5', color: 'var(--katha-vince-near-black)' }} id="philosophy" aria-labelledby="philosophy-h">
+          <section className="section philosophy section--barong" id="philosophy" aria-labelledby="philosophy-h">
             <div className="wrap inner">
               <p className="kicker reveal">01 · Philosophy</p>
               <h2 id="philosophy-h" className="display reveal d2">To compose a story.</h2>
