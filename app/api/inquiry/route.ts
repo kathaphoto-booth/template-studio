@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase";
+import { checkRateLimit, getClientIp, hashIp } from "@/lib/rateLimit";
 
 type InquiryPayload = {
   client_name: string;
@@ -178,11 +179,33 @@ The Katha Team
 
 // ── POST API Handler ──
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const ipHash = hashIp(ip);
+  const rateLimitResult = await checkRateLimit(`inquiry:${ipHash}`, 5, 3600);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { ok: false, error: "Too many inquiries. Please try again later." },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "5",
+          "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+          "X-RateLimit-Reset": rateLimitResult.reset,
+        },
+      }
+    );
+  }
+
   const appUrl = process.env.APP_URL;
   const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined;
-  const baseUrl = appUrl || vercelUrl || 'http://localhost:3000';
+  
+  const forwardedHost = req.headers.get("x-forwarded-host");
+  const host = req.headers.get("host");
+  const requestHost = forwardedHost || host;
+  const baseUrl = requestHost ? `https://${requestHost}` : (appUrl || vercelUrl || 'http://localhost:3000');
 
-  if (!appUrl && !vercelUrl && process.env.NODE_ENV === 'production') {
+  if (!appUrl && !vercelUrl && !requestHost && process.env.NODE_ENV === 'production') {
     return NextResponse.json({error:'Server configuration error'},{status:503});
   }
 

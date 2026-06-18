@@ -11,9 +11,10 @@ export type ServiceTier = {
   price: number; // USD
   blackAndWhite: boolean;
   narrative: string;
+  narrativeLong: string;
   inclusions: string[];
-  heroMedia?: string; // path to hero video or image
-  galleryMedia?: string; // path to gallery image or video
+  hero: string;
+  gallery: string[];
 };
 
 export const SERVICE_TIERS: readonly ServiceTier[] = [
@@ -25,16 +26,16 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     blackAndWhite: false,
     narrative:
       "A timeless oak experience curated for heritage venues. Studio DSLR optics deliver full-color precision, blending seamlessly into historic spaces.",
+    narrativeLong:
+      "Dark oak hardware, studio-grade optics, high-fidelity color. Built to settle into historic estates and grand celebrations without intruding.",
     inclusions: [
-      "Four hours of continuous portraiture",
-      "Studio DSLR sensors calibrated for true-to-life color",
-      "Early arrival, clean install, no exposed cabling",
-      "One installation director guiding composition and light",
+      "Four hours, hand-operated throughout",
+      "Studio DSLR sensors calibrated for true color",
       "Unlimited instant matte prints",
-      "Private high-resolution gallery after the event",
+      "Private high-resolution gallery after",
     ],
-    heroMedia: "/media/hero-signature.mp4",
-    galleryMedia: "/media/gallery-signature.jpg",
+    hero: "/installations/tier-signature.jpg",
+    gallery: ["/installations/insitu-oak.jpg", "/installations/archive.jpg"],
   },
   {
     id: "editorial-oak",
@@ -44,16 +45,16 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     blackAndWhite: true,
     narrative:
       "Our flagship oak experience, curated for striking black-and-white portraiture. Timeless contrast and deep shadows that demand to be printed.",
+    narrativeLong:
+      "Our flagship. Dark oak hardware configured for refined black-and-white frames — stark, high-contrast portraits that hold their weight for years.",
     inclusions: [
       "Four hours of black-tie portraiture",
-      "Black-and-white rendering tuned for luminous skin and deep shadow",
-      "Full site integration, precise hardware mapping, no exposed cabling",
-      "One installation director managing the light space",
-      "Unlimited instant archival black-and-white matte prints",
-      "Private high-resolution gallery after the event",
+      "Black-and-white rendering tuned for skin and shadow",
+      "Unlimited archival matte prints",
+      "Private high-resolution gallery after",
     ],
-    heroMedia: "/media/hero-editorial.mp4",
-    galleryMedia: "/media/gallery-editorial.jpg",
+    hero: "/installations/tier-editorial.jpg",
+    gallery: ["/installations/heirlooms.jpg", "/installations/archive.jpg"],
   },
   {
     id: "modernist-white",
@@ -63,16 +64,16 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     blackAndWhite: false,
     narrative:
       "A minimalist white installation curating a clean, bright experience. Studio DSLR optics capture full-color moments for contemporary rooms.",
+    narrativeLong:
+      "A sleek white shell with studio-grade optics — a clean, luminous presence for contemporary galleries and modern industrial rooms.",
     inclusions: [
-      "Four hours of continuous portraiture",
-      "Studio DSLR sensors tuned for bright, sharp color",
-      "Fast install with hidden power and data routing",
-      "One installation director holding grid symmetry",
-      "Unlimited instant matte prints",
-      "Private high-resolution gallery after the event",
+      "Four hours, hand-operated throughout",
+      "Bright, true-to-life color rendering",
+      "Fast install with hidden power and data",
+      "Unlimited instant prints + private gallery",
     ],
-    heroMedia: "/media/hero-modernist.mp4",
-    galleryMedia: "/media/gallery-modernist.jpg",
+    hero: "/installations/tier-modernist.jpg",
+    gallery: ["/installations/insitu-white.jpg", "/installations/color.jpg"],
   },
   {
     id: "monochrome-white",
@@ -82,16 +83,16 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     blackAndWhite: true,
     narrative:
       "A timeless white installation tuned for sharp black-and-white portraiture. High-contrast experiences curated for modern spaces.",
+    narrativeLong:
+      "White hardware tuned for refined black-and-white frames — high-contrast, razor-sharp portraits for clean-lined lofts and corporate galas.",
     inclusions: [
       "Four hours of editorial portraiture",
-      "High-contrast black-and-white rendering that sharpens facial structure",
-      "Low-footprint install with full wire containment",
-      "One installation director directing guest movement",
-      "Unlimited instant high-contrast matte prints",
-      "Private high-resolution gallery after the event",
+      "High-contrast monochrome rendering",
+      "Low-footprint install, full wire containment",
+      "Unlimited archival prints + private gallery",
     ],
-    heroMedia: "/media/hero-monochrome.mp4",
-    galleryMedia: "/media/gallery-monochrome.jpg",
+    hero: "/installations/tier-monochrome.jpg",
+    gallery: ["/installations/legacy.jpg", "/installations/archive.jpg"],
   },
 ] as const;
 

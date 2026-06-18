@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase";
 import { isServiceTierId, getServiceTier } from "@/lib/serviceTiers";
+import { checkRateLimit, getClientIp, hashIp } from "@/lib/rateLimit";
 
 
 // ──────────────────────────────────────────────────────────────────────
@@ -310,6 +311,24 @@ async function dispatchSupabase(s: Selection): Promise<{ ok: boolean; detail: st
 
 // ── POST handler ──────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const ipHash = hashIp(ip);
+  const rateLimitResult = await checkRateLimit(`selection:${ipHash}`, 10, 60);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { ok: false, error: "Too many template selections. Please try again later." },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "10",
+          "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+          "X-RateLimit-Reset": rateLimitResult.reset,
+        },
+      }
+    );
+  }
+
   let body: any;
   try { body = await req.json(); }
   catch { return NextResponse.json({ ok: false, error: "invalid json" }, { status: 400 }); }

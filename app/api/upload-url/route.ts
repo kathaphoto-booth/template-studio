@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { supabaseAdmin } from "@/lib/supabase";
+import { checkRateLimit, getClientIp, hashIp } from "@/lib/rateLimit";
 
 // ──────────────────────────────────────────────────────────────────────
 // /api/upload-url — issues a presigned upload slot in the private
@@ -20,6 +21,24 @@ const EXT: Record<string, string> = {
 };
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const ipHash = hashIp(ip);
+  const rateLimitResult = await checkRateLimit(`upload_url:${ipHash}`, 15, 60);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { ok: false, error: "Too many uploads. Please try again later." },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "15",
+          "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+          "X-RateLimit-Reset": rateLimitResult.reset,
+        },
+      }
+    );
+  }
+
   if (!supabaseAdmin) {
     return NextResponse.json(
       { ok: false, error: "storage not configured" },

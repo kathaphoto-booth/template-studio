@@ -1032,9 +1032,22 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                             <span className="text-[10px] uppercase tracking-[0.16em]" style={{ color: "#5A564E" }}>
                               {t.material} · ${t.price.toLocaleString()}
                             </span>
-                            <span className="text-xs leading-relaxed font-serif" style={{ color: "#5A564E" }}>
-                              {t.narrative}
-                            </span>
+                            <div className="flex flex-col gap-3 mt-2">
+                              <div className="w-full aspect-[4/3] relative overflow-hidden bg-[#C4B59D]/20">
+                                <img src={t.hero} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                              </div>
+                              <span className="text-xs leading-relaxed font-serif" style={{ color: "#5A564E" }}>
+                                {t.narrativeLong}
+                              </span>
+                              <ul className="text-[9px] uppercase tracking-[0.12em] text-[#5A564E] mt-1 flex flex-col gap-[2px]">
+                                {t.inclusions.map((inc, i) => (
+                                  <li key={i} className="flex items-start gap-2">
+                                    <span className="text-[#C4B59D]">•</span>
+                                    <span className="leading-tight mt-[1px]">{inc}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
                           </button>
                         );
                       })}
