@@ -2,11 +2,11 @@ export function mapFontToVar(fontStr: string | null | undefined): string {
   if (!fontStr) return "var(--font-sans), sans-serif";
   const f = fontStr.toLowerCase();
   
-  if (f.includes('fraunces')) return "var(--font-fraunces), serif";
+  // Fraunces retired; use Playfair Display via Playfair mapping elsewhere
   if (f.includes('cinzel')) return "var(--font-cinzel), serif";
   if (f.includes('playfair')) return "var(--font-serif), serif";
   if (f.includes('bodoni')) return "var(--font-bodoni), serif";
-  if (f.includes('eb garamond')) return "var(--font-eb-garamond), serif";
+  if (f.includes('eb garamond')) return "var(--font-hanken), sans-serif";
   if (f.includes('italiana')) return "var(--font-italiana), serif";
   if (f.includes('aboreto')) return "var(--font-aboreto), sans-serif";
   if (f.includes('great vibes')) return "var(--font-great-vibes), cursive";

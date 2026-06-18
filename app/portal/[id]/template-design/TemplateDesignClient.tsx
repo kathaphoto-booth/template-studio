@@ -183,7 +183,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
     {
       id: "classic",
       title: "The Classic Atelier",
-      description: "Timeless designs, elegant typography, and traditional wedding details.",
+      description: "Classic designs, elegant typography, and traditional wedding details.",
       filterFn: (p: PhotoboothPreset) => !isSignature(p)
     }
   ];
@@ -482,7 +482,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
             <p className="text-[11px] uppercase tracking-[0.12em]" style={{ color: "#5A564E" }}>
               Katha Photo Booth
             </p>
-            <h1 className="mt-3 text-3xl md:text-5xl" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "-0.015em", lineHeight: 1.02 }}>
+            <h1 className="mt-3 text-3xl md:text-5xl" style={{ fontFamily: "var(--font-serif), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "-0.015em", lineHeight: 1.02 }}>
               Choose your style
             </h1>
             <p className="mt-3 text-sm max-w-xl mx-auto md:mx-0 leading-relaxed" style={{ color: "#5A564E" }}>
@@ -565,9 +565,9 @@ export default function TemplateDesignClient({ id }: { id: string }) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-[10px] uppercase tracking-[0.3em] font-mono" style={{ color: "#9C958A" }}>COMMISSIONED EDITIONS</p>
-            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "-0.015em" }}>Katha Editions</h2>
+            <h2 className="mt-2 text-3xl md:text-4xl" style={{ fontFamily: "var(--font-serif), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96", letterSpacing: "-0.015em" }}>Katha Editions</h2>
             <p className="mt-4 text-xs max-w-2xl mx-auto leading-relaxed opacity-80 font-serif">
-              Behold the studio&apos;s commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, architectural alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event&apos;s identity is presented flawlessly.
+              Behold the studio&apos;s commissioned designs as personalized by our clients. These editions demonstrate our strict adherence to intentional margins, precise alignment, and quiet restraint. Our studio executes every frame with precision to ensure your event&apos;s identity is presented flawlessly.
             </p>
           </div>
 
@@ -596,7 +596,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                   {/* Text container: distilled to pure essence */}
                   <div className="w-full md:col-span-5 p-4 md:p-8">
                     <span className="text-[9px] uppercase tracking-[0.2em] font-mono text-[#C4B59D]">Classic Tier</span>
-                    <h3 className="mt-3 text-4xl font-normal text-[#EAE2D5]" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1", letterSpacing: "-0.015em" }}>Tradition Gold Luxe</h3>
+                    <h3 className="mt-3 text-4xl font-normal text-[#EAE2D5]" style={{ fontFamily: "var(--font-serif), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1", letterSpacing: "-0.015em" }}>Tradition Gold Luxe</h3>
                     <p className="mt-4 text-xs text-[#9C958A] leading-relaxed font-light font-serif">
                       Concentric rules in delicate gold-foil shimmer with floating corner tie-ins.
                     </p>
@@ -629,7 +629,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                   {/* Text container: distilled to pure essence */}
                   <div className="w-full md:col-span-5 p-4 md:p-8 md:order-1">
                     <span className="text-[9px] uppercase tracking-[0.2em] font-mono text-[#C4B59D]">Signature Tier</span>
-                    <h3 className="mt-3 text-4xl font-normal text-[#EAE2D5]" style={{ fontFamily: "var(--font-fraunces), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1", letterSpacing: "-0.015em" }}>Tracy & Prince Signature</h3>
+                    <h3 className="mt-3 text-4xl font-normal text-[#EAE2D5]" style={{ fontFamily: "var(--font-serif), serif", fontVariationSettings: "'SOFT' 100, 'WONK' 1", letterSpacing: "-0.015em" }}>Tracy & Prince Signature</h3>
                     <p className="mt-4 text-xs text-[#9C958A] leading-relaxed font-light font-serif">
                       Romantic Parisian calligraphy bounded by a dual-line concentric framework.
                     </p>
@@ -650,7 +650,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
           return (
             <div key={collection.id} className="mb-20">
               <div className="px-6 md:px-12 mb-10 flex flex-col">
-                <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "var(--font-fraunces), serif" }}>
+                <h2 className="text-3xl font-normal tracking-wide text-[#241E1A]" style={{ fontFamily: "var(--font-serif), serif" }}>
                   {collection.title}
                 </h2>
                 <p className="text-[13px] mt-2 text-[#5A5D5A] max-w-lg font-light leading-relaxed">
@@ -683,7 +683,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                           </div>
                         </div>
                         <div className="mt-5 text-center w-full px-2 transition-opacity duration-300">
-                          <div className="text-[15px] text-[#241E1A]" style={{ fontFamily: "var(--font-fraunces), serif" }}>
+                          <div className="text-[15px] text-[#241E1A]" style={{ fontFamily: "var(--font-serif), serif" }}>
                             {p.name.replace("Katha Signature — ", "")}
                           </div>
                           {isSignature(p) && (
@@ -733,7 +733,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
 
             {confirmed ? (
               <div className="px-8 py-16 text-center">
-                <div className="text-3xl" role="status" aria-live="polite" style={{ fontFamily: "var(--font-fraunces), serif", color: "#EAE2D5" }}>Your design is saved</div>
+                <div className="text-3xl" role="status" aria-live="polite" style={{ fontFamily: "var(--font-serif), serif", color: "#EAE2D5" }}>Your design is saved</div>
                 <p className="mt-3 text-sm max-w-sm mx-auto" style={{ color: "#9C958A" }}>
                   {saveWarning ? (
                     <>
@@ -783,7 +783,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                   <p className="text-[11px] uppercase tracking-[0.25em]" style={{ color: "#5A564E" }}>
                     {isSignature(selected) ? "Katha Signature" : "Classic Collection"}
                   </p>
-                  <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "var(--font-fraunces), serif" }}>
+                  <h2 id="katha-modal-title" className="mt-2 text-2xl" style={{ fontFamily: "var(--font-serif), serif" }}>
                     {selected.name.replace("Katha Signature — ", "")}
                   </h2>
                   <p className="mt-3 text-[13px] leading-relaxed" style={{ color: "#5A564E" }}>
@@ -1026,11 +1026,11 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                             className="flex flex-col gap-2 p-4 text-left bg-[#EAE2D5]/30 hover:bg-[#EAE2D5]/50 focus:outline-none focus:ring-1 focus:ring-[#241E1A] transition-colors cursor-pointer"
                             style={{ border: isSelected ? "1px solid #241E1A" : "1px solid #C4B59D", borderRadius: 0 }}
                           >
-                            <span className="text-lg leading-tight" style={{ fontFamily: "var(--font-fraunces), serif", color: "#241E1A" }}>
+                            <span className="text-lg leading-tight" style={{ fontFamily: "var(--font-serif), serif", color: "#241E1A" }}>
                               {t.name}
                             </span>
                             <span className="text-[10px] uppercase tracking-[0.16em]" style={{ color: "#5A564E" }}>
-                              {t.architecture} · ${t.price.toLocaleString()}
+                              {t.material} · ${t.price.toLocaleString()}
                             </span>
                             <span className="text-xs leading-relaxed font-serif" style={{ color: "#5A564E" }}>
                               {t.narrative}
@@ -1063,7 +1063,7 @@ export default function TemplateDesignClient({ id }: { id: string }) {
                     aria-describedby={!serviceTier ? "katha-submit-hint" : undefined}
                     className="mt-6 w-full py-4 text-xs uppercase tracking-[0.12em] rounded-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-[#8C382A] hover:bg-[#6E2C20] text-[#EAE2D5]"
                   >
-                    {isSubmitting ? "Submitting..." : "Submit Design Inquiry"}
+                    {isSubmitting ? "Submitting..." : "Send Inquiry"}
                   </button>
                   <div aria-live="polite">
                     {!serviceTier && (

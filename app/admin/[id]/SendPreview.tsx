@@ -27,7 +27,7 @@ export function SendPreview({ leadHash }: { leadHash: string }) {
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Optional note to include in the email…"
         rows={3}
-        style={{ width: "100%", background: "rgba(196,181,157,0.07)", border: "1px solid rgba(196,181,157,0.2)", color: "#EAE2D5", fontFamily: "'EB Garamond', Georgia, serif", fontSize: "15px", padding: "12px 16px", resize: "vertical", outline: "none", boxSizing: "border-box", marginBottom: "14px" }}
+        style={{ width: "100%", background: "rgba(196,181,157,0.07)", border: "1px solid rgba(196,181,157,0.2)", color: "#EAE2D5", fontFamily: "'Hanken Grotesk', Georgia, serif", fontSize: "15px", padding: "12px 16px", resize: "vertical", outline: "none", boxSizing: "border-box", marginBottom: "14px" }}
       />
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
         <button

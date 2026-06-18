@@ -3,8 +3,13 @@
 @theme {
   --font-sans: var(--font-sans), system-ui, sans-serif;
   --font-serif: var(--font-serif), Georgia, serif;
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "EB Garamond", Georgia, serif;
+  /* Vince-Alignment 2.1 — portal CHROME bends to Vince's lead pair (free near-match:
+     Playfair display + Hanken body, hot-swap to IvyMode/Proxima Nova when licensed).
+     Playfair Display + Hanken Grotesk stay imported in lib/fonts.ts and are retained ONLY for the
+     Signature template DESIGNS (lib/templates.ts LUXURY_FONTS) — they no longer lead
+     portal chrome. Flagged for Jed. */
+  --font-display: var(--font-serif), Georgia, serif;
+  --font-body: var(--font-hanken), system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Katha palette — 9 canon tokens (UI + narrative) */
@@ -22,6 +27,22 @@
   /* §VIII WCAG-AA muted text on Piña Ecru ground (replaces unsafe #9C958A) */
   --color-katha-ecru-muted: #5A564E;
   --color-katha-ecru-muted-soft: #6E6A62;
+
+  /* Vince-Alignment 2.1 — Vince's storefront scale (parallel to Katha canon, not a
+     replacement). Loko Rust sacred CTA unchanged. */
+  --color-katha-vince-cream:      #F6F3EC;
+  --color-katha-vince-beige:      #ECE4DA;
+  --color-katha-vince-taupe:      #7B736B;
+  --color-katha-vince-walnut:     #574C3F;
+  --color-katha-vince-near-black: #36302A;
+}
+
+/* Literal-name aliases so direct var(--katha-vince-*) references resolve (parallel
+   naming used by the proposal-clone). Mirrors the @theme --color-katha-vince-* scale. */
+:root {
+  --katha-vince-cream: #F6F3EC; --katha-vince-beige: #ECE4DA;
+  --katha-vince-taupe: #7B736B; --katha-vince-walnut: #574C3F;
+  --katha-vince-near-black: #36302A;
 }
 
 /* Wabi-Sabi patina — global feTurbulence overlay (BRAND_GENESIS_PLAN §V, Stage 3 H10) */

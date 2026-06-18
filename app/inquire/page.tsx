@@ -80,7 +80,7 @@ export default function InquirePage() {
             ref={headingRef}
             tabIndex={-1}
             style={{
-              fontFamily: "Fraunces, serif",
+              fontFamily: "var(--font-display), Georgia, serif",
               fontWeight: 400,
               fontSize: "2rem",
               letterSpacing: "-0.015em",
@@ -91,7 +91,7 @@ export default function InquirePage() {
           </h1>
           <p
             style={{
-              fontFamily: "'EB Garamond', serif",
+              fontFamily: "var(--font-body), Georgia, serif",
               fontSize: "1.05rem",
               lineHeight: 1.6,
             }}
@@ -143,14 +143,14 @@ export default function InquirePage() {
       >
         <h1
           style={{
-            fontFamily: "Fraunces, serif",
+            fontFamily: "var(--font-display), Georgia, serif",
             fontWeight: 400,
             fontSize: "2rem",
             letterSpacing: "-0.015em",
             margin: 0,
           }}
         >
-          Commission Katha
+          Begin your inquiry
         </h1>
         <label
           style={{
@@ -173,7 +173,7 @@ export default function InquirePage() {
               padding: ".8rem",
               border: "1px solid #C4B59D",
               background: "transparent",
-              fontFamily: "'EB Garamond', serif",
+              fontFamily: "var(--font-body), Georgia, serif",
               fontSize: "1rem",
               borderRadius: 0,
             }}
@@ -201,7 +201,7 @@ export default function InquirePage() {
               padding: ".8rem",
               border: "1px solid #C4B59D",
               background: "transparent",
-              fontFamily: "'EB Garamond', serif",
+              fontFamily: "var(--font-body), Georgia, serif",
               fontSize: "1rem",
               borderRadius: 0,
             }}
@@ -229,7 +229,7 @@ export default function InquirePage() {
               padding: ".8rem",
               border: "1px solid #C4B59D",
               background: "transparent",
-              fontFamily: "'EB Garamond', serif",
+              fontFamily: "var(--font-body), Georgia, serif",
               fontSize: "1rem",
               borderRadius: 0,
             }}
@@ -240,7 +240,7 @@ export default function InquirePage() {
             role="alert"
             style={{
               color: "#241E1A",
-              fontFamily: "'EB Garamond', serif",
+              fontFamily: "var(--font-body), Georgia, serif",
               margin: 0,
             }}
           >
@@ -264,7 +264,7 @@ export default function InquirePage() {
             cursor: busy ? "not-allowed" : "pointer",
           }}
         >
-          {busy ? "Sending…" : "Begin"}
+          {busy ? "Sending…" : "Send Inquiry"}
         </button>
       </form>
     </main>

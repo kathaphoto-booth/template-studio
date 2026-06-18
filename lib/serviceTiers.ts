@@ -7,22 +7,24 @@ export type ServiceTierId =
 export type ServiceTier = {
   id: ServiceTierId;
   name: string;
-  architecture: "Oak" | "White";
+  material: "Oak" | "White";
   price: number; // USD
   blackAndWhite: boolean;
   narrative: string;
   inclusions: string[];
+  heroMedia?: string; // path to hero video or image
+  galleryMedia?: string; // path to gallery image or video
 };
 
 export const SERVICE_TIERS: readonly ServiceTier[] = [
   {
     id: "signature-oak",
     name: "Signature Installation",
-    architecture: "Oak",
+    material: "Oak",
     price: 949,
     blackAndWhite: false,
     narrative:
-      "Weathered oak hardware with studio DSLR optics and full-color calibration. Built to sit inside heritage venues and historic estates without asking for attention.",
+      "A timeless oak experience curated for heritage venues. Studio DSLR optics deliver full-color precision, blending seamlessly into historic spaces.",
     inclusions: [
       "Four hours of continuous portraiture",
       "Studio DSLR sensors calibrated for true-to-life color",
@@ -31,15 +33,17 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
       "Unlimited instant matte prints",
       "Private high-resolution gallery after the event",
     ],
+    heroMedia: "/media/hero-signature.mp4",
+    galleryMedia: "/media/gallery-signature.jpg",
   },
   {
     id: "editorial-oak",
     name: "Editorial Installation",
-    architecture: "Oak",
+    material: "Oak",
     price: 1149,
     blackAndWhite: true,
     narrative:
-      "The flagship oak configuration, set to a black-and-white skin-rendering profile. Stark, high-contrast portraiture that holds up in print.",
+      "Our flagship oak experience, curated for striking black-and-white portraiture. Timeless contrast and deep shadows that demand to be printed.",
     inclusions: [
       "Four hours of black-tie portraiture",
       "Black-and-white rendering tuned for luminous skin and deep shadow",
@@ -48,15 +52,17 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
       "Unlimited instant archival black-and-white matte prints",
       "Private high-resolution gallery after the event",
     ],
+    heroMedia: "/media/hero-editorial.mp4",
+    galleryMedia: "/media/gallery-editorial.jpg",
   },
   {
     id: "modernist-white",
     name: "Modernist Installation",
-    architecture: "White",
+    material: "White",
     price: 749,
     blackAndWhite: false,
     narrative:
-      "A minimalist white chassis with studio DSLR optics and full-color calibration. A clean, bright presence for contemporary galleries and industrial rooms.",
+      "A minimalist white installation curating a clean, bright experience. Studio DSLR optics capture full-color moments for contemporary rooms.",
     inclusions: [
       "Four hours of continuous portraiture",
       "Studio DSLR sensors tuned for bright, sharp color",
@@ -65,15 +71,17 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
       "Unlimited instant matte prints",
       "Private high-resolution gallery after the event",
     ],
+    heroMedia: "/media/hero-modernist.mp4",
+    galleryMedia: "/media/gallery-modernist.jpg",
   },
   {
     id: "monochrome-white",
     name: "Monochrome Installation",
-    architecture: "White",
+    material: "White",
     price: 949,
     blackAndWhite: true,
     narrative:
-      "White hardware set to a black-and-white rendering profile. High-contrast, sharp portraiture for clean lines and modern rooms.",
+      "A timeless white installation tuned for sharp black-and-white portraiture. High-contrast experiences curated for modern spaces.",
     inclusions: [
       "Four hours of editorial portraiture",
       "High-contrast black-and-white rendering that sharpens facial structure",
@@ -82,6 +90,8 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
       "Unlimited instant high-contrast matte prints",
       "Private high-resolution gallery after the event",
     ],
+    heroMedia: "/media/hero-monochrome.mp4",
+    galleryMedia: "/media/gallery-monochrome.jpg",
   },
 ] as const;
 

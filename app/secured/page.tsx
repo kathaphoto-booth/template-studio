@@ -33,7 +33,7 @@ export default function SecuredPage() {
         <h1
           className="mt-6 text-4xl md:text-5xl"
           style={{
-            fontFamily: "'Fraunces', Georgia, serif",
+            fontFamily: "var(--font-display), Georgia, serif",
             fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96",
             letterSpacing: '-0.015em',
           }}
@@ -46,7 +46,7 @@ export default function SecuredPage() {
 
         <div
           className="mt-8 space-y-3 text-lg leading-relaxed"
-          style={{ fontFamily: "'EB Garamond', Georgia, serif", color: '#5A564E' }}
+          style={{ fontFamily: "var(--font-body), Georgia, serif", color: '#5A564E' }}
         >
           <p>Your details are in the studio&apos;s hands. We respond within one business day.</p>
           <p style={{ color: '#241E1A' }}>Now choose your edition.</p>
@@ -66,7 +66,7 @@ export default function SecuredPage() {
 
         <p
           className="mt-4 text-[12px]"
-          style={{ fontFamily: "'EB Garamond', Georgia, serif", color: '#6E6A62' }}
+          style={{ fontFamily: "var(--font-body), Georgia, serif", color: '#6E6A62' }}
         >
           Browse the template library and personalize the details — we attach your design to this inquiry.
         </p>

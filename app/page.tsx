@@ -19,11 +19,11 @@ const SELECTED_PRESETS_IDS = [
 function mapFontToVar(fontStr: string | null | undefined): string {
   if (!fontStr) return "var(--font-sans), sans-serif";
   const f = fontStr.toLowerCase();
-  if (f.includes('fraunces')) return "var(--font-fraunces), serif";
+  if (f.includes('fraunces')) return "var(--font-serif), serif"; // Vince-Alignment: Fraunces retired → Playfair Display
   if (f.includes('cinzel')) return "var(--font-cinzel), serif";
   if (f.includes('playfair')) return "var(--font-serif), serif";
   if (f.includes('bodoni')) return "var(--font-bodoni), serif";
-  if (f.includes('eb garamond')) return "var(--font-eb-garamond), serif";
+  if (f.includes('eb garamond')) return "var(--font-hanken), sans-serif"; // Vince-Alignment: EB Garamond retired → Hanken Grotesk
   if (f.includes('italiana')) return "var(--font-italiana), serif";
   if (f.includes('aboreto')) return "var(--font-aboreto), sans-serif";
   if (f.includes('great vibes')) return "var(--font-great-vibes), cursive";
@@ -182,6 +182,11 @@ export default function Homepage() {
           --ecru-mute: #5A564E;
           --ecru-soft: #6E6A62;
           --ease: cubic-bezier(0.22, 1, 0.36, 1);
+          --katha-vince-cream: #F6F3EC;
+          --katha-vince-beige: #ECE4DA;
+          --katha-vince-taupe: #7B736B;
+          --katha-vince-walnut: #574C3F;
+          --katha-vince-near-black: #36302A;
         }
 
         /* Enforce absolute border-radius: 0 on all cards and images */
@@ -191,11 +196,11 @@ export default function Homepage() {
 
         /* Typography posturing */
         .display, h1, h2, h3, h4 {
-          font-family: var(--font-fraunces), Georgia, serif;
+          font-family: var(--font-display), Georgia, serif;
           font-variation-settings: "SOFT" 100, "WONK" 1;
         }
         body, p, blockquote {
-          font-family: var(--font-eb-garamond), Georgia, serif;
+          font-family: var(--font-body), Georgia, serif;
         }
         .site-nav, .foot-nav, label, button, .u-link, .sacred-link {
           font-family: var(--font-sans), sans-serif;
@@ -443,6 +448,34 @@ export default function Homepage() {
           background-color: var(--ink);
           color: var(--ecru);
         }
+        .vince-dark {
+          background-color: var(--katha-vince-near-black);
+          color: var(--katha-vince-cream);
+        }
+        .vince-dark .kicker, .vince-dark .cap, .vince-dark .body-copy { color: var(--katha-vince-taupe); }
+        .vince-dark .display { color: var(--katha-vince-cream); }
+        
+        .barong-texture {
+          position: relative;
+        }
+        .barong-texture::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background-image: url("/textures/barong-soft-white.png");
+          background-size: cover;
+          background-position: center;
+          background-repeat: repeat;
+          mix-blend-mode: multiply;
+          opacity: 0.15;
+          pointer-events: none;
+        }
+        .barong-texture > * {
+          position: relative;
+          z-index: 1;
+        }
+
         .voices {
           background-image: none; background-color: var(--ink);
         }
@@ -460,7 +493,7 @@ export default function Homepage() {
           position: absolute;
           left: 0;
           top: -0.2em;
-          font-family: var(--font-fraunces), Georgia, serif;
+          font-family: var(--font-display), Georgia, serif;
           font-size: clamp(2.6rem, 4vw, 3.6rem);
           line-height: 1;
           color: var(--terracotta);
@@ -587,9 +620,20 @@ export default function Homepage() {
         <main id="main">
 
           {/* 1. HERO SECTION (8/4 Grid) */}
-          <section className="section hero" aria-labelledby="hero-h">
-            <p className="marginalia" aria-hidden="true">KTHA · The portrait, composed · Southern California</p>
-            <div className="wrap">
+          <section className="section hero relative overflow-hidden vince-dark shading-dark" aria-labelledby="hero-h">
+            <video 
+              autoPlay 
+              loop 
+              muted 
+              playsInline 
+              className="absolute inset-0 w-full h-full object-cover opacity-40 z-0 mix-blend-luminosity"
+            >
+              <source src="/hero/hero-legacy.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-[#36302A]/80 via-[#36302A]/50 to-[#36302A] z-0"></div>
+            
+            <p className="marginalia relative z-10" aria-hidden="true" style={{ color: 'var(--katha-vince-taupe)' }}>KTHA · The portrait, composed · Southern California</p>
+            <div className="wrap relative z-10">
               <h1 id="hero-h" className="sr-only">Katha Photo Booth</h1>
               <p className="kicker reveal">DSLR photo booth studio · Southern California</p>
               <p className="display hero-line reveal d2">The portrait, composed.</p>
@@ -616,7 +660,7 @@ export default function Homepage() {
           </section>
 
           {/* 2. PHILOSOPHY SECTION (7/5 Grid) */}
-          <section className="section philosophy" id="philosophy" aria-labelledby="philosophy-h">
+          <section className="section philosophy barong-texture" style={{ backgroundColor: 'var(--katha-vince-beige)', color: 'var(--katha-vince-near-black)' }} id="philosophy" aria-labelledby="philosophy-h">
             <div className="wrap inner">
               <p className="kicker reveal">01 · Philosophy</p>
               <h2 id="philosophy-h" className="display reveal d2">To compose a story.</h2>
@@ -683,28 +727,28 @@ export default function Homepage() {
                 <figure className="plate c-1-8 reveal">
                   <div className="mat">
                     <div className="frame deckle-a r45">
-                      <img src="/brand/photo/13_Champagne_Booth_Stock.jpg" alt="A tower of filled champagne coupes stands on a black table against a soft plaster wall as a hand steadies a green bottle." width={3648} height={5472} loading="lazy" decoding="async" />
+                      <img src="/gallery/work-01-champagne-coupes.jpg" alt="A tower of filled champagne coupes stands on a black table against a soft plaster wall as a hand steadies a green bottle." width={3648} height={5472} loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <figcaption className="cap">Coupes, stacked before toasts.</figcaption>
                 </figure>
                 <figure className="plate c-9-4 lift-m reveal d2">
                   <div className="frame r34">
-                    <img src="/brand/photo/3_Lumiere_Guac_Booth-Stock.jpg" alt="An oval photobooth screen shows a filter preview in front of cream curtains." width={2667} height={4000} loading="lazy" decoding="async" />
+                    <img src="/gallery/work-02-screen-cream-curtain.jpg" alt="An oval photobooth screen shows a filter preview in front of cream curtains." width={2667} height={4000} loading="lazy" decoding="async" />
                   </div>
                   <figcaption className="cap">The screen, cream curtain.</figcaption>
                 </figure>
 
                 <figure className="plate c-1-5 lift-s reveal">
                   <div className="frame r45">
-                    <img src="/brand/photo/105_Western_Rich_Details_Booth_Stock.jpg" alt="Branded photo booth prints lie on a cowhide rug beside a bolo tie, a crystal glass of whiskey, and a ring." width={1067} height={1600} loading="lazy" decoding="async" />
+                    <img src="/gallery/work-03-prints-cowhide.jpg" alt="Branded photo booth prints lie on a cowhide rug beside a bolo tie, a crystal glass of whiskey, and a ring." width={1067} height={1600} loading="lazy" decoding="async" />
                   </div>
                   <figcaption className="cap">Prints rest on cowhide.</figcaption>
                 </figure>
                 <figure className="plate c-6-7 reveal d2">
                   <div className="mat mat-iron">
                     <div className="frame deckle-b r45">
-                      <img src="/brand/photo/12_Western_Rich_Icon_Booth_Stock.jpg" alt="A groom hugs a bride from behind in front of a deep brown curtain while a wooden photo booth and a black cowboy hat sit in the foreground." width={1067} height={1600} loading="lazy" decoding="async" />
+                      <img src="/gallery/work-04-oxblood-curtain.jpg" alt="A groom hugs a bride from behind in front of a deep brown curtain while a wooden photo booth and a black cowboy hat sit in the foreground." width={1067} height={1600} loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <figcaption className="cap">Oxblood curtain, held close.</figcaption>
@@ -712,13 +756,13 @@ export default function Homepage() {
 
                 <figure className="plate c-1-9 reveal">
                   <div className="frame r32">
-                    <img src="/brand/photo/27_Wildflower_Wedding_Booth_Stock.jpg" alt="A bride leans forward to tap a white booth while a smiling man in black stands behind her in a white draped room." width={2560} height={1707} loading="lazy" decoding="async" />
+                    <img src="/gallery/work-05-tap-screen.jpg" alt="A bride leans forward to tap a white booth while a smiling man in black stands behind her in a white draped room." width={2560} height={1707} loading="lazy" decoding="async" />
                   </div>
                   <figcaption className="cap">She taps the screen.</figcaption>
                 </figure>
                 <figure className="plate c-10-3 lift-l reveal d2">
                   <div className="frame r23">
-                    <img src="/brand/photo/39_Glam_Portrait_Guac_Booth_Stock.jpg" alt="A couple in black formalwear embraces quietly against a softly lit white wall." width={1067} height={1600} loading="lazy" decoding="async" />
+                    <img src="/gallery/work-06-formal-black.jpg" alt="A couple in black formalwear embraces quietly against a softly lit white wall." width={1067} height={1600} loading="lazy" decoding="async" />
                   </div>
                   <figcaption className="cap">Formal black, soft wall.</figcaption>
                 </figure>
@@ -726,14 +770,14 @@ export default function Homepage() {
                 <figure className="plate c-1-7 reveal">
                   <div className="mat">
                     <div className="frame deckle-a r45">
-                      <img src="/brand/photo/43_Holiday-Social_Icon_Booth_Stock.jpg" alt="A woman in a champagne pleated dress smiles downward in front of a mottled green wall." width={3491} height={5236} loading="lazy" decoding="async" />
+                      <img src="/gallery/work-07-champagne-pleats.jpg" alt="A woman in a champagne pleated dress smiles downward in front of a mottled green wall." width={3491} height={5236} loading="lazy" decoding="async" />
                     </div>
                   </div>
                   <figcaption className="cap">Champagne pleats, green wall.</figcaption>
                 </figure>
                 <figure className="plate c-8-5 lift-m reveal d2">
                   <div className="frame r34">
-                    <img src="/brand/photo/74_Lumiere_Details_Booth-Stock.jpg" alt="Three branded photobooth prints of a group of friends rest on a polished silver tray." width={2667} height={4000} loading="lazy" decoding="async" />
+                    <img src="/gallery/work-08-prints-silver-tray.jpg" alt="Three branded photobooth prints of a group of friends rest on a polished silver tray." width={2667} height={4000} loading="lazy" decoding="async" />
                   </div>
                   <figcaption className="cap">Three prints, silver tray.</figcaption>
                 </figure>
@@ -891,18 +935,18 @@ export default function Homepage() {
           <section className="section commission" id="commission" aria-labelledby="commission-h">
             <div className="wrap inner">
               <div className="stitch reveal" aria-hidden="true"></div>
-              <p className="kicker reveal">07 · Commission</p>
+              <p className="kicker reveal">07 · Inquiry</p>
               <img className="seal-k reveal d2" src="/brand/brand/logo-paint.png" alt="" width={188} height={232} loading="lazy" decoding="async" />
-              <h2 id="commission-h" className="display reveal d2">Begin the commission.</h2>
+              <h2 id="commission-h" className="display reveal d2">Begin your inquiry.</h2>
               <p className="body-copy reveal d3">Tell us the date and the room. We will compose the rest.</p>
               
               {/* MASTER CTA: EXACTLY ONE LOKO RUST SACRED CTA IN THE PORT */}
-              <a 
-                className="sacred-link cta-sacred reveal d3" 
-                href="mailto:kathabooth@gmail.com?subject=Commission%20Inquiry"
+              <a
+                className="sacred-link cta-sacred reveal d3"
+                href="mailto:kathabooth@gmail.com?subject=Proposal%20Inquiry"
                 style={{ backgroundColor: '#8C382A' }}
               >
-                Commission
+                Begin Your Inquiry
               </a>
               
               <br />
@@ -921,7 +965,7 @@ export default function Homepage() {
               </a>
               <div className="foot-links">
                 <a className="u-link text-xs tracking-widest text-[#EAE2D5] font-medium" href="/secured">View the template gallery</a>
-                <a className="u-link text-xs tracking-widest text-[#EAE2D5] font-medium mt-2" href="mailto:kathabooth@gmail.com?subject=Commission%20Inquiry">kathabooth@gmail.com</a>
+                <a className="u-link text-xs tracking-widest text-[#EAE2D5] font-medium mt-2" href="mailto:kathabooth@gmail.com?subject=Proposal%20Inquiry">kathabooth@gmail.com</a>
                 <span className="foot-meta mt-4 block text-[#9C958A]">Southern California</span>
               </div>
             </div>

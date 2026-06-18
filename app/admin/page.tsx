@@ -67,7 +67,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ page?: 
     return (
     <div>
       <div style={{ marginBottom: "32px", display: "flex", alignItems: "baseline", gap: "16px" }}>
-        <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: "28px", fontWeight: 400, margin: 0, color: "#EAE2D5", letterSpacing: "-0.02em" }}>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", fontWeight: 400, margin: 0, color: "#EAE2D5", letterSpacing: "-0.02em" }}>
           Leads
         </h1>
         <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9C958A" }}>
@@ -163,7 +163,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ page?: 
   } catch (err: any) {
     return (
       <div style={{ color: "#8C382A", padding: "40px", backgroundColor: "rgba(140,56,42,0.1)", border: "1px solid #8C382A", borderRadius: 0 }}>
-        <h2 style={{ fontFamily: "'Fraunces', serif", margin: "0 0 16px 0" }}>Failed to load leads</h2>
+        <h2 style={{ fontFamily: "'Playfair Display', serif", margin: "0 0 16px 0" }}>Failed to load leads</h2>
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", margin: 0 }}>{err.message}</p>
       </div>
     );

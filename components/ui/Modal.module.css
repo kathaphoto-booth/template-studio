@@ -27,7 +27,7 @@
 
 .title {
   margin: 0 0 8px;
-  font-family: var(--font-fraunces), serif;
+  font-family: var(--font-display), serif;
   font-weight: 500;
   color: var(--text-primary, #1A1A1A);
   font-size: 1.5rem;

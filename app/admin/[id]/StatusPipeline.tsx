@@ -71,7 +71,7 @@ export function StatusPipeline({ currentStatus, leadHash }: { currentStatus: str
 
       {isApproved ? (
         <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", letterSpacing: "0.35em", textTransform: "uppercase", color: "#8C382A", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span style={{ fontFamily: "'Fraunces', serif", fontSize: "16px" }}>⬡</span> KTHA — Brass Ring Sealed
+          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px" }}>⬡</span> KTHA — Brass Ring Sealed
         </div>
       ) : (
         <button

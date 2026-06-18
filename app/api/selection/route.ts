@@ -78,7 +78,7 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
   const appUrl = process.env.APP_URL || "https://kathabooth.com";
 
   const tier = s.serviceTier ? getServiceTier(s.serviceTier) : undefined;
-  const tierLabel = tier ? `${tier.name} · ${tier.architecture} — $${tier.price.toLocaleString()}` : "—";
+  const tierLabel = tier ? `${tier.name} · ${tier.material} — $${tier.price.toLocaleString()}` : "—";
 
   // Construct secure, dynamic query parameter link to auto-fill the admin room
   const customizeLink = `${appUrl}/studio?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
@@ -106,12 +106,12 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
 
   // Premium Wabi-Sabi styled HTML email matching Katha aesthetic
   let html = `
-    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#FAF9F5; color:#241E1A; line-height:1.6; border: 1px solid #EAE2D5; border-radius:0;">
+    <div style="font-family:'Hanken Grotesk', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#FAF9F5; color:#241E1A; line-height:1.6; border: 1px solid #EAE2D5; border-radius:0;">
       <p style="font-family:'Libre Franklin', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#8C382A; margin-bottom: 24px; font-weight:600;">
         Katha Template Studio Notification
       </p>
       
-      <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:22px; letter-spacing:-0.01em; margin-bottom: 30px; color:#241E1A; border-bottom: 1px solid #C4B59D; padding-bottom: 12px;">
+      <h2 style="font-family:'Playfair Display', serif; font-weight:400; font-size:22px; letter-spacing:-0.01em; margin-bottom: 30px; color:#241E1A; border-bottom: 1px solid #C4B59D; padding-bottom: 12px;">
         New Template Selection
       </h2>
       

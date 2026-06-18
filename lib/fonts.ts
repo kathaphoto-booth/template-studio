@@ -1,27 +1,26 @@
-import { 
-  Aboreto, 
-  Alex_Brush, 
-  Bodoni_Moda, 
-  Cinzel, 
-  EB_Garamond, 
-  Fraunces, 
-  Great_Vibes, 
-  Italiana, 
-  JetBrains_Mono, 
-  La_Belle_Aurore, 
-  Montserrat, 
-  Parisienne, 
-  Pinyon_Script, 
-  Playfair_Display, 
-  Rochester, 
+import {
+  Aboreto,
+  Alex_Brush,
+  Bodoni_Moda,
+  Cinzel,
+  Great_Vibes,
+  Hanken_Grotesk,
+  Italiana,
+  JetBrains_Mono,
+  La_Belle_Aurore,
+  Montserrat,
+  Parisienne,
+  Pinyon_Script,
+  Playfair_Display,
+  Rochester,
   Sacramento,
   Inter
 } from 'next/font/google';
 
 export const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
-export const ebGaramond = EB_Garamond({ subsets: ['latin'], variable: '--font-eb-garamond', display: 'swap' });
-export const fraunces = Fraunces({ subsets: ['latin'], variable: '--font-fraunces', display: 'swap', axes: ['SOFT', 'WONK'] });
 export const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
+// Vince-Alignment 2.1 — Hanken Grotesk leads portal CHROME body (free near-match for Proxima Nova)
+export const hankenGrotesk = Hanken_Grotesk({ weight: ['300', '400', '500', '600', '700'], subsets: ['latin'], variable: '--font-hanken', display: 'swap' });
 export const aboreto = Aboreto({ weight: "400", subsets: ['latin'], variable: '--font-aboreto', display: 'swap' });
 export const alexBrush = Alex_Brush({ weight: "400", subsets: ['latin'], variable: '--font-alex-brush', display: 'swap' });
 export const bodoniModa = Bodoni_Moda({ subsets: ['latin'], variable: '--font-bodoni', display: 'swap' });
@@ -38,9 +37,8 @@ export const sacramento = Sacramento({ weight: "400", subsets: ['latin'], variab
 
 export const fontClassNames = [
   inter.variable,
-  ebGaramond.variable,
-  fraunces.variable,
   playfair.variable,
+  hankenGrotesk.variable,
   aboreto.variable,
   alexBrush.variable,
   bodoniModa.variable,

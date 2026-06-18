@@ -117,12 +117,12 @@ The Katha Team
   }
 
   const htmlBody = `
-    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius:0;">
+    <div style="font-family:'Hanken Grotesk', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius:0;">
       <p style="font-family:'Libre Franklin', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.25em; color:#5A564E; margin-bottom: 30px;">
         Katha Photo Booth
       </p>
       
-      <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:24px; letter-spacing:-0.01em; margin-bottom: 24px; color:#241E1A;">
+      <h2 style="font-family:'Playfair Display', serif; font-weight:400; font-size:24px; letter-spacing:-0.01em; margin-bottom: 24px; color:#241E1A;">
         Choose your template.
       </h2>
       

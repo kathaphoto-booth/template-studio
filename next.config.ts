@@ -17,6 +17,11 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: process.cwd(),
+  // Vince-Alignment seam: when the static clone (katha-proposal-clone) proxies portal
+  // pages under its own domain, emit absolute asset URLs so /_next/static/* loads from
+  // the portal's own origin. Additive only — moves zero routes, so book.kathabooth.com
+  // keeps serving every existing URL unchanged.
+  assetPrefix: process.env.NODE_ENV === 'production' ? 'https://book.kathabooth.com' : undefined,
   eslint: {
     ignoreDuringBuilds: true,
   },

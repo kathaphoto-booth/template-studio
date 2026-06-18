@@ -9,7 +9,7 @@
 //
 // TWO-TIER MODEL (this is the whole trick):
 //   • Katha Signature presets  (id ^katha- / name "Katha Signature —")
-//       → held to the Katha palette (10 brand tokens + 2 ecru-safe text) + Fraunces display.
+//       → held to the Katha palette (10 brand tokens + 2 ecru-safe text) + Playfair Display.
 //   • Classic presets          (everything else)
 //       → intentionally polished/symmetric wedding aesthetics. EXEMPT from
 //         Katha brand chrome (see .impeccable/ignore.md → classic-template-tier).
@@ -56,8 +56,8 @@ const nearCanon = (hex) => {
 };
 
 // Display font mandate for Signature tier (DESIGN_SYSTEM §3 / drift D1).
-const SIGNATURE_DISPLAY_OK = /fraunces/i;
-const SIGNATURE_DISPLAY_DRIFT = /cormorant|italiana|playfair|cinzel|rochester|parisienne/i;
+const SIGNATURE_DISPLAY_OK = /playfair display|hanken grotesk/i;
+const SIGNATURE_DISPLAY_DRIFT = /cormorant|italiana|fraunces|eb garamond|cinzel|rochester|parisienne/i;
 
 // Forbidden user-facing vocabulary (DESIGN_SYSTEM §6 + §VIII agentic leak).
 const FORBIDDEN_VOCAB = [
@@ -149,7 +149,7 @@ for (const b of blocks) {
   // display font mandate
   const ff = field(b, "fontFamily") || "";
   if (SIGNATURE_DISPLAY_DRIFT.test(ff) && !SIGNATURE_DISPLAY_OK.test(ff))
-    P1.push(`${id} · fontFamily ${ff.trim()} — drift D1: Signature display must be Fraunces`);
+    P1.push(`${id} · fontFamily ${ff.trim()} — drift D1: Signature display must be Playfair Display or Hanken Grotesk`);
 }
 
 // vocab scan over USER-FACING field values only (not code comments)
