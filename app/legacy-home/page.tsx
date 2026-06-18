@@ -455,7 +455,30 @@ export default function Homepage() {
         .vince-dark .kicker, .vince-dark .cap, .vince-dark .body-copy { color: var(--katha-vince-taupe); }
         .vince-dark .display { color: var(--katha-vince-cream); }
         
-
+        .section--barong {
+          position: relative;
+          background-color: #EAE2D5;
+          color: var(--katha-vince-near-black);
+          overflow: hidden;
+        }
+        .section--barong::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background-image: url("/textures/barong-white-canonical.jpg");
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          mix-blend-mode: multiply;
+          opacity: 0.15;
+          pointer-events: none;
+        }
+        .section--barong > * {
+          position: relative;
+          z-index: 1;
+        }
+        .section--barong .kicker, .section--barong .cap, .section--barong .body-copy { color: var(--katha-vince-near-black); }
 
         .voices {
           background-image: none; background-color: var(--ink);
