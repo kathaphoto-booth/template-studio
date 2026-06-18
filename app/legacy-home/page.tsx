@@ -467,8 +467,8 @@ export default function Homepage() {
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
-          mix-blend-mode: luminosity;
-          opacity: 0.08;
+          mix-blend-mode: multiply;
+          opacity: 0.15;
           pointer-events: none;
         }
         .barong-texture > * {
@@ -660,7 +660,7 @@ export default function Homepage() {
           </section>
 
           {/* 2. PHILOSOPHY SECTION (7/5 Grid) */}
-          <section className="section philosophy barong-texture" style={{ backgroundColor: 'var(--katha-vince-beige)', color: 'var(--katha-vince-near-black)' }} id="philosophy" aria-labelledby="philosophy-h">
+          <section className="section philosophy barong-texture" style={{ backgroundColor: '#EAE2D5', color: 'var(--katha-vince-near-black)' }} id="philosophy" aria-labelledby="philosophy-h">
             <div className="wrap inner">
               <p className="kicker reveal">01 · Philosophy</p>
               <h2 id="philosophy-h" className="display reveal d2">To compose a story.</h2>

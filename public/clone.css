@@ -81,7 +81,7 @@ html { scrollbar-gutter: stable; }
    Dark band riding the cream piña/calado lace: a radial dark overlay keeps the
    centered text legible while the lace breathes at the left/right/bottom edges.
    Used ONLY on the two blocks Vince textures — Philosophy (home) + Our Approach. */
-.section--barong { position: relative; background: var(--near-black); color: var(--on-dark); overflow: hidden; }
+.section--barong { position: relative; background: var(--on-dark); color: var(--ink); overflow: hidden; }
 .section--barong > * { position: relative; z-index: 1; }
 .section--barong::before {
   content: ""; position: absolute; inset: 0; z-index: 0;
@@ -89,17 +89,17 @@ html { scrollbar-gutter: stable; }
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  opacity: 0.08;
-  mix-blend-mode: luminosity;
+  opacity: 0.15;
+  mix-blend-mode: multiply;
 }
 .section--barong::after {
   content: ""; position: absolute; inset: 0; z-index: 1;
-  background-image: radial-gradient(ellipse at center, rgba(36,30,26,.7) 20%, rgba(36,30,26,.2) 100%);
+  background-image: radial-gradient(ellipse at center, rgba(234,226,213,0.8) 20%, rgba(234,226,213,0.0) 100%);
   pointer-events: none;
 }
-.section--barong .eyebrow { color: var(--on-dark-soft); }
-.section--barong h1, .section--barong h2, .section--barong h3 { color: var(--on-dark); }
-.section--barong p { color: var(--on-dark-soft); }
+.section--barong .eyebrow { color: var(--ink-soft); }
+.section--barong h1, .section--barong h2, .section--barong h3 { color: var(--ink); }
+.section--barong p { color: var(--ink-soft); }
 
 h1, h2, h3, h4 {
   font-family: var(--display);
