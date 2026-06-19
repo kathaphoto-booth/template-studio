@@ -8,8 +8,11 @@
      Playfair Display + Hanken Grotesk stay imported in lib/fonts.ts and are retained ONLY for the
      Signature template DESIGNS (lib/templates.ts LUXURY_FONTS) — they no longer lead
      portal chrome. Flagged for Jed. */
-  --font-display: var(--font-serif), Georgia, serif;
-  --font-body: var(--font-hanken), system-ui, -apple-system, sans-serif;
+  /* Licensed leads (IvyMode display + Proxima Nova body) sit first so they auto-resolve
+     once the Adobe Fonts kit <link> is added to the layout <head> (Jed action); until then
+     the near-match Playfair (--font-serif) / Hanken (--font-hanken) render. Zero-touch swap. */
+  --font-display: "ivymode", var(--font-serif), Georgia, serif;
+  --font-body: "proxima-nova", var(--font-hanken), system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Katha palette — 9 canon tokens (UI + narrative) */
