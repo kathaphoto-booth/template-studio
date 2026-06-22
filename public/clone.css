@@ -94,7 +94,7 @@ html { scrollbar-gutter: stable; }
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
-  opacity: 0.08;   /* Jed lock 2026-06-19: match the LIVE clone deployment value (his original ~0.08 preference; 0.35 was an AG deviation) */
+  opacity: 0.35;   /* Jed lock 2026-06-19: match the LIVE clone deployment value (his original ~0.08 preference; 0.35 was an AG deviation) */
   mix-blend-mode: multiply;
 }
 .section--barong::after {
