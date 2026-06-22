@@ -7,7 +7,7 @@ export function mapFontToVar(fontStr: string | null | undefined): string {
   if (f.includes('playfair')) return "var(--font-serif), serif";
   if (f.includes('bodoni')) return "var(--font-bodoni), serif";
   if (f.includes('eb garamond')) return "var(--font-hanken), sans-serif";
-  if (f.includes('italiana')) return "var(--font-italiana), serif";
+  if (f.includes('italiana')) return "var(--font-serif), serif";
   if (f.includes('aboreto')) return "var(--font-aboreto), sans-serif";
   if (f.includes('great vibes')) return "var(--font-great-vibes), cursive";
   if (f.includes('alex brush')) return "var(--font-alex-brush), cursive";

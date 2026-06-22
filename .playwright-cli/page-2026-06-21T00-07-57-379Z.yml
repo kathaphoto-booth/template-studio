@@ -1,0 +1,361 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e8]: Katha Pro Studio
+      - generic [ref=e10]: Workspace
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: Preset Catalog
+        - generic [ref=e14]: 61 templates
+      - generic [ref=e15]:
+        - generic [ref=e16]: Format
+        - combobox [ref=e17]:
+          - option "Full PNG" [selected]
+          - option "Luma Overlay"
+          - option "Layers (Zip)"
+          - option "PDF CMYK"
+      - button "Export" [ref=e18] [cursor=pointer]:
+        - img [ref=e19]
+        - generic [ref=e22]: Export
+  - generic [ref=e23]:
+    - complementary [ref=e24]:
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e28]: Layout Format
+          - generic [ref=e29]:
+            - button "2x6 Strip" [ref=e30] [cursor=pointer]
+            - button "4x6 Port" [ref=e31] [cursor=pointer]
+            - button "6x4 Land" [ref=e32] [cursor=pointer]
+        - generic [ref=e33]:
+          - generic [ref=e35]: Slot Geometry
+          - generic [ref=e36]:
+            - button "3 Stacked" [ref=e37] [cursor=pointer]
+            - button "4 Stacked" [ref=e38] [cursor=pointer]
+        - generic [ref=e39]:
+          - generic [ref=e40]:
+            - img [ref=e41]
+            - generic [ref=e43]: Preset Catalog
+          - generic [ref=e44]:
+            - button "Katha Signature — Heirloom Piña" [ref=e45] [cursor=pointer]:
+              - generic [ref=e46]:
+                - generic [ref=e47]: Katha Signature — Heirloom Piña
+                - img [ref=e48]
+            - button "Katha Signature — The Editorial Void" [ref=e51] [cursor=pointer]:
+              - generic [ref=e52]:
+                - generic [ref=e53]: Katha Signature — The Editorial Void
+                - img [ref=e54]
+            - button "Katha Signature — The Editorial Void Postcard" [ref=e57] [cursor=pointer]:
+              - generic [ref=e58]:
+                - generic [ref=e59]: Katha Signature — The Editorial Void Postcard
+                - img [ref=e60]
+            - button "Katha Signature — The Editorial Void Landscape" [ref=e63] [cursor=pointer]:
+              - generic [ref=e64]:
+                - generic [ref=e65]: Katha Signature — The Editorial Void Landscape
+                - img [ref=e66]
+            - button "Katha Signature — Heirloom Piña Landscape" [ref=e69] [cursor=pointer]:
+              - generic [ref=e70]:
+                - generic [ref=e71]: Katha Signature — Heirloom Piña Landscape
+                - img [ref=e72]
+            - button "Katha Signature — Loom Frame" [ref=e75] [cursor=pointer]:
+              - generic [ref=e76]:
+                - generic [ref=e77]: Katha Signature — Loom Frame
+                - img [ref=e78]
+            - button "Katha Signature — Loom Frame Postcard" [ref=e81] [cursor=pointer]:
+              - generic [ref=e82]:
+                - generic [ref=e83]: Katha Signature — Loom Frame Postcard
+                - img [ref=e84]
+            - button "Katha Signature — Loom Frame Landscape" [ref=e87] [cursor=pointer]:
+              - generic [ref=e88]:
+                - generic [ref=e89]: Katha Signature — Loom Frame Landscape
+                - img [ref=e90]
+            - button "Katha Signature — Knalum Night" [ref=e93] [cursor=pointer]:
+              - generic [ref=e94]:
+                - generic [ref=e95]: Katha Signature — Knalum Night
+                - img [ref=e96]
+            - button "Katha Signature — Knalum Night Postcard" [ref=e99] [cursor=pointer]:
+              - generic [ref=e100]:
+                - generic [ref=e101]: Katha Signature — Knalum Night Postcard
+                - img [ref=e102]
+            - button "Katha Signature — Knalum Night Landscape" [ref=e105] [cursor=pointer]:
+              - generic [ref=e106]:
+                - generic [ref=e107]: Katha Signature — Knalum Night Landscape
+                - img [ref=e108]
+            - button "Katha Signature — Binakul Weave" [ref=e111] [cursor=pointer]:
+              - generic [ref=e112]:
+                - generic [ref=e113]: Katha Signature — Binakul Weave
+                - img [ref=e114]
+            - button "Katha Signature — Binakul Weave Postcard" [ref=e117] [cursor=pointer]:
+              - generic [ref=e118]:
+                - generic [ref=e119]: Katha Signature — Binakul Weave Postcard
+                - img [ref=e120]
+            - button "Katha Signature — Binakul Weave Landscape" [ref=e123] [cursor=pointer]:
+              - generic [ref=e124]:
+                - generic [ref=e125]: Katha Signature — Binakul Weave Landscape
+                - img [ref=e126]
+            - button "Katha Signature — Capiz Sage" [ref=e129] [cursor=pointer]:
+              - generic [ref=e130]:
+                - generic [ref=e131]: Katha Signature — Capiz Sage
+                - img [ref=e132]
+            - button "Katha Signature — Capiz Sage Postcard" [ref=e135] [cursor=pointer]:
+              - generic [ref=e136]:
+                - generic [ref=e137]: Katha Signature — Capiz Sage Postcard
+                - img [ref=e138]
+            - button "Katha Signature — Capiz Sage Landscape" [ref=e141] [cursor=pointer]:
+              - generic [ref=e142]:
+                - generic [ref=e143]: Katha Signature — Capiz Sage Landscape
+                - img [ref=e144]
+            - button "Katha Signature — Tracy & Prince" [ref=e147] [cursor=pointer]:
+              - generic [ref=e148]:
+                - generic [ref=e149]: Katha Signature — Tracy & Prince
+                - img [ref=e150]
+            - button "Style 1 — Tradition Gold Luxe" [ref=e153] [cursor=pointer]:
+              - generic [ref=e154]:
+                - generic [ref=e155]: Style 1 — Tradition Gold Luxe
+                - img [ref=e156]
+            - button "Style 1 — Tradition Gold Postcard" [ref=e159] [cursor=pointer]:
+              - generic [ref=e160]:
+                - generic [ref=e161]: Style 1 — Tradition Gold Postcard
+                - img [ref=e162]
+            - button "Style 1 — Tradition Gold Landscape" [ref=e165] [cursor=pointer]:
+              - generic [ref=e166]:
+                - generic [ref=e167]: Style 1 — Tradition Gold Landscape
+                - img [ref=e168]
+            - button "Style 2 — Minimal Linen Rose" [ref=e171] [cursor=pointer]:
+              - generic [ref=e172]:
+                - generic [ref=e173]: Style 2 — Minimal Linen Rose
+                - img [ref=e174]
+            - button "Style 2 — Minimal Linen Rose Postcard" [ref=e177] [cursor=pointer]:
+              - generic [ref=e178]:
+                - generic [ref=e179]: Style 2 — Minimal Linen Rose Postcard
+                - img [ref=e180]
+            - button "Style 2 — Linen Rose Landscape" [ref=e183] [cursor=pointer]:
+              - generic [ref=e184]:
+                - generic [ref=e185]: Style 2 — Linen Rose Landscape
+                - img [ref=e186]
+            - button "Style 4 — Earthen Clay Sunset" [ref=e189] [cursor=pointer]:
+              - generic [ref=e190]:
+                - generic [ref=e191]: Style 4 — Earthen Clay Sunset
+                - img [ref=e192]
+            - button "Style 4 — Earthen Clay Sunset Postcard" [ref=e195] [cursor=pointer]:
+              - generic [ref=e196]:
+                - generic [ref=e197]: Style 4 — Earthen Clay Sunset Postcard
+                - img [ref=e198]
+            - button "Style 4 — Earthen Clay Sunset Landscape" [ref=e201] [cursor=pointer]:
+              - generic [ref=e202]:
+                - generic [ref=e203]: Style 4 — Earthen Clay Sunset Landscape
+                - img [ref=e204]
+            - button "Style 5 — Stepped Deco in Cream" [ref=e207] [cursor=pointer]:
+              - generic [ref=e208]:
+                - generic [ref=e209]: Style 5 — Stepped Deco in Cream
+                - img [ref=e210]
+            - button "Style 5 — Stepped Deco in Cream Postcard" [ref=e213] [cursor=pointer]:
+              - generic [ref=e214]:
+                - generic [ref=e215]: Style 5 — Stepped Deco in Cream Postcard
+                - img [ref=e216]
+            - button "Style 5 — Stepped Deco in Cream Landscape" [ref=e219] [cursor=pointer]:
+              - generic [ref=e220]:
+                - generic [ref=e221]: Style 5 — Stepped Deco in Cream Landscape
+                - img [ref=e222]
+            - button "Style 8 — Haute Gallery Editorial" [ref=e225] [cursor=pointer]:
+              - generic [ref=e226]:
+                - generic [ref=e227]: Style 8 — Haute Gallery Editorial
+                - img [ref=e228]
+            - button "Style 8 — Editorial Postcard" [ref=e231] [cursor=pointer]:
+              - generic [ref=e232]:
+                - generic [ref=e233]: Style 8 — Editorial Postcard
+                - img [ref=e234]
+            - button "Style 8 — Editorial Landscape" [ref=e237] [cursor=pointer]:
+              - generic [ref=e238]:
+                - generic [ref=e239]: Style 8 — Editorial Landscape
+                - img [ref=e240]
+            - button "Style 10 — Victorian Cream Lace" [ref=e243] [cursor=pointer]:
+              - generic [ref=e244]:
+                - generic [ref=e245]: Style 10 — Victorian Cream Lace
+                - img [ref=e246]
+            - button "Style 10 — Victorian Cream Lace Postcard" [ref=e249] [cursor=pointer]:
+              - generic [ref=e250]:
+                - generic [ref=e251]: Style 10 — Victorian Cream Lace Postcard
+                - img [ref=e252]
+            - button "Style 10 — Victorian Cream Lace Landscape" [ref=e255] [cursor=pointer]:
+              - generic [ref=e256]:
+                - generic [ref=e257]: Style 10 — Victorian Cream Lace Landscape
+                - img [ref=e258]
+            - button "Style 12 — Imperial Crest Seal" [ref=e261] [cursor=pointer]:
+              - generic [ref=e262]:
+                - generic [ref=e263]: Style 12 — Imperial Crest Seal
+                - img [ref=e264]
+            - button "Style 12 — Imperial Crest Postcard" [ref=e267] [cursor=pointer]:
+              - generic [ref=e268]:
+                - generic [ref=e269]: Style 12 — Imperial Crest Postcard
+                - img [ref=e270]
+            - button "Style 12 — Imperial Crest Landscape" [ref=e273] [cursor=pointer]:
+              - generic [ref=e274]:
+                - generic [ref=e275]: Style 12 — Imperial Crest Landscape
+                - img [ref=e276]
+            - button "Style 14 — Delicate Fine-Line Arch" [ref=e279] [cursor=pointer]:
+              - generic [ref=e280]:
+                - generic [ref=e281]: Style 14 — Delicate Fine-Line Arch
+                - img [ref=e282]
+            - button "Style 14 — Delicate Fine-Line Arch Postcard" [ref=e285] [cursor=pointer]:
+              - generic [ref=e286]:
+                - generic [ref=e287]: Style 14 — Delicate Fine-Line Arch Postcard
+                - img [ref=e288]
+            - button "Style 14 — Botanical Arch Landscape" [ref=e291] [cursor=pointer]:
+              - generic [ref=e292]:
+                - generic [ref=e293]: Style 14 — Botanical Arch Landscape
+                - img [ref=e294]
+            - button "Style 19 — Deckled Wax Seal" [ref=e297] [cursor=pointer]:
+              - generic [ref=e298]:
+                - generic [ref=e299]: Style 19 — Deckled Wax Seal
+                - img [ref=e300]
+            - button "Style 19 — Deckled Wax Seal Postcard" [ref=e303] [cursor=pointer]:
+              - generic [ref=e304]:
+                - generic [ref=e305]: Style 19 — Deckled Wax Seal Postcard
+                - img [ref=e306]
+            - button "Style 19 — Deckled Wax Seal Landscape" [ref=e309] [cursor=pointer]:
+              - generic [ref=e310]:
+                - generic [ref=e311]: Style 19 — Deckled Wax Seal Landscape
+                - img [ref=e312]
+            - button "Katha Signature — Heirloom Piña L-Shape" [ref=e315] [cursor=pointer]:
+              - generic [ref=e316]:
+                - generic [ref=e317]: Katha Signature — Heirloom Piña L-Shape
+                - img [ref=e318]
+            - button "Katha Signature — Loom Frame Γ-Shape" [ref=e321] [cursor=pointer]:
+              - generic [ref=e322]:
+                - generic [ref=e323]: Katha Signature — Loom Frame Γ-Shape
+                - img [ref=e324]
+            - button "Style 8 — Editorial L-Shape Landscape" [ref=e327] [cursor=pointer]:
+              - generic [ref=e328]:
+                - generic [ref=e329]: Style 8 — Editorial L-Shape Landscape
+                - img [ref=e330]
+            - button "Katha Signature — Capiz Sage Γ-Shape Landscape" [ref=e333] [cursor=pointer]:
+              - generic [ref=e334]:
+                - generic [ref=e335]: Katha Signature — Capiz Sage Γ-Shape Landscape
+                - img [ref=e336]
+            - button "Katha Signature — Heirloom Piña Landscape 2 Squares" [ref=e339] [cursor=pointer]:
+              - generic [ref=e340]:
+                - generic [ref=e341]: Katha Signature — Heirloom Piña Landscape 2 Squares
+                - img [ref=e342]
+            - button "Katha Signature — Heirloom Piña Landscape 3 Squares" [ref=e345] [cursor=pointer]:
+              - generic [ref=e346]:
+                - generic [ref=e347]: Katha Signature — Heirloom Piña Landscape 3 Squares
+                - img [ref=e348]
+            - button "Katha Signature — Knalum Night Landscape 2 Squares" [ref=e351] [cursor=pointer]:
+              - generic [ref=e352]:
+                - generic [ref=e353]: Katha Signature — Knalum Night Landscape 2 Squares
+                - img [ref=e354]
+            - button "Katha Signature — Knalum Night Landscape 3 Squares" [ref=e357] [cursor=pointer]:
+              - generic [ref=e358]:
+                - generic [ref=e359]: Katha Signature — Knalum Night Landscape 3 Squares
+                - img [ref=e360]
+            - button "Katha Signature — The Editorial Void Landscape 2 Squares" [ref=e363] [cursor=pointer]:
+              - generic [ref=e364]:
+                - generic [ref=e365]: Katha Signature — The Editorial Void Landscape 2 Squares
+                - img [ref=e366]
+            - button "Katha Signature — The Editorial Void Landscape 3 Squares" [ref=e369] [cursor=pointer]:
+              - generic [ref=e370]:
+                - generic [ref=e371]: Katha Signature — The Editorial Void Landscape 3 Squares
+                - img [ref=e372]
+            - button "Style 1 — Tradition Gold Landscape 2 Squares" [ref=e375] [cursor=pointer]:
+              - generic [ref=e376]:
+                - generic [ref=e377]: Style 1 — Tradition Gold Landscape 2 Squares
+                - img [ref=e378]
+            - button "Style 1 — Tradition Gold Landscape 3 Squares" [ref=e381] [cursor=pointer]:
+              - generic [ref=e382]:
+                - generic [ref=e383]: Style 1 — Tradition Gold Landscape 3 Squares
+                - img [ref=e384]
+            - button "Katha Signature — Woven Silk" [ref=e387] [cursor=pointer]:
+              - generic [ref=e388]:
+                - generic [ref=e389]: Katha Signature — Woven Silk
+                - img [ref=e390]
+            - button "Katha Signature — Woven Silk Postcard" [ref=e393] [cursor=pointer]:
+              - generic [ref=e394]:
+                - generic [ref=e395]: Katha Signature — Woven Silk Postcard
+                - img [ref=e396]
+            - button "Katha Signature — Woven Silk Landscape" [ref=e399] [cursor=pointer]:
+              - generic [ref=e400]:
+                - generic [ref=e401]: Katha Signature — Woven Silk Landscape
+                - img [ref=e402]
+            - button "Tracy & Prince" [ref=e405] [cursor=pointer]:
+              - generic [ref=e406]:
+                - generic [ref=e407]: Tracy & Prince
+                - img [ref=e408]
+    - generic [ref=e411]:
+      - generic [ref=e412]:
+        - generic [ref=e415]: Live Visualizer
+        - button "Alpha Masking" [ref=e416] [cursor=pointer]:
+          - img [ref=e417]
+          - generic [ref=e421]: Alpha Masking
+      - generic [ref=e423]:
+        - img
+        - generic [ref=e424]:
+          - generic [ref=e425] [cursor=pointer]:
+            - generic: "1"
+          - generic [ref=e426] [cursor=pointer]:
+            - generic: "2"
+          - generic [ref=e427] [cursor=pointer]:
+            - generic: "3"
+    - complementary [ref=e429]:
+      - generic [ref=e430]:
+        - generic [ref=e431]:
+          - generic [ref=e432]:
+            - img [ref=e433]
+            - generic [ref=e435]: Typography
+          - generic [ref=e436]:
+            - generic [ref=e437]:
+              - generic [ref=e438]: First Name 1
+              - textbox [ref=e439]
+            - generic [ref=e440]:
+              - generic [ref=e441]: First Name 2
+              - textbox [ref=e442]
+            - generic [ref=e443]:
+              - generic [ref=e444]: Date
+              - textbox [ref=e445]
+            - generic [ref=e446]:
+              - generic [ref=e447]: Location
+              - textbox [ref=e448]
+            - generic [ref=e449]:
+              - generic [ref=e450]: Names Typeface
+              - combobox [ref=e451]:
+                - option "Cinzel (Royal Roman)" [selected]
+                - option "Playfair Display (Elegant Serif)"
+                - option "Bodoni Moda (High Fashion Serif)"
+                - option "Hanken Grotesk (Clean Neo-Grotesque)"
+                - option "Aboreto (Wire-Thin Modern Capital)"
+                - option "Great Vibes (Soft Cursive Harmony)"
+                - option "Alex Brush (Stately Royal Calligraphy)"
+                - option "Pinyon Script (Traditional Sloped Signature)"
+                - option "Sacramento (Graceful Midcentury Pen)"
+                - option "Rochester (Antique Signage Script)"
+                - option "Parisienne (Flowing Parisian Romance)"
+                - option "La Belle Aurore (Casual Handwriting ink)"
+                - option "Montserrat (Clean Modernist Sans)"
+        - generic [ref=e452]:
+          - generic [ref=e453]:
+            - img [ref=e454]
+            - generic [ref=e455]: Geometry & Placement
+          - generic [ref=e456]:
+            - generic [ref=e457]:
+              - button "Top Header" [ref=e458] [cursor=pointer]
+              - button "Bottom Footer" [ref=e459] [cursor=pointer]
+            - generic [ref=e460]:
+              - generic [ref=e461]:
+                - generic [ref=e462]: Graphic Opacity
+                - generic [ref=e463]: 100%
+              - slider [ref=e464] [cursor=pointer]: "100"
+        - generic [ref=e465]:
+          - generic [ref=e466]:
+            - img [ref=e467]
+            - generic [ref=e473]: Palettes
+          - generic [ref=e474]:
+            - button "Classic Noir" [ref=e475] [cursor=pointer]:
+              - generic [ref=e476]: Classic Noir
+            - button "Royal Emerald" [ref=e480] [cursor=pointer]:
+              - generic [ref=e481]: Royal Emerald
+            - button "Terracotta Sunset" [ref=e485] [cursor=pointer]:
+              - generic [ref=e486]: Terracotta Sunset
+            - button "Midnight Onyx" [ref=e490] [cursor=pointer]:
+              - generic [ref=e491]: Midnight Onyx
+            - button "Misty Lavender" [ref=e495] [cursor=pointer]:
+              - generic [ref=e496]: Misty Lavender

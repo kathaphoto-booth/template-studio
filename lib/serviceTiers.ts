@@ -25,7 +25,7 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     price: 949,
     blackAndWhite: false,
     narrative:
-      "A timeless oak experience curated for heritage venues. Studio DSLR optics deliver full-color precision, blending seamlessly into historic spaces.",
+      "An oak installation designed for heritage venues. Studio DSLR optics deliver full-color precision, blending seamlessly into historic spaces.",
     narrativeLong:
       "Dark oak hardware, studio-grade optics, high-fidelity color. Built to settle into historic estates and grand celebrations without intruding.",
     inclusions: [
@@ -44,7 +44,7 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     price: 1149,
     blackAndWhite: true,
     narrative:
-      "Our flagship oak experience, curated for striking black-and-white portraiture. Timeless contrast and deep shadows that demand to be printed.",
+      "Our flagship oak installation, designed for striking black-and-white portraiture. Rich contrast and deep shadows that demand to be printed.",
     narrativeLong:
       "Our flagship. Dark oak hardware configured for refined black-and-white frames — stark, high-contrast portraits that hold their weight for years.",
     inclusions: [
@@ -63,7 +63,7 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     price: 749,
     blackAndWhite: false,
     narrative:
-      "A minimalist white installation curating a clean, bright experience. Studio DSLR optics capture full-color moments for contemporary rooms.",
+      "A minimalist white installation offering a clean, bright look. Studio DSLR optics capture full-color moments for contemporary rooms.",
     narrativeLong:
       "A sleek white shell with studio-grade optics — a clean, luminous presence for contemporary galleries and modern industrial rooms.",
     inclusions: [
@@ -82,7 +82,7 @@ export const SERVICE_TIERS: readonly ServiceTier[] = [
     price: 949,
     blackAndWhite: true,
     narrative:
-      "A timeless white installation tuned for sharp black-and-white portraiture. High-contrast experiences curated for modern spaces.",
+      "A classic white installation tuned for sharp black-and-white portraiture. High-contrast prints designed for modern spaces.",
     narrativeLong:
       "White hardware tuned for refined black-and-white frames — high-contrast, razor-sharp portraits for clean-lined lofts and corporate galas.",
     inclusions: [

@@ -1,0 +1,1169 @@
+# Instructions
+
+- Following Playwright test failed.
+- Explain why, be concise, respect Playwright best practices.
+- Provide a snippet of code with the fix, if possible.
+
+# Test info
+
+- Name: e2e/tier2-boundary-corner/f7_template_selection_boundary.spec.ts >> F7: Template Selection - Tier 2 Boundary/Corner >> T2.3: format filter toggles exclusively via aria-pressed
+- Location: tests/e2e/tier2-boundary-corner/f7_template_selection_boundary.spec.ts:34:3
+
+# Error details
+
+```
+Test timeout of 30000ms exceeded.
+```
+
+```
+Error: locator.click: Test timeout of 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: '2×6 Strip' })
+
+```
+
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - heading "Choose your style" [level=1] [ref=e6]
+        - generic [ref=e7]:
+          - generic [ref=e8]:
+            - generic [ref=e9]: Tier
+            - button "All styles" [pressed] [ref=e10]
+            - button "Classic" [ref=e11]
+            - button "Katha Signature" [ref=e12]
+          - generic [ref=e13]:
+            - generic [ref=e14]: Format
+            - button "All" [pressed] [ref=e15]
+            - button "Strip" [ref=e16]
+            - button "Postcard" [ref=e17]
+          - generic [ref=e18]: 61 templates
+      - generic [ref=e19]:
+        - heading "The Signature Collection" [level=2] [ref=e20]
+        - heading "The Classic Atelier" [level=2] [ref=e21]
+        - generic [ref=e22]:
+          - button "Explore details" [ref=e23] [cursor=pointer]:
+            - generic [ref=e24]:
+              - generic [ref=e26]:
+                - img
+              - generic [ref=e32]: Explore Details
+          - generic [ref=e33]:
+            - generic [ref=e34]:
+              - generic [ref=e35]: The Signature Collection
+              - generic [ref=e36]: strip
+            - heading "Katha Signature — Heirloom Piña" [level=3] [ref=e37]
+            - generic [ref=e38]:
+              - generic [ref=e39]:
+                - generic "Background" [ref=e40]
+                - generic "Slot" [ref=e41]
+                - generic "Text" [ref=e42]
+              - generic [ref=e43]: Playfair Display
+        - generic [ref=e44]:
+          - button "Explore details" [ref=e45] [cursor=pointer]:
+            - generic [ref=e46]:
+              - generic [ref=e48]:
+                - img
+              - generic [ref=e54]: Explore Details
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57]: The Signature Collection
+              - generic [ref=e58]: strip
+            - heading "Katha Signature — The Editorial Void" [level=3] [ref=e59]
+            - generic [ref=e60]:
+              - generic [ref=e61]:
+                - generic "Background" [ref=e62]
+                - generic "Slot" [ref=e63]
+                - generic "Text" [ref=e64]
+              - generic [ref=e65]: Playfair Display
+        - generic [ref=e66]:
+          - button "Explore details" [ref=e67] [cursor=pointer]:
+            - generic [ref=e68]:
+              - generic [ref=e70]:
+                - img
+              - generic [ref=e75]: Explore Details
+          - generic [ref=e76]:
+            - generic [ref=e77]:
+              - generic [ref=e78]: The Signature Collection
+              - generic [ref=e79]: postcard
+            - heading "Katha Signature — The Editorial Void Postcard" [level=3] [ref=e80]
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - generic "Background" [ref=e83]
+                - generic "Slot" [ref=e84]
+                - generic "Text" [ref=e85]
+              - generic [ref=e86]: Playfair Display
+        - generic [ref=e87]:
+          - button "Explore details" [ref=e88] [cursor=pointer]:
+            - generic [ref=e89]:
+              - generic [ref=e91]:
+                - img
+              - generic [ref=e97]: Explore Details
+          - generic [ref=e98]:
+            - generic [ref=e99]:
+              - generic [ref=e100]: The Signature Collection
+              - generic [ref=e101]: postcard
+            - heading "Katha Signature — The Editorial Void Landscape" [level=3] [ref=e102]
+            - generic [ref=e103]:
+              - generic [ref=e104]:
+                - generic "Background" [ref=e105]
+                - generic "Slot" [ref=e106]
+                - generic "Text" [ref=e107]
+              - generic [ref=e108]: Playfair Display
+        - generic [ref=e109]:
+          - button "Explore details" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111]:
+              - generic [ref=e113]:
+                - img
+              - generic [ref=e119]: Explore Details
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: The Signature Collection
+              - generic [ref=e123]: postcard
+            - heading "Katha Signature — Heirloom Piña Landscape" [level=3] [ref=e124]
+            - generic [ref=e125]:
+              - generic [ref=e126]:
+                - generic "Background" [ref=e127]
+                - generic "Slot" [ref=e128]
+                - generic "Text" [ref=e129]
+              - generic [ref=e130]: Playfair Display
+        - generic [ref=e131]:
+          - button "Explore details" [ref=e132] [cursor=pointer]:
+            - generic [ref=e133]:
+              - generic [ref=e135]:
+                - img
+              - generic [ref=e141]: Explore Details
+          - generic [ref=e142]:
+            - generic [ref=e143]:
+              - generic [ref=e144]: The Signature Collection
+              - generic [ref=e145]: strip
+            - heading "Katha Signature — Loom Frame" [level=3] [ref=e146]
+            - generic [ref=e147]:
+              - generic [ref=e148]:
+                - generic "Background" [ref=e149]
+                - generic "Slot" [ref=e150]
+                - generic "Text" [ref=e151]
+              - generic [ref=e152]: Playfair Display
+        - generic [ref=e153]:
+          - button "Explore details" [ref=e154] [cursor=pointer]:
+            - generic [ref=e155]:
+              - generic [ref=e157]:
+                - img
+              - generic [ref=e162]: Explore Details
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]: The Signature Collection
+              - generic [ref=e166]: postcard
+            - heading "Katha Signature — Loom Frame Postcard" [level=3] [ref=e167]
+            - generic [ref=e168]:
+              - generic [ref=e169]:
+                - generic "Background" [ref=e170]
+                - generic "Slot" [ref=e171]
+                - generic "Text" [ref=e172]
+              - generic [ref=e173]: Playfair Display
+        - generic [ref=e174]:
+          - button "Explore details" [ref=e175] [cursor=pointer]:
+            - generic [ref=e176]:
+              - generic [ref=e178]:
+                - img
+              - generic [ref=e184]: Explore Details
+          - generic [ref=e185]:
+            - generic [ref=e186]:
+              - generic [ref=e187]: The Signature Collection
+              - generic [ref=e188]: postcard
+            - heading "Katha Signature — Loom Frame Landscape" [level=3] [ref=e189]
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic "Background" [ref=e192]
+                - generic "Slot" [ref=e193]
+                - generic "Text" [ref=e194]
+              - generic [ref=e195]: Playfair Display
+        - generic [ref=e196]:
+          - button "Explore details" [ref=e197] [cursor=pointer]:
+            - generic [ref=e198]:
+              - generic [ref=e200]:
+                - img
+              - generic [ref=e206]: Explore Details
+          - generic [ref=e207]:
+            - generic [ref=e208]:
+              - generic [ref=e209]: The Signature Collection
+              - generic [ref=e210]: strip
+            - heading "Katha Signature — Knalum Night" [level=3] [ref=e211]
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - generic "Background" [ref=e214]
+                - generic "Slot" [ref=e215]
+                - generic "Text" [ref=e216]
+              - generic [ref=e217]: Playfair Display
+        - generic [ref=e218]:
+          - button "Explore details" [ref=e219] [cursor=pointer]:
+            - generic [ref=e220]:
+              - generic [ref=e222]:
+                - img
+              - generic [ref=e227]: Explore Details
+          - generic [ref=e228]:
+            - generic [ref=e229]:
+              - generic [ref=e230]: The Signature Collection
+              - generic [ref=e231]: postcard
+            - heading "Katha Signature — Knalum Night Postcard" [level=3] [ref=e232]
+            - generic [ref=e233]:
+              - generic [ref=e234]:
+                - generic "Background" [ref=e235]
+                - generic "Slot" [ref=e236]
+                - generic "Text" [ref=e237]
+              - generic [ref=e238]: Playfair Display
+        - generic [ref=e239]:
+          - button "Explore details" [ref=e240] [cursor=pointer]:
+            - generic [ref=e241]:
+              - generic [ref=e243]:
+                - img
+              - generic [ref=e249]: Explore Details
+          - generic [ref=e250]:
+            - generic [ref=e251]:
+              - generic [ref=e252]: The Signature Collection
+              - generic [ref=e253]: postcard
+            - heading "Katha Signature — Knalum Night Landscape" [level=3] [ref=e254]
+            - generic [ref=e255]:
+              - generic [ref=e256]:
+                - generic "Background" [ref=e257]
+                - generic "Slot" [ref=e258]
+                - generic "Text" [ref=e259]
+              - generic [ref=e260]: Playfair Display
+        - generic [ref=e261]:
+          - button "Explore details" [ref=e262] [cursor=pointer]:
+            - generic [ref=e263]:
+              - generic [ref=e265]:
+                - img
+              - generic [ref=e271]: Explore Details
+          - generic [ref=e272]:
+            - generic [ref=e273]:
+              - generic [ref=e274]: The Signature Collection
+              - generic [ref=e275]: strip
+            - heading "Katha Signature — Binakul Weave" [level=3] [ref=e276]
+            - generic [ref=e277]:
+              - generic [ref=e278]:
+                - generic "Background" [ref=e279]
+                - generic "Slot" [ref=e280]
+                - generic "Text" [ref=e281]
+              - generic [ref=e282]: Playfair Display
+        - generic [ref=e283]:
+          - button "Explore details" [ref=e284] [cursor=pointer]:
+            - generic [ref=e285]:
+              - generic [ref=e287]:
+                - img
+              - generic [ref=e292]: Explore Details
+          - generic [ref=e293]:
+            - generic [ref=e294]:
+              - generic [ref=e295]: The Signature Collection
+              - generic [ref=e296]: postcard
+            - heading "Katha Signature — Binakul Weave Postcard" [level=3] [ref=e297]
+            - generic [ref=e298]:
+              - generic [ref=e299]:
+                - generic "Background" [ref=e300]
+                - generic "Slot" [ref=e301]
+                - generic "Text" [ref=e302]
+              - generic [ref=e303]: Playfair Display
+        - generic [ref=e304]:
+          - button "Explore details" [ref=e305] [cursor=pointer]:
+            - generic [ref=e306]:
+              - generic [ref=e308]:
+                - img
+              - generic [ref=e314]: Explore Details
+          - generic [ref=e315]:
+            - generic [ref=e316]:
+              - generic [ref=e317]: The Signature Collection
+              - generic [ref=e318]: postcard
+            - heading "Katha Signature — Binakul Weave Landscape" [level=3] [ref=e319]
+            - generic [ref=e320]:
+              - generic [ref=e321]:
+                - generic "Background" [ref=e322]
+                - generic "Slot" [ref=e323]
+                - generic "Text" [ref=e324]
+              - generic [ref=e325]: Playfair Display
+        - generic [ref=e326]:
+          - button "Explore details" [ref=e327] [cursor=pointer]:
+            - generic [ref=e328]:
+              - generic [ref=e330]:
+                - img
+              - generic [ref=e336]: Explore Details
+          - generic [ref=e337]:
+            - generic [ref=e338]:
+              - generic [ref=e339]: The Signature Collection
+              - generic [ref=e340]: strip
+            - heading "Katha Signature — Capiz Sage" [level=3] [ref=e341]
+            - generic [ref=e342]:
+              - generic [ref=e343]:
+                - generic "Background" [ref=e344]
+                - generic "Slot" [ref=e345]
+                - generic "Text" [ref=e346]
+              - generic [ref=e347]: Playfair Display
+        - generic [ref=e348]:
+          - button "Explore details" [ref=e349] [cursor=pointer]:
+            - generic [ref=e350]:
+              - generic [ref=e352]:
+                - img
+              - generic [ref=e357]: Explore Details
+          - generic [ref=e358]:
+            - generic [ref=e359]:
+              - generic [ref=e360]: The Signature Collection
+              - generic [ref=e361]: postcard
+            - heading "Katha Signature — Capiz Sage Postcard" [level=3] [ref=e362]
+            - generic [ref=e363]:
+              - generic [ref=e364]:
+                - generic "Background" [ref=e365]
+                - generic "Slot" [ref=e366]
+                - generic "Text" [ref=e367]
+              - generic [ref=e368]: Playfair Display
+        - generic [ref=e369]:
+          - button "Explore details" [ref=e370] [cursor=pointer]:
+            - generic [ref=e371]:
+              - generic [ref=e373]:
+                - img
+              - generic [ref=e379]: Explore Details
+          - generic [ref=e380]:
+            - generic [ref=e381]:
+              - generic [ref=e382]: The Signature Collection
+              - generic [ref=e383]: postcard
+            - heading "Katha Signature — Capiz Sage Landscape" [level=3] [ref=e384]
+            - generic [ref=e385]:
+              - generic [ref=e386]:
+                - generic "Background" [ref=e387]
+                - generic "Slot" [ref=e388]
+                - generic "Text" [ref=e389]
+              - generic [ref=e390]: Playfair Display
+        - generic [ref=e391]:
+          - button "Explore details" [ref=e392] [cursor=pointer]:
+            - generic [ref=e393]:
+              - generic [ref=e395]:
+                - img
+              - generic [ref=e400]: Explore Details
+          - generic [ref=e401]:
+            - generic [ref=e402]:
+              - generic [ref=e403]: The Signature Collection
+              - generic [ref=e404]: postcard
+            - heading "Katha Signature — Tracy & Prince" [level=3] [ref=e405]
+            - generic [ref=e406]:
+              - generic [ref=e407]:
+                - generic "Background" [ref=e408]
+                - generic "Slot" [ref=e409]
+                - generic "Text" [ref=e410]
+              - generic [ref=e411]: Playfair Display
+        - generic [ref=e412]:
+          - button "Explore details" [ref=e413] [cursor=pointer]:
+            - generic [ref=e414]:
+              - generic [ref=e416]:
+                - img
+              - generic [ref=e422]: Explore Details
+          - generic [ref=e423]:
+            - generic [ref=e424]:
+              - generic [ref=e425]: The Classic Atelier
+              - generic [ref=e426]: strip
+            - heading "Style 1 — Tradition Gold Luxe" [level=3] [ref=e427]
+            - generic [ref=e428]:
+              - generic [ref=e429]:
+                - generic "Background" [ref=e430]
+                - generic "Slot" [ref=e431]
+                - generic "Text" [ref=e432]
+              - generic [ref=e433]: Cinzel
+        - generic [ref=e434]:
+          - button "Explore details" [ref=e435] [cursor=pointer]:
+            - generic [ref=e436]:
+              - generic [ref=e438]:
+                - img
+              - generic [ref=e443]: Explore Details
+          - generic [ref=e444]:
+            - generic [ref=e445]:
+              - generic [ref=e446]: The Classic Atelier
+              - generic [ref=e447]: postcard
+            - heading "Style 1 — Tradition Gold Postcard" [level=3] [ref=e448]
+            - generic [ref=e449]:
+              - generic [ref=e450]:
+                - generic "Background" [ref=e451]
+                - generic "Slot" [ref=e452]
+                - generic "Text" [ref=e453]
+              - generic [ref=e454]: Cinzel
+        - generic [ref=e455]:
+          - button "Explore details" [ref=e456] [cursor=pointer]:
+            - generic [ref=e457]:
+              - generic [ref=e459]:
+                - img
+              - generic [ref=e465]: Explore Details
+          - generic [ref=e466]:
+            - generic [ref=e467]:
+              - generic [ref=e468]: The Classic Atelier
+              - generic [ref=e469]: postcard
+            - heading "Style 1 — Tradition Gold Landscape" [level=3] [ref=e470]
+            - generic [ref=e471]:
+              - generic [ref=e472]:
+                - generic "Background" [ref=e473]
+                - generic "Slot" [ref=e474]
+                - generic "Text" [ref=e475]
+              - generic [ref=e476]: Cinzel
+        - generic [ref=e477]:
+          - button "Explore details" [ref=e478] [cursor=pointer]:
+            - generic [ref=e479]:
+              - generic [ref=e481]:
+                - img
+              - generic [ref=e487]: Explore Details
+          - generic [ref=e488]:
+            - generic [ref=e489]:
+              - generic [ref=e490]: The Classic Atelier
+              - generic [ref=e491]: strip
+            - heading "Style 2 — Minimal Linen Rose" [level=3] [ref=e492]
+            - generic [ref=e493]:
+              - generic [ref=e494]:
+                - generic "Background" [ref=e495]
+                - generic "Slot" [ref=e496]
+                - generic "Text" [ref=e497]
+              - generic [ref=e498]: Playfair Display
+        - generic [ref=e499]:
+          - button "Explore details" [ref=e500] [cursor=pointer]:
+            - generic [ref=e501]:
+              - generic [ref=e503]:
+                - img
+              - generic [ref=e508]: Explore Details
+          - generic [ref=e509]:
+            - generic [ref=e510]:
+              - generic [ref=e511]: The Classic Atelier
+              - generic [ref=e512]: postcard
+            - heading "Style 2 — Minimal Linen Rose Postcard" [level=3] [ref=e513]
+            - generic [ref=e514]:
+              - generic [ref=e515]:
+                - generic "Background" [ref=e516]
+                - generic "Slot" [ref=e517]
+                - generic "Text" [ref=e518]
+              - generic [ref=e519]: Playfair Display
+        - generic [ref=e520]:
+          - button "Explore details" [ref=e521] [cursor=pointer]:
+            - generic [ref=e522]:
+              - generic [ref=e524]:
+                - img
+              - generic [ref=e530]: Explore Details
+          - generic [ref=e531]:
+            - generic [ref=e532]:
+              - generic [ref=e533]: The Classic Atelier
+              - generic [ref=e534]: postcard
+            - heading "Style 2 — Linen Rose Landscape" [level=3] [ref=e535]
+            - generic [ref=e536]:
+              - generic [ref=e537]:
+                - generic "Background" [ref=e538]
+                - generic "Slot" [ref=e539]
+                - generic "Text" [ref=e540]
+              - generic [ref=e541]: Playfair Display
+        - generic [ref=e542]:
+          - button "Explore details" [ref=e543] [cursor=pointer]:
+            - generic [ref=e544]:
+              - generic [ref=e546]:
+                - img
+              - generic [ref=e552]: Explore Details
+          - generic [ref=e553]:
+            - generic [ref=e554]:
+              - generic [ref=e555]: The Classic Atelier
+              - generic [ref=e556]: strip
+            - heading "Style 4 — Earthen Clay Sunset" [level=3] [ref=e557]
+            - generic [ref=e558]:
+              - generic [ref=e559]:
+                - generic "Background" [ref=e560]
+                - generic "Slot" [ref=e561]
+                - generic "Text" [ref=e562]
+              - generic [ref=e563]: Hanken Grotesk
+        - generic [ref=e564]:
+          - button "Explore details" [ref=e565] [cursor=pointer]:
+            - generic [ref=e566]:
+              - generic [ref=e568]:
+                - img
+              - generic [ref=e573]: Explore Details
+          - generic [ref=e574]:
+            - generic [ref=e575]:
+              - generic [ref=e576]: The Classic Atelier
+              - generic [ref=e577]: postcard
+            - heading "Style 4 — Earthen Clay Sunset Postcard" [level=3] [ref=e578]
+            - generic [ref=e579]:
+              - generic [ref=e580]:
+                - generic "Background" [ref=e581]
+                - generic "Slot" [ref=e582]
+                - generic "Text" [ref=e583]
+              - generic [ref=e584]: Hanken Grotesk
+        - generic [ref=e585]:
+          - button "Explore details" [ref=e586] [cursor=pointer]:
+            - generic [ref=e587]:
+              - generic [ref=e589]:
+                - img
+              - generic [ref=e595]: Explore Details
+          - generic [ref=e596]:
+            - generic [ref=e597]:
+              - generic [ref=e598]: The Classic Atelier
+              - generic [ref=e599]: postcard
+            - heading "Style 4 — Earthen Clay Sunset Landscape" [level=3] [ref=e600]
+            - generic [ref=e601]:
+              - generic [ref=e602]:
+                - generic "Background" [ref=e603]
+                - generic "Slot" [ref=e604]
+                - generic "Text" [ref=e605]
+              - generic [ref=e606]: Hanken Grotesk
+        - generic [ref=e607]:
+          - button "Explore details" [ref=e608] [cursor=pointer]:
+            - generic [ref=e609]:
+              - generic [ref=e611]:
+                - img
+              - generic [ref=e617]: Explore Details
+          - generic [ref=e618]:
+            - generic [ref=e619]:
+              - generic [ref=e620]: The Classic Atelier
+              - generic [ref=e621]: strip
+            - heading "Style 5 — Stepped Deco in Cream" [level=3] [ref=e622]
+            - generic [ref=e623]:
+              - generic [ref=e624]:
+                - generic "Background" [ref=e625]
+                - generic "Slot" [ref=e626]
+                - generic "Text" [ref=e627]
+              - generic [ref=e628]: Playfair Display
+        - generic [ref=e629]:
+          - button "Explore details" [ref=e630] [cursor=pointer]:
+            - generic [ref=e631]:
+              - generic [ref=e633]:
+                - img
+              - generic [ref=e638]: Explore Details
+          - generic [ref=e639]:
+            - generic [ref=e640]:
+              - generic [ref=e641]: The Classic Atelier
+              - generic [ref=e642]: postcard
+            - heading "Style 5 — Stepped Deco in Cream Postcard" [level=3] [ref=e643]
+            - generic [ref=e644]:
+              - generic [ref=e645]:
+                - generic "Background" [ref=e646]
+                - generic "Slot" [ref=e647]
+                - generic "Text" [ref=e648]
+              - generic [ref=e649]: Playfair Display
+        - generic [ref=e650]:
+          - button "Explore details" [ref=e651] [cursor=pointer]:
+            - generic [ref=e652]:
+              - generic [ref=e654]:
+                - img
+              - generic [ref=e660]: Explore Details
+          - generic [ref=e661]:
+            - generic [ref=e662]:
+              - generic [ref=e663]: The Classic Atelier
+              - generic [ref=e664]: postcard
+            - heading "Style 5 — Stepped Deco in Cream Landscape" [level=3] [ref=e665]
+            - generic [ref=e666]:
+              - generic [ref=e667]:
+                - generic "Background" [ref=e668]
+                - generic "Slot" [ref=e669]
+                - generic "Text" [ref=e670]
+              - generic [ref=e671]: Playfair Display
+        - generic [ref=e672]:
+          - button "Explore details" [ref=e673] [cursor=pointer]:
+            - generic [ref=e674]:
+              - generic [ref=e676]:
+                - img
+              - generic [ref=e682]: Explore Details
+          - generic [ref=e683]:
+            - generic [ref=e684]:
+              - generic [ref=e685]: The Classic Atelier
+              - generic [ref=e686]: strip
+            - heading "Style 8 — Haute Gallery Editorial" [level=3] [ref=e687]
+            - generic [ref=e688]:
+              - generic [ref=e689]:
+                - generic "Background" [ref=e690]
+                - generic "Slot" [ref=e691]
+                - generic "Text" [ref=e692]
+              - generic [ref=e693]: Playfair Display
+        - generic [ref=e694]:
+          - button "Explore details" [ref=e695] [cursor=pointer]:
+            - generic [ref=e696]:
+              - generic [ref=e698]:
+                - img
+              - generic [ref=e703]: Explore Details
+          - generic [ref=e704]:
+            - generic [ref=e705]:
+              - generic [ref=e706]: The Classic Atelier
+              - generic [ref=e707]: postcard
+            - heading "Style 8 — Editorial Postcard" [level=3] [ref=e708]
+            - generic [ref=e709]:
+              - generic [ref=e710]:
+                - generic "Background" [ref=e711]
+                - generic "Slot" [ref=e712]
+                - generic "Text" [ref=e713]
+              - generic [ref=e714]: Playfair Display
+        - generic [ref=e715]:
+          - button "Explore details" [ref=e716] [cursor=pointer]:
+            - generic [ref=e717]:
+              - generic [ref=e719]:
+                - img
+              - generic [ref=e725]: Explore Details
+          - generic [ref=e726]:
+            - generic [ref=e727]:
+              - generic [ref=e728]: The Classic Atelier
+              - generic [ref=e729]: postcard
+            - heading "Style 8 — Editorial Landscape" [level=3] [ref=e730]
+            - generic [ref=e731]:
+              - generic [ref=e732]:
+                - generic "Background" [ref=e733]
+                - generic "Slot" [ref=e734]
+                - generic "Text" [ref=e735]
+              - generic [ref=e736]: Playfair Display
+        - generic [ref=e737]:
+          - button "Explore details" [ref=e738] [cursor=pointer]:
+            - generic [ref=e739]:
+              - generic [ref=e741]:
+                - img
+              - generic [ref=e747]: Explore Details
+          - generic [ref=e748]:
+            - generic [ref=e749]:
+              - generic [ref=e750]: The Classic Atelier
+              - generic [ref=e751]: strip
+            - heading "Style 10 — Victorian Cream Lace" [level=3] [ref=e752]
+            - generic [ref=e753]:
+              - generic [ref=e754]:
+                - generic "Background" [ref=e755]
+                - generic "Slot" [ref=e756]
+                - generic "Text" [ref=e757]
+              - generic [ref=e758]: Rochester
+        - generic [ref=e759]:
+          - button "Explore details" [ref=e760] [cursor=pointer]:
+            - generic [ref=e761]:
+              - generic [ref=e763]:
+                - img
+              - generic [ref=e768]: Explore Details
+          - generic [ref=e769]:
+            - generic [ref=e770]:
+              - generic [ref=e771]: The Classic Atelier
+              - generic [ref=e772]: postcard
+            - heading "Style 10 — Victorian Cream Lace Postcard" [level=3] [ref=e773]
+            - generic [ref=e774]:
+              - generic [ref=e775]:
+                - generic "Background" [ref=e776]
+                - generic "Slot" [ref=e777]
+                - generic "Text" [ref=e778]
+              - generic [ref=e779]: Rochester
+        - generic [ref=e780]:
+          - button "Explore details" [ref=e781] [cursor=pointer]:
+            - generic [ref=e782]:
+              - generic [ref=e784]:
+                - img
+              - generic [ref=e790]: Explore Details
+          - generic [ref=e791]:
+            - generic [ref=e792]:
+              - generic [ref=e793]: The Classic Atelier
+              - generic [ref=e794]: postcard
+            - heading "Style 10 — Victorian Cream Lace Landscape" [level=3] [ref=e795]
+            - generic [ref=e796]:
+              - generic [ref=e797]:
+                - generic "Background" [ref=e798]
+                - generic "Slot" [ref=e799]
+                - generic "Text" [ref=e800]
+              - generic [ref=e801]: Rochester
+        - generic [ref=e802]:
+          - button "Explore details" [ref=e803] [cursor=pointer]:
+            - generic [ref=e804]:
+              - generic [ref=e806]:
+                - img
+              - generic [ref=e812]: Explore Details
+          - generic [ref=e813]:
+            - generic [ref=e814]:
+              - generic [ref=e815]: The Classic Atelier
+              - generic [ref=e816]: strip
+            - heading "Style 12 — Imperial Crest Seal" [level=3] [ref=e817]
+            - generic [ref=e818]:
+              - generic [ref=e819]:
+                - generic "Background" [ref=e820]
+                - generic "Slot" [ref=e821]
+                - generic "Text" [ref=e822]
+              - generic [ref=e823]: Cinzel
+        - generic [ref=e824]:
+          - button "Explore details" [ref=e825] [cursor=pointer]:
+            - generic [ref=e826]:
+              - generic [ref=e828]:
+                - img
+              - generic [ref=e833]: Explore Details
+          - generic [ref=e834]:
+            - generic [ref=e835]:
+              - generic [ref=e836]: The Classic Atelier
+              - generic [ref=e837]: postcard
+            - heading "Style 12 — Imperial Crest Postcard" [level=3] [ref=e838]
+            - generic [ref=e839]:
+              - generic [ref=e840]:
+                - generic "Background" [ref=e841]
+                - generic "Slot" [ref=e842]
+                - generic "Text" [ref=e843]
+              - generic [ref=e844]: Cinzel
+        - generic [ref=e845]:
+          - button "Explore details" [ref=e846] [cursor=pointer]:
+            - generic [ref=e847]:
+              - generic [ref=e849]:
+                - img
+              - generic [ref=e855]: Explore Details
+          - generic [ref=e856]:
+            - generic [ref=e857]:
+              - generic [ref=e858]: The Classic Atelier
+              - generic [ref=e859]: postcard
+            - heading "Style 12 — Imperial Crest Landscape" [level=3] [ref=e860]
+            - generic [ref=e861]:
+              - generic [ref=e862]:
+                - generic "Background" [ref=e863]
+                - generic "Slot" [ref=e864]
+                - generic "Text" [ref=e865]
+              - generic [ref=e866]: Cinzel
+        - generic [ref=e867]:
+          - button "Explore details" [ref=e868] [cursor=pointer]:
+            - generic [ref=e869]:
+              - generic [ref=e871]:
+                - img
+              - generic [ref=e877]: Explore Details
+          - generic [ref=e878]:
+            - generic [ref=e879]:
+              - generic [ref=e880]: The Classic Atelier
+              - generic [ref=e881]: strip
+            - heading "Style 14 — Delicate Fine-Line Arch" [level=3] [ref=e882]
+            - generic [ref=e883]:
+              - generic [ref=e884]:
+                - generic "Background" [ref=e885]
+                - generic "Slot" [ref=e886]
+                - generic "Text" [ref=e887]
+              - generic [ref=e888]: Hanken Grotesk
+        - generic [ref=e889]:
+          - button "Explore details" [ref=e890] [cursor=pointer]:
+            - generic [ref=e891]:
+              - generic [ref=e893]:
+                - img
+              - generic [ref=e898]: Explore Details
+          - generic [ref=e899]:
+            - generic [ref=e900]:
+              - generic [ref=e901]: The Classic Atelier
+              - generic [ref=e902]: postcard
+            - heading "Style 14 — Delicate Fine-Line Arch Postcard" [level=3] [ref=e903]
+            - generic [ref=e904]:
+              - generic [ref=e905]:
+                - generic "Background" [ref=e906]
+                - generic "Slot" [ref=e907]
+                - generic "Text" [ref=e908]
+              - generic [ref=e909]: Hanken Grotesk
+        - generic [ref=e910]:
+          - button "Explore details" [ref=e911] [cursor=pointer]:
+            - generic [ref=e912]:
+              - generic [ref=e914]:
+                - img
+              - generic [ref=e920]: Explore Details
+          - generic [ref=e921]:
+            - generic [ref=e922]:
+              - generic [ref=e923]: The Classic Atelier
+              - generic [ref=e924]: postcard
+            - heading "Style 14 — Botanical Arch Landscape" [level=3] [ref=e925]
+            - generic [ref=e926]:
+              - generic [ref=e927]:
+                - generic "Background" [ref=e928]
+                - generic "Slot" [ref=e929]
+                - generic "Text" [ref=e930]
+              - generic [ref=e931]: Hanken Grotesk
+        - generic [ref=e932]:
+          - button "Explore details" [ref=e933] [cursor=pointer]:
+            - generic [ref=e934]:
+              - generic [ref=e936]:
+                - img
+              - generic [ref=e942]: Explore Details
+          - generic [ref=e943]:
+            - generic [ref=e944]:
+              - generic [ref=e945]: The Classic Atelier
+              - generic [ref=e946]: strip
+            - heading "Style 19 — Deckled Wax Seal" [level=3] [ref=e947]
+            - generic [ref=e948]:
+              - generic [ref=e949]:
+                - generic "Background" [ref=e950]
+                - generic "Slot" [ref=e951]
+                - generic "Text" [ref=e952]
+              - generic [ref=e953]: Rochester
+        - generic [ref=e954]:
+          - button "Explore details" [ref=e955] [cursor=pointer]:
+            - generic [ref=e956]:
+              - generic [ref=e958]:
+                - img
+              - generic [ref=e963]: Explore Details
+          - generic [ref=e964]:
+            - generic [ref=e965]:
+              - generic [ref=e966]: The Classic Atelier
+              - generic [ref=e967]: postcard
+            - heading "Style 19 — Deckled Wax Seal Postcard" [level=3] [ref=e968]
+            - generic [ref=e969]:
+              - generic [ref=e970]:
+                - generic "Background" [ref=e971]
+                - generic "Slot" [ref=e972]
+                - generic "Text" [ref=e973]
+              - generic [ref=e974]: Rochester
+        - generic [ref=e975]:
+          - button "Explore details" [ref=e976] [cursor=pointer]:
+            - generic [ref=e977]:
+              - generic [ref=e979]:
+                - img
+              - generic [ref=e985]: Explore Details
+          - generic [ref=e986]:
+            - generic [ref=e987]:
+              - generic [ref=e988]: The Classic Atelier
+              - generic [ref=e989]: postcard
+            - heading "Style 19 — Deckled Wax Seal Landscape" [level=3] [ref=e990]
+            - generic [ref=e991]:
+              - generic [ref=e992]:
+                - generic "Background" [ref=e993]
+                - generic "Slot" [ref=e994]
+                - generic "Text" [ref=e995]
+              - generic [ref=e996]: Rochester
+        - generic [ref=e997]:
+          - button "Explore details" [ref=e998] [cursor=pointer]:
+            - generic [ref=e999]:
+              - generic [ref=e1001]:
+                - img
+              - generic [ref=e1007]: Explore Details
+          - generic [ref=e1008]:
+            - generic [ref=e1009]:
+              - generic [ref=e1010]: The Signature Collection
+              - generic [ref=e1011]: postcard
+            - heading "Katha Signature — Heirloom Piña L-Shape" [level=3] [ref=e1012]
+            - generic [ref=e1013]:
+              - generic [ref=e1014]:
+                - generic "Background" [ref=e1015]
+                - generic "Slot" [ref=e1016]
+                - generic "Text" [ref=e1017]
+              - generic [ref=e1018]: Playfair Display
+        - generic [ref=e1019]:
+          - button "Explore details" [ref=e1020] [cursor=pointer]:
+            - generic [ref=e1021]:
+              - generic [ref=e1023]:
+                - img
+              - generic [ref=e1029]: Explore Details
+          - generic [ref=e1030]:
+            - generic [ref=e1031]:
+              - generic [ref=e1032]: The Signature Collection
+              - generic [ref=e1033]: postcard
+            - heading "Katha Signature — Loom Frame Γ-Shape" [level=3] [ref=e1034]
+            - generic [ref=e1035]:
+              - generic [ref=e1036]:
+                - generic "Background" [ref=e1037]
+                - generic "Slot" [ref=e1038]
+                - generic "Text" [ref=e1039]
+              - generic [ref=e1040]: Playfair Display
+        - generic [ref=e1041]:
+          - button "Explore details" [ref=e1042] [cursor=pointer]:
+            - generic [ref=e1043]:
+              - generic [ref=e1045]:
+                - img
+              - generic [ref=e1051]: Explore Details
+          - generic [ref=e1052]:
+            - generic [ref=e1053]:
+              - generic [ref=e1054]: The Classic Atelier
+              - generic [ref=e1055]: postcard
+            - heading "Style 8 — Editorial L-Shape Landscape" [level=3] [ref=e1056]
+            - generic [ref=e1057]:
+              - generic [ref=e1058]:
+                - generic "Background" [ref=e1059]
+                - generic "Slot" [ref=e1060]
+                - generic "Text" [ref=e1061]
+              - generic [ref=e1062]: Playfair Display
+        - generic [ref=e1063]:
+          - button "Explore details" [ref=e1064] [cursor=pointer]:
+            - generic [ref=e1065]:
+              - generic [ref=e1067]:
+                - img
+              - generic [ref=e1073]: Explore Details
+          - generic [ref=e1074]:
+            - generic [ref=e1075]:
+              - generic [ref=e1076]: The Signature Collection
+              - generic [ref=e1077]: postcard
+            - heading "Katha Signature — Capiz Sage Γ-Shape Landscape" [level=3] [ref=e1078]
+            - generic [ref=e1079]:
+              - generic [ref=e1080]:
+                - generic "Background" [ref=e1081]
+                - generic "Slot" [ref=e1082]
+                - generic "Text" [ref=e1083]
+              - generic [ref=e1084]: Playfair Display
+        - generic [ref=e1085]:
+          - button "Explore details" [ref=e1086] [cursor=pointer]:
+            - generic [ref=e1087]:
+              - generic [ref=e1089]:
+                - img
+              - generic [ref=e1094]: Explore Details
+          - generic [ref=e1095]:
+            - generic [ref=e1096]:
+              - generic [ref=e1097]: The Signature Collection
+              - generic [ref=e1098]: postcard
+            - heading "Katha Signature — Heirloom Piña Landscape 2 Squares" [level=3] [ref=e1099]
+            - generic [ref=e1100]:
+              - generic [ref=e1101]:
+                - generic "Background" [ref=e1102]
+                - generic "Slot" [ref=e1103]
+                - generic "Text" [ref=e1104]
+              - generic [ref=e1105]: Playfair Display
+        - generic [ref=e1106]:
+          - button "Explore details" [ref=e1107] [cursor=pointer]:
+            - generic [ref=e1108]:
+              - generic [ref=e1110]:
+                - img
+              - generic [ref=e1116]: Explore Details
+          - generic [ref=e1117]:
+            - generic [ref=e1118]:
+              - generic [ref=e1119]: The Signature Collection
+              - generic [ref=e1120]: postcard
+            - heading "Katha Signature — Heirloom Piña Landscape 3 Squares" [level=3] [ref=e1121]
+            - generic [ref=e1122]:
+              - generic [ref=e1123]:
+                - generic "Background" [ref=e1124]
+                - generic "Slot" [ref=e1125]
+                - generic "Text" [ref=e1126]
+              - generic [ref=e1127]: Playfair Display
+        - generic [ref=e1128]:
+          - button "Explore details" [ref=e1129] [cursor=pointer]:
+            - generic [ref=e1130]:
+              - generic [ref=e1132]:
+                - img
+              - generic [ref=e1137]: Explore Details
+          - generic [ref=e1138]:
+            - generic [ref=e1139]:
+              - generic [ref=e1140]: The Signature Collection
+              - generic [ref=e1141]: postcard
+            - heading "Katha Signature — Knalum Night Landscape 2 Squares" [level=3] [ref=e1142]
+            - generic [ref=e1143]:
+              - generic [ref=e1144]:
+                - generic "Background" [ref=e1145]
+                - generic "Slot" [ref=e1146]
+                - generic "Text" [ref=e1147]
+              - generic [ref=e1148]: Playfair Display
+        - generic [ref=e1149]:
+          - button "Explore details" [ref=e1150] [cursor=pointer]:
+            - generic [ref=e1151]:
+              - generic [ref=e1153]:
+                - img
+              - generic [ref=e1159]: Explore Details
+          - generic [ref=e1160]:
+            - generic [ref=e1161]:
+              - generic [ref=e1162]: The Signature Collection
+              - generic [ref=e1163]: postcard
+            - heading "Katha Signature — Knalum Night Landscape 3 Squares" [level=3] [ref=e1164]
+            - generic [ref=e1165]:
+              - generic [ref=e1166]:
+                - generic "Background" [ref=e1167]
+                - generic "Slot" [ref=e1168]
+                - generic "Text" [ref=e1169]
+              - generic [ref=e1170]: Playfair Display
+        - generic [ref=e1171]:
+          - button "Explore details" [ref=e1172] [cursor=pointer]:
+            - generic [ref=e1173]:
+              - generic [ref=e1175]:
+                - img
+              - generic [ref=e1180]: Explore Details
+          - generic [ref=e1181]:
+            - generic [ref=e1182]:
+              - generic [ref=e1183]: The Signature Collection
+              - generic [ref=e1184]: postcard
+            - heading "Katha Signature — The Editorial Void Landscape 2 Squares" [level=3] [ref=e1185]
+            - generic [ref=e1186]:
+              - generic [ref=e1187]:
+                - generic "Background" [ref=e1188]
+                - generic "Slot" [ref=e1189]
+                - generic "Text" [ref=e1190]
+              - generic [ref=e1191]: Playfair Display
+        - generic [ref=e1192]:
+          - button "Explore details" [ref=e1193] [cursor=pointer]:
+            - generic [ref=e1194]:
+              - generic [ref=e1196]:
+                - img
+              - generic [ref=e1202]: Explore Details
+          - generic [ref=e1203]:
+            - generic [ref=e1204]:
+              - generic [ref=e1205]: The Signature Collection
+              - generic [ref=e1206]: postcard
+            - heading "Katha Signature — The Editorial Void Landscape 3 Squares" [level=3] [ref=e1207]
+            - generic [ref=e1208]:
+              - generic [ref=e1209]:
+                - generic "Background" [ref=e1210]
+                - generic "Slot" [ref=e1211]
+                - generic "Text" [ref=e1212]
+              - generic [ref=e1213]: Playfair Display
+        - generic [ref=e1214]:
+          - button "Explore details" [ref=e1215] [cursor=pointer]:
+            - generic [ref=e1216]:
+              - generic [ref=e1218]:
+                - img
+              - generic [ref=e1223]: Explore Details
+          - generic [ref=e1224]:
+            - generic [ref=e1225]:
+              - generic [ref=e1226]: The Classic Atelier
+              - generic [ref=e1227]: postcard
+            - heading "Style 1 — Tradition Gold Landscape 2 Squares" [level=3] [ref=e1228]
+            - generic [ref=e1229]:
+              - generic [ref=e1230]:
+                - generic "Background" [ref=e1231]
+                - generic "Slot" [ref=e1232]
+                - generic "Text" [ref=e1233]
+              - generic [ref=e1234]: Cinzel
+        - generic [ref=e1235]:
+          - button "Explore details" [ref=e1236] [cursor=pointer]:
+            - generic [ref=e1237]:
+              - generic [ref=e1239]:
+                - img
+              - generic [ref=e1245]: Explore Details
+          - generic [ref=e1246]:
+            - generic [ref=e1247]:
+              - generic [ref=e1248]: The Classic Atelier
+              - generic [ref=e1249]: postcard
+            - heading "Style 1 — Tradition Gold Landscape 3 Squares" [level=3] [ref=e1250]
+            - generic [ref=e1251]:
+              - generic [ref=e1252]:
+                - generic "Background" [ref=e1253]
+                - generic "Slot" [ref=e1254]
+                - generic "Text" [ref=e1255]
+              - generic [ref=e1256]: Cinzel
+        - generic [ref=e1257]:
+          - button "Explore details" [ref=e1258] [cursor=pointer]:
+            - generic [ref=e1259]:
+              - generic [ref=e1261]:
+                - img
+              - generic [ref=e1267]: Explore Details
+          - generic [ref=e1268]:
+            - generic [ref=e1269]:
+              - generic [ref=e1270]: The Signature Collection
+              - generic [ref=e1271]: strip
+            - heading "Katha Signature — Woven Silk" [level=3] [ref=e1272]
+            - generic [ref=e1273]:
+              - generic [ref=e1274]:
+                - generic "Background" [ref=e1275]
+                - generic "Slot" [ref=e1276]
+                - generic "Text" [ref=e1277]
+              - generic [ref=e1278]: Playfair Display
+        - generic [ref=e1279]:
+          - button "Explore details" [ref=e1280] [cursor=pointer]:
+            - generic [ref=e1281]:
+              - generic [ref=e1283]:
+                - img
+              - generic [ref=e1288]: Explore Details
+          - generic [ref=e1289]:
+            - generic [ref=e1290]:
+              - generic [ref=e1291]: The Signature Collection
+              - generic [ref=e1292]: postcard
+            - heading "Katha Signature — Woven Silk Postcard" [level=3] [ref=e1293]
+            - generic [ref=e1294]:
+              - generic [ref=e1295]:
+                - generic "Background" [ref=e1296]
+                - generic "Slot" [ref=e1297]
+                - generic "Text" [ref=e1298]
+              - generic [ref=e1299]: Playfair Display
+        - generic [ref=e1300]:
+          - button "Explore details" [ref=e1301] [cursor=pointer]:
+            - generic [ref=e1302]:
+              - generic [ref=e1304]:
+                - img
+              - generic [ref=e1310]: Explore Details
+          - generic [ref=e1311]:
+            - generic [ref=e1312]:
+              - generic [ref=e1313]: The Signature Collection
+              - generic [ref=e1314]: postcard
+            - heading "Katha Signature — Woven Silk Landscape" [level=3] [ref=e1315]
+            - generic [ref=e1316]:
+              - generic [ref=e1317]:
+                - generic "Background" [ref=e1318]
+                - generic "Slot" [ref=e1319]
+                - generic "Text" [ref=e1320]
+              - generic [ref=e1321]: Playfair Display
+        - generic [ref=e1322]:
+          - button "Explore details" [ref=e1323] [cursor=pointer]:
+            - generic [ref=e1324]:
+              - generic [ref=e1326]:
+                - img
+              - generic [ref=e1331]: Explore Details
+          - generic [ref=e1332]:
+            - generic [ref=e1333]:
+              - generic [ref=e1334]: The Classic Atelier
+              - generic [ref=e1335]: postcard
+            - heading "Tracy & Prince" [level=3] [ref=e1336]
+            - generic [ref=e1337]:
+              - generic [ref=e1338]:
+                - generic "Background" [ref=e1339]
+                - generic "Slot" [ref=e1340]
+                - generic "Text" [ref=e1341]
+              - generic [ref=e1342]: Parisienne
+  - button "Open Next.js Dev Tools" [ref=e1348] [cursor=pointer]:
+    - img [ref=e1349]
+  - alert [ref=e1352]: Choose your style
+```
+
+# Test source
+
+```ts
+  1  | import { test, expect } from '@playwright/test';
+  2  | 
+  3  | // F7: Template Selection — Tier 2 Boundary / Corner
+  4  | // No timing-based or load-state waits: every wait is a web-first assertion.
+  5  | // Network failure is simulated with Playwright-native context.setOffline —
+  6  | // the app's own APIs are never mocked.
+  7  | 
+  8  | test.describe('F7: Template Selection - Tier 2 Boundary/Corner', () => {
+  9  |   test('T2.1: returns a 404 for an unknown portal id (no lead match)', async ({ page }) => {
+  10 |     // Unknown ids call notFound() (app/portal/[id]/template-design/page.tsx),
+  11 |     // consistent with the 404-on-unknown-lead contract in intake-funnel.spec.ts.
+  12 |     const response = await page.goto('/portal/unknown-lead-9999/template-design');
+  13 |     expect(response?.status()).toBe(404);
+  14 |     await expect(page.getByRole('heading', { name: 'Choose your style' })).toHaveCount(0);
+  15 |   });
+  16 | 
+  17 |   test('T2.2: gates submission until a name and a valid email are provided', async ({ page }) => {
+  18 |     await page.goto('/portal/guest/template-design');
+  19 |     await page.getByRole('button', { name: /explore details/i }).first().click();
+  20 | 
+  21 |     const modal = page.getByRole('dialog');
+  22 |     await expect(modal).toBeVisible();
+  23 | 
+  24 |     const submit = modal.getByRole('button', { name: 'Send Inquiry' });
+  25 |     await expect(submit).toBeDisabled();
+  26 | 
+  27 |     await modal.getByLabel('First name').fill('Ana');
+  28 |     await modal.getByLabel('Email address').fill('not-an-email');
+  29 | 
+  30 |     await expect(modal.getByText('Please enter a valid email address.')).toBeVisible();
+  31 |     await expect(submit).toBeDisabled();
+  32 |   });
+  33 | 
+  34 |   test('T2.3: format filter toggles exclusively via aria-pressed', async ({ page }) => {
+  35 |     await page.goto('/portal/guest/template-design');
+  36 | 
+  37 |     const stripFilter = page.getByRole('button', { name: '2×6 Strip' });
+> 38 |     await stripFilter.click();
+     |                       ^ Error: locator.click: Test timeout of 30000ms exceeded.
+  39 | 
+  40 |     await expect(stripFilter).toHaveAttribute('aria-pressed', 'true');
+  41 |     await expect(page.getByRole('button', { name: 'All formats' })).toHaveAttribute('aria-pressed', 'false');
+  42 |     await expect(page.getByText(/\d+ templates?/)).toBeVisible();
+  43 |   });
+  44 | 
+  45 |   test('T2.4: renders cards and opens the modal on a mobile viewport', async ({ page }) => {
+  46 |     await page.setViewportSize({ width: 375, height: 667 });
+  47 |     await page.goto('/portal/guest/template-design');
+  48 | 
+  49 |     const cards = page.getByRole('button', { name: /explore details/i });
+  50 |     await expect(cards.first()).toBeVisible();
+  51 | 
+  52 |     await cards.first().click();
+  53 |     await expect(page.getByRole('dialog')).toBeVisible();
+  54 |   });
+  55 | 
+  56 |   test('T2.5: surfaces a submission error when the network drops', async ({ context, page }) => {
+  57 |     await page.goto('/portal/guest/template-design');
+  58 |     await page.getByRole('button', { name: /explore details/i }).first().click();
+  59 | 
+  60 |     const modal = page.getByRole('dialog');
+  61 |     await expect(modal).toBeVisible();
+  62 | 
+  63 |     await modal.getByLabel('First name').fill('Ana');
+  64 |     await modal.getByLabel('Email address').fill('ana.reyes@example.com');
+  65 |     // Submit stays disabled until an installation is chosen (serviceTier gate).
+  66 |     await modal.getByRole('button', { name: /Signature Installation/i }).click();
+  67 | 
+  68 |     // Playwright-native offline simulation — never mock our own API.
+  69 |     await context.setOffline(true);
+  70 |     await modal.getByRole('button', { name: 'Send Inquiry' }).click();
+  71 | 
+  72 |     await expect(modal.getByText('Submission failed. Please try again.')).toBeVisible();
+  73 |   });
+  74 | });
+  75 | 
+```

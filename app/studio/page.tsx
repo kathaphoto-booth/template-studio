@@ -1,6 +1,5 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { jsPDF } from "jspdf";
@@ -128,14 +127,6 @@ function drawPaperTexture(
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2);
       ctx.fill();
-    }
-  } else if (presetId === "wedding-heritage-sage") {
-    // 4. Matte elegant moss/sage cardstock fibers
-    ctx.fillStyle = "rgba(0,0,0,0.035)";
-    for (let i = 0; i < 400; i++) {
-      const rx = Math.random() * width;
-      const ry = Math.random() * height;
-      ctx.fillRect(rx, ry, 1.5, 2);
     }
   } else if (presetId.includes("pina")) {
     // Katha Signature: Heirloom Piña Fabric Texture
@@ -333,8 +324,8 @@ export default function WorkspacePage() {
 
   // Typography override settings
   const [partnerFont, setPartnerFont] = useState(LUXURY_FONTS[0].css);
-  const [dateFont, setDateFont] = useState(LUXURY_FONTS[13].css);
-  const [venueFont, setVenueFont] = useState(LUXURY_FONTS[13].css);
+  const [dateFont, setDateFont] = useState(LUXURY_FONTS[12].css);
+  const [venueFont, setVenueFont] = useState(LUXURY_FONTS[12].css);
 
   const [partnerFontSize, setPartnerFontSize] = useState(26);
   const [dateFontSize, setDateFontSize] = useState(10);
@@ -711,13 +702,7 @@ export default function WorkspacePage() {
         }
       }
 
-      // If Heritage Sage green, draw its background band as part of the background layer
-      if (!useTransparentSlots && currentPreset.id === "wedding-heritage-sage") {
-        const bannerHeight = 240 * scaleFactor;
-        ctx.fillStyle = currentSecColor;
-        const bannerY = textPosition === "top" ? 0 : cardHeight - bannerHeight;
-        ctx.fillRect(0, bannerY, cardWidth, bannerHeight);
-      }
+
     } else {
       ctx.clearRect(0, 0, cardWidth, cardHeight);
     }
@@ -767,7 +752,7 @@ export default function WorkspacePage() {
 
         if (layer === "slots") {
           // Standard Opaque Matte slots mask for clip masks (Solid Black)
-          ctx.fillStyle = "#000000";
+          ctx.fillStyle = "#111112";
           ctx.fillRect(x, y, sw, sh);
 
           if (borderWidth > 0) {
@@ -821,8 +806,8 @@ export default function WorkspacePage() {
       const namesText = isCursive ? getDerivedNames() : getDerivedNames().toUpperCase();
 
       if (activePresetType === "strip") {
-        const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
-        const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
+        const finalTextColor = currentTextColor;
+        const finalSecColor = currentSecColor;
 
         const dText = getDerivedDate().trim();
         const vText = getDerivedVenue().trim();
@@ -864,8 +849,8 @@ export default function WorkspacePage() {
           ctx.fillText(vText.toUpperCase(), (tz.x + tz.w / 2) * scaleFactor, currentY);
         }
       } else if (activePresetType === "postcard-vertical") {
-        const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
-        const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
+        const finalTextColor = currentTextColor;
+        const finalSecColor = currentSecColor;
 
         // Strip whitespaces out to check if date and venue are excluded
         const dText = getDerivedDate().trim();
@@ -928,8 +913,8 @@ export default function WorkspacePage() {
 
         let currentY = textZoneCenterY - (totalTextHeight / 2) + (firstLineHeight / 2);
 
-        const finalTextColor = currentPreset.id === "wedding-heritage-sage" ? "#FFFFFF" : currentTextColor;
-        const finalSecColor = currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : currentSecColor;
+        const finalTextColor = currentTextColor;
+        const finalSecColor = currentSecColor;
 
         if (hasNames) {
           ctx.font = `${partnerItalic ? "italic " : ""}${partnerFontWeight.replace("font-", "")} ${partnerFontSize * 1.5}px ${partnerCleanFont}`;
@@ -1099,7 +1084,7 @@ export default function WorkspacePage() {
   const stationeryTextElement = (
     <div
       style={{
-        color: currentPreset.id === "wedding-heritage-sage" && activePresetType === "strip" ? "#FFFFFF" : textColor,
+        color: textColor,
         minHeight: activePresetType === "strip" ? "28%" : activePresetType === "postcard-vertical" ? "23%" : "27%",
         paddingTop: textPosition === "bottom" ? (activePresetType === "strip" ? "12px" : "8px") : "4px",
         paddingBottom: textPosition === "top" ? (activePresetType === "strip" ? "12px" : "8px") : "4px",
@@ -1133,7 +1118,7 @@ export default function WorkspacePage() {
             fontFamily: dateFont,
             fontSize: `${dateFontSize}px`,
             letterSpacing: `${dateLetterSpacing}px`,
-            color: currentPreset.id === "wedding-heritage-sage" ? "#E2E2DF" : secondaryColor 
+            color: secondaryColor 
           }}
           className="font-bold uppercase mt-1 leading-none text-stone-550"
         >
@@ -1150,7 +1135,7 @@ export default function WorkspacePage() {
           }}
           className={cn(
             "select-none block opacity-78 uppercase mt-1.5",
-            currentPreset.id === "wedding-heritage-sage" ? "text-stone-100" : "text-stone-405"
+            "text-stone-405"
           )}
         >
           {getDerivedVenue()}
@@ -1159,1120 +1144,486 @@ export default function WorkspacePage() {
     </div>
   );
 
-  return (
-    <main id="app-root-container" className="min-h-screen bg-[#FAF9F5] text-stone-900 flex flex-col font-sans selection:bg-stone-200 selection:text-stone-950">
-      
-      {/* Bridal Header Branding */}
-      <header id="app-header" className="h-16 border-b border-stone-200/60 bg-white px-6 md:px-10 flex items-center justify-between sticky top-0 z-50 shadow-2xs">
-        <div className="flex items-center space-x-3">
-          <Heart className="w-4 h-4 text-[#8A7342] fill-[#8A7342]" />
-          <span className="text-xl font-serif italic tracking-tight font-black text-stone-950">Katha Template Studio</span>
-          <span className="h-4 w-px bg-stone-200" />
-          <span className="text-[10px] uppercase font-bold tracking-widest text-[#a8a29e]">Photo Strip &amp; Postcard Template Library</span>
-        </div>
 
-        <div className="flex items-center space-x-6 text-xs">
-          <div className="flex flex-col items-end">
-            <span className="text-[9px] uppercase font-bold tracking-widest text-stone-400">Heirloom Catalog</span>
-            <span className="font-mono text-stone-700 font-bold text-[10px]">{PRESETS.length} templates</span>
+  return (
+    <main id="app-root-container" className="h-screen w-screen overflow-hidden bg-[#EAE2D5] text-[#241E1A] flex flex-col font-mono selection:bg-[#C4B59D]/30 selection:text-[#1A1816]">
+      
+      {/* Admin Header */}
+      <header id="app-header" className="h-14 shrink-0 border-b border-[#C4B59D] bg-[#EAE2D5] px-6 flex items-center justify-between z-50">
+        <div className="flex items-center space-x-6">
+          <div className="flex flex-col">
+            <span className="text-[10px] uppercase tracking-[0.3em] text-[#9C958A] font-mono leading-none">Katha Booth</span>
+            <span className="text-lg text-[#241E1A] tracking-wide mt-1 leading-none" style={{ fontFamily: "var(--font-serif), serif" }}>Studio Admin</span>
           </div>
-          <div className="hidden sm:flex flex-col items-end border-l border-stone-200 pl-6">
-            <span className="text-[9px] uppercase font-bold tracking-widest text-[#a8a29e]">Rendering Platform</span>
-            <span className="font-mono text-stone-800 font-bold flex items-center gap-1.5 text-[10.5px]">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse" /> Precision Vectors active
-            </span>
+        </div>
+        <div className="flex items-center space-x-6 text-[10px] uppercase tracking-widest text-[#5A564E]">
+          <div className="flex items-center space-x-5">
+            <button className="hover:text-[#241E1A] flex items-center space-x-1.5 transition-colors">
+              <Download className="w-3.5 h-3.5"/><span>Save</span>
+            </button>
+            <button className="hover:text-[#241E1A] flex items-center space-x-1.5 transition-colors" aria-label="Undo">
+              <RotateCcw className="w-3.5 h-3.5"/>
+            </button>
+            <button className="hover:text-[#241E1A] flex items-center space-x-1.5 transition-colors" aria-label="Redo">
+              <RefreshCw className="w-3.5 h-3.5"/>
+            </button>
+          </div>
+          <div className="flex items-center space-x-2 bg-[#F2ECE4] px-3 py-1.5 border border-[#C4B59D]">
+            <Eye className="w-3.5 h-3.5"/>
+            <span>78%</span>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
           </div>
         </div>
       </header>
 
+      {/* DRAFT BANNER */}
       {showDraftBanner && draftSelection && (
-        <div className="bg-[#FAF1EA] border-b border-[#C4B59D]/50 px-6 py-2.5 flex items-center justify-between text-xs text-stone-800 animate-fade-in relative z-40">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center justify-center bg-[#8C382A]/10 text-[#8C382A] rounded-full w-5 h-5 font-bold text-[10px]">✨</span>
-            <span className="font-light">
-              Found a recent gallery selection for <strong>{draftSelection.names || "Gallery Guest"}</strong> ({draftSelection.templateName}). Load this draft into the template studio?
+        <div className="bg-[#1A1816] border-b border-[#2a2a2a] px-6 py-3 flex items-center justify-between text-[10px] uppercase tracking-widest text-[#9C958A] animate-fade-in shrink-0 z-40">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center justify-center border border-white/20 text-[#EAE2D5] w-5 h-5 font-bold">✨</span>
+            <span className="font-mono">
+              Found draft for <span className="text-[#EAE2D5] font-bold">{draftSelection.names || "Gallery Guest"}</span> ({draftSelection.templateName}).
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <button
               onClick={applyDraftSelection}
-              className="bg-stone-900 hover:bg-stone-800 text-white font-bold py-1 px-3 rounded-full uppercase tracking-wider text-[9px] transition-all cursor-pointer"
+              className="bg-[#8C382A] text-white font-bold py-1.5 px-4 hover:bg-[#7A2A1D] transition-colors cursor-pointer"
             >
-              Apply Selection Draft
+              APPLY DRAFT
             </button>
             <button
               onClick={() => setShowDraftBanner(false)}
-              className="text-stone-400 hover:text-stone-600 font-bold transition-all cursor-pointer text-sm"
+              className="text-[#9C958A] hover:text-[#EAE2D5] font-bold transition-all cursor-pointer"
               aria-label="Dismiss draft banner"
             >
-              ×
+              <X className="w-4 h-4"/>
             </button>
           </div>
         </div>
       )}
 
-      {/* Main Sandbox Catalog Panel */}
-      <div id="app-workspace-body" className="flex-1 flex flex-col lg:flex-row min-h-0">
+      {/* 3-PANE WORKSPACE */}
+      <div id="app-workspace-body" className="flex-1 flex min-h-0 overflow-hidden">
         
-        {/* SIDEBAR LEFT: CLIENT PERSONALIZATION CONTROLS */}
-        <aside id="workspace-sidebar" className="lg:w-[380px] border-b lg:border-b-0 lg:border-r border-stone-200 bg-white p-5 flex flex-col gap-5 shrink-0 overflow-y-auto lg:h-[calc(100vh-64px)]">
-          
-          {/* Quick toggle between Strip, Landscape Postcard & Vertical Postcard */}
-          <div>
-            <div className="text-[11px] uppercase font-bold tracking-widest text-stone-400 mb-2 px-0.5 flex items-center justify-between">
-              <span>Layout Ratio Mode</span>
-              <span className="text-[9px] italic text-[#8A7342] font-mono">
-                {activePresetType === "postcard-vertical" ? "2 stacked slots" : "3 layout slots"}
-              </span>
-            </div>
+        {/* LEFT PANE: TEMPLATE OBJECTS (Obsidian) */}
+        <aside className="w-[320px] shrink-0 border-r border-[#C4B59D] bg-[#1A1816] flex flex-col overflow-y-auto text-[10px] uppercase tracking-widest text-[#9C958A] font-mono scrollbar-hide">
+          <div className="border-b border-white/10 py-4 px-6 text-[#EAE2D5] font-bold tracking-[0.2em]">
+            TEMPLATE OBJECTS
+          </div>
+          <div className="p-6 space-y-6">
             
-            <div className="grid grid-cols-3 gap-1 p-1 bg-stone-50 rounded-md border border-stone-200/80">
-              <button
-                id="toggle-factor-strip"
-                onClick={() => handleTypeToggle("strip")}
-                className={cn(
-                  "py-1.5 px-0.5 text-[9.5px] font-bold uppercase tracking-wider text-center cursor-pointer transition-all rounded-sm leading-tight",
-                  activePresetType === "strip"
-                    ? "bg-white text-stone-950 shadow-2xs border border-stone-200"
-                    : "text-stone-500 hover:text-stone-800"
-                )}
-              >
-                2&quot;x6&quot; Strip
-              </button>
-              <button
-                id="toggle-factor-postcard-vertical"
-                onClick={() => handleTypeToggle("postcard-vertical")}
-                className={cn(
-                  "py-1.5 px-0.5 text-[9.5px] font-bold uppercase tracking-wider text-center cursor-pointer transition-all rounded-sm leading-tight",
-                  activePresetType === "postcard-vertical"
-                    ? "bg-white text-stone-950 shadow-2xs border border-stone-200"
-                    : "text-stone-500 hover:text-stone-800"
-                )}
-              >
-                4&quot;x6&quot; Postcard
-              </button>
-              <button
-                id="toggle-factor-postcard"
-                onClick={() => handleTypeToggle("postcard")}
-                className={cn(
-                  "py-1.5 px-0.5 text-[9.5px] font-bold uppercase tracking-wider text-center cursor-pointer transition-all rounded-sm leading-tight",
-                  activePresetType === "postcard"
-                    ? "bg-white text-stone-950 shadow-2xs border border-stone-200"
-                    : "text-stone-500 hover:text-stone-800"
-                )}
-              >
-                6&quot;x4&quot; Postcard
-              </button>
-            </div>
-          </div>
-
-          {/* PHOTO SLOT ARRANGEMENT */}
-          <div className="border-t border-stone-100 pt-3">
-            <div className="text-[11px] uppercase font-bold tracking-widest text-stone-400 mb-2 px-0.5 flex items-center justify-between">
-              <span>Photo Slot Arrangement</span>
-              <span className="text-[9px] italic text-[#8A7342] font-mono">
-                {(LAYOUTS as any)[activeLayoutId]?.slotCount || 3} Slots
-              </span>
-            </div>
-            
-            <div className="grid grid-cols-2 gap-1 p-1 bg-stone-50 rounded-md border border-stone-200/80">
-              {availableLayouts.map(layout => (
-                <button
-                  key={layout.id}
-                  onClick={() => setActiveLayoutId(layout.id)}
-                  className={cn(
-                    "py-1.5 px-0.5 text-[9.5px] font-bold uppercase tracking-wider text-center cursor-pointer transition-all rounded-sm leading-tight",
-                    activeLayoutId === layout.id
-                      ? "bg-white text-stone-950 shadow-2xs border border-stone-200"
-                      : "text-stone-500 hover:text-stone-800"
-                  )}
-                  title={layout.note}
-                >
-                  {layout.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* BRIDAL CLIENT REALTIME CUSTOMIZER FIELDS */}
-          <div className="border-t border-stone-100 pt-4 space-y-3">
-            <div className="text-[11px] uppercase font-bold tracking-widest text-stone-400 px-0.5 flex items-center gap-1.5">
-              <Smile className="w-3.5 h-3.5 text-stone-500" />
-              <span>Personalize Stationery Text</span>
+            {/* Stage */}
+            <div>
+               <div className="flex items-center space-x-2 mb-3 text-[#EAE2D5]">
+                 <Layers className="w-3.5 h-3.5"/>
+                 <span>STAGE</span>
+               </div>
+               <div className="ml-5 space-y-2 border-l border-white/10 pl-3">
+                 <div className="flex items-center space-x-2">
+                    <span className="w-2.5 h-2.5 border border-[#9C958A]"></span>
+                    <span>CANVAS 1800x1200px</span>
+                 </div>
+                 {(() => {
+                   const rawLay = resolveLayout(activeLayoutId, activePresetType);
+                   const lay = getModifiedLayout(rawLay, textPosition);
+                   return lay.slots.map((s: any, i: number) => (
+                     <div key={i} className="space-y-1.5">
+                        <div className={cn("flex items-center space-x-2 py-1 px-2 -ml-2 rounded-sm cursor-default", i === 0 ? "bg-white/10 text-[#EAE2D5]" : "hover:text-[#EAE2D5]")}>
+                          <Camera className="w-3.5 h-3.5"/>
+                          <span>PHOTO_{String(i+1).padStart(2, '0')}</span>
+                        </div>
+                        {i === 0 && (
+                          <div className="ml-5 text-[9px] text-[#9C958A]/70 space-y-1">
+                            <div className="flex space-x-4"><span>X: {s.x.toFixed(2)}</span> <span>Y: {s.y.toFixed(2)}</span></div>
+                            <div className="flex space-x-4"><span>W: {s.w.toFixed(2)}</span> <span>H: {s.h.toFixed(2)}</span></div>
+                          </div>
+                        )}
+                     </div>
+                   ));
+                 })()}
+                 <div className="flex items-center space-x-2 hover:text-[#EAE2D5] py-1 cursor-default">
+                    <FontIcon className="w-3.5 h-3.5"/>
+                    <span>HEADER</span>
+                 </div>
+                 <div className="flex items-center space-x-2 hover:text-[#EAE2D5] py-1 cursor-default">
+                    <FontIcon className="w-3.5 h-3.5"/>
+                    <span>TEXT_DATE</span>
+                 </div>
+                 <div className="flex items-center space-x-2 hover:text-[#EAE2D5] py-1 cursor-default">
+                    <Layers className="w-3.5 h-3.5"/>
+                    <span>OVERLAY_01</span>
+                 </div>
+               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <label className="text-[9px] uppercase font-semibold text-stone-400 block">First Name 1</label>
-                <input
-                  id="client-name-one"
-                  type="text"
-                  placeholder="Steven"
-                  value={partnerOne}
-                  onChange={(e) => setPartnerOne(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 p-2 text-xs focus:outline-none focus:ring-1 focus:ring-stone-900 focus:bg-white rounded-sm"
-                />
+            {/* PROPERTIES */}
+            <div className="pt-6 border-t border-white/10 space-y-5">
+              <div className="text-[#EAE2D5] font-bold mb-4 tracking-[0.2em]">PROPERTIES</div>
+              
+              <div className="bg-[#111112] border border-white/10 p-2 text-[#EAE2D5] text-center">
+                PHOTO_01
               </div>
 
-              <div className="space-y-1">
-                <label className="text-[9px] uppercase font-semibold text-stone-400 block">First Name 2</label>
-                <input
-                  id="client-name-two"
-                  type="text"
-                  placeholder="Cristalyn"
-                  value={partnerTwo}
-                  onChange={(e) => setPartnerTwo(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 p-2 text-xs focus:outline-none focus:ring-1 focus:ring-stone-900 focus:bg-white rounded-sm"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-2">
-              <div className="space-y-1 col-span-1">
-                <label className="text-[9px] uppercase font-semibold text-stone-400 block">Joiner</label>
-                <select
-                  value={textSeparator}
-                  onChange={(e) => setTextSeparator(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 p-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-stone-900 font-bold rounded-sm text-center"
-                >
-                  <option value="&amp;">&amp;</option>
-                  <option value="AND">AND</option>
-                  <option value="♥">♥</option>
-                  <option value="●">●</option>
-                </select>
+              {/* Dims */}
+              <div className="space-y-2">
+                <div className="text-[#EAE2D5]">DIMENSIONS</div>
+                {(() => {
+                   const rawLay = resolveLayout(activeLayoutId, activePresetType);
+                   const lay = getModifiedLayout(rawLay, textPosition);
+                   const s = lay.slots[0] || { w: 0, h: 0 };
+                   return (
+                    <div className="flex justify-between text-[#9C958A]">
+                      <span>W: {s.w.toFixed(2)}px</span>
+                      <span>H: {s.h.toFixed(2)}px</span>
+                    </div>
+                   );
+                })()}
               </div>
 
-              <div className="space-y-1 col-span-2">
-                <label className="text-[9px] uppercase font-semibold text-stone-400 block pb-0.5">Wedding Date</label>
-                <div className="relative">
-                  <input
-                    id="client-wedding-date"
-                    type="text"
-                    placeholder="July 25, 2026"
-                    value={weddingDate}
-                    onChange={(e) => setWeddingDate(e.target.value)}
-                    className="w-full bg-stone-50 border border-stone-200 pl-8 pr-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-stone-900 focus:bg-white rounded-sm"
-                  />
-                  <Calendar className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" />
+              {/* Pos */}
+              <div className="space-y-2">
+                <div className="text-[#EAE2D5]">POSITION</div>
+                {(() => {
+                   const rawLay = resolveLayout(activeLayoutId, activePresetType);
+                   const lay = getModifiedLayout(rawLay, textPosition);
+                   const s = lay.slots[0] || { x: 0, y: 0 };
+                   return (
+                    <div className="flex justify-between text-[#9C958A]">
+                      <span>X: {s.x.toFixed(2)}</span>
+                      <span>Y: {s.y.toFixed(2)}</span>
+                    </div>
+                   );
+                })()}
+              </div>
+
+              {/* Border */}
+              <div className="space-y-2">
+                <div className="text-[#EAE2D5]">BORDER</div>
+                <div className="grid grid-cols-[1fr_auto] gap-y-2 gap-x-4 text-[#9C958A]">
+                  <span className="flex items-center">Width</span>
+                  <span className="bg-[#111112] border border-white/10 px-2 py-1 text-right min-w-[80px]">{slotBorderWidth}</span>
+                  
+                  <span className="flex items-center">Color</span>
+                  <span className="bg-[#111112] border border-white/10 px-2 py-1 text-right min-w-[80px] lowercase">{borderColor}</span>
+                  
+                  <span className="flex items-center">Radius</span>
+                  <span className="bg-[#111112] border border-white/10 px-2 py-1 text-right min-w-[80px]">{slotBorderRadius}</span>
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-[9px] uppercase font-semibold text-stone-400 block">Location / Venue Notes</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="NAPA VALLEY, CALIFORNIA"
-                  value={weddingVenue}
-                  onChange={(e) => setWeddingVenue(e.target.value)}
-                  className="w-full bg-stone-50 border border-stone-200 pl-8 pr-2 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-stone-900 focus:bg-white rounded-sm"
-                />
-                <MapPin className="w-3.5 h-3.5 text-stone-400 absolute left-2.5 top-2.5" />
-              </div>
-            </div>
-          </div>
-
-          {/* ADVANCED TYPOGRAPHY OVERRIDE SECTIONS */}
-          <div className="border-t border-stone-100 pt-4 space-y-4">
-            <div className="text-[11px] uppercase font-bold tracking-widest text-[#8A7342] px-0.5 flex items-center justify-between">
-              <span>Typographic Font Suite</span>
-              <FontIcon className="w-3.5 h-3.5" />
-            </div>
-
-            {/* Names Font */}
-            <div className="space-y-1.5 bg-stone-50/50 p-2.5 rounded-sm border border-stone-200/60 text-left">
-              <label className="text-[9px] uppercase font-bold text-stone-500">Names Typography</label>
-              <select
-                value={partnerFont}
-                onChange={(e) => setPartnerFont(e.target.value)}
-                className="w-full bg-white border border-stone-250 p-1.5 text-xs rounded-sm focus:outline-none focus:ring-1 focus:ring-stone-900 font-mono text-[11px]"
-              >
-                {LUXURY_FONTS.map(f => (
-                  <option key={f.id} value={f.css}>{f.name}</option>
-                ))}
-              </select>
-
-              <div className="flex items-center gap-3 pt-1">
-                <div className="flex-1 space-y-0.5">
-                  <span className="text-[8px] uppercase tracking-wider text-stone-400 block">Size ({partnerFontSize}px)</span>
-                  <input
-                    type="range"
-                    min="14"
-                    max="64"
-                    value={partnerFontSize}
-                    onChange={(e) => setPartnerFontSize(parseInt(e.target.value))}
-                    className="w-full accent-[#8A7342]"
-                  />
-                </div>
-                <div className="flex-1 space-y-0.5">
-                  <span className="text-[8px] uppercase tracking-wider text-stone-400 block">Tracking ({partnerLetterSpacing}px)</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="16"
-                    value={partnerLetterSpacing}
-                    onChange={(e) => setPartnerLetterSpacing(parseInt(e.target.value))}
-                    className="w-full accent-[#8A7342]"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 pt-1.5">
-                <button
-                  type="button"
-                  onClick={() => setPartnerItalic(!partnerItalic)}
-                  className={cn(
-                    "text-[9px] px-2 py-1 rounded-xs border uppercase tracking-widest cursor-pointer",
-                    partnerItalic ? "bg-stone-905 text-white border-stone-905" : "bg-white text-stone-605 border-stone-200"
-                  )}
-                >
-                  <i>Italic</i>
-                </button>
-                <select
-                  value={partnerFontWeight}
-                  onChange={(e) => setPartnerFontWeight(e.target.value as any)}
-                  className="bg-white border border-stone-200 p-1 text-[9px] rounded-xs uppercase tracking-wider"
-                >
-                  <option value="font-normal">Light Weight</option>
-                  <option value="font-semibold">Semi Bold</option>
-                  <option value="font-bold">Bold Weight</option>
-                  <option value="font-black">Black Weight</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Date Font */}
-            <div className="space-y-1.5 bg-stone-50/50 p-2.5 rounded-sm border border-stone-200/60 text-left">
-              <label className="text-[9px] uppercase font-bold text-stone-500">Date Typography</label>
-              <select
-                value={dateFont}
-                onChange={(e) => setDateFont(e.target.value)}
-                className="w-full bg-white border border-stone-250 p-1.5 text-xs rounded-sm focus:outline-none focus:ring-1 focus:ring-stone-900 font-mono text-[11px]"
-              >
-                {LUXURY_FONTS.map(f => (
-                  <option key={f.id} value={f.css}>{f.name}</option>
-                ))}
-              </select>
-
-              <div className="flex items-center gap-3 pt-1">
-                <div className="flex-1 space-y-0.5">
-                  <span className="text-[8px] uppercase tracking-wider text-stone-400 block">Size ({dateFontSize}px)</span>
-                  <input
-                    type="range"
-                    min="8"
-                    max="24"
-                    value={dateFontSize}
-                    onChange={(e) => setDateFontSize(parseInt(e.target.value))}
-                    className="w-full accent-stone-700"
-                  />
-                </div>
-                <div className="flex-1 space-y-0.5">
-                  <span className="text-[8px] uppercase tracking-wider text-stone-400 block">Tracking ({dateLetterSpacing}px)</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="14"
-                    value={dateLetterSpacing}
-                    onChange={(e) => setDateLetterSpacing(parseInt(e.target.value))}
-                    className="w-full accent-stone-700"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Venue Font */}
-            <div className="space-y-1.5 bg-stone-50/50 p-2.5 rounded-sm border border-stone-200/60 text-left">
-              <label className="text-[9px] uppercase font-bold text-stone-500">Venue Typography</label>
-              <select
-                value={venueFont}
-                onChange={(e) => setVenueFont(e.target.value)}
-                className="w-full bg-white border border-stone-250 p-1.5 text-xs rounded-sm focus:outline-none focus:ring-1 focus:ring-stone-900 font-mono text-[11px]"
-              >
-                {LUXURY_FONTS.map(f => (
-                  <option key={f.id} value={f.css}>{f.name}</option>
-                ))}
-              </select>
-
-              <div className="flex items-center gap-3 pt-1">
-                <div className="flex-1 space-y-0.5">
-                  <span className="text-[8px] uppercase tracking-wider text-stone-400 block">Size ({venueFontSize}px)</span>
-                  <input
-                    type="range"
-                    min="7"
-                    max="18"
-                    value={venueFontSize}
-                    onChange={(e) => setVenueFontSize(parseInt(e.target.value))}
-                    className="w-full accent-stone-700"
-                  />
-                </div>
-                <div className="flex-1 space-y-0.5">
-                  <span className="text-[8px] uppercase tracking-wider text-stone-400 block">Tracking ({venueLetterSpacing}px)</span>
-                  <input
-                    type="range"
-                    min="0"
-                    max="14"
-                    value={venueLetterSpacing}
-                    onChange={(e) => setVenueLetterSpacing(parseInt(e.target.value))}
-                    className="w-full accent-stone-700"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* DYNAMIC TEXTURES & MARGIN TUNING RANGE SLIDERS */}
-          <div className="border-t border-stone-100 pt-4 space-y-4">
-            <div className="text-[11px] uppercase font-bold tracking-widest text-[#8A7342] px-0.5 flex items-center gap-1.5">
-              <Sliders className="w-3.5 h-3.5" />
-              <span>Borders &amp; Margin Geometry</span>
-            </div>
-
-            {/* Text Position Option Toggle */}
-            <div className="space-y-1.5 rounded-sm bg-amber-500/5 border border-stone-200/60 p-2.5">
-              <span className="text-[9px] uppercase font-bold tracking-wider text-[#8A7342] block">Text Alignment & Placement</span>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  id="btn-text-position-bottom"
-                  onClick={() => setTextPosition("bottom")}
-                  className={cn(
-                    "text-[10px] py-1.5 font-semibold rounded-xs border uppercase tracking-wider text-center cursor-pointer transition-all",
-                    textPosition === "bottom" 
-                      ? "bg-[#8A7342] text-white border-[#8A7342] shadow-sm" 
-                      : "bg-white text-stone-600 border-stone-250 hover:bg-stone-50"
-                  )}
-                >
-                  Bottom of Template
-                </button>
-                <button
-                  type="button"
-                  id="btn-text-position-top"
-                  onClick={() => setTextPosition("top")}
-                  className={cn(
-                    "text-[10px] py-1.5 font-semibold rounded-xs border uppercase tracking-wider text-center cursor-pointer transition-all",
-                    textPosition === "top" 
-                      ? "bg-[#8A7342] text-white border-[#8A7342] shadow-sm" 
-                      : "bg-white text-stone-600 border-stone-250 hover:bg-stone-50"
-                  )}
-                >
-                  Top of Template
-                </button>
-              </div>
-            </div>
-
-            {/* Background Graphic Opacity Slider */}
-            <div className="space-y-1 bg-amber-500/5 p-2.5 rounded-sm border border-stone-200/60">
-              <div className="flex justify-between text-[11px] text-stone-600">
-                <span className="font-bold text-[#8A7342]">Background Graphic Opacity</span>
-                <span className="font-mono text-[10px] bg-amber-50 px-1 border border-amber-200 text-amber-800 rounded-xs">{graphicOpacity}%</span>
-              </div>
-              <input
-                id="slider-graphic-opacity"
-                type="range"
-                min="0"
-                max="100"
-                step="5"
-                value={graphicOpacity}
-                onChange={(e) => setGraphicOpacity(parseInt(e.target.value))}
-                className="w-full accent-[#8A7342] cursor-pointer"
-              />
-            </div>
-
-            {/* Gap */}
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11px] text-stone-600">
-                <span>Space between photo slots</span>
-                <span className="font-mono text-[10px] bg-stone-100 px-1">{slotGap}</span>
-              </div>
-              <input
-                id="slider-slot-gap"
-                type="range"
-                min="6"
-                max="40"
-                step="2"
-                value={parseInt(slotGap) || 16}
-                onChange={(e) => setSlotGap(`${e.target.value}px`)}
-                className="w-full accent-amber-750"
-              />
-            </div>
-
-            {/* Radius */}
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11px] text-stone-600">
-                <span>Photo Corner Curvatures</span>
-                <span className="font-mono text-[10px] bg-stone-100 px-1">{slotBorderRadius}</span>
-              </div>
-              <input
-                id="slider-slot-radius"
-                type="range"
-                min="0"
-                max="24"
-                step="2"
-                value={parseInt(slotBorderRadius) || 0}
-                onChange={(e) => setSlotBorderRadius(`${e.target.value}px`)}
-                className="w-full accent-amber-750"
-              />
-            </div>
-
-            {/* Padding */}
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11px] text-stone-600">
-                <span>Outer Print Frame Margins</span>
-                <span className="font-mono text-[10px] bg-stone-100 px-1">{innerSpacing}</span>
-              </div>
-              <input
-                id="slider-inner-spacing"
-                type="range"
-                min="12"
-                max="36"
-                step="2"
-                value={parseInt(innerSpacing) || 24}
-                onChange={(e) => setInnerSpacing(`${e.target.value}px`)}
-                className="w-full accent-amber-750"
-              />
-            </div>
-
-            {/* Slot border width */}
-            <div className="space-y-1">
-              <div className="flex justify-between text-[11px] text-stone-600">
-                <span>Blank Space Slot Outline</span>
-                <span className="font-mono text-[10px] bg-stone-100 px-1">{slotBorderWidth}</span>
-              </div>
-              <input
-                id="slider-slot-border-width"
-                type="range"
-                min="0"
-                max="8"
-                step="0.5"
-                value={parseFloat(slotBorderWidth) || 0}
-                onChange={(e) => setSlotBorderWidth(`${e.target.value}px`)}
-                className="w-full accent-amber-750"
-              />
-            </div>
-          </div>
-
-        </aside>
-
-        {/* BRIDAL PREVIEW CARDS SUITE VIEWPORT (CENTER) */}
-        <section id="workspace-content-canvas" className="flex-1 bg-[#FAF8F5]/40 p-5 md:p-8 flex flex-col items-center justify-center overflow-y-auto lg:h-[calc(100vh-64px)] border-t lg:border-t-0 border-stone-200">
-          
-          <div className="flex flex-col items-center space-y-5 max-w-full">
-            
-            {/* Top status controller bar */}
-            <div className="flex items-center justify-between w-full max-w-lg bg-white border border-stone-200 p-2 text-xs gap-2">
-              <div className="flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-                <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-stone-650">Nano Banana Pro Visualizer</span>
               </div>
               
-              <button
-                type="button"
-                onClick={() => setUseTransparentSlots(!useTransparentSlots)}
-                className={cn(
-                  "px-2 py-0.5 font-bold text-[8.5px] uppercase tracking-wider flex items-center gap-1 transition-all cursor-pointer border rounded-sm",
-                  useTransparentSlots 
-                    ? "bg-stone-900 border-stone-900 text-white" 
-                    : "bg-stone-50 border-stone-200 text-stone-600"
-                )}
-                title="Toggle template transparency preview"
-              >
-                <Layers className="w-3 h-3" />
-                <span>Alpha Cutouts</span>
-              </button>
-            </div>
+              {/* Transform */}
+              <div className="space-y-2">
+                <div className="text-[#EAE2D5]">TRANSFORM</div>
+                <div className="flex justify-between items-center text-[#9C958A]">
+                  <span>Scale</span>
+                  <span className="bg-[#111112] border border-white/10 px-2 py-1 text-right min-w-[80px]">1.00x</span>
+                </div>
+              </div>
 
-            {/* Aspect Ratio Display Sandbox Wrapper */}
-            <div 
+            </div>
+          </div>
+        </aside>
+
+        {/* CENTER PANE: CANVAS */}
+        <section className="flex-1 bg-[#F2ECE4] relative overflow-auto flex items-center justify-center">
+          {/* Subtle Piña grid overlay */}
+          <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'linear-gradient(to right, #EAE2D5 1px, transparent 1px), linear-gradient(to bottom, #EAE2D5 1px, transparent 1px)', backgroundSize: '100px 100px' }}></div>
+          
+          <div 
+            style={{
+              width: activePresetType === "strip" ? "272px" : (activePresetType === "postcard-vertical" ? "366px" : "550px"),
+              height: activePresetType === "strip" ? "816px" : (activePresetType === "postcard-vertical" ? "550px" : "366px"),
+            }}
+            id="live-template-canvas-viewport" 
+            className={cn(
+              "relative select-none p-1 ring-1 shadow-2xl z-10",
+              useTransparentSlots ? "bg-[radial-gradient(#C4B59D_1px,transparent_1px)] [background-size:16px_16px] ring-[#C4B59D]" : "bg-[#f5f2eb] ring-black/5"
+            )}
+          >
+            <div
               style={{
-                width: activePresetType === "strip" ? "272px" : (activePresetType === "postcard-vertical" ? "366px" : "550px"),
-                height: activePresetType === "strip" ? "816px" : (activePresetType === "postcard-vertical" ? "550px" : "366px"),
+                backgroundColor: customBasePhoto ? undefined : (useTransparentSlots ? "transparent" : backgroundColor),
+                backgroundImage: customBasePhoto ? `url(${customBasePhoto})` : undefined,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
               }}
-              id="live-template-canvas-viewport" 
-              className={cn(
-                "border border-stone-250/90 shadow-xl relative select-none p-1 bg-white",
-                useTransparentSlots ? "bg-[radial-gradient(#e5e5e5_1px,transparent_1px)] [background-size:16px_16px]" : ""
-              )}
+              className="w-full h-full flex flex-col justify-between absolute inset-0 overflow-hidden"
             >
-              {/* Flat viewport — layout coords include the safe margin, so no
-                   padding here. Slots position themselves via layout data. */}
-              <div
+              <div 
+                className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.22] z-12"
                 style={{
-                  backgroundColor: customBasePhoto ? undefined : (useTransparentSlots ? "transparent" : backgroundColor),
-                  backgroundImage: customBasePhoto ? `url(${customBasePhoto})` : undefined,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  backgroundImage: "radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px)",
+                  backgroundSize: "3px 3px"
                 }}
-                className="w-full h-full flex flex-col justify-between absolute inset-0 overflow-hidden shadow-xl"
-              >
-                  
-                  {/* Realistic Paper Artistry Texture Overlay */}
-                  <div 
-                    className="absolute inset-0 pointer-events-none mix-blend-multiply opacity-[0.22] z-12"
-                    style={{
-                      backgroundImage: currentPreset.id === "wedding-warm-terracotta"
-                        ? "radial-gradient(rgba(0,0,0,0.18) 0.5px, transparent 0.5px)"
-                        : ["wedding-luxe-gold", "wedding-classic-monogram", "wedding-vintage-lace", "wedding-luxury-blind-deboss", "wedding-art-deco"].includes(currentPreset.id)
-                        ? "linear-gradient(90deg, rgba(0,0,0,0.06) 50%, transparent 50%), linear-gradient(rgba(0,0,0,0.06) 50%, transparent 50%)"
-                        : "radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px)",
-                      backgroundSize: ["wedding-luxe-gold", "wedding-classic-monogram", "wedding-vintage-lace", "wedding-luxury-blind-deboss", "wedding-art-deco"].includes(currentPreset.id) ? "4px 4px" : "3px 3px"
-                    }}
-                  />
-                  <div 
-                    className="absolute inset-0 pointer-events-none mix-blend-screen opacity-[0.35] z-12"
-                    style={{
-                      backgroundImage: ["wedding-luxe-gold", "wedding-classic-monogram", "wedding-vintage-lace", "wedding-luxury-blind-deboss", "wedding-art-deco"].includes(currentPreset.id)
-                        ? "linear-gradient(90deg, rgba(255,255,255,0.12) 50%, transparent 50%), linear-gradient(rgba(255,255,255,0.12) 50%, transparent 50%)"
-                        : "none",
-                      backgroundSize: "4px 4px"
-                    }}
-                  />
+              />
 
-                  {/* Inline SVG decoration layer — re-renders when preset / colors / textPosition change */}
-                  <svg 
-                    className="absolute inset-0 w-full h-full pointer-events-none z-10" 
-                    style={{ opacity: graphicOpacity / 100 }}
-                    viewBox={activePresetType === "strip" ? "0 0 600 1800" : (activePresetType === "postcard-vertical" ? "0 0 1200 1800" : "0 0 1800 1200")}
-                    dangerouslySetInnerHTML={{ __html: renderDecorativeSvg(currentPreset.id, activePresetType, textColor, secondaryColor, borderColor, textPosition) }}
-                  />
-                  {textPosition === "top" && stationeryTextElement}
- 
-                  {/* THE PHOTO MOUNT SLOTS — data-driven from lib/layouts.js */}
-                  <div className="flex-1 relative z-20 w-full h-full">
-                    {(() => {
-                      const rawLay = resolveLayout(activeLayoutId, activePresetType);
-                      const lay = getModifiedLayout(rawLay, textPosition);
-                      const vb = VIEWBOX[activePresetType];
-                      return lay.slots.map((s: { x: number; y: number; w: number; h: number }, idx: number) => {
-                        const left = (s.x / vb.w) * 100;
-                        const top = (s.y / vb.h) * 100;
-                        const width = (s.w / vb.w) * 100;
-                        const height = (s.h / vb.h) * 100;
-                        return (
-                        <label
-                          key={idx}
-                          id={`slot-preview-item-${idx}`}
-                          style={{
-                            position: "absolute",
-                            left: `${left}%`,
-                            top: `${top}%`,
-                            width: `${width}%`,
-                            height: `${height}%`,
-                            borderRadius: slotBorderRadius,
-                            border: `${slotBorderWidth} ${useTransparentSlots && !customBasePhoto ? "dashed" : "solid"} ${useTransparentSlots && !customBasePhoto ? "rgba(0,0,0,0.15)" : borderColor}`,
-                            backgroundColor: useTransparentSlots ? "rgba(0,0,0,0.02)" : slotBgColor,
-                            boxShadow: useTransparentSlots ? "none" : "inset 2px 3px 6px rgba(0, 0, 0, 0.18), inset -1px -1px 3px rgba(255, 255, 255, 0.85), 0.5px 1px 1px rgba(0,0,0,0.03)",
-                          }}
-                          className={cn(
-                            "overflow-hidden group flex flex-col items-center justify-center transition-all cursor-pointer text-center",
-                            useTransparentSlots ? "border-dashed" : "hover:bg-stone-50/20"
-                          )}
-                        >
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) => {
-                              if (e.target.files?.[0]) {
-                                const url = URL.createObjectURL(e.target.files[0]);
-                                setCustomBasePhoto(url);
-                              }
-                            }}
-                          />
- 
-                          <span className="absolute top-2 left-2 text-[10px] font-sans font-semibold text-stone-400/80 z-20 pointer-events-none select-none">
-                            {idx + 1}
-                          </span>
- 
-                          <div className="flex flex-col items-center space-y-1 text-stone-400/75 p-3 z-10 pointer-events-none group-hover:text-stone-700 transition-colors">
-                            <Upload className="w-3.5 h-3.5 stroke-[1.5]" />
-                            <span className="text-[7.5px] uppercase font-bold tracking-widest text-[#8A7342]">Upload Base</span>
-                          </div>
+              <svg 
+                className="absolute inset-0 w-full h-full pointer-events-none z-10" 
+                style={{ opacity: graphicOpacity / 100, mixBlendMode: 'screen' }}
+                viewBox={activePresetType === "strip" ? "0 0 600 1800" : (activePresetType === "postcard-vertical" ? "0 0 1200 1800" : "0 0 1800 1200")}
+                dangerouslySetInnerHTML={{ __html: renderDecorativeSvg(currentPreset.id, activePresetType, textColor, secondaryColor, borderColor, textPosition) }}
+              />
 
-                          {/* OVERLAPPING 3D ROSE ACCESSORY (Only for bottom-most / third slot) */}
-                          {currentPreset.id === "rose-whisper" && idx === 2 && (
-                            <div 
-                              style={{
-                                position: "absolute",
-                                bottom: "-10px",
-                                right: "-10px",
-                                width: "65px",
-                                height: "65px",
-                                zIndex: 30,
-                                pointerEvents: "none",
-                                filter: "drop-shadow(2px 4px 6px rgba(0,0,0,0.22))"
-                              }}
-                              className="animate-fade-in"
-                            >
-                              <svg viewBox="0 0 100 100" className="w-full h-full">
-                                <defs>
-                                  <radialGradient id="rose-grad-1-p" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stopColor="#FFFFFF" />
-                                    <stop offset="70%" stopColor="#FBF7EC" />
-                                    <stop offset="100%" stopColor="#E0D7C5" />
-                                  </radialGradient>
-                                  <radialGradient id="rose-grad-2-p" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stopColor="#FFFFFF" />
-                                    <stop offset="85%" stopColor="#F3EDE0" />
-                                    <stop offset="100%" stopColor="#CEBF9E" />
-                                  </radialGradient>
-                                </defs>
-                                {/* Foliage */}
-                                <path d="M 25,60 C 15,58 12,70 18,74 C 25,78 30,70 25,60 Z" fill="#8F9A86" opacity="0.9" stroke="#606A57" strokeWidth="0.5" />
-                                <path d="M 72,64 C 82,62 85,74 79,78 C 72,82 68,74 72,64 Z" fill="#8F9A86" opacity="0.9" stroke="#606A57" strokeWidth="0.5" />
-                                {/* Outside petals */}
-                                <circle cx="36" cy="46" r="21" fill="url(#rose-grad-2-p)" stroke="#E2D6C0" strokeWidth="0.3" />
-                                <circle cx="64" cy="46" r="21" fill="url(#rose-grad-2-p)" stroke="#E2D6C0" strokeWidth="0.3" />
-                                <circle cx="50" cy="66" r="21" fill="url(#rose-grad-2-p)" stroke="#E2D6C0" strokeWidth="0.3" />
-                                <circle cx="50" cy="34" r="21" fill="url(#rose-grad-2-p)" stroke="#E2D6C0" strokeWidth="0.3" />
-                                {/* Center layer petals */}
-                                <circle cx="42" cy="44" r="16" fill="url(#rose-grad-1-p)" stroke="#D6C7AA" strokeWidth="0.3" />
-                                <circle cx="58" cy="44" r="16" fill="url(#rose-grad-1-p)" stroke="#D6C7AA" strokeWidth="0.3" />
-                                <circle cx="50" cy="56" r="16" fill="url(#rose-grad-1-p)" stroke="#D6C7AA" strokeWidth="0.3" />
-                                {/* Center core */}
-                                <circle cx="50" cy="48" r="8" fill="#F4EDE0" stroke="#CDBC9F" strokeWidth="0.5" />
-                              </svg>
-                            </div>
-                          )}
+              {textPosition === "top" && stationeryTextElement}
 
-                          {/* OVERLAPPING 3D GOLD LEAF ACCESSORY (Only for top-most / first slot) */}
-                          {currentPreset.id === "wedding-warm-terracotta" && idx === 0 && (
-                            <div 
-                              style={{
-                                position: "absolute",
-                                top: "-8px",
-                                right: "-8px",
-                                width: "55px",
-                                height: "55px",
-                                zIndex: 30,
-                                pointerEvents: "none",
-                                filter: "drop-shadow(2px 3px 5px rgba(0,0,0,0.26))"
-                              }}
-                              className="animate-fade-in"
-                            >
-                              <svg viewBox="0 0 100 100" className="w-full h-full">
-                                <defs>
-                                  <linearGradient id="gold-leaf-grad-p" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stopColor="#FFEFA6" />
-                                    <stop offset="30%" stopColor="#D9A441" />
-                                    <stop offset="50%" stopColor="#FFF4B8" />
-                                    <stop offset="80%" stopColor="#B38B32" />
-                                    <stop offset="100%" stopColor="#FFE38F" />
-                                  </linearGradient>
-                                </defs>
-                                <path d="M 20,80 Q 75,70 85,20 Q 35,35 20,80 Z" fill="url(#gold-leaf-grad-p)" stroke="#8C6B1F" strokeWidth="0.5" />
-                                <path d="M 20,80 L 85,20" fill="none" stroke="#FFFFFF" strokeWidth="0.8" opacity="0.5" />
-                              </svg>
-                            </div>
-                          )}
-                        </label>
-                        );
-                      });
-                    })()}
-                  </div>
-
-                  {textPosition === "bottom" && stationeryTextElement}
+              <div className="flex-1 relative z-20 w-full h-full">
+                {(() => {
+                  const rawLay = resolveLayout(activeLayoutId, activePresetType);
+                  const lay = getModifiedLayout(rawLay, textPosition);
+                  const vb = VIEWBOX[activePresetType];
+                  return lay.slots.map((s: { x: number; y: number; w: number; h: number }, idx: number) => {
+                    const left = (s.x / vb.w) * 100;
+                    const top = (s.y / vb.h) * 100;
+                    const width = (s.w / vb.w) * 100;
+                    const height = (s.h / vb.h) * 100;
+                    return (
+                    <label
+                      key={idx}
+                      id={`slot-preview-item-${idx}`}
+                      style={{
+                        position: "absolute",
+                        left: `${left}%`,
+                        top: `${top}%`,
+                        width: `${width}%`,
+                        height: `${height}%`,
+                        borderRadius: slotBorderRadius,
+                        border: `${slotBorderWidth} ${useTransparentSlots && !customBasePhoto ? "dashed" : "solid"} ${useTransparentSlots && !customBasePhoto ? "rgba(0,0,0,0.15)" : borderColor}`,
+                        backgroundColor: useTransparentSlots ? "rgba(0,0,0,0.02)" : slotBgColor,
+                      }}
+                      className={cn(
+                        "overflow-hidden group flex flex-col items-center justify-center transition-all cursor-pointer text-center",
+                        useTransparentSlots ? "border-dashed" : "hover:bg-black/5"
+                      )}
+                    >
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          if (e.target.files?.[0]) {
+                            const url = URL.createObjectURL(e.target.files[0]);
+                            setCustomBasePhoto(url);
+                          }
+                        }}
+                      />
+                      <span className="text-[10px] font-mono text-black/60 z-20 pointer-events-none select-none tracking-widest uppercase">
+                        PHOTO {idx + 1}
+                      </span>
+                      {/* Mathematical crosshairs on corners */}
+                      <span className="absolute -top-[5px] -left-[5px] w-2.5 h-2.5 border-t border-l border-[#8C382A]/40 pointer-events-none"></span>
+                      <span className="absolute -top-[5px] -right-[5px] w-2.5 h-2.5 border-t border-r border-[#8C382A]/40 pointer-events-none"></span>
+                      <span className="absolute -bottom-[5px] -left-[5px] w-2.5 h-2.5 border-b border-l border-[#8C382A]/40 pointer-events-none"></span>
+                      <span className="absolute -bottom-[5px] -right-[5px] w-2.5 h-2.5 border-b border-r border-[#8C382A]/40 pointer-events-none"></span>
+                    </label>
+                    );
+                  });
+                })()}
               </div>
-            </div>
 
-            {/* Design summary log */}
-            <div className="bg-white border border-stone-200 py-3.5 px-5 rounded-none max-w-lg shadow-2xs flex items-start space-x-3.5 text-left">
-              <Info className="w-4 h-4 text-[#8A7342] shrink-0 mt-0.5" />
-              <div className="space-y-0.5">
-                <span className="text-[8.5px] font-mono font-bold uppercase tracking-widest text-stone-400 block">
-                  Fine-Art Editorial Specs
-                </span>
-                <p className="text-xs text-stone-600 leading-relaxed font-serif italic">
-                  &ldquo;{currentPreset.designerExplanation}&rdquo;
-                </p>
-              </div>
+              {textPosition === "bottom" && stationeryTextElement}
             </div>
-
+            
+            {/* Extended mathematical constraints around canvas */}
+            <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-px h-6 bg-[#C4B59D]" />
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-px h-6 bg-[#C4B59D]" />
+            <div className="absolute top-1/2 -left-8 -translate-y-1/2 w-6 h-px bg-[#C4B59D]" />
+            <div className="absolute top-1/2 -right-8 -translate-y-1/2 w-6 h-px bg-[#C4B59D]" />
           </div>
         </section>
 
-        {/* SIDEBAR RIGHT: STATIONERY THEMES CATALOG & PRODUCTION EXPORT */}
-        <aside id="sidebar-photo-sources" className="lg:w-80 border-t lg:border-t-0 lg:border-l border-stone-200 bg-white p-5 flex flex-col gap-5 shrink-0 overflow-y-auto lg:h-[calc(100vh-64px)]">
-          
-          {/* Template catalog */}
-          <div>
-            <div className="text-[11px] uppercase font-bold tracking-widest text-stone-400 mb-2.5 px-0.5 flex items-center justify-between font-sans">
-              <span>Wedding Preset Styles (Style 1 - 12)</span>
-              <BookOpen className="w-3.5 h-3.5 text-stone-400" />
-            </div>
-
-            <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
-              {PRESETS.map((p) => (
-                <button
-                  key={p.id}
-                  id={`preset-selector-${p.id}`}
-                  onClick={() => handleSelectPreset(p)}
-                  className={cn(
-                    "w-full text-left p-2.5 flex flex-col gap-1 transition-all border rounded-xs cursor-pointer",
-                    currentPreset.id === p.id
-                      ? "border-[#8A7342] bg-[#FAF8F3] shadow-2xs"
-                      : "border-stone-200 bg-white hover:bg-stone-50"
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-stone-904">{p.name}</span>
-                    <Heart className={cn("w-3 h-3", currentPreset.id === p.id ? "fill-[#8A7342] text-[#8A7342]" : "text-stone-300")} />
-                  </div>
-                  <p className="text-[9px] text-stone-500 leading-normal line-clamp-2">{p.designerExplanation}</p>
-                </button>
-              ))}
-            </div>
+        {/* RIGHT PANE: CONFIGURATION (Obsidian) */}
+        <aside className="w-[320px] shrink-0 border-l border-[#C4B59D] bg-[#1A1816] flex flex-col overflow-y-auto text-[10px] uppercase tracking-widest text-[#9C958A] font-mono scrollbar-hide">
+          <div className="border-b border-white/10 py-4 px-6 text-[#EAE2D5] font-bold tracking-[0.2em]">
+            CONFIGURATION
           </div>
-
-          {/* DYNAMIC BACKGROUND CUSTOM GRAPHICS BASE */}
-          <div className="border-t border-stone-100 pt-4 space-y-2 text-left">
-            <span className="text-[11px] uppercase font-bold tracking-widest text-[#8A7342] block">
-              Background Canvas Graphic
-            </span>
-
-            {customBasePhoto ? (
-              <div className="p-2.5 bg-stone-50 border border-stone-200 rounded-xs flex items-center gap-2.5">
-                <div className="w-10 h-10 relative bg-stone-200 border border-stone-300 rounded overflow-hidden shrink-0">
-                  <picture>
-                    <img src={customBasePhoto} alt="Base Template Preview" className="w-full h-full object-cover" />
-                  </picture>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <span className="text-[9px] uppercase font-mono font-bold text-emerald-600 block">✓ Custom Base Active</span>
-                  <button
-                    id="clear-base-photo-btn"
-                    onClick={clearCustomBasePhoto}
-                    className="text-[8.5px] font-bold uppercase tracking-widest text-rose-600 hover:text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded-xs mt-0.5 cursor-pointer"
-                  >
-                    Remove base
+          <div className="p-6 space-y-6">
+            
+            {/* LAYOUT */}
+            <div className="space-y-4">
+              <div className="text-[#EAE2D5]">LAYOUT</div>
+              <div className="space-y-3 text-[#9C958A]">
+                <div className="flex justify-between items-center">
+                  <span>Masking</span>
+                  <button onClick={() => setUseTransparentSlots(!useTransparentSlots)} className={cn("px-3 py-1.5 border transition-colors focus:outline-none", useTransparentSlots ? "bg-[#EAE2D5] border-[#EAE2D5] text-[#1A1816]" : "bg-[#111112] border-white/10 text-[#EAE2D5]")}>
+                    {useTransparentSlots ? "ON  " : "OFF"}
                   </button>
                 </div>
-              </div>
-            ) : (
-              <div className="p-3 bg-stone-50/50 border border-dashed border-stone-200 rounded-xs text-center space-y-2 animate-fade-in">
-                <p className="text-[9px] text-stone-500 leading-dense">
-                  Upload custom visual background bases to layer behind the frames.
-                </p>
-                <label className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 text-[9px] font-bold uppercase tracking-wider cursor-pointer transition-colors rounded-sm shadow-2xs">
-                  <Upload className="w-3 h-3 text-[#8A7342]" />
-                  <span>Upload Background</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
+                <div className="flex justify-between items-center">
+                  <span>Type</span>
+                  <select 
+                    value={activePresetType} 
+                    onChange={(e) => handleTypeToggle(e.target.value as any)}
+                    className="bg-[#111112] border border-white/10 text-[#EAE2D5] px-2 py-1.5 outline-none min-w-[120px] appearance-none"
+                  >
+                    <option value="strip">Strip</option>
+                    <option value="postcard-vertical">Port</option>
+                    <option value="postcard">Land</option>
+                  </select>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>Geometry</span>
+                  <select 
+                    value={activeLayoutId} 
+                    onChange={(e) => setActiveLayoutId(e.target.value)}
+                    className="bg-[#111112] border border-white/10 text-[#EAE2D5] px-2 py-1.5 outline-none min-w-[120px] appearance-none"
+                  >
+                    {availableLayouts.map(l => (
+                      <option key={l.id} value={l.id}>{l.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>Catalog</span>
+                  <select 
+                    value={currentPreset.id} 
                     onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        const url = URL.createObjectURL(e.target.files[0]);
-                        setCustomBasePhoto(url);
-                      }
+                      const p = PRESETS.find(x => x.id === e.target.value);
+                      if (p) handleSelectPreset(p);
                     }}
-                  />
-                </label>
+                    className="bg-[#111112] border border-white/10 text-[#EAE2D5] px-2 py-1.5 outline-none w-[120px] appearance-none"
+                  >
+                    {PRESETS.map(p => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
 
-          {/* PRESET COHESIVE PALETTES */}
-          <div className="border-t border-stone-100 pt-4 space-y-3 mr-0.5">
-            <div className="flex items-center justify-between">
-              <div className="text-[11px] uppercase font-bold tracking-widest text-[#8A7342] px-0.5 flex items-center gap-1.5">
-                <Palette className="w-3.5 h-3.5" />
-                <span>Preset Palettes</span>
-              </div>
-              <button
-                type="button"
-                id="btn-cycle-palettes"
-                onClick={cyclePalette}
-                className="text-[9px] font-bold uppercase tracking-widest text-[#8A7342] hover:text-[#705c31] flex items-center gap-1 px-2 py-0.5 bg-amber-500/5 rounded-xs border border-amber-500/10 hover:border-amber-500/20 transition-all cursor-pointer"
+            {/* ALIGNMENT */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="text-[#EAE2D5]">ALIGNMENT</div>
+              <select 
+                value={textPosition} 
+                onChange={(e) => setTextPosition(e.target.value as "top" | "bottom")}
+                className="w-full bg-[#111112] border border-white/10 text-[#EAE2D5] px-2 py-1.5 outline-none appearance-none"
               >
-                <RefreshCw className="w-2.5 h-2.5" />
-                Cycle Harmony
+                <option value="top">Distribute Vertical (Top)</option>
+                <option value="bottom">Distribute Vertical (Bottom)</option>
+              </select>
+            </div>
+
+            {/* SPACING */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="text-[#EAE2D5]">SPACING / OPACITY</div>
+              <div className="grid grid-cols-[auto_1fr_auto] gap-x-3 gap-y-2 items-center text-[#9C958A]">
+                  <span>Opacity</span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="5"
+                    value={graphicOpacity}
+                    onChange={(e) => setGraphicOpacity(parseInt(e.target.value))}
+                    className="w-full accent-[#EAE2D5]"
+                  />
+                  <span className="bg-[#111112] border border-white/10 px-2 py-1.5 w-12 text-center text-[#EAE2D5]">{graphicOpacity}%</span>
+              </div>
+              <div className="flex justify-between items-center mt-2 text-[#9C958A]">
+                  <span>Palette</span>
+                  <select 
+                    value={activePaletteId || ""} 
+                    onChange={(e) => {
+                      const pal = HARMONY_PALETTES.find(x => x.id === e.target.value);
+                      if (pal) applyPalette(pal);
+                    }}
+                    className="bg-[#111112] border border-white/10 text-[#EAE2D5] px-2 py-1.5 outline-none min-w-[120px] appearance-none"
+                  >
+                    {HARMONY_PALETTES.map(p => (
+                      <option key={p.id} value={p.id}>{p.name}</option>
+                    ))}
+                  </select>
+              </div>
+            </div>
+
+            {/* TYPOGRAPHY */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="text-[#EAE2D5]">TYPOGRAPHY</div>
+              <div className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="First Name 1"
+                  value={partnerOne}
+                  onChange={(e) => setPartnerOne(e.target.value)}
+                  className="w-full bg-[#111112] border border-white/10 text-[#EAE2D5] px-3 py-2 outline-none placeholder:text-[#5A564E] focus:border-[#C4B59D] transition-colors"
+                />
+                <input
+                  type="text"
+                  placeholder="First Name 2"
+                  value={partnerTwo}
+                  onChange={(e) => setPartnerTwo(e.target.value)}
+                  className="w-full bg-[#111112] border border-white/10 text-[#EAE2D5] px-3 py-2 outline-none placeholder:text-[#5A564E] focus:border-[#C4B59D] transition-colors"
+                />
+                <input
+                  type="text"
+                  placeholder="Date"
+                  value={weddingDate}
+                  onChange={(e) => setWeddingDate(e.target.value)}
+                  className="w-full bg-[#111112] border border-white/10 text-[#EAE2D5] px-3 py-2 outline-none placeholder:text-[#5A564E] focus:border-[#C4B59D] transition-colors"
+                />
+                <input
+                  type="text"
+                  placeholder="Location"
+                  value={weddingVenue}
+                  onChange={(e) => setWeddingVenue(e.target.value)}
+                  className="w-full bg-[#111112] border border-white/10 text-[#EAE2D5] px-3 py-2 outline-none placeholder:text-[#5A564E] focus:border-[#C4B59D] transition-colors"
+                />
+                <select
+                    value={partnerFont}
+                    onChange={(e) => setPartnerFont(e.target.value)}
+                    className="w-full bg-[#111112] border border-white/10 text-[#EAE2D5] px-3 py-2 outline-none font-mono focus:border-[#C4B59D] transition-colors appearance-none"
+                  >
+                    {LUXURY_FONTS.map(f => (
+                      <option key={f.id} value={f.css}>{f.name}</option>
+                    ))}
+                  </select>
+              </div>
+            </div>
+
+            {/* EXPORT */}
+            <div className="space-y-4 pt-6 border-t border-white/10">
+              <div className="text-[#EAE2D5]">EXPORT</div>
+              <div className="space-y-3 text-[#9C958A]">
+                <div className="flex justify-between items-center">
+                  <span>Format</span>
+                  <select 
+                    value={exportMode} 
+                    onChange={(e) => setExportMode(e.target.value as any)}
+                    className="bg-[#111112] border border-white/10 text-[#EAE2D5] px-2 py-1.5 outline-none min-w-[120px] appearance-none"
+                  >
+                    <option value="composite">PNG</option>
+                    <option value="luma-overlay">LUMA</option>
+                    <option value="layers">ZIP</option>
+                    <option value="pdf-print">PDF</option>
+                  </select>
+                </div>
+                {exportMode === "pdf-print" && (
+                  <div className="flex justify-between items-center">
+                    <span>CMYK</span>
+                    <button onClick={() => setExportCmykMode(!exportCmykMode)} className={cn("px-3 py-1.5 border transition-colors focus:outline-none", exportCmykMode ? "bg-[#EAE2D5] border-[#EAE2D5] text-[#1A1816]" : "bg-[#111112] border-white/10 text-[#EAE2D5]")}>
+                      {exportCmykMode ? "ON" : "OFF"}
+                    </button>
+                  </div>
+                )}
+                <div className="flex justify-between items-center">
+                  <span>DPI</span>
+                  <span className="text-[#EAE2D5]">300</span>
+                </div>
+              </div>
+              <button 
+                id="export-png-trigger"
+                onClick={handleDownload}
+                className="w-full bg-[#8C382A] text-white font-bold py-3 hover:bg-[#7A2A1D] transition-colors cursor-pointer mt-4 tracking-[0.2em] uppercase"
+              >
+                EXPORT NOW
               </button>
             </div>
 
-            <p className="text-[9.5px] text-stone-500 leading-snug px-0.5">
-              Instantly override the active template with high-fidelity, designer-selected color harmonies.
-            </p>
-
-            <div className="flex flex-col gap-1.5">
-              {HARMONY_PALETTES.map((palette) => {
-                const isActive = activePaletteId === palette.id;
-                return (
-                  <button
-                    key={palette.id}
-                    type="button"
-                    id={`btn-select-palette-${palette.id}`}
-                    onClick={() => applyPalette(palette)}
-                    className={cn(
-                      "w-full text-left p-2 rounded-sm border cursor-pointer transition-all flex items-center justify-between gap-3",
-                      isActive 
-                        ? "bg-[#8A7342]/10 border-[#8A7342]" 
-                        : "bg-white hover:bg-stone-50 border-stone-200"
-                    )}
-                  >
-                    <div className="min-w-0">
-                      <span className={cn(
-                        "text-[10px] uppercase tracking-wider font-bold block",
-                        isActive ? "text-[#8A7342]" : "text-stone-700"
-                      )}>
-                        {palette.name}
-                      </span>
-                      <div className="flex items-center gap-1 mt-0.5 font-mono text-[8px] text-stone-400">
-                        <span>Bg: {palette.bg}</span>
-                        <span>•</span>
-                        <span>Ink: {palette.text}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1 bg-stone-100/50 p-1 rounded-sm border border-stone-250 shrink-0">
-                      <span className="w-3 h-3 rounded-full border border-stone-300" style={{ backgroundColor: palette.bg }} />
-                      <span className="w-3 h-3 rounded-full border border-stone-300" style={{ backgroundColor: palette.text }} />
-                      <span className="w-3 h-3 rounded-full border border-stone-300" style={{ backgroundColor: palette.secondary }} />
-                      <span className="w-3 h-3 rounded-full border border-stone-300" style={{ backgroundColor: palette.border }} />
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
           </div>
-
-          {/* HEX DECAL INK MANUAL ADJUSTERS */}
-          <div className="border-t border-stone-100 pt-4 space-y-3">
-            <div className="text-[11px] uppercase font-bold tracking-widest text-stone-400 px-0.5 flex items-center gap-1.5">
-              <Palette className="w-3.5 h-3.5" />
-              <span>Manual Ink Palettes</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 text-left">
-              <div className="space-y-0.5">
-                <span className="text-[8px] uppercase font-bold text-stone-400 block">Paper Backdrop</span>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    id="input-color-bg"
-                    type="color"
-                    value={backgroundColor}
-                    onChange={(e) => setBackgroundColor(e.target.value)}
-                    className="w-5.5 h-5.5 cursor-pointer rounded-full border border-stone-200"
-                  />
-                  <span className="font-mono text-[9px] text-stone-500 uppercase">{backgroundColor}</span>
-                </div>
-              </div>
-
-              <div className="space-y-0.5">
-                <span className="text-[8px] uppercase font-bold text-stone-400 block">Typography Ink</span>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    id="input-color-text"
-                    type="color"
-                    value={textColor}
-                    onChange={(e) => setTextColor(e.target.value)}
-                    className="w-5.5 h-5.5 cursor-pointer rounded-full border border-stone-200"
-                  />
-                  <span className="font-mono text-[9px] text-stone-500 uppercase">{textColor}</span>
-                </div>
-              </div>
-
-              <div className="space-y-0.5">
-                <span className="text-[8px] uppercase font-bold text-stone-400 block">Decals Gold</span>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    id="input-color-secondary"
-                    type="color"
-                    value={secondaryColor}
-                    onChange={(e) => setSecondaryColor(e.target.value)}
-                    className="w-5.5 h-5.5 cursor-pointer rounded-full border border-stone-200"
-                  />
-                  <span className="font-mono text-[9px] text-stone-500 uppercase">{secondaryColor}</span>
-                </div>
-              </div>
-
-              <div className="space-y-0.5">
-                <span className="text-[8px] uppercase font-bold text-stone-400 block">Slot Edge</span>
-                <div className="flex items-center gap-1.5">
-                  <input
-                    id="input-color-border"
-                    type="color"
-                    value={borderColor}
-                    onChange={(e) => setBorderColor(e.target.value)}
-                    className="w-5.5 h-5.5 cursor-pointer rounded-full border border-stone-200"
-                  />
-                  <span className="font-mono text-[9px] text-stone-500 uppercase">{borderColor}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* PRINT-READY PRODUCTION DISPATCH EXPORT HUB */}
-          <div className="border-t border-stone-100 pt-4 space-y-3.5">
-            <div className="space-y-1.5 text-left bg-stone-50/80 p-2.5 rounded-sm border border-stone-200/50">
-              <span className="text-[10px] uppercase font-mono font-black tracking-widest text-[#8A7342] flex items-center gap-1">
-                <Settings className="w-3.5 h-3.5" />
-                <span>Export Configuration</span>
-              </span>
-              <p className="text-[9px] text-stone-500 leading-snug">
-                Select your preferred file structure for direct client dispatch or post-production:
-              </p>
-
-              {/* Mode Selectors */}
-              <div className="grid grid-cols-4 gap-1 mt-2">
-                <button
-                  type="button"
-                  onClick={() => setExportMode("composite")}
-                  className={cn(
-                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
-                    exportMode === "composite"
-                      ? "bg-stone-900 text-white border-stone-900"
-                      : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
-                  )}
-                >
-                  Full PNG
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExportMode("luma-overlay")}
-                  className={cn(
-                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
-                    exportMode === "luma-overlay"
-                      ? "bg-amber-800 text-white border-amber-800"
-                      : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
-                  )}
-                >
-                  Luma
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExportMode("layers")}
-                  className={cn(
-                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
-                    exportMode === "layers"
-                      ? "bg-stone-900 text-white border-stone-900"
-                      : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
-                  )}
-                >
-                  Layers
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setExportMode("pdf-print")}
-                  className={cn(
-                    "text-[8px] font-bold py-1.5 px-1 rounded-xs uppercase tracking-wider text-center border cursor-pointer transition-all",
-                    exportMode === "pdf-print"
-                      ? "bg-stone-900 text-white border-stone-900"
-                      : "bg-white text-stone-600 border-stone-200 hover:text-stone-900"
-                  )}
-                >
-                  PDF CMYK
-                </button>
-              </div>
-
-              {/* Advanced Config based on selection */}
-              {exportMode === "luma-overlay" && (
-                <div className="mt-2 p-1.5 bg-amber-50 border border-amber-200 rounded-xs space-y-1">
-                  <span className="text-[8.5px] font-mono font-semibold text-amber-900 block text-left">Luma Booth Overlay</span>
-                  <p className="text-[8px] text-amber-800 leading-normal text-left">
-                    Single alpha-transparent PNG with decoration + text. Upload directly to Luma Booth event dashboard as the overlay layer.
-                  </p>
-                </div>
-              )}
-
-              {exportMode === "layers" && (
-                <div className="mt-2 p-1.5 bg-white border border-[#E9E4DC] rounded-xs space-y-1">
-                  <span className="text-[8.5px] font-mono font-semibold text-stone-700 block text-left">Separate Transparent PNG Layers</span>
-                  <p className="text-[8px] text-stone-500 leading-normal text-left">
-                    Downloads 4 separate high-definition transparent assets in sequence: <br />
-                    <span className="font-mono text-[7.5px] text-[#8A7342]">Background • Slots Mask • Typography • Borders</span>
-                  </p>
-                </div>
-              )}
-
-              {exportMode === "pdf-print" && (
-                <div className="mt-2 space-y-2 p-1.5 bg-white border border-[#E9E4DC] rounded-xs text-left">
-                  <div>
-                    <span className="text-[8.5px] font-bold uppercase text-stone-600 block mb-1">PDF Page Composition:</span>
-                    <div className="grid grid-cols-2 gap-1">
-                      <button
-                        type="button"
-                        onClick={() => setPdfLayoutType("single-page")}
-                        className={cn(
-                          "text-[8px] font-bold py-1 px-1.5 rounded-xs uppercase text-center border cursor-pointer transition-all",
-                          pdfLayoutType === "single-page"
-                            ? "bg-stone-200 text-stone-900 border-stone-400"
-                            : "bg-stone-50 text-stone-500 border-stone-200 hover:text-stone-800"
-                        )}
-                      >
-                        Single Composite
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setPdfLayoutType("multi-page")}
-                        className={cn(
-                          "text-[8px] font-bold py-1 px-1.5 rounded-xs uppercase text-center border cursor-pointer transition-all",
-                          pdfLayoutType === "multi-page"
-                            ? "bg-stone-200 text-stone-900 border-stone-400"
-                            : "bg-stone-50 text-stone-500 border-stone-200 hover:text-stone-800"
-                        )}
-                      >
-                        4x Separated Pages
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* CMYK Gamut Toggle */}
-              <div className="mt-2 pt-2 border-t border-stone-150 flex items-center justify-between">
-                <div className="flex flex-col text-left">
-                  <span className="text-[8.5px] font-bold text-stone-700 uppercase tracking-wide">CMYK Ink Calibration</span>
-                  <span className="text-[8px] text-[#8A7342]">Tone compression optimized for offset press</span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setExportCmykMode(!exportCmykMode)}
-                  className={cn(
-                    "relative inline-flex h-4 w-8 shrink-0 cursor-pointer rounded-full transition-colors duration-200 ease-in-out border border-transparent",
-                    exportCmykMode ? "bg-[#8A7342]" : "bg-stone-200"
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow-xs ring-0 transition duration-200 ease-in-out",
-                      exportCmykMode ? "translate-x-4" : "translate-x-0"
-                    )}
-                  />
-                </button>
-              </div>
-            </div>
-
-            <button
-              id="export-png-trigger"
-              onClick={handleDownload}
-              className="w-full bg-stone-900 border border-stone-900 hover:bg-stone-850 text-white text-xs font-bold uppercase tracking-widest py-3 flex items-center justify-center gap-2 transition-all cursor-pointer rounded-sm shadow-xs"
-            >
-              <Download className="w-4 h-4" />
-              <span>
-                {exportMode === "composite" && "Export High-Res Stamp"}
-                {exportMode === "luma-overlay" && "Download Luma Overlay (Alpha PNG)"}
-                {exportMode === "layers" && "Download Layers Stack (PNGs)"}
-                {exportMode === "pdf-print" && "Export Print PDF (CMYK)"}
-              </span>
-            </button>
-
-            <button
-              id="copy-json-trigger"
-              onClick={copyConfigSpec}
-              className="w-full bg-[#FCFAF5] border border-stone-200 hover:bg-stone-50 text-stone-800 text-[10px] font-bold uppercase tracking-widest py-2 flex items-center justify-center gap-1.5 transition-all cursor-pointer rounded-sm"
-            >
-              <Copy className="w-3.5 h-3.5" />
-              <span>{copied ? "Copied Spec JSON!" : "Copy SPEC specifications"}</span>
-            </button>
-          </div>
-
         </aside>
 
       </div>
-
-
-
     </main>
   );
 }

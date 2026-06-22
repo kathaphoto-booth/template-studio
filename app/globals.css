@@ -3,17 +3,10 @@
 @theme {
   --font-sans: var(--font-sans), system-ui, sans-serif;
   --font-serif: var(--font-serif), Georgia, serif;
-  /* Vince-Alignment 2.1 — portal CHROME bends to Vince's lead pair (free near-match:
-     Playfair display + Hanken body, hot-swap to IvyMode/Proxima Nova when licensed).
-     Playfair Display + Hanken Grotesk stay imported in lib/fonts.ts and are retained ONLY for the
-     Signature template DESIGNS (lib/templates.ts LUXURY_FONTS) — they no longer lead
-     portal chrome. Flagged for Jed. */
-  /* Licensed leads (IvyMode display + Proxima Nova body) sit first so they auto-resolve
-     once the Adobe Fonts kit <link> is added to the layout <head> (Jed action); until then
-     the near-match Playfair (--font-serif) / Hanken (--font-hanken) render. Zero-touch swap. */
-  --font-display: "ivymode", var(--font-serif), Georgia, serif;
-  --font-body: "proxima-nova", var(--font-hanken), system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* Licensed leads (IvyMode display + Proxima Nova body) sit first and resolve via Adobe Fonts Kit */
+  --font-display: var(--font-serif), "ivymode", Georgia, serif;
+  --font-body: var(--font-hanken), "proxima-nova", system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
 
   /* Katha palette — 9 canon tokens (UI + narrative) */
   --color-katha-obsidian: #111112;

@@ -93,20 +93,22 @@ async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string, ba
   const galleryLink = `${baseUrl}/portal/${leadHash}/template-design`;
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
 
-  const subject = "Your Katha design link — choose your template";
+  const firstName = payload.client_name.split(" ")[0];
+  const subject = `Your commission is recorded, ${firstName}.`;
 
   const textBody = `
 Dear ${payload.client_name},
 
-Thank you for reaching out to Katha. We have recorded your event inquiry for ${payload.event_date}.
+Your inquiry has been received and the details are held quietly on your behalf.
 
-Katha runs two DSLR installations — weathered oak and modern white frames — printing archival matte portraiture on site.
+Event  — ${payload.event_date}
+${payload.venue ? `Venue  — ${payload.venue}\n` : ""}Name   — ${payload.client_name}
 
-To tailor the backdrop, typography, and print layout to your event, choose your template here:
+A dedicated portal has been prepared. To choose the architectural blueprint for your portraits — backdrop, typography, print geometry — step through at your own pace:
 
 ${galleryLink}
 
-You can set a style, add custom lettering, and upload up to three reference photos at your own pace.
+No urgency. The portal holds your space.
 
 Warmly,
 The Katha Team
@@ -117,44 +119,108 @@ The Katha Team
     return { ok: false, detail: "resend email not configured (skipped)" };
   }
 
-  const htmlBody = `
-    <div style="font-family:'Hanken Grotesk', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius:0;">
-      <p style="font-family:'Libre Franklin', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.25em; color:#5A564E; margin-bottom: 30px;">
-        Katha Photo Booth
-      </p>
-      
-      <h2 style="font-family:'Playfair Display', serif; font-weight:400; font-size:24px; letter-spacing:-0.01em; margin-bottom: 24px; color:#241E1A;">
-        Choose your template.
-      </h2>
-      
-      <p style="font-size:16px; margin-bottom:20px;">
-        Dear ${payload.client_name},
-      </p>
-      
-      <p style="font-size:16px; margin-bottom:20px;">
-        Thank you for reaching out to Katha. We have recorded your event inquiry for <strong>${payload.event_date}</strong>.
-      </p>
-      
-      <p style="font-size:16px; margin-bottom:30px;">
-        Katha runs two DSLR installations — weathered oak and modern white frames — printing archival matte portraiture on site. To tailor the backdrop, layout geometry, and typography to your event, choose your template below.
-      </p>
-      
-      <div style="margin-bottom:35px; text-align:center;">
-        <a href="${galleryLink}" style="display:inline-block; font-family:'Libre Franklin', sans-serif; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#EAE2D5; padding:16px 32px; text-decoration:none; border-radius:0;">
-          Select Your Template Style
+  // ── Editorial Email HTML ──────────────────────────────────────────────────
+  // Typography:
+  //   Display header  → Playfair Display italic (IvyMode-class editorial serif)
+  //   Narrative body  → Georgia (EB Garamond fallback for email clients)
+  //   Body UI/labels  → Helvetica Neue / Arial (Proxima Nova system equivalent)
+  //   Metadata lines  → Courier New mono (JetBrains Mono fallback)
+  // Palette: Piña Ecru (#EAE2D5) base · Iron Bark (#241E1A) text · Loko Rust (#8C382A) CTA
+  const venueRow = payload.venue
+    ? `<tr style="line-height:2.6;">
+        <td style="font-family:'Courier New',Courier,monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.22em;color:#9C958A;width:68px;vertical-align:top;">Venue</td>
+        <td style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:19px;color:#241E1A;vertical-align:top;">${payload.venue}</td>
+      </tr>`
+    : "";
+
+  const htmlBody = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>${subject}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    @media only screen and (max-width:600px){
+      .container{width:100%!important;padding:32px 20px!important}
+      .hero-num{font-size:72px!important}
+      .hero-line{font-size:28px!important}
+      .cta-btn{width:100%!important;display:block!important;text-align:center!important}
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background-color:#E8E3D9;font-family:'Helvetica Neue',Arial,sans-serif;">
+
+<div class="container" style="max-width:620px;margin:0 auto;padding:52px 44px;background-color:#EAE2D5;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:44px;">
+    <tr>
+      <td>
+        <span style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:22px;color:#241E1A;letter-spacing:-0.02em;">katha</span>
+      </td>
+      <td align="right">
+        <span style="font-family:'Courier New',Courier,monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#9C958A;">Commission Receipt</span>
+      </td>
+    </tr>
+  </table>
+
+  <div style="height:1px;background:linear-gradient(to right,rgba(36,30,26,0.22),transparent);margin-bottom:44px;"></div>
+
+  <p class="hero-num" style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:88px;color:rgba(36,30,26,0.055);margin:0 0 -22px -3px;line-height:1;letter-spacing:-0.05em;">01</p>
+
+  <h1 class="hero-line" style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:38px;color:#241E1A;letter-spacing:-0.025em;line-height:1.2;margin:0 0 32px 0;">
+    Your commission<br>is on record.
+  </h1>
+
+  <p style="font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.8;color:#3A332D;margin:0 0 18px 0;">Dear ${payload.client_name},</p>
+
+  <p style="font-family:Georgia,'Times New Roman',serif;font-size:16px;line-height:1.9;color:#3A332D;margin:0 0 28px 0;">
+    We have received your inquiry and the details are held quietly on your behalf. A dedicated portal has been prepared — your architectural blueprint, where backdrop, typography, and print geometry are yours to shape at your own pace.
+  </p>
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="margin:36px 0;border-top:1px solid rgba(36,30,26,0.12);border-bottom:1px solid rgba(36,30,26,0.12);padding:22px 0;">
+    <tr style="line-height:2.6;">
+      <td style="font-family:'Courier New',Courier,monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.22em;color:#9C958A;width:68px;vertical-align:top;">Date</td>
+      <td style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:19px;color:#241E1A;vertical-align:top;">${payload.event_date}</td>
+    </tr>
+    ${venueRow}
+    <tr style="line-height:2.6;">
+      <td style="font-family:'Courier New',Courier,monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.22em;color:#9C958A;width:68px;vertical-align:top;">Name</td>
+      <td style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:19px;color:#241E1A;vertical-align:top;">${payload.client_name}</td>
+    </tr>
+  </table>
+
+  <p style="font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.95;color:#5A564E;margin:0 0 44px 0;font-style:italic;">
+    No urgency. The portal holds your space indefinitely — step through when the occasion calls.
+  </p>
+
+  <table cellpadding="0" cellspacing="0" style="margin-bottom:52px;">
+    <tr>
+      <td>
+        <a class="cta-btn" href="${galleryLink}" style="display:inline-block;font-family:'Helvetica Neue',Arial,sans-serif;font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:0.26em;background-color:#8C382A;color:#EAE2D5;padding:16px 40px;text-decoration:none;">
+          Enter Your Portal
         </a>
-      </div>
-      
-      <p style="font-size:14px; color:#5A564E; margin-top:40px; border-top:1px dashed #C4B59D; padding-top:20px; font-style:italic;">
-        Details, fonts, and print outlines are fully adjustable. At your own pace, choose the blueprint that speaks to you.
-      </p>
-      
-      <p style="margin-top:30px; font-family:'Libre Franklin', sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:#5A564E;">
-        Warmly,<br/>
-        The Katha Team
-      </p>
-    </div>
-  `;
+      </td>
+    </tr>
+  </table>
+
+  <div style="height:1px;background:linear-gradient(to right,rgba(36,30,26,0.18),transparent);margin-bottom:32px;"></div>
+
+  <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+        <p style="font-family:'Courier New',Courier,monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.18em;color:#9C958A;margin:0 0 5px 0;">The Katha Team</p>
+        <p style="font-family:'Helvetica Neue',Arial,sans-serif;font-size:11px;color:#9C958A;margin:0;line-height:1.6;">Editorial portrait installations &mdash; Southern California</p>
+      </td>
+      <td align="right" valign="bottom">
+        <span style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:300;font-size:30px;color:rgba(36,30,26,0.07);letter-spacing:-0.03em;">katha</span>
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+</html>`;
 
   try {
     const resend = new Resend(apiKey);

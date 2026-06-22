@@ -72,9 +72,12 @@ test.describe('Modal Layout & Accessibility Verification', () => {
     await expect(modal).toHaveAttribute('aria-labelledby', titleId || '');
 
     // 8. Accessibility: role="group" on selectors
-    const textPositionGroup = modal.locator('[role="group"]');
+    const groups = modal.locator('[role="group"]');
+    await expect(groups).toHaveCount(2);
+    const textPositionGroup = modal.locator('[role="group"][aria-labelledby="text-position-label"]');
     await expect(textPositionGroup).toHaveCount(1);
-    await expect(textPositionGroup).toHaveAttribute('aria-labelledby', 'text-position-label');
+    const serviceTierGroup = modal.locator('[role="group"][aria-labelledby="katha-service-tier-label"]');
+    await expect(serviceTierGroup).toHaveCount(1);
 
     // Fill name and email to enable the submit button
     await modal.getByLabel('First name').fill('Ana');
@@ -93,9 +96,10 @@ test.describe('Modal Layout & Accessibility Verification', () => {
     const activeLabelShiftTab = await page.evaluate(() => document.activeElement?.textContent?.trim() || '');
     console.log("Active element after Shift+Tab on close button:", activeLabelShiftTab);
 
-    // Reset focus to last element, press Tab (wrap forward to first element)
-    const submitBtn = modal.locator('button').last(); // Submit button is the last button
-    await submitBtn.focus();
+    // Submit stays disabled until a service tier is picked, so the last ENABLED
+    // focusable element is the venue-address input. Tab from it must wrap to Close.
+    const lastEnabled = page.locator('#katha-venue-address');
+    await lastEnabled.focus();
     
     await page.keyboard.press('Tab');
     

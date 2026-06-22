@@ -1,0 +1,195 @@
+.inq {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas: "media" "panel";
+  background: var(--color-katha-pina-ecru);
+  color: var(--color-katha-iron-bark);
+}
+
+/* ── Media (mobile: bounded band on top) ── */
+.media {
+  grid-area: media;
+  position: relative;
+  overflow: hidden;
+  height: clamp(220px, 40vh, 360px);
+  background:
+    radial-gradient(120% 90% at 70% 100%, rgba(196, 181, 157, 0.35), transparent 70%),
+    var(--color-katha-pina-ecru);
+}
+.mediaInner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.couple {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+  /* dissolve the rough cut-out edge into the ground */
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 99%);
+  filter: drop-shadow(0 18px 36px rgba(36, 30, 26, 0.14));
+  will-change: transform, opacity;
+}
+
+/* ── Panel ── */
+.panel {
+  grid-area: panel;
+  display: flex;
+  align-items: center;
+  padding: clamp(2rem, 7vw, 4rem) clamp(1.5rem, 7vw, 4rem) clamp(3rem, 8vw, 5rem);
+}
+.panelInner {
+  width: 100%;
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  color: var(--color-katha-iron-bark);
+  margin: 0 0 clamp(1.5rem, 5vw, 2.75rem);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7vw, 4rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+  margin: 0 0 1.25rem;
+  color: var(--color-katha-iron-bark);
+}
+.title em { font-style: italic; }
+.title:focus { outline: none; }
+
+.lede {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  max-width: 38ch;
+  color: var(--color-katha-ecru-muted);
+  margin: 0 0 clamp(2rem, 5vw, 2.75rem);
+}
+.lede strong { color: var(--color-katha-iron-bark); font-weight: 600; }
+
+.form { display: flex; flex-direction: column; gap: 1.6rem; }
+
+.error {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--color-katha-loko-rust);
+  margin: 0;
+  min-height: 1.2rem;
+}
+
+/* ── Sacred CTA — the ONE Loko Rust element on the page ── */
+.cta {
+  appearance: none;
+  border: none;
+  align-self: flex-start;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-katha-pina-ecru);
+  background: var(--color-katha-loko-rust);
+  padding: 1.1rem 2.6rem;
+  min-height: 48px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 220ms ease, transform 220ms ease;
+}
+.cta:hover { background: #6E2C20; }
+.cta:active { transform: translateY(1px); }
+.cta:disabled { opacity: 0.55; cursor: progress; }
+.cta:focus-visible {
+  outline: 2px solid var(--color-katha-iron-bark);
+  outline-offset: 3px;
+}
+.ctaLink { display: inline-block; }
+
+/* ── Desktop: two-pane editorial split ── */
+@media (min-width: 860px) {
+  .inq {
+    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-areas: "panel media";
+  }
+  .media { height: 100svh; }
+  .couple {
+    max-height: 94vh;
+    -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+  }
+  .panel { padding-block: 4rem; }
+  .panelInner { margin: 0; margin-left: auto; }
+}
+
+/* ── Entrance motion: enhances an already-visible default ── */
+@media (prefers-reduced-motion: no-preference) {
+  .wordmark { animation: rise 700ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .title { animation: rise 800ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both; }
+  .lede { animation: rise 800ms cubic-bezier(0.16, 1, 0.3, 1) 160ms both; }
+  .form { animation: rise 800ms cubic-bezier(0.16, 1, 0.3, 1) 240ms both; }
+  .couple { animation: settle 1100ms cubic-bezier(0.16, 1, 0.3, 1) 120ms both; }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes settle {
+  from { opacity: 0; transform: translateY(24px) scale(1.02); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Field ── */
+.fld { display: grid; gap: 0.5rem; }
+.fldLabel {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--color-katha-ecru-muted);
+}
+.fldOpt {
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: var(--color-katha-ecru-muted-soft);
+}
+.fldInput {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(36, 30, 26, 0.28);
+  padding: 0.65rem 0;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--color-katha-iron-bark);
+  width: 100%;
+  outline: none;
+  color-scheme: light;
+  transition: border-color 200ms ease;
+}
+.fldInput::placeholder {
+  color: var(--color-katha-ecru-muted-soft);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+.fldInput:focus { border-color: var(--color-katha-iron-bark); }
+.fldInput:focus-visible {
+  border-color: var(--color-katha-iron-bark);
+  box-shadow: 0 1px 0 0 var(--color-katha-champagne-heirloom);
+}
+.fldInput[aria-invalid="true"] { border-color: var(--color-katha-loko-rust); }

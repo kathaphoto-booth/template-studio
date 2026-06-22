@@ -31,11 +31,12 @@ export default function SecuredPage() {
         </p>
 
         <h1
-          className="mt-6 text-4xl md:text-5xl"
+          className="mt-6 text-4xl md:text-5xl [text-wrap:balance]"
           style={{
             fontFamily: "var(--font-display), Georgia, serif",
-            fontVariationSettings: "'SOFT' 100, 'WONK' 1, 'opsz' 96",
-            letterSpacing: '-0.015em',
+            fontWeight: 500,
+            letterSpacing: '-0.022em',
+            lineHeight: 1.03,
           }}
         >
           Your inquiry is received

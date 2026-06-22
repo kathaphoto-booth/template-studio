@@ -8,7 +8,6 @@ const AUDIT_IDS = [
   "katha-heirloom-pina",
   "katha-loom-frame",
   "katha-knalum-night",
-  "katha-brass-ring",
   "katha-woven-silk",
   "katha-tracy-prince",
   "katha-binakul-weave",
@@ -114,16 +113,16 @@ export default function AuditPage() {
   return (
     <div className="min-h-screen bg-[#F5F3ED] p-12">
       <h1 className="text-4xl font-serif text-[#241E1A] mb-8 text-center uppercase tracking-widest">
-        17 Unique Designs Visual Audit
+        16 Unique Designs Visual Audit
       </h1>
       <p className="text-center text-[#5A564E] mb-12 max-w-2xl mx-auto">
-        A diagnostic view of the 17 unique structural designs rendering via the unified layout engine.
+        A diagnostic view of the 16 unique structural designs rendering via the unified layout engine.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
         {auditPresets.map((preset) => (
           <div key={preset!.id} className="flex flex-col items-center">
-            <div className="h-[400px] w-full flex items-center justify-center bg-white p-8 shadow-sm rounded-sm">
+            <div className="h-[400px] w-full flex items-center justify-center bg-[#EAE2D5] p-8 shadow-sm rounded-sm">
               <TemplateCanvas
                 preset={preset!}
                 width={preset!.type === "strip" ? 120 : 240}

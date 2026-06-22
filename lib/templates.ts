@@ -268,70 +268,6 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. Landscape postcard variant."
   },
 
-  // ─── 4. BRASS RING (Katha Signature)
-  {
-    id: "katha-brass-ring",
-    name: "Katha Signature — Brass Ring",
-    type: "strip",
-    backgroundColor: "#EAE2D5",
-    textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
-    dateText: "SOUTH COTABATO",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing."
-  },
-  {
-    id: "katha-brass-ring-postcard",
-    name: "Katha Signature — Brass Ring Postcard",
-    type: "postcard-vertical",
-    layoutId: "pv-2",
-    backgroundColor: "#EAE2D5",
-    textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
-    dateText: "SOUTH COTABATO",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "24px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "60px",
-    decorativeSvg: "",
-    designerExplanation: "The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names."
-  },
-  {
-    id: "katha-brass-ring-landscape",
-    name: "Katha Signature — Brass Ring Landscape",
-    type: "postcard",
-    layoutId: "pc-3-v",
-    backgroundColor: "#EAE2D5",
-    textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
-    dateText: "SOUTH COTABATO",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "18px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names."
-  },
-
   // ─── 5. BINAKUL WEAVE (Katha Signature)
   {
     id: "katha-binakul-weave",
@@ -503,7 +439,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F4EDE3",
     innerSpacing: "26px",
     decorativeSvg: "",
-    designerExplanation: "Double gold foil fine outline detailing around each slot. Clean Roman serif display, providing timeless heirloom appeal."
+    designerExplanation: "Double gold foil fine outline detailing around each slot. Clean Roman serif display, providing classic appeal."
   },
   {
     id: "wedding-luxe-gold-postcard",
@@ -676,68 +612,68 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Bohemian dry terracotta sunset clay color. Accentuated by fine hairline gold rules and micro leafy contours. Landscape format."
   },
 
-  // ─── 10. GATSBY MIDNIGHT GOLD (Classic Tier)
+  // ─── 10. STEPPED DECO IN CREAM (Classic Tier)
   {
     id: "wedding-art-deco",
-    name: "Style 5 — Gatsby Midnight Gold",
+    name: "Style 5 — Stepped Deco in Cream",
     type: "strip",
-    backgroundColor: "#161616",
-    textColor: "#DEC190",
-    borderColor: "#90774D",
-    secondaryColor: "#DEC190",
-    fontFamily: "'Cinzel', serif",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Playfair Display', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
     dateText: "THE GRAND PLAZA SUITE",
     slotBorderRadius: "0px",
-    slotBorderWidth: "3px",
+    slotBorderWidth: "1.5px",
     slotGap: "20px",
-    slotBgColor: "#222222",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons and tall typography."
+    designerExplanation: "Stepped Art Deco geometry — three concentric Champagne frames inset at the cream ground, with flared diamond corner ears anchored at each corner. The names rest at the foot in Playfair, the date pressed in spaced caps."
   },
   {
     id: "wedding-art-deco-postcard",
-    name: "Style 5 — Gatsby Midnight Gold Postcard",
+    name: "Style 5 — Stepped Deco in Cream Postcard",
     type: "postcard-vertical",
     layoutId: "pv-2",
-    backgroundColor: "#161616",
-    textColor: "#DEC190",
-    borderColor: "#90774D",
-    secondaryColor: "#DEC190",
-    fontFamily: "'Cinzel', serif",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Playfair Display', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
     dateText: "THE GRAND PLAZA SUITE",
     slotBorderRadius: "0px",
-    slotBorderWidth: "3px",
+    slotBorderWidth: "1.5px",
     slotGap: "24px",
-    slotBgColor: "#222222",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Postcard vertical format."
+    designerExplanation: "Stepped Art Deco geometry on a cream ground — three concentric Champagne frames with flared diamond corner ears. Postcard vertical format."
   },
   {
     id: "wedding-art-deco-landscape",
-    name: "Style 5 — Gatsby Midnight Gold Landscape",
+    name: "Style 5 — Stepped Deco in Cream Landscape",
     type: "postcard",
     layoutId: "pc-3-v",
-    backgroundColor: "#161616",
-    textColor: "#DEC190",
-    borderColor: "#90774D",
-    secondaryColor: "#DEC190",
-    fontFamily: "'Cinzel', serif",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Playfair Display', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
     dateText: "THE GRAND PLAZA SUITE",
     slotBorderRadius: "0px",
-    slotBorderWidth: "3px",
+    slotBorderWidth: "1.5px",
     slotGap: "18px",
-    slotBgColor: "#222222",
+    slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Gatsby-era black velvet base framing interlocking linear art-deco brass-yellow chevrons. Landscape postcard format."
+    designerExplanation: "Stepped Art Deco geometry on a cream ground — concentric Champagne frames with diamond corner ears. Landscape postcard format."
   },
 
   // ─── 11. HAUTE GALLERY EDITORIAL (Classic Tier)
@@ -749,7 +685,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#121212",
     borderColor: "#E5E5E5",
     secondaryColor: "#737373",
-    fontFamily: "'Italiana', serif",
+    fontFamily: "'Playfair Display', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
     dateText: "MUSEUM OF BRIDAL ARTS",
@@ -770,7 +706,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#121212",
     borderColor: "#E5E5E5",
     secondaryColor: "#737373",
-    fontFamily: "'Italiana', serif",
+    fontFamily: "'Playfair Display', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
     dateText: "MUSEUM OF BRIDAL ARTS",
@@ -780,7 +716,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F5F5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Generous gallery margins with a single hairline rule and wide-tracked Italiana display. Quiet, modernist."
+    designerExplanation: "Generous gallery margins with a single hairline rule and wide-tracked Playfair Display. Quiet, modernist."
   },
   {
     id: "wedding-editorial-landscape",
@@ -791,7 +727,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#121212",
     borderColor: "#E5E5E5",
     secondaryColor: "#737373",
-    fontFamily: "'Italiana', serif",
+    fontFamily: "'Playfair Display', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
     dateText: "MUSEUM OF BRIDAL ARTS",
@@ -876,7 +812,7 @@ export const PRESETS: PhotoboothPreset[] = [
     backgroundColor: "#FCFBF8",
     textColor: "#6B5526",
     borderColor: "#D4C59B",
-    secondaryColor: "#8A7342",
+    secondaryColor: "#FFFFFF",
     fontFamily: "'Cinzel', serif",
     titleText: "S & C",
     subTitleText: "2026.07.25",
@@ -897,7 +833,7 @@ export const PRESETS: PhotoboothPreset[] = [
     backgroundColor: "#FCFBF8",
     textColor: "#6B5526",
     borderColor: "#D4C59B",
-    secondaryColor: "#8A7342",
+    secondaryColor: "#FFFFFF",
     fontFamily: "'Cinzel', serif",
     titleText: "S & C",
     subTitleText: "2026.07.25",
@@ -918,7 +854,7 @@ export const PRESETS: PhotoboothPreset[] = [
     backgroundColor: "#FCFBF8",
     textColor: "#6B5526",
     borderColor: "#D4C59B",
-    secondaryColor: "#8A7342",
+    secondaryColor: "#FFFFFF",
     fontFamily: "'Cinzel', serif",
     titleText: "S & C",
     subTitleText: "2026.07.25",
@@ -1104,7 +1040,7 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Inverted-L arrangement framed by the loom-bark border. The open bottom-left becomes a quiet whitespace for the names."
   },
   {
-    id: "editorial-landscape-L",
+    id: "wedding-editorial-invL",
     name: "Style 8 — Editorial L-Shape Landscape",
     type: "postcard",
     layoutId: "pc-L",
@@ -1112,7 +1048,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#121212",
     borderColor: "#E5E5E5",
     secondaryColor: "#737373",
-    fontFamily: "'Italiana', serif",
+    fontFamily: "'Playfair Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "GALLERY",
@@ -1122,7 +1058,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#F5F5F5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Italiana display."
+    designerExplanation: "Three photos trace an L on a gallery-clean ground. Hairline rule, wide-tracked Playfair Display."
   },
   {
     id: "capiz-sage-invL",
@@ -1379,6 +1315,29 @@ export const PRESETS: PhotoboothPreset[] = [
     decorativeSvg: "",
     designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
   },
+
+  // ─── TRACY & PRINCE — CLASSIC (rose-gold script on white) ────────────────
+  {
+    id: "tracy-prince-classic",
+    name: "Tracy & Prince",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#FFFFFF",
+    textColor: "#9E5460",
+    borderColor: "#9E5460",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Parisienne', cursive",
+    titleText: "tracy ♥ prince",
+    subTitleText: "",
+    dateText: "",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1px",
+    slotGap: "40px",
+    slotBgColor: "#FFFFFF",
+    innerSpacing: "0px",
+    decorativeSvg: "",
+    designerExplanation: "A rose-gold Parisienne script over white, the names connected by a single drawn heart. The composition rests with the work taking the body of the page."
+  },
 ];
 
 
@@ -1399,9 +1358,6 @@ const DECORATION_ALIASES: Record<string, string> = {
 
   "katha-knalum-night-postcard":    "katha-knalum-night",
   "katha-knalum-night-landscape":   "katha-knalum-night",
-
-  "katha-brass-ring-postcard":      "katha-brass-ring",
-  "katha-brass-ring-landscape":     "katha-brass-ring",
 
   "katha-binakul-weave-postcard":   "katha-binakul-weave",
   "katha-binakul-weave-landscape":  "katha-binakul-weave",
@@ -1460,7 +1416,6 @@ export const LUXURY_FONTS = [
   { id: "playfair", name: "Playfair Display (Elegant Serif)", css: "'Playfair Display', serif" },
   { id: "bodoni", name: "Bodoni Moda (High Fashion Serif)", css: "'Bodoni Moda', serif" },
   { id: "hanken-grotesk", name: "Hanken Grotesk (Clean Neo-Grotesque)", css: "'Hanken Grotesk', sans-serif" },
-  { id: "italiana", name: "Italiana (Geometric Roman)", css: "'Italiana', serif" },
   { id: "aboreto", name: "Aboreto (Wire-Thin Modern Capital)", css: "'Aboreto', sans-serif" },
   { id: "greatvibes", name: "Great Vibes (Soft Cursive Harmony)", css: "'Great Vibes', cursive" },
   { id: "alexbrush", name: "Alex Brush (Stately Royal Calligraphy)", css: "'Alex Brush', cursive" },
@@ -1478,7 +1433,7 @@ export const HARMONY_PALETTES = [
     name: "Classic Noir",
     bg: "#FAF9F5",
     text: "#1C1C1C",
-    secondary: "#8A7342",
+    secondary: "#FFFFFF",
     border: "#D4CFC4",
     slotBg: "#EDEDE8",
   },
@@ -1554,7 +1509,7 @@ export function renderDecorativeSvg(
     centerY: layout.textZone.y + layout.textZone.h / 2
   };
 
-  const isGoldPreset = ["wedding-luxe-gold", "wedding-art-deco", "wedding-warm-terracotta", "wedding-royal-crest", "wedding-classic-monogram"].includes(baseId);
+  const isGoldPreset = ["wedding-luxe-gold", "wedding-warm-terracotta", "wedding-royal-crest", "wedding-classic-monogram"].includes(baseId);
   const strokeColor = isGoldPreset ? "url(#svg-gold-shimmer)" : secondaryColor;
 
   const defs = `
@@ -1614,18 +1569,7 @@ export function renderDecorativeSvg(
         <!-- Soil-black T'nalak raw linen rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.8" />
         <!-- A single, sacred loko-root rust horizontal thread above/below the text pedestal -->
-        <line x1="${vb.w / 2 - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${vb.w / 2 + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="#8C382A" stroke-width="2.5" />
-      `;
-
-    case "katha-brass-ring":
-      return `
-        <!-- Fine ecru rules -->
-        <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
-        <!-- Sacred loko-rust brass ring centered at the boundary of the branding pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30})" fill="none" stroke="${secondaryColor}">
-          <circle cx="0" cy="0" r="22" stroke-width="2" />
-          <circle cx="0" cy="0" r="14" stroke-width="0.75" opacity="0.6" />
-        </g>
+        <line x1="${vb.w / 2 - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${vb.w / 2 + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="#FFFFFF" stroke-width="2.5" />
       `;
 
     case "katha-woven-silk":
@@ -1743,18 +1687,45 @@ export function renderDecorativeSvg(
         </g>
       `;
 
-    case "wedding-art-deco":
-      return defs + `
-        <!-- Gatsby concentric yellow chevrons -->
-        <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${strokeColor}" stroke-width="2.5" />
-        <rect x="${margin / 3 + 8}" y="${margin / 3 + 8}" width="${vb.w - 2 * margin / 3 - 16}" height="${vb.h - 2 * margin / 3 - 16}" fill="none" stroke="${strokeColor}" stroke-width="1" opacity="0.8" />
-        <g stroke="${strokeColor}" stroke-width="1.5" fill="none">
-          <polyline points="${margin / 3},60 60,${margin / 3} 100,${margin / 3}" />
-          <polyline points="${margin / 3},100 100,${margin / 3}" />
-          <polyline points="${vb.w - margin / 3},60 ${vb.w - 60},${margin / 3} ${vb.w - 100},${margin / 3}" />
-          <polyline points="${vb.w - margin / 3},100 ${vb.w - 100},${margin / 3}" />
+    case "wedding-art-deco": {
+      // Stepped Art Deco — concentric Champagne frames + flared diamond corner ears.
+      const ox = margin / 3;
+      const oy = margin / 3;
+      const ow = vb.w - 2 * margin / 3;
+      const oh = vb.h - 2 * margin / 3;
+      // Inset corner anchors for the diamond ears (relative to outermost frame)
+      const ears = [
+        { cx: ox + 18, cy: oy + 18 },
+        { cx: ox + ow - 18, cy: oy + 18 },
+        { cx: ox + 18, cy: oy + oh - 18 },
+        { cx: ox + ow - 18, cy: oy + oh - 18 },
+      ];
+      const diamond = (cx: number, cy: number, r: number) =>
+        `${cx},${cy - r} ${cx + r},${cy} ${cx},${cy + r} ${cx - r},${cy}`;
+      // Two thin horizontal dividers centered between consecutive slot bands
+      const slots = layout.slots;
+      const dividers = slots.slice(0, -1).map((s: any, i: number) => {
+        const next = slots[i + 1];
+        const midY = (s.y + s.h + next.y) / 2;
+        return `<line x1="${ox + 24}" y1="${midY}" x2="${ox + ow - 24}" y2="${midY}" stroke="${strokeColor}" stroke-width="0.6" opacity="0.7" />`;
+      }).join("");
+      return `
+        <!-- Stepped concentric Champagne frames -->
+        <rect x="${ox}" y="${oy}" width="${ow}" height="${oh}" fill="none" stroke="${strokeColor}" stroke-width="1" />
+        <rect x="${ox + 8}" y="${oy + 8}" width="${ow - 16}" height="${oh - 16}" fill="none" stroke="${strokeColor}" stroke-width="1" opacity="0.85" />
+        <rect x="${ox + 16}" y="${oy + 16}" width="${ow - 32}" height="${oh - 32}" fill="none" stroke="${strokeColor}" stroke-width="0.5" opacity="0.7" />
+        <!-- Flared diamond corner ears: stepped nested polygons at each corner -->
+        <g fill="${strokeColor}" stroke="none">
+          ${ears.map(e => `
+            <polygon points="${diamond(e.cx, e.cy, 12)}" opacity="0.9" />
+            <polygon points="${diamond(e.cx, e.cy, 8)}" fill="#EAE2D5" />
+            <polygon points="${diamond(e.cx, e.cy, 4)}" fill="${strokeColor}" />
+          `).join("")}
         </g>
+        <!-- Thin Champagne dividers between slot bands -->
+        ${dividers}
       `;
+    }
 
     case "wedding-editorial":
       return `
@@ -1801,6 +1772,12 @@ export function renderDecorativeSvg(
           <path d="M -35,5 C -45,35 45,35 35,5 C 25,-25 -25,-25 -35,5 Z" fill="${secondaryColor}" opacity="0.15" stroke-width="1" />
           <circle cx="0" cy="4" r="28" stroke="${secondaryColor}" stroke-width="1" />
         </g>
+      `;
+
+    case "tracy-prince-classic":
+      // Minimal — the Parisienne script does the heavy lifting. A single thin rose-gold rule at the bottom margin.
+      return `
+        <line x1="${margin}" y1="${vb.h - margin / 2}" x2="${vb.w - margin}" y2="${vb.h - margin / 2}" stroke="#9E5460" stroke-width="0.6" opacity="0.7" />
       `;
 
     default:

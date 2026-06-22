@@ -6,11 +6,12 @@ import { test, expect } from '@playwright/test';
 // the app's own APIs are never mocked.
 
 test.describe('F7: Template Selection - Tier 2 Boundary/Corner', () => {
-  test('T2.1: renders the gallery gracefully for an unknown portal id', async ({ page }) => {
-    await page.goto('/portal/unknown-lead-9999/template-design');
-
-    await expect(page.getByRole('heading', { name: 'Choose your style' })).toBeVisible();
-    await expect(page.getByRole('button', { name: /explore details/i }).first()).toBeVisible();
+  test('T2.1: returns a 404 for an unknown portal id (no lead match)', async ({ page }) => {
+    // Unknown ids call notFound() (app/portal/[id]/template-design/page.tsx),
+    // consistent with the 404-on-unknown-lead contract in intake-funnel.spec.ts.
+    const response = await page.goto('/portal/unknown-lead-9999/template-design');
+    expect(response?.status()).toBe(404);
+    await expect(page.getByRole('heading', { name: 'Choose your style' })).toHaveCount(0);
   });
 
   test('T2.2: gates submission until a name and a valid email are provided', async ({ page }) => {
@@ -20,7 +21,7 @@ test.describe('F7: Template Selection - Tier 2 Boundary/Corner', () => {
     const modal = page.getByRole('dialog');
     await expect(modal).toBeVisible();
 
-    const submit = modal.getByRole('button', { name: 'Submit Design Inquiry' });
+    const submit = modal.getByRole('button', { name: 'Send Inquiry' });
     await expect(submit).toBeDisabled();
 
     await modal.getByLabel('First name').fill('Ana');
@@ -61,10 +62,12 @@ test.describe('F7: Template Selection - Tier 2 Boundary/Corner', () => {
 
     await modal.getByLabel('First name').fill('Ana');
     await modal.getByLabel('Email address').fill('ana.reyes@example.com');
+    // Submit stays disabled until an installation is chosen (serviceTier gate).
+    await modal.getByRole('button', { name: /Signature Installation/i }).click();
 
     // Playwright-native offline simulation — never mock our own API.
     await context.setOffline(true);
-    await modal.getByRole('button', { name: 'Submit Design Inquiry' }).click();
+    await modal.getByRole('button', { name: 'Send Inquiry' }).click();
 
     await expect(modal.getByText('Submission failed. Please try again.')).toBeVisible();
   });

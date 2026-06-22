@@ -96,10 +96,11 @@ test.describe('Challenger Modal Interaction & Accessibility Verification', () =>
     expect(titleId).toBeTruthy();
     await expect(modal).toHaveAttribute('aria-labelledby', titleId!);
 
-    // role="group" with aria-labelledby on selectors
-    const textPositionGroup = modal.locator('[role="group"]');
-    await expect(textPositionGroup).toHaveCount(1);
-    await expect(textPositionGroup).toHaveAttribute('aria-labelledby', 'text-position-label');
+    // Two role="group" regions: Text Position toggle + Installation/service-tier picker
+    const groups = modal.locator('[role="group"]');
+    await expect(groups).toHaveCount(2);
+    await expect(modal.locator('[role="group"][aria-labelledby="text-position-label"]')).toHaveCount(1);
+    await expect(modal.locator('[role="group"][aria-labelledby="katha-service-tier-label"]')).toHaveCount(1);
   });
 
   test('verify focus trapping loop when submit button is DISABLED (initial state)', async ({ page }) => {
@@ -148,7 +149,10 @@ test.describe('Challenger Modal Interaction & Accessibility Verification', () =>
     // In our code: First name input, Second name, Email, Phone, Event date, Venue, Font selector, Bottom, Top, Notes, Photo upload input.
     // The last enabled element in the DOM is the photo upload input or notes. Let's focus #katha-notes and press Tab.
     // Wait, the input #katha-photo-upload is also an input:not([disabled]) and is after #katha-notes.
-    const lastElement = page.locator('#katha-photo-upload');
+    // The photo upload is NOT last anymore: the service-tier group and the
+    // venue-address input come after it. With submit disabled, the last enabled
+    // focusable element is #katha-venue-address — Tab from it wraps to Close.
+    const lastElement = page.locator('#katha-venue-address');
     await lastElement.focus();
     await page.keyboard.press('Tab');
 
@@ -171,11 +175,12 @@ test.describe('Challenger Modal Interaction & Accessibility Verification', () =>
     // Fill in required fields to enable the submit button
     await modal.getByLabel('First name').fill('Ana');
     await modal.getByLabel('Email address').fill('ana.reyes@example.com');
+    // Submit also requires a selected installation (serviceTier gate).
+    await modal.getByRole('button', { name: /Signature Installation/i }).click();
     await page.waitForTimeout(200);
 
-    // Verify the submit button is enabled
-    // Wait, the submit button has text "Submit Design Inquiry"
-    const submitBtn = modal.getByRole('button', { name: /submit design inquiry/i });
+    // Verify the submit button is enabled (label is "Send Inquiry").
+    const submitBtn = modal.getByRole('button', { name: /send inquiry/i });
     await expect(submitBtn).toBeVisible();
     await expect(submitBtn).not.toBeDisabled();
 
@@ -190,7 +195,7 @@ test.describe('Challenger Modal Interaction & Accessibility Verification', () =>
 
     const activeTextContent = await page.evaluate(() => document.activeElement?.textContent?.trim() || '');
     console.log(`[VERIFICATION-ENABLED] Shift+Tab active element on close: "${activeTextContent}"`);
-    expect(activeTextContent).toMatch(/submit design inquiry/i);
+    expect(activeTextContent).toMatch(/send inquiry/i);
 
     // Focus the submit button and press Tab (should wrap forward to the Close button)
     await submitBtn.focus();

@@ -1,0 +1,89 @@
+- main [ref=e3]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - text: Step 01
+      - heading "Select Your Event Details" [level=2] [ref=e7]
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - button "Prev" [ref=e12]
+          - heading "June 2026" [level=2] [ref=e13]
+          - button "Next" [ref=e14]
+        - generic [ref=e15]:
+          - generic [ref=e16]: Sun
+          - generic [ref=e17]: Mon
+          - generic [ref=e18]: Tue
+          - generic [ref=e19]: Wed
+          - generic [ref=e20]: Thu
+          - generic [ref=e21]: Fri
+          - generic [ref=e22]: Sat
+        - generic [ref=e23]:
+          - button "1" [ref=e25] [cursor=pointer]:
+            - generic [ref=e26]: "1"
+          - button "2" [ref=e27] [cursor=pointer]:
+            - generic [ref=e28]: "2"
+          - button "3" [ref=e29] [cursor=pointer]:
+            - generic [ref=e30]: "3"
+          - button "4" [ref=e31] [cursor=pointer]:
+            - generic [ref=e32]: "4"
+          - button "5" [ref=e33] [cursor=pointer]:
+            - generic [ref=e34]: "5"
+          - button "6" [ref=e35] [cursor=pointer]:
+            - generic [ref=e36]: "6"
+          - button "7" [ref=e37] [cursor=pointer]:
+            - generic [ref=e38]: "7"
+          - button "8" [ref=e39] [cursor=pointer]:
+            - generic [ref=e40]: "8"
+          - button "9" [ref=e41] [cursor=pointer]:
+            - generic [ref=e42]: "9"
+          - button "10" [ref=e43] [cursor=pointer]:
+            - generic [ref=e44]: "10"
+          - button "11" [ref=e45] [cursor=pointer]:
+            - generic [ref=e46]: "11"
+          - button "12" [ref=e47] [cursor=pointer]:
+            - generic [ref=e48]: "12"
+          - button "13" [ref=e49] [cursor=pointer]:
+            - generic [ref=e50]: "13"
+          - button "14" [ref=e51] [cursor=pointer]:
+            - generic [ref=e52]: "14"
+          - button "15" [ref=e53] [cursor=pointer]:
+            - generic [ref=e54]: "15"
+          - button "16" [ref=e55] [cursor=pointer]:
+            - generic [ref=e56]: "16"
+          - button "17" [ref=e57] [cursor=pointer]:
+            - generic [ref=e58]: "17"
+          - button "18" [ref=e59] [cursor=pointer]:
+            - generic [ref=e60]: "18"
+          - button "19" [ref=e61] [cursor=pointer]:
+            - generic [ref=e62]: "19"
+          - button "20" [ref=e63] [cursor=pointer]:
+            - generic [ref=e64]: "20"
+          - button "21" [ref=e65] [cursor=pointer]:
+            - generic [ref=e66]: "21"
+          - button "22" [ref=e67] [cursor=pointer]:
+            - generic [ref=e68]: "22"
+          - button "23" [ref=e69] [cursor=pointer]:
+            - generic [ref=e70]: "23"
+          - button "24" [ref=e71] [cursor=pointer]:
+            - generic [ref=e72]: "24"
+          - button "25" [ref=e73] [cursor=pointer]:
+            - generic [ref=e74]: "25"
+          - button "26" [ref=e75] [cursor=pointer]:
+            - generic [ref=e76]: "26"
+          - button "27" [ref=e77] [cursor=pointer]:
+            - generic [ref=e78]: "27"
+          - button "28" [ref=e79] [cursor=pointer]:
+            - generic [ref=e80]: "28"
+          - button "29" [ref=e81] [cursor=pointer]:
+            - generic [ref=e82]: "29"
+          - button "30" [ref=e83] [cursor=pointer]:
+            - generic [ref=e84]: "30"
+        - generic [ref=e89]:
+          - generic [ref=e90]: Select your date
+          - button "Confirm" [disabled] [ref=e91]
+      - generic [ref=e92]:
+        - generic [ref=e93]: Venue Name (Optional)
+        - textbox "Where is the magic happening?" [ref=e94]
+    - button "Continue" [ref=e95]:
+      - text: Continue
+      - img [ref=e97]
