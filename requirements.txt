@@ -1,0 +1,2 @@
+# Python Template Rendering Dependencies
+Pillow>=10.0.0
