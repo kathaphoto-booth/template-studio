@@ -1,0 +1,11 @@
+{
+  "fontFile": "hello-honey.otf",
+  "displayName": "Hello Honey",
+  "baselineOffset": -10,
+  "scaleAdjust": 0.95,
+  "letterSpacing": 0,
+  "ligatures": {
+    "&": "♥"
+  },
+  "notes": "Cursive script font. Metrics: ascender=750, descender=-250, unitsPerEm=1000. Baseline offset compensates for generous descenders. Scale adjust is a design-intent value (not metrics-derived); Parisienne asc/em=0.916 vs Hello Honey asc/em=0.750."
+}

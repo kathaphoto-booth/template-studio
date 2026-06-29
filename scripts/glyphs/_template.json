@@ -1,0 +1,10 @@
+{
+  "$schema": "Font glyph configuration for Katha template export pipeline",
+  "fontFile": "",
+  "displayName": "",
+  "baselineOffset": 0,
+  "scaleAdjust": 1.0,
+  "letterSpacing": 0,
+  "ligatures": {},
+  "notes": ""
+}
