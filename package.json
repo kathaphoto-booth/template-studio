@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "clean": "next clean",
-    "export:tracy": "node scripts/export-tracy.mjs",
+    "export:tracy": "node scripts/export-template.mjs",
     "guard": "node scripts/katha-guard.mjs",
     "guard:ci": "node scripts/katha-guard.mjs --p0-only",
     "guard:templates": "node scripts/katha-template-guard.mjs",

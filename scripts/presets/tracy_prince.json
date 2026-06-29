@@ -1,0 +1,13 @@
+{
+  "slug": "tracy_prince",
+  "format": "postcard-vertical",
+  "layoutId": "pv-2",
+  "bg": "#FDFCFB",
+  "text": "#9E5460",
+  "secondary": "#9E5460",
+  "border": "#E5E5E5",
+  "slotBg": "#F9F9F9",
+  "names": "Tracy & Prince",
+  "font": "parisienne",
+  "foil": null
+}
