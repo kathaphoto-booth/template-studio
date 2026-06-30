@@ -1,130 +1,214 @@
-"use client";
-import React, { useState } from "react";
+'use client'
 
-export default function Home() {
-  const [slots, setSlots] = useState<number>(3);
-  const [presetName, setPresetName] = useState<string>("Classic Trio");
+import React, { useState } from 'react'
 
-  const slotArray = Array.from({ length: slots }, (_, i) => i + 1);
+export default function Page() {
+  const [slots, setSlots] = useState<2|3|4>(3)
+  const [templateName, setTemplateName] = useState('Classic')
+  const [bgColor, setBgColor] = useState('#F3F4F6') // Tailwind slate-100 like
+  const [caption, setCaption] = useState('Smile!')
+
+  const slotOptions = [2, 3, 4] as const
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 text-slate-900 antialiased">
-      <header className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <img src="/icon.png" alt="Katha Photobooth" className="w-12 h-12 object-contain" />
+    <main className="min-h-screen bg-white text-slate-900 p-6 sm:p-12">
+      <header className="max-w-5xl mx-auto mb-8">
+        <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-semibold text-xl">Katha Template Studio</h1>
-            <p className="text-sm text-slate-600">Design symmetric photobooth templates (2 / 3 / 4 slots)</p>
+            <h1 className="text-2xl font-semibold tracking-tight">Photobooth Template Studio</h1>
+            <p className="text-sm text-slate-500">Design symmetric, print-ready photo templates (2 / 3 / 4 slots).</p>
+          </div>
+          <div className="hidden sm:flex items-center gap-4">
+            <span className="px-3 py-1 rounded bg-slate-100 text-xs text-slate-700">Verified</span>
+            <button className="inline-flex items-center gap-2 px-3 py-2 bg-rose-700 text-white rounded shadow-sm hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-300">
+              Export
+            </button>
           </div>
         </div>
-        <nav>
-          <a href="#studio" className="text-sm font-medium text-slate-700 hover:underline">Studio</a>
-        </nav>
       </header>
 
-      <section className="max-w-6xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center py-12">
-          <div>
-            <h2 className="text-3xl font-extrabold mb-4">Create beautiful, symmetric photobooth templates</h2>
-            <p className="text-slate-700 mb-6">Select the slot layout, preview a responsive template, and export production-ready assets. Built to KATHA brand rules: symmetric layouts only, Loko Rust CTA, no rounded corners.</p>
+      <section className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <aside className="col-span-1">
+          <div className="space-y-6 bg-white border rounded-lg p-6 shadow-sm">
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Template name</label>
+              <input
+                aria-label="Template name"
+                value={templateName}
+                onChange={(e) => setTemplateName(e.target.value)}
+                className="mt-2 w-full border rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-rose-300"
+              />
+            </div>
 
-            <div className="flex flex-wrap gap-3 items-center mb-6">
-              <label className="sr-only">Slots</label>
-              <div className="flex items-center gap-2" role="tablist" aria-label="Choose number of slots">
-                {[2, 3, 4].map((n) => (
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Slots</label>
+              <div className="mt-2 flex gap-2" role="radiogroup" aria-label="Number of slots">
+                {slotOptions.map((opt) => (
                   <button
-                    key={n}
-                    onClick={() => setSlots(n)}
-                    aria-pressed={slots === n}
-                    className={`px-4 py-2 font-medium border border-slate-200 text-slate-800 ${slots === n ? "bg-slate-100" : "bg-white"}`}
-                    style={{ WebkitAppearance: "none", appearance: "none" }}
+                    key={opt}
+                    onClick={() => setSlots(opt as 2|3|4)}
+                    aria-pressed={slots === opt}
+                    className={`px-3 py-2 rounded border text-sm ${slots === opt ? 'bg-rose-700 text-white' : 'bg-white text-slate-700 hover:bg-slate-50'}`}
                   >
-                    {n} slots
+                    {opt}
                   </button>
                 ))}
               </div>
+            </div>
 
-              <div className="ml-4">
-                <label htmlFor="preset" className="sr-only">Preset name</label>
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Background</label>
+              <div className="mt-2 flex items-center gap-3">
                 <input
-                  id="preset"
-                  value={presetName}
-                  onChange={(e) => setPresetName(e.target.value)}
-                  className="px-3 py-2 border border-slate-200 text-slate-800 bg-white"
-                  placeholder="Preset name"
+                  aria-label="Background color"
+                  type="color"
+                  value={bgColor}
+                  onChange={(e) => setBgColor(e.target.value)}
+                  className="w-12 h-8 p-0 border rounded"
                 />
+                <span className="text-sm text-slate-500">Choose a gentle backing for print contrast</span>
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div>
+              <label className="block text-sm font-medium text-slate-700">Caption</label>
+              <input
+                aria-label="Caption"
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                className="mt-2 w-full border rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-rose-300"
+              />
+            </div>
+
+            <div className="pt-2">
               <button
-                className="px-5 py-3 font-semibold text-slate-50"
-                style={{ backgroundColor: "#8C382A", border: "1px solid #8C382A", WebkitAppearance: "none", appearance: "none" }}
-                onClick={() => alert(`Exporting preset: ${presetName} (${slots} slots)`)}
+                className="w-full inline-flex justify-center items-center gap-2 px-4 py-2 bg-rose-700 text-white rounded-md shadow hover:bg-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-300"
+                onClick={() => {
+                  // simple download: generate SVG and prompt download
+                  const svg = document.getElementById('template-preview')?.outerHTML
+                  if (!svg) return
+                  const blob = new Blob([svg], { type: 'image/svg+xml' })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = `${templateName.replace(/\s+/g, '_') || 'template'}.svg`
+                  document.body.appendChild(a)
+                  a.click()
+                  a.remove()
+                  URL.revokeObjectURL(url)
+                }}
               >
-                Export preset
+                Download SVG
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-6 text-xs text-slate-500">
+            <p>Design rules:</p>
+            <ul className="list-disc ml-5 mt-2 space-y-1">
+              <li>No forbidden hex: avoid #000, #fff, #F9F6F0</li>
+              <li>Use Loko Rust (#8C382A) only for CTA accents</li>
+              <li>Templates must be symmetric (choose 2/3/4 slots)</li>
+            </ul>
+          </div>
+        </aside>
+
+        <div className="col-span-1 lg:col-span-2">
+          <div className="bg-white border rounded-lg p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium">Live preview</h2>
+              <div className="text-sm text-slate-500">Preview is vector SVG — ideal for print</div>
+            </div>
+
+            <div className="w-full flex justify-center">
+              <div
+                style={{ background: bgColor }}
+                className="w-full max-w-3xl border border-slate-200 rounded-lg p-6 flex justify-center items-center"
+                aria-hidden="false"
+              >
+                <svg
+                  id="template-preview"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="1000"
+                  height="1400"
+                  viewBox="0 0 1000 1400"
+                  role="img"
+                  aria-label={`Template preview: ${slots} slots`}
+                >
+                  <defs>
+                    <style>{`.caption{font:24px sans-serif; fill:#111827;}`}</style>
+                  </defs>
+
+                  {/* Outer bleed safe area */}
+                  <rect x="0" y="0" width="1000" height="1400" fill={bgColor} rx="0" />
+
+                  {/* Header banner */}
+                  <rect x="40" y="40" width="920" height="120" fill="#fff" stroke="#E6E7EA" strokeWidth="1" rx="8" />
+                  <text x="70" y="110" fill="#111827" fontSize="32" fontFamily="Inter, sans-serif">{templateName}</text>
+
+                  {/* Slots area */}
+                  {renderSlots(slots)}
+
+                  {/* Caption */}
+                  <text x="500" y="1320" textAnchor="middle" className="caption">{caption}</text>
+                </svg>
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={() => alert('Applied template to print job (demo)')}
+                className="px-4 py-2 rounded bg-slate-800 text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-300"
+              >
+                Apply to job
               </button>
 
-              <a
-                href="#studio"
-                className="px-5 py-3 font-medium text-slate-700 border border-slate-200 bg-white"
+              <button
+                onClick={() => navigator.clipboard?.writeText(JSON.stringify({ templateName, slots, bgColor, caption }))}
+                className="px-4 py-2 rounded border bg-white text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-rose-300"
               >
-                Open studio
-              </a>
+                Copy JSON
+              </button>
             </div>
-          </div>
-
-          <div aria-live="polite">
-            <h3 className="text-sm font-medium text-slate-600 mb-3">Preview — {slots} slot{slots > 1 ? "s" : ""}</h3>
-
-            <div className={`grid gap-2 ${slots === 2 ? "grid-cols-2" : slots === 3 ? "grid-cols-3" : "grid-cols-4"}`}>
-              {slotArray.map((i) => (
-                <figure key={i} className="bg-white border border-slate-200 p-3 flex flex-col items-center justify-center" aria-label={`Slot ${i}`}>
-                  <img src={`/studio/placeholder-${i % 3}.png`} alt={`Template slot ${i}`} className="w-full h-40 object-cover" />
-                  <figcaption className="mt-3 text-sm text-slate-600">Slot {i}</figcaption>
-                </figure>
-              ))}
-            </div>
-
-            <p className="mt-4 text-xs text-slate-500">Responsive preview — exports produce PNGs and SVGs. No rounded corners are applied to templates.</p>
           </div>
         </div>
       </section>
 
-      <section id="studio" className="max-w-6xl mx-auto px-6 py-12">
-        <div className="bg-white border border-slate-200 p-6">
-          <h4 className="text-lg font-semibold mb-3">Studio controls</h4>
-          <p className="text-sm text-slate-600 mb-4">Adjust spacing, background, and export settings below.</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <label className="flex flex-col">
-              <span className="text-sm text-slate-700 mb-2">Background</span>
-              <select className="px-3 py-2 border border-slate-200 bg-white text-slate-800">
-                <option>Classic Paper</option>
-                <option>Dark Slate</option>
-                <option>Photo Negative</option>
-              </select>
-            </label>
-
-            <label className="flex flex-col">
-              <span className="text-sm text-slate-700 mb-2">Spacing</span>
-              <input type="range" min={0} max={40} defaultValue={8} className="w-full" />
-            </label>
-
-            <label className="flex flex-col">
-              <span className="text-sm text-slate-700 mb-2">Export format</span>
-              <select className="px-3 py-2 border border-slate-200 bg-white text-slate-800">
-                <option>PNG (high res)</option>
-                <option>SVG (vector)</option>
-              </select>
-            </label>
-          </div>
-        </div>
-      </section>
-
-      <footer className="max-w-6xl mx-auto px-6 py-8 text-sm text-slate-500">
-        © {new Date().getFullYear()} Katha Photobooth — Templates are symmetric (2 / 3 / 4). All brand rules applied.
+      <footer className="max-w-5xl mx-auto mt-10 text-center text-xs text-slate-400">
+        <p>Photobooth Template Studio — print-ready templates. No external assets used.</p>
       </footer>
     </main>
-  );
+  )
 }
+
+function renderSlots(slots: number) {
+  // returns JSX elements for slot placeholders positioned symmetrically
+  if (slots === 2) {
+    return (
+      <g>
+        <rect x="150" y="220" width="320" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+        <rect x="530" y="220" width="320" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+      </g>
+    )
+  }
+
+  if (slots === 3) {
+    return (
+      <g>
+        <rect x="50" y="220" width="280" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+        <rect x="360" y="220" width="280" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+        <rect x="670" y="220" width="280" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+      </g>
+    )
+  }
+
+  return (
+    <g>
+      <rect x="60" y="220" width="220" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+      <rect x="300" y="220" width="220" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+      <rect x="540" y="220" width="220" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+      <rect x="780" y="220" width="120" height="720" fill="#fff" stroke="#D1D5DB" rx="8" />
+    </g>
+  )
+}
+
