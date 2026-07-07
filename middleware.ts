@@ -1,5 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { timingSafeEqual } from "crypto";
+// Pure JS constant-time comparison for Edge Runtime support
+function constantTimeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let result = 0;
+  for (let i = 0; i < a.length; i++) {
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return result === 0;
+}
 
 // ──────────────────────────────────────────────────────────────────────
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
@@ -25,7 +33,7 @@ function isProtected(pathname: string): boolean {
 }
 
 export function middleware(req: NextRequest) {
-  const password = process.env.STUDIO_PASSWORD;
+  const password = process.env.STUDIO_PASSWORD || "";
   if (!password) {
     if (process.env.NODE_ENV === "production") {
       return new NextResponse("Server configuration error — contact administrator", { status: 503 });
@@ -42,9 +50,7 @@ export function middleware(req: NextRequest) {
     const decoded = Buffer.from(encoded, "base64").toString("utf-8");
     const colonIndex = decoded.indexOf(":");
     const provided = decoded.slice(colonIndex + 1);
-    const authBuf = Buffer.from(provided, "utf-8");
-    const passBuf = Buffer.from(password, "utf-8");
-    const match = authBuf.length === passBuf.length && timingSafeEqual(authBuf, passBuf);
+    const match = constantTimeCompare(provided, password);
     if (match) return NextResponse.next();
   }
 

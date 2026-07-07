@@ -71,14 +71,14 @@ export function StatusPipeline({ currentStatus, leadHash, authToken }: { current
       </div>
 
       {isApproved ? (
-        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", letterSpacing: "0.35em", textTransform: "uppercase", color: "#8C382A", display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", letterSpacing: "0.35em", textTransform: "uppercase", color: "#3D2B1F", display: "flex", alignItems: "center", gap: "10px" }}>
           <span style={{ fontFamily: "'Fraunces', serif", fontSize: "16px" }}>⬡</span> KTHA — Brass Ring Sealed
         </div>
       ) : (
         <button
           onClick={advance}
           disabled={saving}
-          style={{ backgroundColor: "#8C382A", color: "#EAE2D5", border: "none", padding: "10px 24px", fontFamily: "'Inter', sans-serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", cursor: saving ? "wait" : "pointer", opacity: saving ? 0.7 : 1 }}
+          style={{ backgroundColor: "#DCCBB5", color: "#110F0D", border: "none", padding: "10px 24px", fontFamily: "'Inter', sans-serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", cursor: saving ? "wait" : "pointer", opacity: saving ? 0.7 : 1 }}
         >
           {saving ? "Saving…" : `Mark as ${LEAD_STATUSES[Math.min(currentIndex + 1, LEAD_STATUSES.length - 1)]}`}
         </button>

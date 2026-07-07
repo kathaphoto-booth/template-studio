@@ -31,6 +31,11 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
+  // The legacy /reserve flow is consolidated into the gallery's Vault Drawer.
+  // Query strings (?tier=, ?lead=) are preserved through the redirect.
+  async redirects() {
+    return [{ source: '/reserve', destination: '/gallery', permanent: true }];
+  },
   output: 'standalone',
   transpilePackages: ['motion'],
   webpack: (config, {dev}) => {

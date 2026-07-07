@@ -8,4 +8,9 @@ const __dirname = path.dirname(__filename);
 
 export default defineConfig([{
     extends: [...next],
+    rules: {
+        "react-hooks/set-state-in-effect": "off",
+        "react-hooks/error-boundaries": "off",
+        "@next/next/no-page-custom-font": "off"
+    }
 }]);

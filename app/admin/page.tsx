@@ -21,7 +21,7 @@ type Selection = {
 const STATUS_STYLES: Record<string, { background: string; color: string }> = {
   Inquired:   { background: "#C4B59D",           color: "#241E1A" },
   Selected:   { background: "#EAE2D5",           color: "#5A564E" },
-  "In-Design":{ background: "rgba(140,56,42,0.15)", color: "#8C382A" },
+  "In-Design":{ background: "rgba(220,203,181,0.15)", color: "#DCCBB5" },
   Approved:   { background: "#241E1A",           color: "#EAE2D5" },
 };
 
@@ -161,7 +161,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ page?: 
   );
   } catch (err: any) {
     return (
-      <div style={{ color: "#8C382A", padding: "40px", backgroundColor: "rgba(140,56,42,0.1)", border: "1px solid #8C382A", borderRadius: 0 }}>
+      <div style={{ color: "#E4DACA", padding: "40px", backgroundColor: "rgba(220,203,181,0.08)", border: "1px solid var(--none)", borderLeft: "2px solid #E4DACA", borderRadius: 0 }}>
         <h2 style={{ fontFamily: "'Fraunces', serif", margin: "0 0 16px 0" }}>Failed to load leads</h2>
         <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", margin: 0 }}>{err.message}</p>
       </div>

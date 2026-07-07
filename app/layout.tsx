@@ -1,31 +1,62 @@
 import type {Metadata} from 'next';
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Newsreader, Cormorant, Courier_Prime } from 'next/font/google';
 import './globals.css'; // Global styles
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-
-const playfair = Playfair_Display({
+// next/font variables are set on <html>, which overrides the @theme :root
+// values — so only claim the slots we actually want these faces to own.
+// --font-display stays with the self-hosted FH Ronaldson from globals.css.
+const newsreader = Newsreader({
   subsets: ['latin'],
   variable: '--font-serif',
 });
 
+const cormorant = Cormorant({
+  subsets: ['latin'],
+  variable: '--font-body',
+});
+
+const courier = Courier_Prime({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-mono',
+});
+
+import { SmoothScrollProvider } from '@/components/providers/SmoothScrollProvider';
+import { CinematicEntrance } from '@/components/CinematicEntrance';
+import { EntryCapture } from '@/components/entry/EntryCapture';
+
 import { KathaThread } from '@/components/marks/KathaThread';
 
 export const metadata: Metadata = {
-  title: 'Katha Template Studio',
-  description: 'Photo strip and postcard template library and designer for Katha Photo Booth.',
+  title: 'Katha Booth — Check Availability & Reserve · Los Angeles & Orange County',
+  description:
+    'Heritage photo-booth installations. Oak-wood DSLR capture, archival prints, quiet high-contrast portraits. Check open dates and reserve your night — Los Angeles & Orange County.',
+  keywords: ['photo booth', 'Los Angeles', 'Orange County', 'wedding', 'editorial', 'archival prints'],
+  openGraph: {
+    title: 'Katha Booth — The Gilded Archive',
+    description:
+      'Photo-booth portraiture as a crafted installation. Real dates, real prints, real photography. Reserve your night.',
+    type: 'website',
+    url: 'https://book.kathabooth.com',
+    siteName: 'Katha Booth',
+  },
 };
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en" className={`${newsreader.variable} ${cormorant.variable} ${courier.variable}`}>
+      <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Aboreto&family=Alex+Brush&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Cinzel:wght@400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Great+Vibes&family=Italiana&family=JetBrains+Mono:wght@400..700&family=La+Belle+Aurore&family=Montserrat:wght@100..900&family=Parisienne&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Rochester&family=Sacramento&display=swap" rel="stylesheet" />
+      </head>
       <body className="antialiased" suppressHydrationWarning>
+        {/* Marketing entry contract — holds ?src / ?tier for the session */}
+        <EntryCapture />
         {/* Katha Wabi-Sabi patina — feTurbulence filter defs (BRAND_GENESIS_PLAN §V, Stage 3 H10) */}
         <svg
           aria-hidden="true"
@@ -44,7 +75,13 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           </filter>
         </svg>
         <KathaThread className="fixed inset-0 z-0 pointer-events-none" />
-        {children}
+        <SmoothScrollProvider>
+          <CinematicEntrance>
+            <div id="app-wrapper">
+              {children}
+            </div>
+          </CinematicEntrance>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

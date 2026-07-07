@@ -2,7 +2,7 @@
 name: Katha Photo Booth
 description: Perseverance composed into thread — Filipino heritage woven through wabi-sabi web design.
 colors:
-  primary: "#8C382A"
+  primary: "#3D2B1F"
   primary-deep: "#6E2C20"
   neutral-bg: "#EAE2D5"
   obsidian-weave: "#111112"
@@ -11,7 +11,7 @@ colors:
   champagne-heirloom: "#C4B59D"
   iron-bark: "#241E1A"
   knalum-ink: "#1A1816"
-  loko-rust: "#8C382A"
+  loko-rust: "#3D2B1F"
   terracotta-earth: "#A35C44"
   abel-slate: "#5A5D5A"
   capiz-sage: "#B5B8A3"
@@ -85,7 +85,7 @@ space (Ma). Data must reach the user as a continuous narrative thread, never ste
 ## 2. Colors
 
 ### Primary (sacred)
-- **Loko Rust** (#8C382A): The sacred CTA — and only the sacred CTA. From boiled loko
+- **Loko Rust** (#3D2B1F): The sacred CTA — and only the sacred CTA. From boiled loko
   root in the T'nalak tradition: blood, vitality, permission. Exactly one visible per
   screen. Its scarcity is the point.
 

@@ -90,10 +90,10 @@ export async function POST(req: NextRequest) {
 function buildPreviewEmail(name: string, message?: string): string {
   return `
     <div style="font-family:'EB Garamond',Georgia,serif;max-width:600px;margin:0 auto;padding:40px 48px;background:#EAE2D5;color:#241E1A;line-height:1.65;">
-      <p style="font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.25em;color:#8C382A;margin:0 0 32px;font-weight:600;">
+      <p style="font-family:'Inter',sans-serif;font-size:10px;text-transform:uppercase;letter-spacing:0.25em;color:#8A7350;margin:0 0 32px;font-weight:600;">
         Katha Photo Booth
       </p>
-      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:22px;letter-spacing:-0.01em;color:#241E1A;margin:0 0 28px;border-bottom:1px solid #C4B59D;padding-bottom:14px;">
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:22px;letter-spacing:-0.01em;color:#241E1A;margin:0 0 28px;border-bottom:1px solid #DCCBB5;padding-bottom:14px;">
         Your design is ready.
       </h2>
       <p style="font-size:16px;margin:0 0 20px;">Dear ${name},</p>

@@ -8,6 +8,8 @@ type InquiryPayload = {
   client_email: string;
   client_phone?: string;
   event_date: string;
+  tier_selected?: string;
+  source?: string;
 };
 
 // ── Outbound Dispatch targets ──
@@ -28,6 +30,10 @@ async function recordLead(payload: InquiryPayload, leadHash: string) {
         event_date: payload.event_date,
         lead_hash: leadHash,
         status: "Inquired",
+        // Attribution columns ride along only when present, so unattributed
+        // inquiries insert exactly as before.
+        ...(payload.tier_selected ? { tier_selected: payload.tier_selected } : {}),
+        ...(payload.source ? { source: payload.source } : {}),
       });
 
     if (error) {
@@ -59,6 +65,10 @@ async function pingHoneyBook(payload: InquiryPayload, leadHash: string) {
         event_date: payload.event_date,
         lead_hash: leadHash,
         status: "Inquired",
+        tier_selected: payload.tier_selected || null,
+        // `source` above is the system marker; the marketing attribution
+        // slug travels as `lead_source`.
+        lead_source: payload.source || null,
       }),
     });
 
@@ -81,66 +91,58 @@ async function sendEnrichmentEmail(payload: InquiryPayload, leadHash: string, ba
   const galleryLink = `${baseUrl}/gallery?lead=${leadHash}`;
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
 
-  const subject = "Rooted by perseverance, crafted for generations — Katha Photo Booth";
+  const subject = "Your date is noted — Katha Booth";
 
   const textBody = `
 Dear ${payload.client_name},
 
-Thank you for reaching out to Katha. We have recorded your event inquiry for ${payload.event_date}.
+Your inquiry for ${payload.event_date} is on the registry. Nothing is confirmed until you choose your date and installation — this note simply holds your place in the conversation.
 
-A DSLR photo booth designed like a wooden loom, capturing portraits that feel less like prints and more like passed-down heirlooms.
+Katha is a studio, not a rental: a weathered oak booth, a trained operator on site, and archival prints made to be kept for decades.
 
-To help us tailor the backdrop, typography, and print outlines to the narrative of your room, we invite you to explore our dynamic design catalog and choose your template:
+When you're ready, open the design gallery to choose your date, your installation, and the plate your prints are set on:
 
 ${galleryLink}
 
-You can select a style, add customized lettering, and upload up to three reference photos at your own pace.
+Take your time. The details — stock, layout, lettering — are yours to shape.
 
-Rooted by perseverance, crafted for generations.
-
-Warmly,
-The Katha Team
+— The studio at Katha Booth
   `.trim();
 
   const htmlBody = `
-    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#EAE2D5; color:#241E1A; line-height:1.6; border-radius: 4px;">
-      <p style="font-family:'Inter', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.25em; color:#5A564E; margin-bottom: 30px;">
-        Katha Photo Booth
+    <div style="font-family:Georgia, 'Times New Roman', serif; max-width:600px; margin:0 auto; padding:48px 44px; background-color:#F5EFE6; color:#241E1A; line-height:1.6;">
+      <p style="font-family:'Courier New', monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.28em; color:#8A7350; margin:0 0 34px;">
+        // Katha Booth · Inquiry Registry
       </p>
-      
-      <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:24px; letter-spacing:-0.01em; margin-bottom: 24px; color:#241E1A;">
-        Rooted by perseverance, crafted for generations.
+
+      <h2 style="font-family:Georgia, serif; font-weight:400; font-size:27px; line-height:1.25; letter-spacing:-0.01em; margin:0 0 26px; color:#1A1714;">
+        Your date is noted.
       </h2>
-      
-      <p style="font-size:16px; margin-bottom:20px;">
+
+      <p style="font-size:16px; margin:0 0 20px;">
         Dear ${payload.client_name},
       </p>
-      
-      <p style="font-size:16px; margin-bottom:20px;">
-        Thank you for starting this dialogue with Katha. We have successfully recorded your event inquiry for the date of <strong>${payload.event_date}</strong>.
+
+      <p style="font-size:16px; margin:0 0 20px;">
+        Your inquiry for <strong>${payload.event_date}</strong> is on the registry. Nothing is confirmed yet — this note simply holds your place in the conversation.
       </p>
-      
-      <p style="font-size:16px; margin-bottom:20px;">
-        A Katha photo booth is built like a wooden loom. The abacá textile frames, the unbleached ecru fibers, and the hand-finished KTHA maker's mark exist for one purpose: to weave your shared memory directly into a passed-down heirloom.
+
+      <p style="font-size:16px; margin:0 0 30px;">
+        Katha is a studio, not a rental: a weathered oak booth, a trained operator on site, and archival prints made to be kept for decades.
       </p>
-      
-      <p style="font-size:16px; margin-bottom:30px;">
-        To help us shape the backdrops, layout geometry, and typography for your event, we invite you to browse the template gallery and finalize your aesthetic blueprint:
-      </p>
-      
-      <div style="margin-bottom:35px; text-align:center;">
-        <a href="${galleryLink}" style="display:inline-block; font-family:'Inter', sans-serif; font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#EAE2D5; padding:16px 32px; text-decoration:none; border-radius:0;">
-          Select Your Template Style
+
+      <div style="margin:0 0 38px;">
+        <a href="${galleryLink}" style="display:inline-block; font-family:'Courier New', monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.18em; background-color:#110F0D; color:#DCCBB5; padding:17px 34px; text-decoration:none;">
+          Open the design gallery →
         </a>
       </div>
-      
-      <p style="font-size:14px; color:#5A564E; margin-top:40px; border-top:1px dashed #C4B59D; padding-top:20px; font-style:italic;">
-        Details, fonts, and print outlines are fully adjustable. At your own pace, choose the blueprint that speaks to you.
+
+      <p style="font-size:14px; color:#5A564E; margin:44px 0 0; border-top:1px dashed #DCCBB5; padding-top:22px; font-style:italic;">
+        Take your time. The details — stock, layout, lettering — are yours to shape.
       </p>
-      
-      <p style="margin-top:30px; font-family:'Inter', sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:#5A564E;">
-        Warmly,<br/>
-        The Katha Team
+
+      <p style="margin:26px 0 0; font-family:'Courier New', monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.14em; color:#8A7350;">
+        — The studio at Katha Booth
       </p>
     </div>
   `;
@@ -164,11 +166,9 @@ The Katha Team
 
 // ── POST API Handler ──
 export async function POST(req: NextRequest) {
-  const appUrl = process.env.APP_URL;
-  if (!appUrl && process.env.NODE_ENV === 'production') {
-    return NextResponse.json({error:'Server configuration error'},{status:503});
-  }
-  const baseUrl = appUrl ?? 'http://localhost:3000';
+  // Explicit APP_URL wins (canonical domain); otherwise the request's own
+  // origin is always available and correct in every environment.
+  const baseUrl = process.env.APP_URL ?? req.nextUrl.origin;
 
   let body: any;
   try {
@@ -191,6 +191,12 @@ export async function POST(req: NextRequest) {
   const cleanName = name.trim();
   const cleanEmail = email.trim().toLowerCase();
 
+  // Optional attribution from the marketing entry contract — never a reason
+  // to reject an inquiry; malformed values are simply dropped.
+  const tierSelected =
+    typeof body?.tier_selected === "string" ? body.tier_selected.trim().slice(0, 120) : "";
+  const source = typeof body?.source === "string" ? body.source.trim().slice(0, 64) : "";
+
   // Generate unique cryptographic lead hash (16 bytes)
   const leadHash = crypto.randomBytes(16).toString("hex");
 
@@ -199,6 +205,8 @@ export async function POST(req: NextRequest) {
     client_email: cleanEmail,
     event_date: date,
     client_phone: phone || undefined,
+    tier_selected: tierSelected || undefined,
+    source: source || undefined,
   };
 
   // Run database, HoneyBook, and transactional email dispatches in parallel

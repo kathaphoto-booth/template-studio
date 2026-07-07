@@ -1,45 +1,228 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Outfit:wght@100..900&display=swap');
+
+@font-face {
+  font-family: 'FH Ronaldson Display';
+  src: url('/fonts/fh-ronaldson/FHRonaldsonDisplayTest-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'FH Ronaldson Display';
+  src: url('/fonts/fh-ronaldson/FHRonaldsonDisplayTest-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'FH Ronaldson Display';
+  src: url('/fonts/fh-ronaldson/FHRonaldsonDisplayTest-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
 
 @theme {
-  --font-sans: var(--font-sans), system-ui, sans-serif;
-  --font-serif: var(--font-serif), Georgia, serif;
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "EB Garamond", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-sans: "Outfit", system-ui, sans-serif;
+  --font-serif: "Newsreader", Georgia, serif;
+  --font-display: "FH Ronaldson Display", "Newsreader", Georgia, serif;
+  --font-body: "Cormorant", "Cormorant Garamond", Georgia, serif;
+  --font-mono: "Courier Prime", ui-monospace, monospace;
 
-  /* Katha palette — 9 canon tokens (UI + narrative) */
-  --color-katha-obsidian: #111112;
-  --color-katha-pina-ecru: #EAE2D5;
-  --color-katha-hammered-sequin: #9C958A;
-  --color-katha-champagne-heirloom: #C4B59D;
-  --color-katha-iron-bark: #241E1A;
-  --color-katha-knalum-ink: #1A1816;
-  --color-katha-loko-rust: #8C382A;
-  --color-katha-terracotta-earth: #A35C44;
-  --color-katha-abel-slate: #5A5D5A;
-  --color-katha-capiz-sage: #B5B8A3;
+  /* ═══ Katha palette — THE GILDED ARCHIVE (no red exists in this system) ═══ */
+  /* Surface ladder */
+  --color-katha-l0: #110F0D; /* Kamagong — page void */
+  --color-katha-l1: #181512; /* Kamagong Lift — section surface */
+  --color-katha-l2: #201B16; /* Oiled Oak — card */
+  --color-katha-l3: #28221B; /* Kape — raised card / drawer */
 
-  /* §VIII WCAG-AA muted text on Piña Ecru ground (replaces unsafe #9C958A) */
-  --color-katha-ecru-muted: #5A564E;
-  --color-katha-ecru-muted-soft: #6E6A62;
+  /* Ink */
+  --color-katha-ink: #F5EFE6;  /* Piña Ecru — primary ink */
+  --color-katha-hi: #E4DACA;   /* Bone — display headlines */
+  --color-katha-ecru: #F5EFE6;
+  --color-katha-mut: #A89C8A;  /* Rattan — secondary ink */
+  --color-katha-fnt: #857D71;  /* Capiz Slate — meta, base surfaces only */
+  --color-katha-dim: #857D71;
+
+  /* The sacred accent — gilt, not ember */
+  --color-katha-gilt: #DCCBB5;      /* Satin Champagne — CTAs, active, intent */
+  --color-katha-gilt-dark: #8A7350; /* gilt darkened to speak on light stock */
+  --color-katha-gilt-low: rgba(220, 203, 181, 0.10); /* selected wash */
+  --color-katha-moss: #4E5B48;      /* Moss Patina — state only, never text */
+  --color-katha-moss-hi: #8FA283;   /* Lifted Moss — when moss must read */
+  --color-katha-champ: #DCCBB5;     /* legacy alias → gilt */
+  --color-katha-sage: #8FA283;      /* legacy alias → lifted moss */
+
+  /* Architecture */
+  --color-katha-ln: rgba(245, 239, 230, 0.12);
+  --color-katha-ln2: rgba(245, 239, 230, 0.28);
+  --color-katha-glass: rgba(245, 239, 230, 0.04);
+  --color-katha-shadow: rgba(0, 0, 0, 0.85);
+
+  /* Print stocks (five, no red) */
+  --color-stock-pina: #F5EFE6;
+  --color-stock-sepia: #E9DFCC;
+  --color-stock-void: #110F0D;
+  --color-stock-moss: #4E5B48;
+  --color-stock-gilt: #DCCBB5;
 }
 
-/* Wabi-Sabi patina — global feTurbulence overlay (BRAND_GENESIS_PLAN §V, Stage 3 H10) */
-body::after {
-  content: "";
+@layer base {
+  body {
+    background-color: var(--color-katha-l0);
+    color: var(--color-katha-ink);
+  }
+  /* Focus law: Piña Ecru ring, offset 3px — always, both button variants */
+  :focus-visible {
+    outline: 2px solid var(--color-katha-ink);
+    outline-offset: 3px;
+  }
+}
+
+/* ── Cinematic Entrance ── */
+@keyframes weaveIn {
+  from { opacity: 0; transform: translateY(24px) }
+  to { opacity: 1; transform: translateY(0) }
+}
+@keyframes fadeIn {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+@keyframes bridgeOut {
+  0% { opacity: 1 }
+  70% { opacity: 1; filter: blur(0px); transform: scale(1) }
+  100% { opacity: 0; visibility: hidden; filter: blur(20px); transform: scale(1.08) }
+}
+@keyframes letterSnap {
+  0% { opacity: 0; filter: blur(20px); transform: scale(1.15) translateY(10px); letter-spacing: 0.1em; }
+  60% { opacity: 0.8; filter: blur(3px); }
+  100% { opacity: 1; filter: blur(0px); transform: scale(1) translateY(0); letter-spacing: "-0.01em"; }
+}
+
+.weave { animation: weaveIn 1s cubic-bezier(.16,1,.3,1) both; }
+.fin { animation: fadeIn .6s ease both; }
+.d1 { animation-delay: .15s; }
+.d2 { animation-delay: .3s; }
+.d3 { animation-delay: .45s; }
+
+/* ── Developer Fluid Hover Physics ── */
+.pw {
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+}
+.pw::after {
+  content: ''; position: absolute; top: 0; left: -150%; width: 150%; height: 100%;
+  background: linear-gradient(105deg, transparent 20%, rgba(255,255,255,0.06) 50%, transparent 80%);
+  transform: skewX(-20deg); transition: left 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none; z-index: 10;
+}
+.titem:hover .pw { box-shadow: 0 40px 80px var(--color-katha-shadow), 0 12px 30px rgba(0,0,0,0.5); }
+.titem:hover .pw::after { left: 150%; }
+
+/* ── Date Gate ledger ── */
+.gate-plate {
+  flex: 0 0 auto;
+  background: var(--color-katha-l1);
+  border: 1px solid var(--color-katha-ln);
+  transition: transform .6s cubic-bezier(.16,1,.3,1), border-color .4s, background .4s;
+  cursor: pointer;
+}
+.gate-plate:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-katha-gilt);
+  background: var(--color-katha-l2);
+}
+@keyframes plateBreath {
+  0%, 100% { opacity: .35 }
+  50% { opacity: .7 }
+}
+.gate-skeleton { animation: plateBreath 1.8s ease-in-out infinite; }
+
+/* ── Pricing Grid & Cards ── */
+.pricing-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 0.82fr 1fr; gap: 44px; align-items: start; }
+.oak-sticky { position: sticky; top: 120px; }
+.tier-card {
+  position: relative; background: var(--color-katha-l2); border: 1px solid var(--color-katha-ln); padding: 32px 36px;
+  display: flex; flex-direction: column; gap: 16px;
+  transition: transform .4s cubic-bezier(.16,1,.3,1), border-color .4s, background .4s; cursor: pointer;
+}
+.tier-card:hover { transform: translateY(-4px); border-color: var(--color-katha-ln2); background: var(--color-katha-l3); }
+.tier-card.tier-off { opacity: .35; cursor: not-allowed; }
+.tier-card.tier-off:hover { transform: none; border-color: var(--color-katha-ln); background: var(--color-katha-l2); }
+.tier-cta {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--color-katha-gilt);
+  opacity: 0; transform: translateY(4px); transition: opacity .35s, transform .35s;
+  border-bottom: 1px solid var(--color-katha-gilt); padding-bottom: 3px; align-self: flex-start;
+}
+.tier-card:hover .tier-cta { opacity: 1; transform: translateY(0); }
+.tier-flag { border-color: rgba(228, 218, 202, 0.35); }
+.tier-flag::before {
+  content: 'Flagship'; position: absolute; top: 0; right: 0; font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--color-katha-l0); background: var(--color-katha-gilt); padding: 6px 12px;
+}
+
+@media(max-width: 820px) {
+  .pricing-grid { grid-template-columns: 1fr; gap: 32px; }
+  .oak-sticky { position: static; }
+  .tier-card { padding: 24px 28px; }
+}
+
+/* ── Deep Z-Depth under the Vault Drawer ──
+   Targets .drawer-dim (page content wrapper), NOT #app-wrapper, so the
+   fixed parallax footer never sits inside a transformed ancestor. */
+.drawer-dim {
+  transition: transform .8s cubic-bezier(.16,1,.3,1), filter .8s ease, opacity .8s ease;
+  transform-origin: center 20%;
+}
+body.drawer .drawer-dim {
+  transform: scale(0.94) translateY(12px);
+  filter: blur(8px) grayscale(40%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+body.drawer { overflow: hidden; }
+
+/* The Track / Gallery - Optimized for GSAP / Lenis */
+.track {
+  display: flex;
+  gap: 48px;
+  padding: 16px clamp(20px, 5vw, 32px) 60px;
+  align-items: center;
+}
+.titem {
+  flex: 0 0 auto;
+  transition: transform .6s cubic-bezier(.16,1,.3,1);
+  will-change: transform;
+}
+.titem:hover {
+  transform: translateY(-12px);
+}
+
+/* Wabi-Sabi Plaster & Parchment Grain Overlay */
+.grain {
   position: fixed;
   inset: 0;
+  z-index: 50;
   pointer-events: none;
-  z-index: 1;
-  filter: url(#katha-patina);
-  background-color: var(--color-katha-pina-ecru);
-  opacity: 0.04;
-  mix-blend-mode: multiply;
+  opacity: .9;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
+/* ── Reduced motion law: force-reveal, no opacity:0 traps ── */
 @media (prefers-reduced-motion: reduce) {
-  body::after {
-    /* Freeze the noise — no animation. The filter renders once and stays static. */
-    animation: none;
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .drawer-dim, body.drawer .drawer-dim {
+    transform: none;
+    filter: none;
+  }
+  .gate-plate:hover, .tier-card:hover, .titem:hover {
+    transform: none;
   }
 }

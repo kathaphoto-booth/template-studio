@@ -6,6 +6,9 @@
 export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout } from "./layouts.js";
 import { resolveLayout, VIEWBOX, FORMAT_MARGIN, getModifiedLayout } from "./layouts.js";
 
+// Gilded Archive sacred accent (Satin Champagne) — the one thread of intent on dark grounds.
+const GILT_THREAD = "#DCCBB5";
+
 // Types
 export interface PhotoboothPreset {
   id: string;
@@ -47,7 +50,7 @@ export const PRESETS: PhotoboothPreset[] = [
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
     slotBgColor: "#EAE2D5",
@@ -68,7 +71,7 @@ export const PRESETS: PhotoboothPreset[] = [
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
     slotBgColor: "#EAE2D5",
@@ -89,7 +92,7 @@ export const PRESETS: PhotoboothPreset[] = [
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "18px",
     slotBgColor: "#EAE2D5",
@@ -181,7 +184,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single loko-root rust rule — the dreamweaver's tri-color."
+    designerExplanation: "T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single satin-champagne rule — the dreamweaver's third thread, gilded."
   },
   {
     id: "katha-knalum-night-postcard",
@@ -202,7 +205,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. 4×6 postcard variant."
+    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single satin-champagne accent. 4×6 postcard variant."
   },
   {
     id: "katha-knalum-night-landscape",
@@ -223,7 +226,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. Landscape postcard variant."
+    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single satin-champagne accent. Landscape postcard variant."
   },
 
   // ─── 4. BRASS RING (Katha Signature)
@@ -233,8 +236,8 @@ export const PRESETS: PhotoboothPreset[] = [
     type: "strip",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
+    borderColor: "#8A7350",
+    secondaryColor: "#8A7350",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
@@ -245,7 +248,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing."
+    designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single gilded circle beneath the names. Permission, and blessing."
   },
   {
     id: "katha-brass-ring-postcard",
@@ -254,8 +257,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
+    borderColor: "#8A7350",
+    secondaryColor: "#8A7350",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
@@ -266,7 +269,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names."
+    designerExplanation: "The brass ring permission seal, postcard-format. A single gilded ring beneath the names."
   },
   {
     id: "katha-brass-ring-landscape",
@@ -275,8 +278,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-v",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
+    borderColor: "#8A7350",
+    secondaryColor: "#8A7350",
     fontFamily: "'Fraunces', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
@@ -287,7 +290,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names."
+    designerExplanation: "The brass ring permission seal, landscape postcard format. A single gilded ring beneath the names."
   },
 
   // ─── 5. BINAKUL WEAVE (Katha Signature)
@@ -418,10 +421,10 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
   },
 
-  // ─── 7. TRACY & PRINCE (Katha Signature) — palette + Fraunces (Signature rule)
+  // ─── 7. HERITAGE FRAME (Katha Signature) — palette + Fraunces (Signature rule)
   {
-    id: "katha-tracy-prince",
-    name: "Katha Signature — Tracy & Prince",
+    id: "katha-heritage-frame",
+    name: "Katha Signature — Heritage Frame",
     type: "postcard-vertical",
     layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
@@ -429,7 +432,7 @@ export const PRESETS: PhotoboothPreset[] = [
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
     fontFamily: "'Fraunces', serif",
-    titleText: "Tracy & Prince",
+    titleText: "Abel & Calado",
     subTitleText: "",
     dateText: "",
     slotBorderRadius: "0px",
@@ -438,7 +441,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. Abel & Calado Heritage Frame."
   },
 
   // ─── 8. TRADITION GOLD LUXE (Classic Tier)
@@ -1032,7 +1035,7 @@ export const PRESETS: PhotoboothPreset[] = [
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "20px",
     slotBgColor: "#EAE2D5",
@@ -1188,7 +1191,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T’nalak soil-black ground — one square focal photo centered, loko-root rust accent text band."
+    designerExplanation: "T’nalak soil-black ground — one square focal photo centered, satin-champagne accent text band."
   },
   {
     id: "katha-knalum-night-landscape-2sq",
@@ -1209,7 +1212,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T’nalak soil-black — two square photos, ecru lettering with loko-root rust accent."
+    designerExplanation: "T’nalak soil-black — two square photos, ecru lettering with satin-champagne accent."
   },
   {
     id: "katha-knalum-night-landscape-3sq",
@@ -1356,7 +1359,28 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
+        designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
+  },
+  {
+    id: "katha-celestial-bituin",
+    name: "Katha Signature — Bituin Celestial",
+    type: "postcard-vertical",
+    layoutId: "pv-3",
+    backgroundColor: "#0B0C10",
+    textColor: "#c4b59d",
+    borderColor: "#241e1a",
+    secondaryColor: "#eae2d5",
+    fontFamily: "'Fraunces', serif",
+    titleText: "BITUIN",
+    subTitleText: "star in the night sky",
+    dateText: "OCTOBER 26, 2024 • MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#0B0C10",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Deep, textured night sky background accented with celestial deconstructed double-borders and an elegant 8-pointed gold star layout. Set in high-end Fraunces and Montserrat."
   },
 ];
 
@@ -1364,6 +1388,9 @@ export const PRESETS: PhotoboothPreset[] = [
 // ─── DECORATION ALIASES ───────────────────────────────────────────────
 // Maps format variants back to the root family ID so we only write the drawing rules ONCE.
 const DECORATION_ALIASES: Record<string, string> = {
+  "katha-celestial-bituin-postcard":      "katha-celestial-bituin",
+  "katha-celestial-bituin-landscape":     "katha-celestial-bituin",
+  "katha-celestial-bituin-postcard-vertical": "katha-celestial-bituin",
   "katha-woven-silk-postcard":      "katha-woven-silk",
   "katha-woven-silk-landscape":     "katha-woven-silk",
   "katha-heirloom-pina-postcard":   "katha-heirloom-pina",
@@ -1545,6 +1572,20 @@ export function renderDecorativeSvg(
 
   // Render SVG elements anchored ONLY to the canvas edges (relative to margin) or to the dynamic tz pedestal boundaries.
   switch (baseId) {
+    case "katha-celestial-bituin":
+      return `
+        <!-- Fine celestial double borders -->
+        <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" opacity="0.8" />
+        <rect x="${margin / 3 + 6}" y="${margin / 3 + 6}" width="${vb.w - 2 * margin / 3 - 12}" height="${vb.h - 2 * margin / 3 - 12}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.4" />
+        
+        <!-- Elegant 8-pointed star in the text zone divider -->
+        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" stroke="${secondaryColor}" fill="${secondaryColor}" stroke-width="1">
+          <line x1="-120" y1="0" x2="-25" y2="0" opacity="0.6" stroke-dasharray="2 4" />
+          <line x1="25" y1="0" x2="120" y2="0" opacity="0.6" stroke-dasharray="2 4" />
+          <path d="M 0,-12 L 2,-4 L 10,-2 L 3,0 L 6,8 L 0,3 L -6,8 L -3,0 L -10,-2 L -2,-4 Z" />
+          <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
+        </g>
+      `;
     case "katha-heirloom-pina":
       return `
         <!-- Dual calado champagne borders -->
@@ -1585,15 +1626,15 @@ export function renderDecorativeSvg(
       return `
         <!-- Soil-black T'nalak raw linen rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.8" />
-        <!-- A single, sacred loko-root rust horizontal thread above/below the text pedestal -->
-        <line x1="${vb.w / 2 - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${vb.w / 2 + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="#8C382A" stroke-width="2.5" />
+        <!-- A single, sacred satin-champagne thread above/below the text pedestal -->
+        <line x1="${vb.w / 2 - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${vb.w / 2 + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="${GILT_THREAD}" stroke-width="2.5" />
       `;
 
     case "katha-brass-ring":
       return `
         <!-- Fine ecru rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
-        <!-- Sacred loko-rust brass ring centered at the boundary of the branding pedestal -->
+        <!-- Sacred gilded brass ring centered at the boundary of the branding pedestal -->
         <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30})" fill="none" stroke="${secondaryColor}">
           <circle cx="0" cy="0" r="22" stroke-width="2" />
           <circle cx="0" cy="0" r="14" stroke-width="0.75" opacity="0.6" />
@@ -1622,7 +1663,7 @@ export function renderDecorativeSvg(
         </g>
       `;
 
-    case "katha-tracy-prince":
+    case "katha-heritage-frame":
       return `
         <!-- Subtle Overlay Frame intruding 12px into the photo slot -->
         ` + layout.slots.map((s: any) => `
@@ -1634,10 +1675,21 @@ export function renderDecorativeSvg(
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.8" />
         <rect x="${margin / 2 + 8}" y="${margin / 2 + 8}" width="${vb.w - margin - 16}" height="${vb.h - margin - 16}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
         <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" fill="none" stroke="${secondaryColor}">
-           <circle cx="0" cy="0" r="14" stroke-width="1.5" />
-           <circle cx="0" cy="0" r="6" stroke-width="0.75" />
-           <line x1="-140" y1="0" x2="-32" y2="0" stroke-width="1" />
-           <line x1="32" y1="0" x2="140" y2="0" stroke-width="1" />
+           <!-- Center rosette (Calado openwork motif) -->
+           <circle cx="0" cy="0" r="12" stroke-width="1" stroke-dasharray="1 1.5" />
+           <circle cx="0" cy="0" r="18" stroke-width="0.8" />
+           <circle cx="0" cy="0" r="5" stroke-width="1.2" />
+           <!-- Rosette petals -->
+           <path d="M 0,-18 L 3,-10 L 0,-5 L -3,-10 Z" stroke-width="1" fill="none" />
+           <path d="M 0,18 L 3,10 L 0,5 L -3,10 Z" stroke-width="1" fill="none" />
+           <path d="M -18,0 L -10,3 L -5,0 L -10,-3 Z" stroke-width="1" fill="none" />
+           <path d="M 18,0 L 10,3 L 5,0 L 10,-3 Z" stroke-width="1" fill="none" />
+           
+           <!-- Framing lines with end dots -->
+           <line x1="-160" y1="0" x2="-30" y2="0" stroke-width="1" />
+           <line x1="30" y1="0" x2="160" y2="0" stroke-width="1" />
+           <circle cx="-160" cy="0" r="2" fill="${secondaryColor}" stroke="none" />
+           <circle cx="160" cy="0" r="2" fill="${secondaryColor}" stroke="none" />
         </g>
       `;
 

@@ -31,7 +31,7 @@ const text = readFileSync(SRC, "utf8");
 // ── CANON (DESIGN_SYSTEM.v2.md — 11 tokens) + documented in-use tints ──
 const CANON = new Set([
   "#111112", "#eae2d5", "#9c958a", "#c4b59d", "#241e1a",   // UI tokens
-  "#1a1816", "#8c382a", "#a35c44", "#5a5d5a", "#b5b8a3",   // narrative tokens
+  "#1a1816", "#3d2b1f", "#a35c44", "#5a5d5a", "#b5b8a3",   // narrative tokens
   "#5a564e", "#6e6a62",                                     // ecru-safe muted (§VIII)
   "#e0d7c7", "#8f4d39",                                     // documented Signature tints
 ]);

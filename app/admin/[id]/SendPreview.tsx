@@ -34,8 +34,8 @@ export function SendPreview({ leadHash }: { leadHash: string }) {
           onClick={send}
           disabled={state === "sending" || state === "sent"}
           style={{
-            backgroundColor: state === "sent" ? "#241E1A" : "#8C382A",
-            color: "#EAE2D5",
+            backgroundColor: state === "sent" ? "#241E1A" : "#DCCBB5",
+            color: state === "sent" ? "#EAE2D5" : "#110F0D",
             border: state === "sent" ? "1px solid rgba(196,181,157,0.3)" : "none",
             padding: "10px 24px",
             fontFamily: "'Inter', sans-serif",
@@ -54,7 +54,7 @@ export function SendPreview({ leadHash }: { leadHash: string }) {
           </span>
         )}
         {state === "error" && (
-          <span style={{ color: "#8C382A", fontSize: "13px" }}>
+          <span style={{ color: "#E4DACA", fontSize: "13px", borderLeft: "2px solid #E4DACA", paddingLeft: "8px" }}>
             Send failed — check Resend configuration.
           </span>
         )}
