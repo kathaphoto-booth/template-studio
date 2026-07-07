@@ -32,6 +32,30 @@ export async function POST(req: NextRequest) {
     const body = JSON.parse(rawBody);
     console.log("[Webhook] Received HoneyBook event:", JSON.stringify(body, null, 2));
 
+    // Idempotency: claim the event id before processing so provider retries
+    // are acknowledged without re-running side effects. Falls back to a body
+    // hash when the payload carries no id (identical retries still dedupe).
+    const eventId =
+      body?.event?.id ||
+      body?.event_id ||
+      body?.id ||
+      `sha256:${crypto.createHash("sha256").update(rawBody).digest("hex")}`;
+
+    if (supabaseAdmin) {
+      const { error: dedupeError } = await supabaseAdmin
+        .from("processed_webhook_events")
+        .insert({ event_id: String(eventId) });
+
+      if (dedupeError) {
+        if (dedupeError.code === "23505") {
+          console.log("[Webhook] Duplicate event skipped:", eventId);
+          return NextResponse.json({ ok: true, received: true, duplicate: true });
+        }
+        // Ledger unavailable — prefer at-least-once processing over dropping the event.
+        console.error("[Webhook] Dedupe insert failed, processing anyway:", dedupeError);
+      }
+    }
+
     // Identify event type
     const eventType = body?.event?.type || body?.type || "unknown";
     

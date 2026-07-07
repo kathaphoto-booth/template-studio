@@ -15,3 +15,8 @@ exports/*.pdf
 chat_memory.jsonl
 
 
+
+# Scratch: brand test bitmaps, clone snapshots, empty placeholders
+*.pbm
+clone_snapshot.png
+generate_code.sh

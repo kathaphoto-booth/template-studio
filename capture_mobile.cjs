@@ -5,7 +5,8 @@ const { chromium, devices } = require('playwright');
   const context = await browser.newContext(devices['iPhone 13']);
   const page = await context.newPage();
   
-  await page.goto('http://localhost:3000/portal/test-123/template-design');
+  const baseUrl = process.env.APP_URL ?? 'http://localhost:3000';
+  await page.goto(`${baseUrl}/portal/test-123/template-design`);
   
   // Wait for the fonts and canvas to render
   await page.waitForTimeout(3000);
