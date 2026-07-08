@@ -1,5 +1,5 @@
 {
-  "name": "katha-template-studio",
+  "name": "katha-pb-v3",
   "version": "0.2.0",
   "private": true,
   "type": "module",
@@ -17,6 +17,7 @@
     "guard:detect": "impeccable detect app lib --json"
   },
   "dependencies": {
+    "@katha/core": "*",
     "@hookform/resolvers": "^5.2.1",
     "@studio-freight/react-lenis": "^0.0.47",
     "@supabase/supabase-js": "^2.106.2",
