@@ -11,6 +11,7 @@
     "clean": "next clean",
     "export:tracy": "node scripts/export-tracy.mjs",
     "guard": "node scripts/katha-guard.mjs",
+    "guard:ownership": "node ../scripts/guard-ownership.js",
     "guard:ci": "node scripts/katha-guard.mjs --p0-only",
     "guard:templates": "node scripts/katha-template-guard.mjs",
     "guard:layout": "node scripts/validate-spec.mjs",
