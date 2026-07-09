@@ -1,6 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "nextjs",
-  "installCommand": "cd .. && npm install && npm run build --workspace=@katha/core",
-  "buildCommand": "npm run build"
+  "framework": "nextjs"
 }
