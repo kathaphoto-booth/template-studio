@@ -18,7 +18,7 @@
     "guard:detect": "impeccable detect app lib --json"
   },
   "dependencies": {
-    "@katha/core": "*",
+    "@katha/core": "file:../packages/core",
     "@hookform/resolvers": "^5.2.1",
     "@supabase/supabase-js": "^2.106.2",
     "autoprefixer": "^10.4.21",
