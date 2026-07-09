@@ -66,6 +66,7 @@
   --color-stock-void: #110F0D;
   --color-stock-moss: #4E5B48;
   --color-stock-gilt: #DCCBB5;
+  --color-stock-ink-mut: #5A564E; /* ecru-muted — the only safe muted ink on light stock (AA) */
 }
 
 @layer base {
@@ -97,7 +98,7 @@
 @keyframes letterSnap {
   0% { opacity: 0; filter: blur(20px); transform: scale(1.15) translateY(10px); letter-spacing: 0.1em; }
   60% { opacity: 0.8; filter: blur(3px); }
-  100% { opacity: 1; filter: blur(0px); transform: scale(1) translateY(0); letter-spacing: "-0.01em"; }
+  100% { opacity: 1; filter: blur(0px); transform: scale(1) translateY(0); letter-spacing: -0.01em; }
 }
 
 .weave { animation: weaveIn 1s cubic-bezier(.16,1,.3,1) both; }

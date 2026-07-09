@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { TEMPLATES } from "@/lib/data";
+import content from "@/lib/content.json";
+const { templates: TEMPLATES } = content;
 import { Print } from "@/components/Print";
 import { KathaWordmark } from "@/components/marks/KathaWordmark";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
@@ -137,21 +138,28 @@ export default function Gallery() {
   );
   const closeDrawer = useCallback(() => setDrawer((d) => ({ ...d, open: false })), []);
 
-  // Honor inbound deep links: ?template= (studio + enrichment emails) and
+  // Honor inbound deep links: ?template= (studio + enrichment emails),
   // ?tier= (redirected legacy /reserve links, Squarespace CTAs — catalog keys
-  // or marketing slugs). A tier held from an earlier entry preselects quietly
-  // without opening the drawer; unrecognized values fall through in silence.
+  // or marketing slugs), and ?date= (the home-page Date Gate hands off a
+  // registry-checked night). A tier held from an earlier entry preselects
+  // quietly without opening the drawer; unrecognized values fall through in
+  // silence. The drawer itself re-verifies any inbound date against the open
+  // registry before adopting it — a URL can suggest a date, never invent one.
   useEffect(() => {
     const templateId = searchParams.get("template");
     const tierParam = searchParams.get("tier");
+    const dateParam = searchParams.get("date");
     const t = templateId ? TEMPLATES.find((tpl: any) => tpl.id === templateId) : null;
     const paramTierKey = tierParam
       ? TIERS_CATALOG.find((tr) => tr.key === tierParam && tr.available)?.key ??
         tierKeyFromSlug(tierParam)
       : null;
+    const paramDate = dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) ? dateParam : null;
     const heldTierKey = paramTierKey ?? getEntryTierKey();
-    if (t) openDrawer({ template: t, ...(heldTierKey ? { tierKey: heldTierKey } : {}) });
-    else if (paramTierKey) openDrawer({ tierKey: paramTierKey });
+    const datePatch = paramDate ? { date: paramDate } : {};
+    if (t) openDrawer({ template: t, ...datePatch, ...(heldTierKey ? { tierKey: heldTierKey } : {}) });
+    else if (paramTierKey) openDrawer({ tierKey: paramTierKey, ...datePatch });
+    else if (paramDate) openDrawer(datePatch);
     else if (heldTierKey) setDrawer((d) => ({ ...d, tierKey: heldTierKey }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

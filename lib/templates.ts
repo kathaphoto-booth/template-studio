@@ -3,8 +3,8 @@
 // and the client gallery (app/gallery/). Edit decoration HERE only — it updates
 // preview, canvas export, AND the gallery thumbnails simultaneously.
 
-export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout } from "./layouts.js";
-import { resolveLayout, VIEWBOX, FORMAT_MARGIN, getModifiedLayout } from "./layouts.js";
+export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout } from "@/lib/layouts";
+import { resolveLayout, VIEWBOX, FORMAT_MARGIN, getModifiedLayout } from "@/lib/layouts";
 
 // Gilded Archive sacred accent (Satin Champagne) — the one thread of intent on dark grounds.
 const GILT_THREAD = "#DCCBB5";

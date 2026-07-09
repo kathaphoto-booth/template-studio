@@ -6,6 +6,14 @@ import { Print } from '@/components/Print';
 import { KathaWordmark } from '@/components/marks/KathaWordmark';
 import { formatLongDate, tierByKey, minSelectableISO, type Tier } from '@/lib/booking';
 import { getEntrySource } from '@/lib/entry';
+import content from '@/lib/content.json';
+
+// The single HoneyBook config point (PRD §14.1a). Jed pastes the Lead Form
+// URL into content.json.integrations.HONEYBOOK_LEAD_FORM; until then the
+// value is prose and the seam renders its honest placeholder state.
+const rawHoneyBook = content.integrations.HONEYBOOK_LEAD_FORM;
+const HONEYBOOK_FORM_URL =
+  typeof rawHoneyBook === 'string' && rawHoneyBook.startsWith('http') ? rawHoneyBook : null;
 
 /* ── ThreadWire — floating hairline input, gilt intent on focus ── */
 function ThreadWire({
@@ -50,6 +58,25 @@ function ThreadWire({
         />
       </div>
     </div>
+  );
+}
+
+/* ── Calado stitch — the openwork seam that marks every handoff ──
+   A row of punched piña-lace dots in gilt. It appears only where the
+   cloth leaves the loom: the receipt's perforation and the reservation
+   desk seam. Decorative, never load-bearing. */
+function CaladoStitch({ tone = 'var(--color-katha-gilt)' }: { tone?: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-[5px] w-full"
+      style={{
+        backgroundImage: `radial-gradient(circle, ${tone} 1px, transparent 1.6px)`,
+        backgroundSize: '9px 5px',
+        backgroundPosition: 'center',
+        opacity: 0.65,
+      }}
+    />
   );
 }
 
@@ -195,11 +222,14 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
   const tier: Tier | undefined = tierByKey(selection.tierKey);
   const template = selection.template;
 
-  // Adopt an incoming date (from the Date Gate) without clobbering a choice
-  // the client already made inside the drawer.
+  // Adopt an incoming date (Date Gate or deep link) without clobbering a
+  // choice the client already made inside the drawer. Only registry-open
+  // dates are adopted — a URL can suggest a date, never invent one.
   useEffect(() => {
-    if (selection.open && selection.date) setDate(selection.date);
-  }, [selection.open, selection.date]);
+    if (selection.open && selection.date && openDates.includes(selection.date)) {
+      setDate(selection.date);
+    }
+  }, [selection.open, selection.date, openDates]);
 
   // Deep z-depth: dim the page content, lock scroll.
   useEffect(() => {
@@ -227,7 +257,7 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
       // Marketing attribution rides along when held for the session;
       // JSON.stringify drops the keys entirely when absent.
       const source = getEntrySource();
-      const res = await fetch('/api/inquiry', {
+      const res = await fetch('/api/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -239,8 +269,13 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
         }),
       });
       const json = await res.json().catch(() => null);
-      if (!res.ok || !json?.ok) throw new Error('dispatch failed');
-      const token = `KB-${crypto.randomUUID().slice(0, 7).toUpperCase()}`;
+      // The token IS the registry entry — it must be the server-issued
+      // lead_hash or nothing. A fabricated client-side token would print
+      // a receipt for a record that doesn't exist (zero-loss law).
+      if (!res.ok || !json?.ok || typeof json.lead_hash !== 'string') {
+        throw new Error('dispatch failed');
+      }
+      const token = `KB-${json.lead_hash.slice(0, 7).toUpperCase()}`;
       setReceipt({ token, date, tier: tier?.name ?? 'Installation' });
     } catch {
       // Zero-loss law: state is preserved, the failure is stated plainly.
@@ -319,46 +354,86 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
             {/* Body */}
             <div className="flex-1 overflow-y-auto px-7 py-7 flex flex-col gap-7 [scrollbar-width:thin]">
               {receipt ? (
-                /* ── Receipt — bone stock, kamagong ink ── */
+                /* ── Receipt — sepia stock, kamagong ink, punched perforation ── */
                 <div className="flex flex-col gap-6">
                   <div
-                    className="relative px-8 pt-9 pb-7 rounded-[2px]"
-                    style={{ backgroundColor: '#E9DFCC', color: '#110F0D' }}
+                    className="relative px-8 pt-10 pb-8 rounded-[2px]"
+                    style={{ backgroundColor: 'var(--color-stock-sepia)', color: 'var(--color-katha-l0)' }}
                   >
+                    {/* Punched perforation — the drawer surface shows through the holes */}
                     <div
-                      className="absolute inset-x-6 top-0 border-t-2 border-dashed"
-                      style={{ borderColor: 'rgba(17,15,13,0.25)' }}
                       aria-hidden="true"
+                      className="absolute inset-x-0 -top-[4px] h-[9px]"
+                      style={{
+                        backgroundImage: 'radial-gradient(circle, var(--color-katha-l1) 3px, transparent 3.6px)',
+                        backgroundSize: '18px 9px',
+                        backgroundPosition: 'center',
+                      }}
                     />
-                    <p className="font-mono text-[9px] tracking-[0.24em] uppercase" style={{ color: '#5A5245' }}>
+                    <p className="font-mono text-[9px] tracking-[0.24em] uppercase" style={{ color: 'var(--color-stock-ink-mut)' }}>
                       Katha Booth · Inquiry Registry
                     </p>
                     <p className="font-mono text-[30px] tracking-[0.08em] mt-4 mb-5">{receipt.token}</p>
-                    <div className="border-t border-dashed pt-5 flex flex-col gap-2" style={{ borderColor: 'rgba(17,15,13,0.25)' }}>
-                      <p className="font-display text-[20px] font-light" style={{ color: '#8A7350' }}>
+                    <CaladoStitch tone="var(--color-katha-gilt-dark)" />
+                    <div className="pt-5 flex flex-col gap-2">
+                      <p className="font-display text-[20px] font-light" style={{ color: 'var(--color-katha-gilt-dark)' }}>
                         {formatLongDate(receipt.date)}
                       </p>
-                      <p className="font-mono text-[10px] tracking-[0.16em] uppercase" style={{ color: '#5A5245' }}>
+                      <p className="font-mono text-[10px] tracking-[0.16em] uppercase" style={{ color: 'var(--color-stock-ink-mut)' }}>
                         {receipt.tier}
                       </p>
                     </div>
-                    <p className="font-mono text-[9px] tracking-[0.1em] mt-6 break-all" style={{ color: '#5A5245' }}>
+                    <p className="font-mono text-[9px] tracking-[0.1em] mt-6 break-all" style={{ color: 'var(--color-stock-ink-mut)' }}>
                       book.kathabooth.com/gallery?lead={receipt.token.replace('KB-', '')}
                     </p>
                     <div
-                      className="absolute inset-x-6 bottom-0 border-b-2 border-dashed"
-                      style={{ borderColor: 'rgba(17,15,13,0.25)' }}
                       aria-hidden="true"
+                      className="absolute inset-x-0 -bottom-[4px] h-[9px]"
+                      style={{
+                        backgroundImage: 'radial-gradient(circle, var(--color-katha-l1) 3px, transparent 3.6px)',
+                        backgroundSize: '18px 9px',
+                        backgroundPosition: 'center',
+                      }}
                     />
                   </div>
                   <p className="font-body text-[17px] leading-relaxed text-[var(--color-katha-ink)]">
-                    Received. Your date is held for 72 hours. A deposit invoice and
-                    contract follow via HoneyBook — watch your inbox.
+                    Received. Your date is held for 72 hours.
                   </p>
+
+                  {/* ── The Reservation Desk — the seam where the cloth leaves the loom.
+                       HoneyBook owns contract, invoice & payment (PRD §14.1a); this
+                       panel frames that handoff as a first-class, branded step. ── */}
+                  <div className="border border-[var(--color-katha-ln)] rounded-[2px] overflow-hidden mt-2">
+                    <div className="px-5 pt-4 pb-3 bg-[var(--color-katha-l2)]">
+                      <p className="font-mono text-[9px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
+                        {'//'} The reservation desk
+                      </p>
+                      <p className="font-display text-[19px] font-light text-[var(--color-katha-hi)] mt-1">
+                        Contract, invoice &amp; payment
+                      </p>
+                    </div>
+                    <CaladoStitch />
+                    {HONEYBOOK_FORM_URL ? (
+                      <iframe
+                        src={HONEYBOOK_FORM_URL}
+                        title="Reserve your date — contract, invoice and payment"
+                        loading="lazy"
+                        className="w-full min-h-[500px] block bg-[var(--color-katha-l2)]"
+                      />
+                    ) : (
+                      <div className="px-5 py-5 bg-[var(--color-katha-l1)]">
+                        <p className="font-body text-[16px] leading-relaxed text-[var(--color-katha-mut)]">
+                          A deposit invoice and contract follow by email within one
+                          business day — watch your inbox.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
                   <button
                     type="button"
                     onClick={resetForAnother}
-                    className="self-start font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-katha-mut)] border-b border-[var(--color-katha-ln2)] pb-1 hover:text-[var(--color-katha-ink)] transition-colors cursor-pointer"
+                    className="self-start font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-katha-mut)] border-b border-[var(--color-katha-ln2)] pb-1 hover:text-[var(--color-katha-ink)] transition-colors cursor-pointer mt-4"
                   >
                     Hold another date
                   </button>

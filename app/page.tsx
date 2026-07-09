@@ -1,4 +1,5 @@
-import { TIERS, TEMPLATES } from "@/lib/data";
+import content from "@/lib/content.json";
+const { tiers: TIERS, templates: TEMPLATES } = content;
 import { SidebarClient } from "@/components/SidebarClient";
 
 export default function Home() {

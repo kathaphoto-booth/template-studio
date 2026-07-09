@@ -20,8 +20,10 @@ function constantTimeCompare(a: string, b: string): boolean {
 //             /api/selection → client submits their pick (POST only)
 //
 // Set STUDIO_PASSWORD in env. Username can be anything (we ignore it).
-// If STUDIO_PASSWORD is unset, gate is bypassed (so local dev still works
-// without it). Set it in Vercel env vars before sharing the URL.
+// If STUDIO_PASSWORD is unset, the gate stands open — in every environment.
+// This is deliberate soft-open behavior: the public gallery must never be
+// collateral damage of a missing env var. Set STUDIO_PASSWORD in Vercel
+// before sharing the studio URL; until then the studio is reachable.
 // ──────────────────────────────────────────────────────────────────────
 
 const PROTECTED_PATHS = ["/", "/admin"];
@@ -35,10 +37,7 @@ function isProtected(pathname: string): boolean {
 export function middleware(req: NextRequest) {
   const password = process.env.STUDIO_PASSWORD || "";
   if (!password) {
-    if (process.env.NODE_ENV === "production") {
-      return new NextResponse("Server configuration error — contact administrator", { status: 503 });
-    }
-    return NextResponse.next(); // local dev only
+    return NextResponse.next();
   }
 
   const pathname = req.nextUrl.pathname;
