@@ -28,7 +28,7 @@ export default function CustomizerClient({ leadId }: { leadId: string }) {
       <aside className="w-full lg:w-[400px] flex-shrink-0 bg-[#1A1714] border-r border-[#241F1B] overflow-y-auto z-10 flex flex-col relative shadow-[4px_0_24px_rgba(0,0,0,0.4)]">
         <div className="p-8 pb-4">
           <p className="text-xs tracking-widest text-[#A39B8E] uppercase mb-2">
-            // Studio Customizer
+            {"// Studio Customizer"}
           </p>
           <h1 className="text-2xl font-light text-[#E8E1D3] mb-2 font-display">
             Design Your Card.
