@@ -1,12 +1,16 @@
 import React from "react";
 import CustomizerClient from "@/components/customizer/CustomizerClient";
 
-export default function TemplateDesignPage({ params }: { params: { id: string } }) {
-  // In a real app, fetch the lead/selection by ID here. 
-  // We'll pass the ID to the client component.
+// Next 15: dynamic-route params arrive as a Promise.
+export default async function TemplateDesignPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   return (
-    <div className="min-h-screen bg-[#110F0D] text-[#E8E1D3]">
-      <CustomizerClient leadId={params.id} />
+    <div className="min-h-screen bg-[var(--color-katha-l0)] text-[var(--color-katha-ink)]">
+      <CustomizerClient leadId={id} />
     </div>
   );
 }

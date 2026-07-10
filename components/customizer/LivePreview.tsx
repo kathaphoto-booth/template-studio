@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { LAYOUTS, VIEWBOX } from "@/lib/layouts";
+import React, { useRef } from "react";
+import { getLayout, getModifiedLayout, VIEWBOX } from "@/lib/layouts";
 
 interface LivePreviewProps {
   template: any;
@@ -10,7 +10,11 @@ interface LivePreviewProps {
   title: string;
   subtitle: string;
   venue: string;
+  textPosition?: "bottom" | "top";
 }
+
+const MAX_TILT_DEG = 5; // motion law ceiling is 6°
+const RETURN_MS = 1200; // damped return floor
 
 export default function LivePreview({
   template,
@@ -19,138 +23,181 @@ export default function LivePreview({
   title,
   subtitle,
   venue,
+  textPosition = "bottom",
 }: LivePreviewProps) {
-  // Resolve layout
-  let layout = LAYOUTS[layoutId];
-  if (!layout) {
-    layout = LAYOUTS["strip-3"]; // fallback
-  }
+  const plateRef = useRef<HTMLDivElement>(null);
 
-  const viewBoxDef = VIEWBOX[layout.format];
+  // Resolve layout, then flip the text zone if the inscription sits on top.
+  const base = getLayout(layoutId) ?? getLayout("strip-3")!;
+  const layout = getModifiedLayout(base, textPosition);
+
+  const viewBoxDef = VIEWBOX[layout.format as keyof typeof VIEWBOX];
   if (!viewBoxDef) return null;
 
   const { w, h } = viewBoxDef;
-  
-  // Choose standard font stack mapping based on template.font if desired, 
-  // or default to a nice display serif for title and sans-serif for subtitles.
-  // Using generic fallbacks for safety if fonts aren't perfectly matched.
-  const displayFont = template.font === "Fraunces" || template.font === "Cormorant Garamond" 
-    ? `'${template.font}', serif` 
-    : `'FH Ronaldson Display', 'Playfair Display', serif`;
+
+  const displayFont =
+    template.font === "Fraunces" || template.font === "Cormorant Garamond"
+      ? `'${template.font}', serif`
+      : `'FH Ronaldson Display', 'Playfair Display', serif`;
+
+  // 3D tilt within the Quiet-Luxury law: ≤5°, damped return ≥1.2s with the
+  // extreme-deceleration curve, fully inert under prefers-reduced-motion.
+  function onPointerMove(e: React.PointerEvent<HTMLDivElement>) {
+    const el = plateRef.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const rect = el.getBoundingClientRect();
+    const xc = (e.clientX - rect.left) / rect.width - 0.5;
+    const yc = (e.clientY - rect.top) / rect.height - 0.5;
+    el.style.transition = "none"; // live-follow while the pointer moves
+    el.style.transform = `perspective(1100px) rotateX(${(-yc * MAX_TILT_DEG * 2).toFixed(2)}deg) rotateY(${(xc * MAX_TILT_DEG * 2).toFixed(2)}deg)`;
+  }
+
+  function onPointerLeave() {
+    const el = plateRef.current;
+    if (!el) return;
+    el.style.transition = `transform ${RETURN_MS}ms cubic-bezier(0.16,1,0.3,1)`;
+    el.style.transform = "perspective(1100px) rotateX(0deg) rotateY(0deg)";
+  }
 
   return (
     <div className="relative w-full h-full flex items-center justify-center p-4 lg:p-8">
-      <svg
-        viewBox={`0 0 ${w} ${h}`}
-        className="max-h-full max-w-full drop-shadow-2xl transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-        style={{
-          backgroundColor: palette.bg,
-          color: palette.text,
-          aspectRatio: `${w} / ${h}`
-        }}
+      <div
+        ref={plateRef}
+        onPointerMove={onPointerMove}
+        onPointerLeave={onPointerLeave}
+        className="max-h-full max-w-full will-change-transform"
+        style={{ aspectRatio: `${w} / ${h}`, height: "100%" }}
       >
-        {/* Subtle noise texture filter definition */}
-        <defs>
-          <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
-            <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.05 0" />
-          </filter>
-        </defs>
-        
-        {/* Paper Background */}
-        <rect width={w} height={h} fill={palette.bg} />
-        
-        {/* Subtle Grain Overlay */}
-        <rect width={w} height={h} fill="none" style={{ filter: "url(#grain)" }} className="opacity-40 mix-blend-multiply pointer-events-none" />
+        <svg
+          viewBox={`0 0 ${w} ${h}`}
+          className="max-h-full max-w-full drop-shadow-2xl"
+          style={{
+            backgroundColor: palette.bg,
+            color: palette.text,
+            aspectRatio: `${w} / ${h}`,
+          }}
+          role="img"
+          aria-label={`Live proof of ${template.name} on ${palette.name} paper`}
+        >
+          {/* Subtle noise texture filter definition */}
+          <defs>
+            <filter id="grain">
+              <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" />
+              <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.05 0" />
+            </filter>
+          </defs>
 
-        {/* Photo Slots */}
-        {layout.slots.map((slot: any, i: number) => (
-          <g key={i}>
-            <rect
-              x={slot.x}
-              y={slot.y}
-              width={slot.w}
-              height={slot.h}
-              fill={palette.slot}
-              stroke={palette.stroke || palette.text}
-              strokeWidth={template.style === "Classic" ? 2 : 0}
-            />
-            {/* Inner frame styling for some templates */}
-            {template.style === "Signature" && (
+          {/* Paper Background */}
+          <rect width={w} height={h} fill={palette.bg} />
+
+          {/* Subtle Grain Overlay */}
+          <rect width={w} height={h} fill="none" style={{ filter: "url(#grain)" }} className="opacity-40 mix-blend-multiply pointer-events-none" />
+
+          {/* Photo Slots — empty by design: this is where the night's booth
+              photos will print. Never filled with stock. */}
+          {layout.slots.map((slot: any, i: number) => (
+            <g key={i}>
               <rect
-                x={slot.x - 4}
-                y={slot.y - 4}
-                width={slot.w + 8}
-                height={slot.h + 8}
-                fill="none"
-                stroke={palette.stroke || palette.sub}
-                strokeWidth={1}
-                strokeOpacity={0.3}
+                x={slot.x}
+                y={slot.y}
+                width={slot.w}
+                height={slot.h}
+                fill={palette.slot}
+                stroke={palette.stroke || palette.text}
+                strokeWidth={template.style === "Classic" ? 2 : 0}
               />
-            )}
-          </g>
-        ))}
+              {template.style === "Signature" && (
+                <rect
+                  x={slot.x - 4}
+                  y={slot.y - 4}
+                  width={slot.w + 8}
+                  height={slot.h + 8}
+                  fill="none"
+                  stroke={palette.stroke || palette.sub}
+                  strokeWidth={1}
+                  strokeOpacity={0.3}
+                />
+              )}
+            </g>
+          ))}
 
-        {/* Text Zone Branding Pedestal */}
-        {layout.textZone && (
-          <g transform={`translate(${layout.textZone.x}, ${layout.textZone.y})`}>
-            {/* The textZone rect itself is for positioning, not drawn, but we can visualize it for debug or bounding */}
-            {/* <rect width={layout.textZone.w} height={layout.textZone.h} fill="rgba(255,0,0,0.1)" /> */}
-            
+          {/* Plate-registry stamp — the maker's mark of the archive */}
+          {template.plate && (
             <text
-              x={layout.textZone.w / 2}
-              y={layout.textZone.h * 0.45}
-              textAnchor="middle"
-              fill={palette.text}
-              fontFamily={displayFont}
-              fontSize={layout.format === 'strip' ? 38 : 54}
-              letterSpacing="0.08em"
-              className="uppercase"
-            >
-              {title || template.sName}
-            </text>
-            
-            <text
-              x={layout.textZone.w / 2}
-              y={layout.textZone.h * 0.65}
-              textAnchor="middle"
+              x={w - 24}
+              y={h - 24}
+              textAnchor="end"
               fill={palette.sub}
-              fontFamily="'Outfit', sans-serif"
-              fontSize={layout.format === 'strip' ? 16 : 22}
-              letterSpacing="0.15em"
+              fontFamily="'Courier Prime', monospace"
+              fontSize={layout.format === "strip" ? 11 : 14}
+              letterSpacing="0.18em"
+              opacity={0.55}
               className="uppercase"
             >
-              {subtitle || template.sSub}
+              {`PLATE ${template.plate} · KTHA`}
             </text>
+          )}
 
-            {(venue || (template.sSub && template.sSub.includes("·"))) && (
-               <text
-                 x={layout.textZone.w / 2}
-                 y={layout.textZone.h * 0.8}
-                 textAnchor="middle"
-                 fill={palette.sub}
-                 fontFamily="'Outfit', sans-serif"
-                 fontSize={layout.format === 'strip' ? 14 : 18}
-                 letterSpacing="0.1em"
-                 className="uppercase opacity-70"
-               >
-                 {venue || "LOS ANGELES, CA"}
-               </text>
-            )}
-            
-            {/* Small decorative separator or line */}
-            <line 
-              x1={layout.textZone.w / 2 - 30} 
-              y1={layout.textZone.h * 0.52} 
-              x2={layout.textZone.w / 2 + 30} 
-              y2={layout.textZone.h * 0.52} 
-              stroke={palette.sub} 
-              strokeWidth={1}
-              strokeOpacity={0.4}
-            />
-          </g>
-        )}
-      </svg>
+          {/* Text Zone Branding Pedestal */}
+          {layout.textZone && (
+            <g transform={`translate(${layout.textZone.x}, ${layout.textZone.y})`}>
+              <text
+                x={layout.textZone.w / 2}
+                y={layout.textZone.h * 0.45}
+                textAnchor="middle"
+                fill={palette.text}
+                fontFamily={displayFont}
+                fontSize={layout.format === "strip" ? 38 : 54}
+                letterSpacing="0.08em"
+                className="uppercase"
+              >
+                {title || template.sName}
+              </text>
+
+              <text
+                x={layout.textZone.w / 2}
+                y={layout.textZone.h * 0.65}
+                textAnchor="middle"
+                fill={palette.sub}
+                fontFamily="'Courier Prime', monospace"
+                fontSize={layout.format === "strip" ? 16 : 22}
+                letterSpacing="0.15em"
+                className="uppercase"
+              >
+                {subtitle || template.sSub}
+              </text>
+
+              {venue && (
+                <text
+                  x={layout.textZone.w / 2}
+                  y={layout.textZone.h * 0.8}
+                  textAnchor="middle"
+                  fill={palette.sub}
+                  fontFamily="'Courier Prime', monospace"
+                  fontSize={layout.format === "strip" ? 14 : 18}
+                  letterSpacing="0.1em"
+                  className="uppercase opacity-70"
+                >
+                  {venue}
+                </text>
+              )}
+
+              {/* Small decorative separator */}
+              <line
+                x1={layout.textZone.w / 2 - 30}
+                y1={layout.textZone.h * 0.52}
+                x2={layout.textZone.w / 2 + 30}
+                y2={layout.textZone.h * 0.52}
+                stroke={palette.sub}
+                strokeWidth={1}
+                strokeOpacity={0.4}
+              />
+            </g>
+          )}
+        </svg>
+      </div>
     </div>
   );
 }
