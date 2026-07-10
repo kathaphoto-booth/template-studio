@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { PlateThumb, plateAspect } from "./PlateThumb";
 
 export function TemplateCard({ template, index }: { template: any; index: number }) {
   const reduce = useReducedMotion();
@@ -9,35 +10,47 @@ export function TemplateCard({ template, index }: { template: any; index: number
     return null;
   }
 
-  const ratio = template.ratio ? `${template.ratio.w} / ${template.ratio.h}` : "2 / 3";
+  // Prefer the true canvas aspect from the layout registry; hand-typed
+  // ratio is only the fallback for plates without a registered layout.
+  const ratio =
+    plateAspect(template) ??
+    (template.ratio ? `${template.ratio.w} / ${template.ratio.h}` : "2 / 3");
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      // `initial` must NOT branch on useReducedMotion() — it is false during
+      // SSR, so the server HTML and a reduce-enabled client disagree and React
+      // reports a hydration mismatch. Keep initial stable; collapse the
+      // transition to instant under reduce (content force-reveals in view).
+      initial={{ opacity: 0, y: 40, filter: "blur(8px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{
-        duration: 0.7,
-        delay: reduce ? 0 : (index % 4) * 0.1,
+        duration: reduce ? 0 : 1.25,
+        delay: reduce ? 0 : (index % 4) * 0.12,
         ease: [0.16, 1, 0.3, 1],
       }}
       className="break-inside-avoid mb-6 relative group cursor-pointer"
     >
       <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3 transition-colors duration-500 ease-out hover:border-[#DCCBB5]/30 hover:shadow-[0_20px_40px_var(--color-katha-shadow)]">
         <div
-          className="w-full flex items-center justify-center relative overflow-hidden bg-[var(--color-katha-l2)]"
+          className="w-full relative overflow-hidden bg-[var(--color-katha-l2)]"
           style={{ aspectRatio: ratio }}
         >
+          {/* Faithful miniature: layout-registry geometry + the plate's own paint */}
+          <PlateThumb template={template} />
+
           {/* Subtle gradient overlay on hover */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/0 to-black/0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          
-          <div className="flex flex-col items-center justify-center opacity-30 group-hover:opacity-100 transition-opacity duration-500 z-20">
+
+          {/* Plate ordinal + format, revealed on hover over the darkened base */}
+          <div className="absolute bottom-2 left-0 right-0 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-20">
             <span className="font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--color-katha-hi)]">
-              {template.formatLabel}
+              {template.plate ? `Plate ${template.plate} — ` : ""}{template.formatLabel}
             </span>
           </div>
 
-          {/* Gilded inner border on hover to signify premium editorial feel */}
+          {/* Gilded inner border on hover to signify the held standard */}
           <div className="absolute inset-0 border border-transparent group-hover:border-[#DCCBB5]/20 transition-colors duration-700 z-20 pointer-events-none" />
         </div>
         
