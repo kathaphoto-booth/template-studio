@@ -24,27 +24,9 @@
   --color-katha-ecru-muted-soft: #6E6A62;
 }
 
-/* Wabi-Sabi patina — global feTurbulence overlay (BRAND_GENESIS_PLAN §V, Stage 3 H10) */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: -1;
-  filter: url(#katha-patina);
-  background-color: var(--color-katha-pina-ecru);
-  opacity: 0.04;
-  mix-blend-mode: multiply;
-  will-change: transform;
-  transform: translateZ(0);
-}
 
-@media (prefers-reduced-motion: reduce) {
-  body::after {
-    /* Freeze the noise — no animation. The filter renders once and stays static. */
-    animation: none;
-  }
-}
+
+
 
 /* ==========================================================================
    INQUIRY MULTI-STEP FUNNEL ANIMATIONS
