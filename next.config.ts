@@ -17,16 +17,10 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Allow access to remote image placeholder.
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**', // This allows any path under the hostname
-      },
-    ],
+    formats: ['image/avif', 'image/webp'],
+    // One year: portfolio assets are content-hashed by filename convention.
+    minimumCacheTTL: 31536000,
   },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];

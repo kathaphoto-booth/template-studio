@@ -1,3 +1,4 @@
+import Image from "next/image";
 import content from "@/lib/content.json";
 const { tiers: TIERS, templates: TEMPLATES } = content;
 import { SidebarClient } from "@/components/SidebarClient";
@@ -36,10 +37,12 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
               <figure className="md:col-span-7">
                 <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3">
-                  <img
+                  <Image
+                    width={1067}
+                    height={1600}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src="/portfolio/velour-floral.webp"
                     alt="Guests framed by a velour and floral installation, warm archival print tones"
-                    loading="lazy"
                     className="w-full h-auto block"
                   />
                 </div>
@@ -49,10 +52,12 @@ export default function Home() {
               </figure>
               <figure className="md:col-span-5 md:mb-16">
                 <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3">
-                  <img
+                  <Image
+                    width={1067}
+                    height={1600}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src="/portfolio/glam-portrait.webp"
                     alt="High-contrast monochrome glam portrait from the Glam Editorial installation"
-                    loading="lazy"
                     className="w-full h-auto block"
                   />
                 </div>
@@ -62,10 +67,12 @@ export default function Home() {
               </figure>
               <figure className="md:col-span-5 md:col-start-2">
                 <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3">
-                  <img
+                  <Image
+                    width={1800}
+                    height={2700}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src="/portfolio/wildflower-wedding.webp"
                     alt="Wedding guests at a wildflower-backed booth, archival paper texture"
-                    loading="lazy"
                     className="w-full h-auto block"
                   />
                 </div>
@@ -75,10 +82,12 @@ export default function Home() {
               </figure>
               <figure className="md:col-span-4 md:mb-24">
                 <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3">
-                  <img
+                  <Image
+                    width={1067}
+                    height={1600}
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     src="/portfolio/western-rich.webp"
                     alt="Western-styled installation with rich tonal backdrop and oak hardware"
-                    loading="lazy"
                     className="w-full h-auto block"
                   />
                 </div>
