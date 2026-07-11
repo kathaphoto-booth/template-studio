@@ -1,6 +1,7 @@
 "use client";
 
 import { ledgerParts } from '@/lib/booking';
+import { track } from '@/lib/track';
 
 type DateGateProps = {
   dates: string[] | null;
@@ -85,7 +86,10 @@ export function DateGate({ dates, loading, error, onRetry, onSelectDate }: DateG
                 type="button"
                 role="option"
                 aria-selected={false}
-                onClick={() => onSelectDate(iso)}
+                onClick={() => {
+                  track('date_check', { meta: { date: iso } });
+                  onSelectDate(iso);
+                }}
                 aria-label={`Reserve ${p.weekday} ${p.month} ${p.day}`}
                 className="gate-plate w-[124px] px-4 py-5 text-center"
               >

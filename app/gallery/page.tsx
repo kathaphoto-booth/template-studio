@@ -13,6 +13,7 @@ import { PricingTiers } from "@/components/booking/PricingTiers";
 import { ParallaxFooter } from "@/components/booking/ParallaxFooter";
 import { TIERS_CATALOG, DEFAULT_TIER_KEY, fetchOpenDates } from "@/lib/booking";
 import { getEntryTierKey, tierKeyFromSlug } from "@/lib/entry";
+import { track } from "@/lib/track";
 
 const STYLES = ["All", "Signature", "Classic"];
 
@@ -96,6 +97,11 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
 export default function Gallery() {
   const searchParams = useSearchParams();
   const [styleF, setStyleF] = useState("All");
+
+  // Funnel step 1 — fire-and-forget beacon on mount, never blocks paint.
+  useEffect(() => {
+    track("gallery_view");
+  }, []);
 
   /* ── Real availability ── */
   const [dates, setDates] = useState<string[] | null>(null);

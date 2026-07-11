@@ -6,6 +6,7 @@ import { Print } from '@/components/Print';
 import { KathaWordmark } from '@/components/marks/KathaWordmark';
 import { formatLongDate, tierByKey, minSelectableISO, type Tier } from '@/lib/booking';
 import { getEntrySource } from '@/lib/entry';
+import { track } from '@/lib/track';
 import content from '@/lib/content.json';
 
 // The single HoneyBook config point (PRD §14.1a). Jed pastes the Lead Form
@@ -235,6 +236,11 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
   useEffect(() => {
     document.body.classList.toggle('drawer', selection.open);
     return () => document.body.classList.remove('drawer');
+  }, [selection.open]);
+
+  // Funnel step 3 — beacon on each open, never touches the slide motion.
+  useEffect(() => {
+    if (selection.open) track('drawer_open');
   }, [selection.open]);
 
   useEffect(() => {

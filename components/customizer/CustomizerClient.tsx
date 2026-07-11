@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import LivePreview from "./LivePreview";
 import content from "@/lib/content.json";
 import { getLayout, layoutsForFormat } from "@/lib/layouts";
+import { track } from "@/lib/track";
 
 type SubmitState =
   | { phase: "idle" }
@@ -33,6 +34,12 @@ export default function CustomizerClient({ leadId }: { leadId: string }) {
   async function finalize() {
     if (submit.phase === "sending") return;
     setSubmit({ phase: "sending" });
+    // Funnel step 4 — beacon fires before the POST so a failed submit still
+    // counts as an attempt; no PII beyond the lead hash.
+    track("selection_submit", {
+      leadHash: leadId && leadId !== "demo" ? leadId : undefined,
+      meta: { templateId: activeTemplate.id },
+    });
     try {
       const res = await fetch("/api/selection", {
         method: "POST",
