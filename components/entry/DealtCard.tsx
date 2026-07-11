@@ -1,5 +1,6 @@
 'use client';
 
+import Image from "next/image";
 import { motion, type Variants } from 'motion/react';
 import { DEAL_BASE_DELAY, DEAL_SPRING, DEAL_STAGGER, LIFT_SPRING, PALETTE } from './motion';
 import type { TemplateCard } from './types';
@@ -64,11 +65,13 @@ export function DealtCard({ card, index, onSettled }: DealtCardProps) {
         willChange: 'transform',
       }}
     >
-      <img
+      <Image
         src={card.src}
         alt={card.alt}
+        fill
+        sizes="420px"
         draggable={false}
-        className="h-full w-full object-cover"
+        className="object-cover"
         style={{
           // Archival monochrome: warm the portraits into the kamagong/gilt world
           // and neutralize any stray colour so the dealt hand reads as one set.
