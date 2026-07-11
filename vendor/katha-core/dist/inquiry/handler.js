@@ -57,18 +57,37 @@ async function handleInquiry(req, supabaseAdmin, opts) {
     };
     const leadHash = crypto_1.default.randomBytes(16).toString('hex');
     const galleryLink = opts.buildGalleryLink(leadHash, baseUrl);
-    const settledResults = await Promise.allSettled([
-        (0, record_lead_js_1.recordLead)(supabaseAdmin, payload, leadHash),
+    // Durable capture FIRST — a lead must never depend on email delivery. The
+    // database row is the source of truth; the HoneyBook ping and enrichment
+    // email ride on top of it. If the DB write fails while Supabase is
+    // configured, return 503 so the client retries rather than losing the lead.
+    const dbSettled = await Promise.allSettled([(0, record_lead_js_1.recordLead)(supabaseAdmin, payload, leadHash)]);
+    const dbResult = dbSettled[0].status === 'fulfilled'
+        ? dbSettled[0].value
+        : { target: 'database', ok: false, detail: `unexpected failure: ${String(dbSettled[0].reason)}` };
+    const supabaseConfigured = !!supabaseAdmin;
+    if (supabaseConfigured && !dbResult.ok) {
+        console.error('[LEAD_CAPTURE_FAILED]', JSON.stringify({ payload, leadHash, detail: dbResult.detail }));
+        return server_1.NextResponse.json({ ok: false, error: 'capture failed — please retry', lead_hash: leadHash, dispatch: [dbResult] }, { status: 503 });
+    }
+    // Notifications — best-effort, never block capture.
+    const notifySettled = await Promise.allSettled([
         (0, ping_honeybook_js_1.pingHoneyBook)(payload, leadHash),
         (0, send_enrichment_email_js_1.sendEnrichmentEmail)(payload, leadHash, galleryLink),
     ]);
-    const results = settledResults.map((r, i) => {
-        if (r.status === 'fulfilled')
-            return r.value;
-        const target = i === 0 ? 'database' : i === 1 ? 'honeybook' : 'email';
-        return { target, ok: false, detail: `unexpected failure: ${String(r.reason)}` };
-    });
-    const anyOk = results.some((r) => r.ok);
-    return server_1.NextResponse.json({ ok: anyOk, lead_hash: leadHash, dispatch: results }, { status: anyOk ? 200 : 202 });
+    const [honeybookResult, emailResult] = notifySettled.map((r, i) => r.status === 'fulfilled'
+        ? r.value
+        : { target: i === 0 ? 'honeybook' : 'email', ok: false, detail: `unexpected failure: ${String(r.reason)}` });
+    const notified = honeybookResult.ok || emailResult.ok;
+    const captured = supabaseConfigured ? dbResult.ok : notified;
+    // A captured-but-unnotified lead must never look like a clean success.
+    if (captured && !notified) {
+        console.error('[UNNOTIFIED_LEAD]', JSON.stringify({
+            leadHash, name: payload.client_name, email: payload.client_email, date: payload.event_date,
+            honeybook: honeybookResult.detail, emailDetail: emailResult.detail,
+        }));
+    }
+    const results = [dbResult, honeybookResult, emailResult];
+    return server_1.NextResponse.json({ ok: captured, notified, lead_hash: leadHash, dispatch: results }, { status: captured ? 200 : 202 });
 }
 //# sourceMappingURL=handler.js.map

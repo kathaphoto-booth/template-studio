@@ -294,19 +294,46 @@ export async function POST(req: NextRequest) {
     selectedAt: new Date().toISOString(),
   };
 
-  // Fan out to dispatch targets in parallel; report each result
-  const results = await Promise.all([
+  // ── Durable capture FIRST. A lead must never depend on email delivery.
+  // The Supabase row is the source of truth; notifications ride on top of it.
+  // If the DB write fails while Supabase is configured, return 503 so the
+  // client retries — a lost lead is the worst possible outcome here.
+  const dbResult = await dispatchSupabase(selection).then(r => ({ target: "supabase", ...r }));
+  const supabaseConfigured = !!supabaseAdmin;
+  if (supabaseConfigured && !dbResult.ok) {
+    console.error("[LEAD_CAPTURE_FAILED]", JSON.stringify({ selection, detail: dbResult.detail }));
+    return NextResponse.json(
+      { ok: false, error: "capture failed — please retry", dispatch: [dbResult] },
+      { status: 503 },
+    );
+  }
+
+  // ── Notifications — best-effort, never block capture.
+  const [emailResult, honeybookResult] = await Promise.all([
     dispatchEmail(selection).then(r => ({ target: "email", ...r })),
     dispatchHoneyBook(selection).then(r => ({ target: "honeybook", ...r })),
-    dispatchSupabase(selection).then(r => ({ target: "supabase", ...r })),
   ]);
 
+  const notified = emailResult.ok || honeybookResult.ok;
+  // When Supabase isn't configured (local/no env), fall back to notification as capture.
+  const captured = supabaseConfigured ? dbResult.ok : notified;
 
-  const anyOk = results.some(r => r.ok);
+  // A captured-but-unnotified lead must never look like a clean success. Emit a
+  // greppable tag so a daily "unnotified leads" check (or log alert) surfaces it.
+  if (captured && !notified) {
+    console.error("[UNNOTIFIED_LEAD]", JSON.stringify({
+      selectedAt: selection.selectedAt,
+      names: selection.names, date: selection.date, venue: selection.venue,
+      template: selection.templateName, lead: selection.lead,
+      email: emailResult.detail, honeybook: honeybookResult.detail,
+    }));
+  }
 
+  const results = [emailResult, honeybookResult, dbResult];
   return NextResponse.json({
-    ok: anyOk,
+    ok: captured,
+    notified,
     selection,
     dispatch: results,
-  }, { status: anyOk ? 200 : 202 }); // 202 = recorded, no dispatch yet (no env)
+  }, { status: captured ? 200 : 202 }); // 202 = captured, notification pending
 }
