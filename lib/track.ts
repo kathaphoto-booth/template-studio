@@ -5,6 +5,9 @@
 export type FunnelEvent =
   | "gallery_view"
   | "date_check"
+  | "date_held"
+  | "browse_all"
+  | "review_open"
   | "drawer_open"
   | "selection_submit";
 

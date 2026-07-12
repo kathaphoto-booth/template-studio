@@ -13,10 +13,11 @@ function constantTimeCompare(a: string, b: string): boolean {
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
 // simple HTTP Basic auth check.
 //
-// PROTECTED   /          → studio UI (admin tweak)
-//             /api/generate, /api/generate-theme → AI cost surface
+// PROTECTED   /admin     → operator studio
+//             /api/generate, /api/admin → AI + admin cost surface
 //
-// PUBLIC      /gallery   → client-facing template picker
+// PUBLIC      /          → redirects to /gallery (the public front door)
+//             /gallery   → client-facing funnel
 //             /api/selection → client submits their pick (POST only)
 //
 // Set STUDIO_PASSWORD in env. Username can be anything (we ignore it).
@@ -26,7 +27,7 @@ function constantTimeCompare(a: string, b: string): boolean {
 // before sharing the studio URL; until then the studio is reachable.
 // ──────────────────────────────────────────────────────────────────────
 
-const PROTECTED_PATHS = ["/", "/admin"];
+const PROTECTED_PATHS = ["/admin"];
 const PROTECTED_PREFIXES = ["/api/generate", "/api/admin"];
 
 function isProtected(pathname: string): boolean {

@@ -141,6 +141,24 @@
 }
 .gate-skeleton { animation: plateBreath 1.8s ease-in-out infinite; }
 
+/* ── The velvet rope: the archive glides open once a night is noted ──
+   Locked content stays visible (dimmed, softened) — never display:none,
+   so the page reads whole and nothing ships blank. Reduced-motion law
+   above zeroes the glide automatically. */
+.act-gate {
+  opacity: 0.22;
+  filter: blur(2px) saturate(0.85);
+  pointer-events: none;
+  transition:
+    opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.act-gate--open {
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+}
+
 /* ── Pricing Grid & Cards ── */
 .pricing-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 0.82fr 1fr; gap: 44px; align-items: start; }
 .oak-sticky { position: sticky; top: 120px; }
