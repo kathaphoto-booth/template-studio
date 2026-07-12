@@ -10,7 +10,9 @@ const record_lead_js_1 = require("./record-lead.js");
 const ping_honeybook_js_1 = require("./ping-honeybook.js");
 const send_enrichment_email_js_1 = require("./send-enrichment-email.js");
 async function handleInquiry(req, supabaseAdmin, opts) {
-    const appUrl = process.env.APP_URL;
+    // `||` not `??`: an empty-string APP_URL (seen once in seeded Vercel env)
+    // must fall through to VERCEL_URL, or email gallery links render relative.
+    const appUrl = process.env.APP_URL || undefined;
     const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined;
     const baseUrl = appUrl ?? vercelUrl ?? req.nextUrl.origin;
     if (!appUrl && !vercelUrl && process.env.NODE_ENV === 'production') {
@@ -70,10 +72,27 @@ async function handleInquiry(req, supabaseAdmin, opts) {
         console.error('[LEAD_CAPTURE_FAILED]', JSON.stringify({ payload, leadHash, detail: dbResult.detail }));
         return server_1.NextResponse.json({ ok: false, error: 'capture failed — please retry', lead_hash: leadHash, dispatch: [dbResult] }, { status: 503 });
     }
+    // Truthful date status for the auto-reply — best-effort, never blocks.
+    // Claims 'open' only when the available_dates allow-list confirms it.
+    let dateStatus = 'unknown';
+    if (supabaseAdmin) {
+        try {
+            const { data: dateRow } = await supabaseAdmin
+                .from('available_dates')
+                .select('status')
+                .eq('date', date)
+                .maybeSingle();
+            if (dateRow?.status === 'open')
+                dateStatus = 'open';
+        }
+        catch {
+            // stays 'unknown' — the email then makes no availability claim
+        }
+    }
     // Notifications — best-effort, never block capture.
     const notifySettled = await Promise.allSettled([
         (0, ping_honeybook_js_1.pingHoneyBook)(payload, leadHash),
-        (0, send_enrichment_email_js_1.sendEnrichmentEmail)(payload, leadHash, galleryLink),
+        (0, send_enrichment_email_js_1.sendEnrichmentEmail)(payload, leadHash, galleryLink, dateStatus),
     ]);
     const [honeybookResult, emailResult] = notifySettled.map((r, i) => r.status === 'fulfilled'
         ? r.value

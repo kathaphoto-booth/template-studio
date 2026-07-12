@@ -33,7 +33,10 @@ const CANON = new Set([
   "#111112", "#eae2d5", "#9c958a", "#c4b59d", "#241e1a",   // UI tokens
   "#1a1816", "#3d2b1f", "#a35c44", "#5a5d5a", "#b5b8a3",   // narrative tokens
   "#5a564e", "#6e6a62",                                     // ecru-safe muted (§VIII)
-  "#e0d7c7", "#8f4d39",                                     // documented Signature tints
+  "#e0d7c7",                                                // documented Signature tint
+  // #8f4d39 REMOVED 2026-07-11 — retired red family, zero uses (Gilded Archive no-red law)
+  "#dccbb5", "#8a7350", "#c2b19d",                          // Gilded Archive gilt (ratified 2026-07-06/07)
+  "#e9dfcc", "#4e5b48",                                     // Sepia Bone stock + moss state (Gilded Archive)
 ]);
 const LEGACY_OAX = new Set(["#0a0806", "#bf9d2c", "#c4c1b8", "#161618"]);
 const PURE = new Set(["#000000", "#000", "#ffffff", "#fff"]);
