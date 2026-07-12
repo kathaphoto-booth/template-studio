@@ -314,7 +314,7 @@ export default function Gallery() {
           <button
             type="button"
             onClick={() => openDrawer(heldDate ? { date: heldDate } : {})}
-            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-5 py-3 rounded-[3px] hover:brightness-105 transition-all cursor-pointer"
+            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-5 py-3.5 min-h-[44px] rounded-[3px] hover:brightness-105 transition-all cursor-pointer"
           >
             Reserve a date
           </button>
@@ -378,7 +378,7 @@ export default function Gallery() {
                 <button
                   key={s}
                   onClick={() => setStyleF(s)}
-                  className={`font-display relative pb-2 transition-colors duration-300 outline-none cursor-pointer ${
+                  className={`font-display relative px-2 pb-2 min-h-[44px] min-w-[44px] transition-colors duration-300 outline-none cursor-pointer ${
                     s === styleF
                       ? "text-[28px] lg:text-[36px] text-[var(--color-katha-hi)] font-light"
                       : "text-[20px] lg:text-[24px] text-[var(--color-katha-fnt)] hover:text-[var(--color-katha-mut)] font-light"
@@ -451,7 +451,7 @@ export default function Gallery() {
               track("review_open");
               openDrawer(heldDate ? { date: heldDate } : {});
             }}
-            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-5 py-3 rounded-[3px] hover:brightness-105 transition-all cursor-pointer whitespace-nowrap"
+            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-5 py-3.5 min-h-[44px] rounded-[3px] hover:brightness-105 transition-all cursor-pointer whitespace-nowrap"
           >
             {plateTouched ? "Review" : "Reserve"}
           </button>

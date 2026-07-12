@@ -30,14 +30,14 @@ export function ParallaxFooter({ onReserve }: { onReserve: () => void }) {
         >
           <div className="flex items-baseline justify-between gap-6">
             <p className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
-              03 · The Studio
+              // The Studio
             </p>
             <button
               type="button"
               onClick={onReserve}
-              className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-katha-gilt)] border-b border-[var(--color-katha-gilt)] pb-1 hover:brightness-110 transition-all cursor-pointer"
+              className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-katha-gilt)] py-4 min-h-[44px] hover:brightness-110 transition-all cursor-pointer [&>span]:border-b [&>span]:border-[var(--color-katha-gilt)] [&>span]:pb-1"
             >
-              Reserve your night →
+              <span>Reserve your night →</span>
             </button>
           </div>
 
@@ -55,7 +55,7 @@ export function ParallaxFooter({ onReserve }: { onReserve: () => void }) {
                 </p>
                 <a
                   href="mailto:kathabooth@gmail.com"
-                  className="font-body text-[17px] text-[var(--color-katha-ink)] hover:text-[var(--color-katha-hi)] transition-colors"
+                  className="font-body text-[17px] text-[var(--color-katha-ink)] hover:text-[var(--color-katha-hi)] transition-colors inline-block py-3"
                 >
                   kathabooth@gmail.com
                 </a>

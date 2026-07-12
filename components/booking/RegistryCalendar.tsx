@@ -101,7 +101,7 @@ export function RegistryCalendar({ dates, heldDate, onSelect }: RegistryCalendar
             onClick={() => setMonthIdx((i) => Math.max(0, i - 1))}
             disabled={monthIdx === 0}
             aria-label="Previous month"
-            className="font-mono text-[12px] w-9 h-9 border border-[var(--color-katha-ln)] text-[var(--color-katha-mut)] enabled:hover:border-[var(--color-katha-gilt)] enabled:hover:text-[var(--color-katha-ink)] disabled:opacity-25 transition-colors duration-300 cursor-pointer disabled:cursor-default"
+            className="font-mono text-[12px] w-11 h-11 border border-[var(--color-katha-ln)] text-[var(--color-katha-mut)] enabled:hover:border-[var(--color-katha-gilt)] enabled:hover:text-[var(--color-katha-ink)] disabled:opacity-25 transition-colors duration-300 cursor-pointer disabled:cursor-default"
           >
             ←
           </button>
@@ -110,7 +110,7 @@ export function RegistryCalendar({ dates, heldDate, onSelect }: RegistryCalendar
             onClick={() => setMonthIdx((i) => Math.min(months.length - 1, i + 1))}
             disabled={monthIdx >= months.length - 1}
             aria-label="Next month"
-            className="font-mono text-[12px] w-9 h-9 border border-[var(--color-katha-ln)] text-[var(--color-katha-mut)] enabled:hover:border-[var(--color-katha-gilt)] enabled:hover:text-[var(--color-katha-ink)] disabled:opacity-25 transition-colors duration-300 cursor-pointer disabled:cursor-default"
+            className="font-mono text-[12px] w-11 h-11 border border-[var(--color-katha-ln)] text-[var(--color-katha-mut)] enabled:hover:border-[var(--color-katha-gilt)] enabled:hover:text-[var(--color-katha-ink)] disabled:opacity-25 transition-colors duration-300 cursor-pointer disabled:cursor-default"
           >
             →
           </button>
