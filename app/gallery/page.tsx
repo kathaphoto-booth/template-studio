@@ -121,6 +121,18 @@ const WORK_FIGURES = [
     caption: "Western rich — Oak booth",
     w: 1067, h: 1600, span: "md:col-span-4 md:mb-24",
   },
+  {
+    src: "/portfolio/lumiere.webp",
+    alt: "Three guests posing beside the oak booth, fresh prints on the case — high-contrast monochrome",
+    caption: "Lumière — monochrome editorial",
+    w: 1800, h: 2701, span: "md:col-span-6",
+  },
+  {
+    src: "/portfolio/peachy.webp",
+    alt: "Mirror booth installation framed by peach and ecru florals in an arched alcove",
+    caption: "Peachy — mirror installation",
+    w: 1800, h: 2700, span: "md:col-span-5 md:col-start-8 md:mb-12",
+  },
 ];
 
 function TheWork() {
