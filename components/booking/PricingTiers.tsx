@@ -12,17 +12,24 @@ type PricingTiersProps = {
  * visible and legible (35% plate, capiz chip); the flagship carries a gilt
  * chip. Selecting an available installation opens the Vault Drawer.
  */
+const COUNT_WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+
 export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
+  // Truthful count (funnel-audit r1): the headline names how many
+  // installations are OPEN — unavailable tiers stay visible below but
+  // announce themselves, so the number never contradicts the cards.
+  const openCount = tiers.filter((t) => t.available).length;
+  const openWord = COUNT_WORDS[openCount] ?? String(openCount);
   return (
     <section className="px-6 lg:px-12 py-28 lg:py-36" aria-label="Installations and pricing">
       <div className="pricing-grid">
         <div className="oak-sticky">
           <p className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)] mb-6 flex items-baseline gap-3">
-            02 · The Investment
+            The Investment
             <span className="h-[1px] w-10 bg-[var(--color-katha-ln)] inline-block relative -top-[3px]" />
           </p>
           <h2 className="font-display text-[36px] lg:text-[46px] leading-[1.1] font-light text-[var(--color-katha-hi)] mb-8">
-            Three installations.
+            {openWord} installations open.
             <br />
             One operator.
             <br />

@@ -153,6 +153,12 @@ function TheWork() {
           </figure>
         ))}
       </div>
+      {/* Neutral, factual trust line (Jed, 2026-07-12) — placeholder until a
+          real client testimonial replaces it. No fabricated quotes, ever. */}
+      <p className="mt-10 font-body text-[17px] leading-[1.6] italic text-[var(--color-katha-mut)] max-w-[560px]">
+        Trusted by couples across Los Angeles &amp; Orange County — real
+        events, real installations.
+      </p>
     </section>
   );
 }

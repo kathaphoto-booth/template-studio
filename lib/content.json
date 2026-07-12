@@ -9,8 +9,8 @@
     "plate": "Plate No. 2026-CF",
     "copyright": "©2026 Katha Booth",
     "contactEmail": "kathabooth@gmail.com",
-    "emailFrom": "onboarding@resend.dev",
-    "emailFromNote": "hello@kathabooth.com is NOT a verified Resend sender yet. Client-facing emails (brochure/invoice/contract) come from HoneyBook, not this site. This site only self-notifies Katha, which works from onboarding@resend.dev. To send client email from hello@kathabooth.com later, verify the kathabooth.com domain in Resend."
+    "emailFrom": "hello@kathabooth.com",
+    "emailFromNote": "kathabooth.com VERIFIED in Resend 2026-07-12 (SPF/DKIM live, smoke test id 479c5fdc). Client-facing email sends from hello@kathabooth.com. DMARC record still recommended: TXT _dmarc \"v=DMARC1; p=none;\". Contract/invoice email remains HoneyBook."
   },
   "seo": {
     "note": "Emit a LocalBusiness JSON-LD script for SEO/AIO. Specific place names beat 'Southern California'.",
