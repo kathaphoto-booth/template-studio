@@ -82,7 +82,7 @@ export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
                     <p className="font-display text-[32px] font-light text-[var(--color-katha-ink)]">
                       ${tier.price.toLocaleString()}
                     </p>
-                    <p className="font-mono text-[8.5px] tracking-[0.1em] uppercase text-[var(--color-katha-fnt)]">
+                    <p className="font-mono text-[8.5px] tracking-[0.1em] uppercase text-[var(--color-katha-mut)]">
                       up to {tier.hours} hrs
                     </p>
                   </div>
@@ -104,7 +104,7 @@ export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
                       </li>
                     ))}
                     {tier.includes.length > 4 && (
-                      <li className="font-mono text-[9px] tracking-[0.1em] uppercase text-[var(--color-katha-fnt)] mt-1">
+                      <li className="font-mono text-[9px] tracking-[0.1em] uppercase text-[var(--color-katha-mut)] mt-1">
                         + {tier.includes.length - 4} more in the full brief
                       </li>
                     )}

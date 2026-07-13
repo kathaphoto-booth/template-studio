@@ -32,7 +32,7 @@ export function TemplateCard({ template, index }: { template: any; index: number
       }}
       className="break-inside-avoid mb-6 relative group cursor-pointer"
     >
-      <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3 transition-colors duration-500 ease-out hover:border-[#DCCBB5]/30 hover:shadow-[0_20px_40px_var(--color-katha-shadow)]">
+      <div className="bg-[var(--color-katha-l1)] border border-[var(--color-katha-ln)] p-3 transition-colors duration-500 ease-out hover:border-[color:var(--color-katha-gilt)]/30 hover:shadow-[0_20px_40px_var(--color-katha-shadow)]">
         <div
           className="w-full relative overflow-hidden bg-[var(--color-katha-l2)]"
           style={{ aspectRatio: ratio }}
@@ -51,7 +51,7 @@ export function TemplateCard({ template, index }: { template: any; index: number
           </div>
 
           {/* Gilded inner border on hover to signify the held standard */}
-          <div className="absolute inset-0 border border-transparent group-hover:border-[#DCCBB5]/20 transition-colors duration-700 z-20 pointer-events-none" />
+          <div className="absolute inset-0 border border-transparent group-hover:border-[color:var(--color-katha-gilt)]/20 transition-colors duration-700 z-20 pointer-events-none" />
         </div>
         
         <div className="mt-5 flex justify-between items-baseline px-1 pb-1">
