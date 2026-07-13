@@ -19,14 +19,14 @@ describe('contrastRatio (WCAG 2.1)', () => {
   });
 
   it('catches the real risk: Capiz Slate meta FAILS AA on raised cards', () => {
-    // --color-katha-fnt #857D71 on --color-katha-l3 #28221B  (~3.9:1)
+    // --color-katha-fnt #8C8477 on --color-katha-l3 #28221B  (~4.3:1)
     // This is why 'fnt' is documented "meta, base surfaces only" — the util
     // makes that rule enforceable instead of a comment.
-    expect(meetsAA(contrastRatio('#857D71', '#28221B'))).toBe(false);
+    expect(meetsAA(contrastRatio('#8C8477', '#28221B'))).toBe(false);
   });
 
   it('large-text threshold is 3:1', () => {
-    const r = contrastRatio('#857D71', '#28221B'); // ~3.9
+    const r = contrastRatio('#8C8477', '#28221B'); // ~4.3
     expect(meetsAA(r, false)).toBe(false);
     expect(meetsAA(r, true)).toBe(true);
   });

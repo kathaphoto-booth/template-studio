@@ -42,13 +42,16 @@
   --color-katha-hi: #E4DACA;   /* Bone — display headlines */
   --color-katha-ecru: #F5EFE6;
   --color-katha-mut: #A89C8A;  /* Rattan — secondary ink */
-  --color-katha-fnt: #857D71;  /* Capiz Slate — meta, base surfaces only */
-  --color-katha-dim: #857D71;
+  --color-katha-fnt: #8C8477;  /* Capiz Slate (lifted 2026-07-13) — meta, base
+                                  surfaces only. AA on l0/l1 (5.2/4.9); still
+                                  FAILS on raised l3 (4.3) — the forbidden pair
+                                  stays forbidden, tests enforce both sides. */
+  --color-katha-dim: #8C8477;
 
   /* The sacred accent — gilt, not ember */
   --color-katha-gilt: #DCCBB5;      /* Satin Champagne — CTAs, active, intent */
   --color-katha-gilt-dark: #8A7350; /* gilt darkened to speak on light stock */
-  --color-katha-gilt-low: rgba(220, 203, 181, 0.10); /* selected wash */
+  --color-katha-gilt-low: rgba(220, 203, 181, 0.12); /* selected wash — gilt text on it stays ≥8:1 */
   --color-katha-moss: #4E5B48;      /* Moss Patina — state only, never text */
   --color-katha-moss-hi: #8FA283;   /* Lifted Moss — when moss must read */
   --color-katha-champ: #DCCBB5;     /* legacy alias → gilt */
@@ -56,7 +59,9 @@
 
   /* Architecture */
   --color-katha-ln: rgba(245, 239, 230, 0.12);
-  --color-katha-ln2: rgba(245, 239, 230, 0.28);
+  --color-katha-ln2: rgba(245, 239, 230, 0.38); /* interactive boundaries — composited ≥3:1
+                                                   on every surface (WCAG 1.4.11); 0.28 sat
+                                                   at 2.35:1 and failed */
   --color-katha-glass: rgba(245, 239, 230, 0.04);
   --color-katha-shadow: rgba(0, 0, 0, 0.85);
 
