@@ -67,6 +67,23 @@
   --color-stock-moss: #4E5B48;
   --color-stock-gilt: #DCCBB5;
   --color-stock-ink-mut: #5A564E; /* ecru-muted — the only safe muted ink on light stock (AA) */
+
+  /* ═══ Accessibility scale — the senior floor, fluid across devices ═══ */
+  /* Essential/interactive text never renders below --fs-body (16px). Mono
+     eyebrows (--fs-eyebrow) are decorative only; every fact they carry is
+     duplicated in an accessible-sized element. */
+  --fs-eyebrow: 11px;                              /* decorative mono label */
+  --fs-meta: 13px;                                 /* secondary, non-essential */
+  --fs-label: 1rem;                                /* 16px — field labels */
+  --fs-body: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);   /* 16–17px */
+  --fs-lede: clamp(1.125rem, 1.05rem + 0.4vw, 1.25rem); /* 18–20px */
+  --fs-title: clamp(1.5rem, 1.2rem + 1.6vw, 2rem);      /* 24–32px */
+  --fs-display: clamp(2rem, 1.4rem + 3vw, 3rem);        /* 32–48px */
+
+  --touch: 44px;        /* minimum interactive target */
+  --touch-lg: 48px;     /* primary actions */
+  --field-h: 56px;      /* input height */
+  --tap-gap: 12px;      /* min gap between adjacent targets */
 }
 
 @layer base {
@@ -219,7 +236,9 @@ body.drawer { overflow: hidden; }
   transform: translateY(-12px);
 }
 
-/* Wabi-Sabi Plaster & Parchment Grain Overlay */
+/* Wabi-Sabi Plaster & Parchment Grain Overlay — static texture, but the
+   feTurbulence data-URI is skipped when the client signals reduced data,
+   so low-power / metered devices keep the base surface with no render cost. */
 .grain {
   position: fixed;
   inset: 0;
@@ -227,6 +246,9 @@ body.drawer { overflow: hidden; }
   pointer-events: none;
   opacity: .9;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-data: reduce) {
+  .grain { background-image: none; }
 }
 
 /* ── Reduced motion law: force-reveal, no opacity:0 traps ── */
