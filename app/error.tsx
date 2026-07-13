@@ -14,8 +14,8 @@ export default function Error({ reset }: { error: Error & { digest?: string }; r
         <p className="font-body text-[18px] leading-relaxed text-[var(--color-katha-ink)] font-medium border-l-2 border-[var(--color-katha-hi)] pl-5 text-left mb-10 mx-auto max-w-[400px]">
           This step didn&rsquo;t complete. Your place in the archive is safe — try
           again, or write to{' '}
-          <a href="mailto:kathabooth@gmail.com" className="underline underline-offset-4">
-            kathabooth@gmail.com
+          <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4">
+            hello@kathabooth.com
           </a>
           .
         </p>
