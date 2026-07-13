@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { getLayout, getModifiedLayout, VIEWBOX } from "@/lib/layouts";
+import { announce, prefersReducedData } from "@/lib/a11y";
 
 interface LivePreviewProps {
   template: any;
@@ -11,10 +12,16 @@ interface LivePreviewProps {
   subtitle: string;
   venue: string;
   textPosition?: "bottom" | "top";
+  simple?: boolean;
+  proofText?: string;
 }
 
 const MAX_TILT_DEG = 5; // motion law ceiling is 6°
 const RETURN_MS = 1200; // damped return floor
+
+// Display-only truncation. The full inscription still rides in the finalize
+// payload (CustomizerClient sends cz.state.*), so nothing is lost on submit.
+const clip = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
 export default function LivePreview({
   template,
@@ -24,8 +31,22 @@ export default function LivePreview({
   subtitle,
   venue,
   textPosition = "bottom",
+  simple = false,
+  proofText,
 }: LivePreviewProps) {
   const plateRef = useRef<HTMLDivElement>(null);
+
+  // Announce the derived proof sentence, debounced, so a screen reader hears the
+  // change without a burst on every keystroke. No-op until a LiveRegion mounts.
+  useEffect(() => {
+    if (!proofText) return;
+    const id = setTimeout(() => announce(proofText), 300);
+    return () => clearTimeout(id);
+  }, [proofText]);
+
+  // Grain is decorative texture, not legibility — gate it on the perf/comfort
+  // signals (Simple view or reduced-data), never on the accessibility baseline.
+  const showGrain = !simple && !prefersReducedData();
 
   // Resolve layout, then flip the text zone if the inscription sits on top.
   const base = getLayout(layoutId) ?? getLayout("strip-3")!;
@@ -92,8 +113,10 @@ export default function LivePreview({
           {/* Paper Background */}
           <rect width={w} height={h} fill={palette.bg} />
 
-          {/* Subtle Grain Overlay */}
-          <rect width={w} height={h} fill="none" style={{ filter: "url(#grain)" }} className="opacity-40 mix-blend-multiply pointer-events-none" />
+          {/* Subtle Grain Overlay — perf-gated (Simple view / reduced-data drop it) */}
+          {showGrain && (
+            <rect width={w} height={h} fill="none" style={{ filter: "url(#grain)" }} className="opacity-40 mix-blend-multiply pointer-events-none" />
+          )}
 
           {/* Photo Slots — empty by design: this is where the night's booth
               photos will print. Never filled with stock. */}
@@ -149,11 +172,11 @@ export default function LivePreview({
                 textAnchor="middle"
                 fill={palette.text}
                 fontFamily={displayFont}
-                fontSize={layout.format === "strip" ? 38 : 54}
+                fontSize={layout.format === "strip" ? (simple ? 44 : 38) : (simple ? 62 : 54)}
                 letterSpacing="0.08em"
                 className="uppercase"
               >
-                {title || template.sName}
+                {clip(title || template.sName || "", 28)}
               </text>
 
               <text
@@ -162,11 +185,11 @@ export default function LivePreview({
                 textAnchor="middle"
                 fill={palette.sub}
                 fontFamily="'Courier Prime', monospace"
-                fontSize={layout.format === "strip" ? 16 : 22}
+                fontSize={layout.format === "strip" ? (simple ? 18 : 16) : (simple ? 25 : 22)}
                 letterSpacing="0.15em"
                 className="uppercase"
               >
-                {subtitle || template.sSub}
+                {clip(subtitle || template.sSub || "", 32)}
               </text>
 
               {venue && (
@@ -180,7 +203,7 @@ export default function LivePreview({
                   letterSpacing="0.1em"
                   className="uppercase opacity-70"
                 >
-                  {venue}
+                  {clip(venue, 32)}
                 </text>
               )}
 
