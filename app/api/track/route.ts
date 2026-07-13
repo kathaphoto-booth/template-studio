@@ -20,6 +20,10 @@ const ALLOWED_EVENTS = new Set([
   "review_open",
   "drawer_open",
   "selection_submit",
+  "slot_pick",
+  "request_submit",
+  "request_accepted",
+  "request_declined",
 ]);
 
 const META_MAX_BYTES = 1024;
