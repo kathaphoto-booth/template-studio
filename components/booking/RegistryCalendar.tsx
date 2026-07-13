@@ -29,9 +29,12 @@ function chipLabel(slot: Slot, status: SlotStatus): string {
 export function RegistryCalendar({
   days, selected, onPick,
 }: { days: Day[]; selected: { date: string; slot: Slot } | null; onPick: (date: string, slot: Slot) => void }) {
-  // Shelves start collapsed (tap a night to open its times). `days` already
-  // arrives nearest-open-weekend first (A2), so the top row is the soonest night.
-  const [open, setOpen] = useState<string | null>(null);
+  // A2 — the strip defaults focus to the nearest OPEN weekend: the first
+  // requestable night starts expanded (never a fully-booked row). Lazy init
+  // only; closing it afterwards is the visitor's choice and stays closed.
+  const [open, setOpen] = useState<string | null>(
+    () => days.find(hasOpenSlot)?.date ?? null,
+  );
 
   return (
     <div className="w-full max-w-[600px]">

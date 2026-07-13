@@ -22,13 +22,13 @@ const STYLES = ["All", "Signature", "Classic"];
 function Tag({ style }: { style: string }) {
   if (style === "Signature") {
     return (
-      <span className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[8.5px] font-bold px-2 py-0.5 rounded-[1px] tracking-[0.18em] uppercase shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
+      <span className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[11px] font-bold px-2 py-0.5 rounded-[1px] tracking-[0.18em] uppercase shadow-[0_2px_6px_rgba(0,0,0,0.2)]">
         ◆ Signature
       </span>
     );
   }
   return (
-    <span className="border border-[var(--color-katha-ln2)] text-[var(--color-katha-mut)] font-mono text-[8.5px] px-2 py-0.5 rounded-[1px] tracking-[0.18em] uppercase">
+    <span className="border border-[var(--color-katha-ln2)] text-[var(--color-katha-mut)] font-mono text-[11px] px-2 py-0.5 rounded-[1px] tracking-[0.18em] uppercase">
       Classic
     </span>
   );
@@ -76,10 +76,10 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
         className="bg-[var(--color-katha-l2)] rounded-[2px] border-t border-[var(--color-katha-glass)] px-6 pt-10 pb-8 flex flex-col items-center gap-8 relative shadow-[0_24px_60px_var(--color-katha-shadow)] hover:-translate-y-2 transition-all duration-500 hover:border-[var(--color-katha-ln2)]"
       >
         <div className="absolute top-6 left-6 flex items-baseline gap-1.5">
-          <span className="font-mono text-[10px] text-[var(--color-katha-mut)] tracking-widest">{t.plate}</span>
+          <span className="font-mono text-[11px] text-[var(--color-katha-mut)] tracking-widest">{t.plate}</span>
         </div>
         <div className="absolute top-6 right-6">
-          <span className="font-mono text-[8px] tracking-[0.14em] uppercase text-[var(--color-katha-mut)] border-b border-[var(--color-katha-ln)] pb-[2px]">{t.booth}</span>
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[var(--color-katha-mut)] border-b border-[var(--color-katha-ln)] pb-[2px]">{t.booth}</span>
         </div>
 
         <div className="mt-4" style={{ transform: "translateZ(25px)" }}>
@@ -89,7 +89,7 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
         <div className="text-center" style={{ transform: "translateZ(10px)" }}>
           <div className="mb-3"><Tag style={t.style} /></div>
           <h3 className="font-display text-[24px] lg:text-[28px] font-light text-[var(--color-katha-hi)] mt-1 mb-1.5">{t.name}</h3>
-          <p className="font-mono text-[9px] tracking-[0.14em] text-[var(--color-katha-mut)] uppercase">{t.formatLabel}</p>
+          <p className="font-mono text-[11px] tracking-[0.14em] text-[var(--color-katha-mut)] uppercase">{t.formatLabel}</p>
         </div>
       </motion.div>
     </div>
@@ -143,7 +143,7 @@ function TheWork() {
         <h2 className="font-display font-light text-3xl lg:text-4xl text-[var(--color-katha-hi)] tracking-tight">
           The work<span className="text-[var(--color-katha-gilt)]">.</span>
         </h2>
-        <span className="font-mono text-[9px] uppercase tracking-[0.24em] text-[var(--color-katha-fnt)]">
+        <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--color-katha-fnt)]">
           {'//'} From recent installations
         </span>
       </div>
@@ -160,7 +160,7 @@ function TheWork() {
                 className="w-full h-auto block"
               />
             </div>
-            <figcaption className="mt-3 font-mono text-[9px] uppercase tracking-[0.2em] text-[var(--color-katha-mut)]">
+            <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--color-katha-mut)]">
               {f.caption}
             </figcaption>
           </figure>
@@ -347,14 +347,14 @@ export default function Gallery() {
         <header className="flex items-center justify-between px-6 lg:px-12 py-6 border-b border-[var(--color-katha-ln)]">
           <div className="flex items-baseline gap-6">
             <KathaWordmark size={24} swash={false} />
-            <span className="hidden md:inline font-mono text-[9px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
+            <span className="hidden md:inline font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
               Los Angeles &amp; Orange County
             </span>
           </div>
           <button
             type="button"
             onClick={() => openDrawer(heldDate ? { date: heldDate } : {})}
-            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-5 py-3.5 min-h-[44px] rounded-[3px] hover:brightness-105 transition-all cursor-pointer"
+            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[length:var(--fs-body)] tracking-[0.1em] uppercase px-5 py-3.5 min-h-[44px] rounded-[3px] hover:brightness-105 transition-all cursor-pointer"
           >
             Reserve a date
           </button>
@@ -362,7 +362,7 @@ export default function Gallery() {
 
         {/* ── Hero: the editorial headline + the Date Gate ── */}
         <section className="px-6 lg:px-12 pt-20 lg:pt-28 pb-16 lg:pb-24 max-w-[1280px] mx-auto">
-          <p className="font-mono text-[9.5px] tracking-[0.24em] uppercase text-[var(--color-katha-fnt)] mb-10">
+          <p className="font-mono text-[11px] tracking-[0.24em] uppercase text-[var(--color-katha-fnt)] mb-10">
             {'//'} Inquiry registry active · heritage photo-booth installations
           </p>
           <h1 className="font-display font-light text-[var(--color-katha-hi)] leading-[1.02] tracking-[-0.015em] text-[clamp(54px,8.5vw,124px)] mb-10">
@@ -394,7 +394,7 @@ export default function Gallery() {
             <button
               type="button"
               onClick={openArchiveWithoutDate}
-              className="mt-10 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-katha-fnt)] hover:text-[var(--color-katha-mut)] underline underline-offset-4 decoration-[var(--color-katha-ln2)] transition-colors cursor-pointer"
+              className="mt-10 font-mono text-[length:var(--fs-body)] tracking-[0.12em] uppercase text-[var(--color-katha-fnt)] hover:text-[var(--color-katha-mut)] underline underline-offset-4 decoration-[var(--color-katha-ln2)] transition-colors cursor-pointer"
             >
               or browse the archive without a date →
             </button>
@@ -478,7 +478,7 @@ export default function Gallery() {
       >
         <div className="bg-[var(--color-katha-l1)]/95 backdrop-blur-sm border border-[var(--color-katha-ln)] shadow-[0_24px_60px_rgba(0,0,0,0.6)] px-6 py-4 flex items-center gap-8 max-w-full">
           <div className="flex flex-col min-w-0">
-            <span className="font-mono text-[8.5px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
+            <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
               Registry {held ? `· ${held.weekday} ${held.month} ${held.day}` : ""}
             </span>
             <span className="font-display font-light text-[18px] text-[var(--color-katha-hi)] truncate">
@@ -491,7 +491,7 @@ export default function Gallery() {
               track("review_open");
               openDrawer(heldDate ? { date: heldDate } : {});
             }}
-            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-5 py-3.5 min-h-[44px] rounded-[3px] hover:brightness-105 transition-all cursor-pointer whitespace-nowrap"
+            className="bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[length:var(--fs-body)] tracking-[0.1em] uppercase px-5 py-3.5 min-h-[44px] rounded-[3px] hover:brightness-105 transition-all cursor-pointer whitespace-nowrap"
           >
             {plateTouched ? "Review" : "Reserve"}
           </button>
