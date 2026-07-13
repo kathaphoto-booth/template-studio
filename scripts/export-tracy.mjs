@@ -80,10 +80,13 @@ const SLOT_BORDER_W = 1;
 // text-zone top edge (declarative — comes from the layout's textZone).
 // ──────────────────────────────────────────────────────────────────────
 const MONOGRAM_Y = LAYOUT.textZone.y + 80; // 80u below the text-zone top edge
+// Pedestal center, NOT canvas center — pv-2 happens to be canvas-centered so
+// VB_W/2 rendered correctly by luck; asymmetric layouts (pc-L/pv-L) are not.
+const TEXT_CX = LAYOUT.textZone.x + LAYOUT.textZone.w / 2;
 const decoration = `
   <rect x="${FRAME_OUTER}" y="${FRAME_OUTER}" width="${VB_W - FRAME_OUTER * 2}" height="${VB_H - FRAME_OUTER * 2}" fill="none" stroke="${PRESET.secondary}" stroke-width="1.5"/>
   <rect x="${FRAME_INNER}" y="${FRAME_INNER}" width="${VB_W - FRAME_INNER * 2}" height="${VB_H - FRAME_INNER * 2}" fill="none" stroke="${PRESET.secondary}" stroke-width="0.5" opacity="0.55"/>
-  <g transform="translate(${VB_W / 2}, ${MONOGRAM_Y})" fill="none" stroke="${PRESET.secondary}">
+  <g transform="translate(${TEXT_CX}, ${MONOGRAM_Y})" fill="none" stroke="${PRESET.secondary}">
     <circle cx="0" cy="0" r="22" stroke-width="1" opacity="0.55"/>
     <circle cx="0" cy="0" r="16" stroke-width="0.5" opacity="0.35"/>
     <line x1="-220" y1="0" x2="-32" y2="0" stroke-width="0.75" opacity="0.4"/>
@@ -108,7 +111,7 @@ const slotRects = LAYOUT.slots.map(
 const TEXT_BASELINE_Y = LAYOUT.textZone.y + LAYOUT.textZone.h * 0.62;
 const namesText = textToSvgPath({
   text: PRESET.names,
-  cx: VB_W / 2,
+  cx: TEXT_CX,
   by: TEXT_BASELINE_Y,
   fontSize: 170,
   fill: PRESET.text,

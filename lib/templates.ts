@@ -1579,7 +1579,7 @@ export function renderDecorativeSvg(
         <rect x="${margin / 3 + 6}" y="${margin / 3 + 6}" width="${vb.w - 2 * margin / 3 - 12}" height="${vb.h - 2 * margin / 3 - 12}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.4" />
         
         <!-- Elegant 8-pointed star in the text zone divider -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" stroke="${secondaryColor}" fill="${secondaryColor}" stroke-width="1">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" stroke="${secondaryColor}" fill="${secondaryColor}" stroke-width="1">
           <line x1="-120" y1="0" x2="-25" y2="0" opacity="0.6" stroke-dasharray="2 4" />
           <line x1="25" y1="0" x2="120" y2="0" opacity="0.6" stroke-dasharray="2 4" />
           <path d="M 0,-12 L 2,-4 L 10,-2 L 3,0 L 6,8 L 0,3 L -6,8 L -3,0 L -10,-2 L -2,-4 Z" />
@@ -1592,7 +1592,7 @@ export function renderDecorativeSvg(
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
         <rect x="${margin / 3 + 8}" y="${margin / 3 + 8}" width="${vb.w - 2 * margin / 3 - 16}" height="${vb.h - 2 * margin / 3 - 16}" fill="none" stroke="${secondaryColor}" stroke-width="0.6" opacity="0.55" />
         <!-- Dynamic Calado Openwork Divider anchored to textZone boundary -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1.4" fill="${secondaryColor}">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1.4" fill="${secondaryColor}">
           <line x1="-150" y1="0" x2="-26" y2="0" stroke-dasharray="1.5 7" stroke-linecap="round" />
           <line x1="26" y1="0" x2="150" y2="0" stroke-dasharray="1.5 7" stroke-linecap="round" />
           <path d="M -16,0 L 0,-9 L 16,0 L 0,9 Z" fill="none" stroke-width="1.1" />
@@ -1627,7 +1627,7 @@ export function renderDecorativeSvg(
         <!-- Soil-black T'nalak raw linen rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.8" />
         <!-- A single, sacred satin-champagne thread above/below the text pedestal -->
-        <line x1="${vb.w / 2 - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${vb.w / 2 + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="${GILT_THREAD}" stroke-width="2.5" />
+        <line x1="${tz.centerX - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${tz.centerX + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="${GILT_THREAD}" stroke-width="2.5" />
       `;
 
     case "katha-brass-ring":
@@ -1635,7 +1635,7 @@ export function renderDecorativeSvg(
         <!-- Fine ecru rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
         <!-- Sacred gilded brass ring centered at the boundary of the branding pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30})" fill="none" stroke="${secondaryColor}">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30})" fill="none" stroke="${secondaryColor}">
           <circle cx="0" cy="0" r="22" stroke-width="2" />
           <circle cx="0" cy="0" r="14" stroke-width="0.75" opacity="0.6" />
         </g>
@@ -1656,7 +1656,7 @@ export function renderDecorativeSvg(
         `).join("") + `
         
         <!-- Minimal organic hand-woven medallion centered below text pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 24 : tz.y + tz.h + 24})" fill="none" stroke="${secondaryColor}">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 24 : tz.y + tz.h + 24})" fill="none" stroke="${secondaryColor}">
           <line x1="-120" y1="0" x2="-24" y2="0" stroke-width="1" />
           <line x1="24" y1="0" x2="120" y2="0" stroke-width="1" />
           <polygon points="-8,0 0,-7 8,0 0,7" stroke-width="1.2" />
@@ -1674,7 +1674,7 @@ export function renderDecorativeSvg(
         <!-- Outer Canvas Frame -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.8" />
         <rect x="${margin / 2 + 8}" y="${margin / 2 + 8}" width="${vb.w - margin - 16}" height="${vb.h - margin - 16}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" fill="none" stroke="${secondaryColor}">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" fill="none" stroke="${secondaryColor}">
            <!-- Center rosette (Calado openwork motif) -->
            <circle cx="0" cy="0" r="12" stroke-width="1" stroke-dasharray="1 1.5" />
            <circle cx="0" cy="0" r="18" stroke-width="0.8" />
@@ -1711,7 +1711,7 @@ export function renderDecorativeSvg(
         <!-- Sage border -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
         <!-- Translucent Capiz Windowpane Grid in the text pedestal gap -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1">
           <rect x="-72" y="-12" width="24" height="24" fill="${secondaryColor}" fill-opacity="0.15" />
           <rect x="-42" y="-12" width="24" height="24" fill="none" />
           <rect x="-12" y="-12" width="24" height="24" fill="${secondaryColor}" fill-opacity="0.15" />
@@ -1742,7 +1742,7 @@ export function renderDecorativeSvg(
         <!-- Ivory linen border -->
         <rect x="${margin / 4}" y="${margin / 4}" width="${vb.w - 2 * margin / 4}" height="${vb.h - 2 * margin / 4}" fill="none" stroke="${secondaryColor}" stroke-dasharray="8 6" stroke-width="1.5" opacity="0.5" />
         <!-- Hand-sketched classic ivory rose aligned dynamically above/below the text -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 45 : tz.y + tz.h + 45}) scale(1.65)">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 45 : tz.y + tz.h + 45}) scale(1.65)">
           <path d="M 12 30 C 5 22 15 15 22 24 C 28 12 40 20 32 30 C 45 32 35 48 24 40 C 15 45 8 36 12 30 Z" fill="#FFFFFF" stroke="${color}" stroke-width="1" />
           <path d="M 22 28 C 18 24 24 20 26 26 Z" fill="#FCFAF2" stroke="${color}" stroke-width="0.75" />
           <path d="M -5 32 Q 5 18 12 28" fill="none" stroke="#9A9F95" stroke-width="1" />
@@ -1799,7 +1799,7 @@ export function renderDecorativeSvg(
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="3" />
         <rect x="${margin / 3 + 9}" y="${margin / 3 + 9}" width="${vb.w - 2 * margin / 3 - 18}" height="${vb.h - 2 * margin / 3 - 18}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.6" />
         <!-- Dynamic circular debossed crest centered at text pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.15)" stroke="${secondaryColor}" fill="none" stroke-width="1.2">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.15)" stroke="${secondaryColor}" fill="none" stroke-width="1.2">
           <ellipse cx="0" cy="0" rx="36" ry="26" />
           <path d="M -15, -12 L 0, -20 L 15, -12 L 10, 8 L -10, 8 Z" opacity="0.2" fill="${secondaryColor}" />
         </g>
@@ -1817,7 +1817,7 @@ export function renderDecorativeSvg(
         <!-- Hand-torn deckled edges -->
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1" stroke-dasharray="20 4 4 4" />
         <!-- Dynamic copper wax-seal centered above/below names -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.35)" fill="none" stroke="${secondaryColor}" stroke-width="1.5">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.35)" fill="none" stroke="${secondaryColor}" stroke-width="1.5">
           <path d="M -35,5 C -45,35 45,35 35,5 C 25,-25 -25,-25 -35,5 Z" fill="${secondaryColor}" opacity="0.15" stroke-width="1" />
           <circle cx="0" cy="4" r="28" stroke="${secondaryColor}" stroke-width="1" />
         </g>
