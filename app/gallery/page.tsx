@@ -9,7 +9,7 @@ import { Print } from "@/components/Print";
 import { KathaWordmark } from "@/components/marks/KathaWordmark";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { DateGate } from "@/components/booking/DateGate";
-import { type Day } from "@/components/booking/RegistryCalendar";
+import { hasOpenSlot, type Day } from "@/components/booking/RegistryCalendar";
 import { VaultDrawer, type DrawerSelection } from "@/components/booking/VaultDrawer";
 import { PricingTiers } from "@/components/booking/PricingTiers";
 import { ParallaxFooter } from "@/components/booking/ParallaxFooter";
@@ -217,12 +217,7 @@ export default function Gallery() {
   // "open" when any of its slots can still be requested. Derived from the strip
   // so there is one source of truth (never a second fetch).
   const dates = useMemo(
-    () =>
-      days
-        ? days
-            .filter((d) => d.slots.some((s) => s.status === "open" || s.status === "under_request"))
-            .map((d) => d.date)
-        : null,
+    () => (days ? days.filter(hasOpenSlot).map((d) => d.date) : null),
     [days]
   );
 

@@ -8,6 +8,10 @@ type Slot = 'afternoon' | 'evening';
 type SlotStatus = 'open' | 'under_request' | 'booked' | 'past';
 export type Day = { date: string; weekday: string; slots: { slot: Slot; status: SlotStatus }[] };
 
+/** A night is still requestable when any of its slots is open or under request. */
+export const hasOpenSlot = (day: Day): boolean =>
+  day.slots.some((s) => s.status === 'open' || s.status === 'under_request');
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 /** Label from an ISO string — pure string math, never new Date(iso) (R6). */
 function human(iso: string): string {
@@ -37,7 +41,7 @@ export function RegistryCalendar({
       <ul className="flex flex-col gap-2" aria-label="Open weekend nights">
         {days.map((day) => {
           const isOpen = open === day.date;
-          const anyOpen = day.slots.some((s) => s.status === 'open' || s.status === 'under_request');
+          const anyOpen = hasOpenSlot(day);
           const chosen = selected?.date === day.date;
           return (
             <li key={day.date} className="border border-[var(--color-katha-ln)] rounded-[2px] overflow-hidden">

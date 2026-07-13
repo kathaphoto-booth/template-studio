@@ -2,7 +2,7 @@
 
 import { ledgerParts } from '@/lib/booking';
 import { track } from '@/lib/track';
-import { RegistryCalendar, type Day } from './RegistryCalendar';
+import { RegistryCalendar, hasOpenSlot, type Day } from './RegistryCalendar';
 
 type Slot = 'afternoon' | 'evening';
 const SLOT_WORD: Record<Slot, string> = { afternoon: 'Afternoon', evening: 'Evening' };
@@ -23,9 +23,7 @@ type DateGateProps = {
  * truthful or it is an error state; there is no pretend calendar here.
  */
 export function DateGate({ days, loading, error, selected, onRetry, onPick }: DateGateProps) {
-  const openNights = days
-    ? days.filter((d) => d.slots.some((s) => s.status === 'open' || s.status === 'under_request')).length
-    : 0;
+  const openNights = days ? days.filter(hasOpenSlot).length : 0;
 
   return (
     <div className="w-full">
