@@ -64,6 +64,18 @@ components:
 
 # Katha Photo Booth — Visual Design System
 
+> **SCOPE (reconciled 2026-07-13).** This file governs the **print catalog** —
+> the Katha Signature preset system (`lib/templates.ts`, guarded by
+> `scripts/katha-template-guard.mjs`) and the physical prints guests keep.
+> The **booking web UI** (gallery → intake → customizer → portal) is governed
+> by the **Gilded Archive**: tokens in `app/globals.css @theme`, prose law in
+> the repo-root `DESIGN.md` of the orchestration repo. Where the two conflict
+> on WEB surfaces, the Gilded Archive wins — the funnel's single high-intent
+> accent is gilt `#DCCBB5` (never Loko Rust in app chrome), errors speak in
+> ink + a gilt rule (no red), and the Carved-Wood rule below is a PRINT
+> display rule (Cormorant is permitted as web body type). Sections 2–6 apply
+> to prints and preset artwork; read them through that lens.
+
 ## 1. Overview
 
 Katha (Tagalog) — to compose, to weave a poem or story. Not a noun; a verb. The booth
