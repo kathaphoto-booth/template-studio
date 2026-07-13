@@ -6,6 +6,7 @@ import { ChoiceCard } from '@/components/ui/ChoiceCard';
 import { ActionBar } from '@/components/ui/ActionBar';
 import { announce } from '@/lib/a11y';
 import { GUEST_ESTIMATES } from '@/lib/requests';
+import { A1_CONTRACT_LINE_CLEARED } from '@/lib/flags';
 
 const EVENT_TYPES = ['Wedding', 'Reception', 'Birthday', 'Corporate', 'Other'];
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,6 +16,10 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 // production until Jed's legal read-through clears it. Committed locally only.
 const CONTRACT_LINE =
   'The night is secured with a $99 retainer once we accept — non-refundable, with the balance due 14 days before your event. Date changes need 20 days’ notice.';
+
+// Until the A1 gate clears, the intake speaks the SLA line instead
+// (microcopy deck #7) — a true commitment with no un-reviewed legal terms.
+const SLA_LINE = 'Reviewed by one of the two of us. Answer within 24 hours.';
 
 export function IntakeForm({
   date, slot, tier, onSubmitted,
@@ -114,7 +119,9 @@ export function IntakeForm({
           </div>
         </details>
 
-        <p className="border-l-2 border-[var(--color-katha-gilt)] pl-3 text-[var(--color-katha-mut)]" style={{ fontSize: 'var(--fs-meta)' }}>{CONTRACT_LINE}</p>
+        <p className="border-l-2 border-[var(--color-katha-gilt)] pl-3 text-[var(--color-katha-mut)]" style={{ fontSize: 'var(--fs-meta)' }}>
+          {A1_CONTRACT_LINE_CLEARED ? CONTRACT_LINE : SLA_LINE}
+        </p>
         {serverError && <p role="alert" className="text-[var(--color-katha-ink)]" style={{ fontSize: 'var(--fs-body)' }}>{serverError}</p>}
       </div>
 
