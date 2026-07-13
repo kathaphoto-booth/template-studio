@@ -47,8 +47,8 @@ export function DateGate({ dates, loading, error, heldDate, onRetry, onSelectDat
           <p className="font-body text-[17px] text-[var(--color-katha-ink)] leading-relaxed">
             The registry didn&rsquo;t answer. Open dates can&rsquo;t be shown right now —
             try again, or write to{' '}
-            <a href="mailto:kathabooth@gmail.com" className="underline underline-offset-4">
-              kathabooth@gmail.com
+            <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4">
+              hello@kathabooth.com
             </a>{' '}
             with your date.
           </p>
@@ -66,8 +66,8 @@ export function DateGate({ dates, loading, error, heldDate, onRetry, onSelectDat
         <div className="border-l-2 border-[var(--color-katha-hi)] bg-[var(--color-katha-l1)] px-6 py-5 max-w-[560px]">
           <p className="font-body text-[17px] text-[var(--color-katha-ink)] leading-relaxed">
             Every listed night is spoken for. Write to{' '}
-            <a href="mailto:kathabooth@gmail.com" className="underline underline-offset-4">
-              kathabooth@gmail.com
+            <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4">
+              hello@kathabooth.com
             </a>{' '}
             for off-calendar dates.
           </p>
