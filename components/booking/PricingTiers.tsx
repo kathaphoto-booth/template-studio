@@ -66,11 +66,15 @@ export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
                   }
                 }}
                 className={`tier-card ${flagship ? 'tier-flag' : ''} ${off ? 'tier-off' : ''}`}
+                style={{ minHeight: 'var(--touch-lg)' }}
               >
                 <div className="flex items-baseline justify-between gap-4">
                   <div>
                     {tier.badge && (
-                      <span className="font-mono text-[8.5px] tracking-[0.18em] uppercase text-[var(--color-katha-mut)] border border-[var(--color-katha-ln)] px-2 py-0.5 rounded-[1px]">
+                      <span
+                        className="font-mono tracking-[0.18em] uppercase text-[var(--color-katha-mut)] border border-[var(--color-katha-ln)] px-2 py-0.5 rounded-[1px]"
+                        style={{ fontSize: 'var(--fs-eyebrow)' }}
+                      >
                         {tier.badge}
                       </span>
                     )}
@@ -82,7 +86,10 @@ export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
                     <p className="font-display text-[32px] font-light text-[var(--color-katha-ink)]">
                       ${tier.price.toLocaleString()}
                     </p>
-                    <p className="font-mono text-[8.5px] tracking-[0.1em] uppercase text-[var(--color-katha-mut)]">
+                    <p
+                      className="font-mono tracking-[0.1em] uppercase text-[var(--color-katha-mut)]"
+                      style={{ fontSize: 'var(--fs-meta)' }}
+                    >
                       up to {tier.hours} hrs
                     </p>
                   </div>
@@ -97,14 +104,18 @@ export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
                     {tier.includes.slice(0, 4).map((line) => (
                       <li
                         key={line}
-                        className="font-mono text-[9.5px] tracking-[0.08em] text-[var(--color-katha-mut)] flex gap-2.5"
+                        className="font-mono tracking-[0.08em] text-[var(--color-katha-mut)] flex gap-2.5"
+                        style={{ fontSize: 'var(--fs-meta)' }}
                       >
                         <span className="text-[var(--color-katha-gilt)]" aria-hidden="true">·</span>
                         {line}
                       </li>
                     ))}
                     {tier.includes.length > 4 && (
-                      <li className="font-mono text-[9px] tracking-[0.1em] uppercase text-[var(--color-katha-mut)] mt-1">
+                      <li
+                        className="font-mono tracking-[0.1em] uppercase text-[var(--color-katha-mut)] mt-1"
+                        style={{ fontSize: 'var(--fs-meta)' }}
+                      >
                         + {tier.includes.length - 4} more in the full brief
                       </li>
                     )}
@@ -112,7 +123,10 @@ export function PricingTiers({ tiers, onSelect }: PricingTiersProps) {
                 )}
 
                 {off ? (
-                  <span className="self-start font-mono text-[9px] tracking-[0.16em] uppercase text-[var(--color-katha-fnt)] bg-[var(--color-katha-l0)] px-3 py-1.5 rounded-[1px]">
+                  <span
+                    className="self-start font-mono tracking-[0.16em] uppercase text-[var(--color-katha-fnt)] bg-[var(--color-katha-l0)] px-3 py-1.5 rounded-[1px]"
+                    style={{ fontSize: 'var(--fs-meta)' }}
+                  >
                     {tier.unavailableLabel ?? 'Currently unavailable'}
                   </span>
                 ) : (

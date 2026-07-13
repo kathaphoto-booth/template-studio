@@ -9,10 +9,11 @@ import { Print } from "@/components/Print";
 import { KathaWordmark } from "@/components/marks/KathaWordmark";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { DateGate } from "@/components/booking/DateGate";
+import { type Day } from "@/components/booking/RegistryCalendar";
 import { VaultDrawer, type DrawerSelection } from "@/components/booking/VaultDrawer";
 import { PricingTiers } from "@/components/booking/PricingTiers";
 import { ParallaxFooter } from "@/components/booking/ParallaxFooter";
-import { TIERS_CATALOG, DEFAULT_TIER_KEY, fetchOpenDates, ledgerParts } from "@/lib/booking";
+import { TIERS_CATALOG, DEFAULT_TIER_KEY, ledgerParts } from "@/lib/booking";
 import { getEntryTierKey, tierKeyFromSlug } from "@/lib/entry";
 import { track } from "@/lib/track";
 
@@ -185,8 +186,8 @@ export default function Gallery() {
     track("gallery_view");
   }, []);
 
-  /* ── Real availability ── */
-  const [dates, setDates] = useState<string[] | null>(null);
+  /* ── Real availability (slot-aware weekend strip) ── */
+  const [days, setDays] = useState<Day[] | null>(null);
   const [datesLoading, setDatesLoading] = useState(true);
   const [datesError, setDatesError] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
@@ -195,10 +196,11 @@ export default function Gallery() {
     let alive = true;
     setDatesLoading(true);
     setDatesError(false);
-    fetchOpenDates()
-      .then((d) => {
+    fetch("/api/availability/v2")
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("availability"))))
+      .then((body: { days?: Day[] }) => {
         if (!alive) return;
-        setDates(d);
+        setDays(Array.isArray(body?.days) ? body.days : []);
         setDatesLoading(false);
       })
       .catch(() => {
@@ -211,12 +213,26 @@ export default function Gallery() {
     };
   }, [retryKey]);
 
+  // The open-date allow-list the drawer + deep-links still speak in: a night is
+  // "open" when any of its slots can still be requested. Derived from the strip
+  // so there is one source of truth (never a second fetch).
+  const dates = useMemo(
+    () =>
+      days
+        ? days
+            .filter((d) => d.slots.some((s) => s.status === "open" || s.status === "under_request"))
+            .map((d) => d.date)
+        : null,
+    [days]
+  );
+
   /* ── The velvet rope: date first, archive after ──
      A held night opens the archive. The rope is honest — one click, no
      contact info demanded — and it never strands anyone: browsing without
      a date is an explicit link away, and a failed availability check
      never locks the page. */
   const [heldDate, setHeldDate] = useState<string | null>(null);
+  const [selected, setSelected] = useState<{ date: string; slot: "afternoon" | "evening" } | null>(null);
   const [browseAll, setBrowseAll] = useState(false);
   const [plateTouched, setPlateTouched] = useState(false);
   const platesRef = useRef<HTMLElement | null>(null);
@@ -240,6 +256,17 @@ export default function Gallery() {
       }
     },
     [heldDate, prefersReducedMotion]
+  );
+
+  // Weekend strip → time shelf: remember the slot for the confirmation line and
+  // bridge the date into the existing rope (holdDate opens the archive + HUD).
+  // The slot ride-along to /api/request is the deferred RTN funnel join.
+  const onPick = useCallback(
+    (date: string, slot: "afternoon" | "evening") => {
+      setSelected({ date, slot });
+      holdDate(date);
+    },
+    [holdDate]
   );
 
   const openArchiveWithoutDate = useCallback(() => {
@@ -360,12 +387,12 @@ export default function Gallery() {
           </p>
 
           <DateGate
-            dates={dates}
+            days={days}
             loading={datesLoading}
             error={datesError}
-            heldDate={heldDate}
+            selected={selected}
             onRetry={() => setRetryKey((k) => k + 1)}
-            onSelectDate={holdDate}
+            onPick={onPick}
           />
 
           {!archiveOpen && !datesLoading && (
