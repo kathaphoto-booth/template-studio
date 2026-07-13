@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:a11y": "playwright test",
     "clean": "next clean",
     "export:tracy": "node scripts/export-tracy.mjs",
     "guard": "node scripts/katha-guard.mjs",
