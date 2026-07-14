@@ -32,20 +32,41 @@ export async function POST(req: NextRequest) {
     const body = JSON.parse(rawBody);
     console.log("[Webhook] Received HoneyBook event:", JSON.stringify(body, null, 2));
 
+    if (!supabaseAdmin) {
+      console.error("[Webhook] Supabase admin not configured.");
+      return NextResponse.json({ ok: false, error: "supabase not configured" }, { status: 500 });
+    }
+
+    // Idempotency: HoneyBook retries deliveries on timeout/non-2xx, so the
+    // same event can arrive more than once. Record the event id up front —
+    // a duplicate hits the primary-key conflict and is acknowledged without
+    // re-running the side effects below.
+    const eventId = body?.event?.id || body?.id;
+    if (eventId) {
+      const { error: dedupeError } = await supabaseAdmin
+        .from("processed_webhook_events")
+        .insert({ event_id: String(eventId) });
+
+      if (dedupeError) {
+        if (dedupeError.code === "23505") {
+          console.log("[Webhook] Duplicate delivery, already processed:", eventId);
+          return NextResponse.json({ ok: true, received: true, duplicate: true });
+        }
+        console.error("[Webhook] Failed to record event id, processing without dedupe:", dedupeError);
+      }
+    } else {
+      console.log("[Webhook] No event id in payload; skipping dedupe check.");
+    }
+
     // Identify event type
     const eventType = body?.event?.type || body?.type || "unknown";
-    
+
     // We are looking for payment and contract completions
     if (eventType === "payment_completed" || eventType === "contract_signed" || eventType === "project_booked") {
       
       // Attempt to find the client email or lead hash from the payload
       const clientEmail = body?.data?.client_email || body?.data?.email || body?.client?.email;
       const leadHash = body?.data?.lead_hash || body?.lead_hash;
-
-      if (!supabaseAdmin) {
-        console.error("[Webhook] Supabase admin not configured.");
-        return NextResponse.json({ ok: false, error: "supabase not configured" }, { status: 500 });
-      }
 
       if (leadHash) {
         const { error } = await supabaseAdmin
