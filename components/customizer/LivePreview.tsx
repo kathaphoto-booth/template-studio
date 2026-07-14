@@ -93,11 +93,15 @@ export default function LivePreview({
       >
         <svg
           viewBox={`0 0 ${w} ${h}`}
-          className="max-h-full max-w-full drop-shadow-2xl"
+          className="max-h-full max-w-full"
           style={{
             backgroundColor: palette.bg,
             color: palette.text,
             aspectRatio: `${w} / ${h}`,
+            // The proof-plate shadow (DESIGN.md §4) — a physical print floating
+            // over the void, same recipe as the gallery's Print component.
+            // Never a generic drop-shadow utility (No-Slop Rule).
+            boxShadow: "0 24px 60px rgba(0,0,0,0.85), 0 4px 12px rgba(0,0,0,0.45)",
           }}
           role="img"
           aria-label={`Live proof of ${template.name} on ${palette.name} paper`}
@@ -112,6 +116,19 @@ export default function LivePreview({
 
           {/* Paper Background */}
           <rect width={w} height={h} fill={palette.bg} />
+
+          {/* Cut edge — a hairline in the stock's own sub ink, so the sheet
+              reads as a physical print with a trimmed edge on every paper. */}
+          <rect
+            x={3}
+            y={3}
+            width={w - 6}
+            height={h - 6}
+            fill="none"
+            stroke={palette.sub}
+            strokeWidth={1.5}
+            strokeOpacity={0.28}
+          />
 
           {/* Subtle Grain Overlay — perf-gated (Simple view / reduced-data drop it) */}
           {showGrain && (
