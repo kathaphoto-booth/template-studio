@@ -8,10 +8,13 @@ const { templates: TEMPLATES } = content;
 import { Print } from "@/components/Print";
 import { KathaWordmark } from "@/components/marks/KathaWordmark";
 import { ArchiveEntrance } from "@/components/GildedArchive/ArchiveEntrance";
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
+import { LazyMotion, domAnimation, m, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { DateGate } from "@/components/booking/DateGate";
 import { hasOpenSlot, type Day } from "@/components/booking/RegistryCalendar";
-import { VaultDrawer, type DrawerSelection } from "@/components/booking/VaultDrawer";
+import dynamic from "next/dynamic";
+import { type DrawerSelection } from "@/components/booking/VaultDrawer";
+// Interaction-gated: the drawer chunk loads after hydration, never on first paint.
+const VaultDrawer = dynamic(() => import("@/components/booking/VaultDrawer").then((mod) => mod.VaultDrawer), { ssr: false });
 import { PricingTiers } from "@/components/booking/PricingTiers";
 import { ParallaxFooter } from "@/components/booking/ParallaxFooter";
 import { TIERS_CATALOG, DEFAULT_TIER_KEY, ledgerParts } from "@/lib/booking";
@@ -70,7 +73,7 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
       aria-label={`Reserve with the ${t.name} plate`}
       className="titem cursor-pointer w-full"
     >
-      <motion.div
+      <m.div
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -92,7 +95,7 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
           <h3 className="font-display text-[24px] lg:text-[28px] font-light text-[var(--color-katha-hi)] mt-1 mb-1.5">{t.name}</h3>
           <p className="font-mono text-[11px] tracking-[0.14em] text-[var(--color-katha-mut)] uppercase">{t.formatLabel}</p>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }
@@ -338,6 +341,9 @@ export default function Gallery() {
   const held = heldDate ? ledgerParts(heldDate) : null;
 
   return (
+    /* LazyMotion + m-components: the gallery ships the ~15kB domAnimation
+       renderer instead of the full motion bundle (WI#2 first-load budget). */
+    <LazyMotion features={domAnimation} strict>
     <div className="w-full relative min-h-screen">
       <div className="grain" aria-hidden="true" />
 
@@ -430,7 +436,7 @@ export default function Gallery() {
                 >
                   {s}
                   {s === styleF && (
-                    <motion.div
+                    <m.div
                       layoutId="activeFilterUnderline"
                       className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--color-katha-gilt)]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
@@ -504,5 +510,6 @@ export default function Gallery() {
 
       <VaultDrawer selection={drawer} openDates={dates ?? []} onClose={closeDrawer} />
     </div>
+    </LazyMotion>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform, useReducedMotion } from 'motion/react';
+import { m, useScroll, useTransform, useReducedMotion } from 'motion/react';
 
 /**
  * Osmo-style parallax reveal: the page content (z-10, opaque) scrolls up and
@@ -24,7 +24,7 @@ export function ParallaxFooter({ onReserve }: { onReserve: () => void }) {
     <>
       <div ref={spacerRef} className="h-[72vh]" aria-hidden="true" />
       <footer className="fixed bottom-0 inset-x-0 h-[72vh] z-0 overflow-hidden bg-[var(--color-katha-l0)]">
-        <motion.div
+        <m.div
           style={reduceMotion ? undefined : { y, opacity }}
           className="h-full flex flex-col justify-between px-6 md:px-16 pt-14 pb-8"
         >
@@ -86,7 +86,7 @@ export function ParallaxFooter({ onReserve }: { onReserve: () => void }) {
               </p>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </footer>
     </>
   );

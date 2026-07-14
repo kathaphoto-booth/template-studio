@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, m, useReducedMotion } from 'motion/react';
 import { Print } from '@/components/Print';
 import { KathaWordmark } from '@/components/marks/KathaWordmark';
 import { formatLongDate, tierByKey, minSelectableISO, type Tier } from '@/lib/booking';
@@ -314,7 +314,7 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
     <AnimatePresence>
       {selection.open && (
         <>
-          <motion.button
+          <m.button
             key="vault-backdrop"
             type="button"
             aria-label="Close the reservation drawer"
@@ -324,7 +324,7 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[55] bg-black/40 cursor-default"
           />
-          <motion.aside
+          <m.aside
             key="vault-panel"
             ref={panelRef}
             tabIndex={-1}
@@ -531,7 +531,7 @@ export function VaultDrawer({ selection, openDates, onClose }: VaultDrawerProps)
                 </p>
               </div>
             )}
-          </motion.aside>
+          </m.aside>
         </>
       )}
     </AnimatePresence>

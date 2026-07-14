@@ -1,5 +1,4 @@
 import content from './content.json';
-import { supabase } from './supabase';
 
 export type Tier = {
   key: string;
@@ -38,23 +37,9 @@ export function minSelectableISO(): string {
   return d.toISOString().slice(0, 10);
 }
 
-/**
- * Real availability from Supabase `available_dates` — status 'open',
- * at least MIN_NOTICE_DAYS out, ascending. Throws on any failure so the
- * caller can render an honest error state (never silent).
- */
-export async function fetchOpenDates(): Promise<string[]> {
-  if (!supabase) throw new Error('Availability service not configured');
-  const { data, error } = await supabase
-    .from('available_dates')
-    .select('date,status')
-    .eq('status', 'open')
-    .gte('date', minSelectableISO())
-    .order('date', { ascending: true })
-    .limit(90);
-  if (error) throw new Error(error.message);
-  return (data ?? []).map((r: { date: string }) => r.date);
-}
+/* Availability moved server-side: clients call /api/availability/v2; the
+   Supabase client must never ride a client bundle (it cost 99kB gz on the
+   gallery's first paint as dead code — removed 2026-07-14, WI#2). */
 
 function parseISO(iso: string): Date {
   const [y, m, d] = iso.split('-').map(Number);
