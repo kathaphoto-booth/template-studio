@@ -7,6 +7,7 @@ import content from "@/lib/content.json";
 const { templates: TEMPLATES } = content;
 import { Print } from "@/components/Print";
 import { KathaWordmark } from "@/components/marks/KathaWordmark";
+import { ArchiveEntrance } from "@/components/GildedArchive/ArchiveEntrance";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { DateGate } from "@/components/booking/DateGate";
 import { hasOpenSlot, type Day } from "@/components/booking/RegistryCalendar";
@@ -339,6 +340,9 @@ export default function Gallery() {
   return (
     <div className="w-full relative min-h-screen">
       <div className="grain" aria-hidden="true" />
+
+      {/* The Foundry Plate — plays once per session, degrades to nothing. */}
+      <ArchiveEntrance />
 
       {/* Page content — scrolls up over the fixed footer; dims under the drawer */}
       <div className="drawer-dim relative z-10 bg-[var(--color-katha-l0)] shadow-[0_80px_140px_rgba(0,0,0,0.65)]">
