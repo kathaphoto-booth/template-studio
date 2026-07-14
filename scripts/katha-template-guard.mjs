@@ -37,6 +37,7 @@ const CANON = new Set([
   // #8f4d39 REMOVED 2026-07-11 — retired red family, zero uses (Gilded Archive no-red law)
   "#dccbb5", "#8a7350", "#c2b19d",                          // Gilded Archive gilt (ratified 2026-07-06/07)
   "#e9dfcc", "#4e5b48",                                     // Sepia Bone stock + moss state (Gilded Archive)
+  "#f9d2ae", "#e5b893",                                     // Guhit 1957 heritage newsprint — sampled from Deo Asis Grepo's Romansa Komiks pages (easter egg, ratified 2026-07-14)
 ]);
 const LEGACY_OAX = new Set(["#0a0806", "#bf9d2c", "#c4c1b8", "#161618"]);
 const PURE = new Set(["#000000", "#000", "#ffffff", "#fff"]);

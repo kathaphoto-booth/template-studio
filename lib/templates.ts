@@ -235,6 +235,28 @@ export const PRESETS: PhotoboothPreset[] = [
   },
 
   {
+    id: "katha-guhit-1957",
+    name: "Katha Signature — Guhit 1957",
+    type: "strip",
+    layoutId: "strip-3",
+    backgroundColor: "#F9D2AE",
+    textColor: "#120704",
+    borderColor: "#120704",
+    secondaryColor: "#917259",
+    fontFamily: "'Fraunces', serif",
+    titleText: "Romansa",
+    subTitleText: "IKA-6 NA LABAS",
+    dateText: "MAYNILA · 1957",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "2px",
+    slotGap: "24px",
+    slotBgColor: "#E5B893",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "The easter egg. Aged-newsprint ground and dense komiks ink sampled directly from the 1957 Romansa Komiks pages of Deo Asis Grepo — Golden-Age Philippine Komiks illustrator, the founder's grandfather. Heavy panel keylines, one quiet signature. A printed thing, made by hand, passed down."
+  },
+
+  {
     id: "katha-loom-frame",
     name: "Katha Signature — Loom Frame",
     type: "strip",
@@ -1916,6 +1938,17 @@ export function renderDecorativeSvg(
       `;
     case "katha-editorial-void":
       return "";
+    case "katha-guhit-1957":
+      return `
+        <!-- Komiks panel keyline — Grepo's heavy border -->
+        <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${borderColor}" stroke-width="2.5" />
+        ` + layout.slots.map((s: any) => `
+          <rect x="${s.x - 6}" y="${s.y - 6}" width="${s.w + 12}" height="${s.h + 12}" fill="none" stroke="${borderColor}" stroke-width="1" opacity="0.55" />
+        `).join("") + `
+        <!-- guhit ni — the signature, once, small, inside the panel like his pages -->
+        <text x="${vb.w - margin - 16}" y="${vb.h - margin - 16}" text-anchor="end" font-family="'Courier Prime', monospace" font-size="22" letter-spacing="2" fill="${secondaryColor}">guhit ni d.a. grepo · 1957</text>
+      `;
+
     case "katha-heirloom-pina":
       return `
         <!-- Dual calado champagne borders -->
