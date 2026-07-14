@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { checkRateLimit, getClientIp, hashIp } from "@/lib/rateLimit";
 
 // ──────────────────────────────────────────────────────────────────────
 // /api/track — first-party funnel event sink (zero Google, zero SaaS)
@@ -32,6 +33,14 @@ export async function POST(req: NextRequest) {
   const event = typeof body?.event === "string" ? body.event : "";
   if (!ALLOWED_EVENTS.has(event)) {
     return NextResponse.json({ ok: false, error: "unknown event" }, { status: 400 });
+  }
+
+  // Public, unauthenticated endpoint — same per-IP budget shape as
+  // /api/selection so a single client can't flood funnel_events.
+  const ipHash = hashIp(getClientIp(req));
+  const rateLimitResult = await checkRateLimit(`track:${ipHash}`, 30, 60);
+  if (!rateLimitResult.success) {
+    return NextResponse.json({ ok: false, error: "rate limited" }, { status: 429 });
   }
 
   const leadHash =
