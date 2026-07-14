@@ -97,7 +97,7 @@ export function Print({ t, height = 200, overrides = {} }: { t: any, height?: nu
       ))}
 
       {/* Double line Champagne Frame or Calado Piña borders */}
-      {(t.id === "champagne-frame" || t.id === "calado-pina" || t.id === "katha-heirloom-pina" || t.id === "katha-heritage-frame") && (
+      {(t.id === "champagne-frame" || t.id === "calado-pina" || t.id === "katha-heirloom-pina" || t.id === "katha-heritage-frame" || t.id === "tracy-prince") && (
         <>
           <div style={{ 
             position: "absolute", 

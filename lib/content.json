@@ -319,9 +319,9 @@
   "customizer": {
     "note": "MATCH the prior book.kathabooth.com model (photobooth-template-studio). Do NOT use the flattened 2-format placeholder. Live preview slots + text zone are positioned as PERCENTAGES of the layout viewBox.",
     "authorityFiles": [
-      "photobooth-template-studio/lib/layouts.js (LAYOUT REGISTRY — slot + textZone rectangles per arrangement, 300-DPI viewBox; single source of slot math)",
-      "photobooth-template-studio/lib/templates.ts (48 'Katha Signature —' PRESETS: id, type, layoutId, colors, fontFamily, decorative SVG)",
-      "photobooth-template-studio/app/portal/[id]/template-design/TemplateDesignClient.tsx (reference live-preview implementation)"
+      "pb-v3/lib/layouts.js (LAYOUT REGISTRY — slot + textZone rectangles per arrangement, 300-DPI viewBox; single source of slot math; superset of legacy after 2026-07-14 harvest)",
+      "pb-v3/lib/templates.ts (full preset catalog + LUXURY_FONTS + tier-tagged HARMONY_PALETTES; legacy photobooth-template-studio is retired reference only)",
+      "pb-v3/components/customizer/ (live-preview implementation — the tested, mobile-first flow)"
     ],
     "model": "gallery of real presets -> pick a style -> personalize names/date/venue (+font, text-position) -> faithful live preview from layout geometry -> optional reference-photo upload to Supabase Storage",
     "formats": [
@@ -546,6 +546,50 @@
       "accent": "#C4B59D",
       "sName": "Abel & Calado",
       "sSub": "OCTOBER · MALIBU"
+    },
+    {
+      "id": "editorial-void",
+      "plate": "036",
+      "name": "Editorial Void",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "Fraunces",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "A study in Ma — three severe apertures adrift on unbroken Piña. No ornament; the negative space is the design.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#111112",
+      "ink": "#111112",
+      "accent": "#1A1816",
+      "sName": "ELENA & MARCUS",
+      "sSub": "AUGUST · PASADENA"
+    },
+    {
+      "id": "tracy-prince",
+      "plate": "038",
+      "name": "Tracy & Prince",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "Fraunces",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Double fine-lined frame in Champagne Heirloom on Piña ground — the Signature tier's quietest restraint.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#C4B59D",
+      "ink": "#241E1A",
+      "accent": "#C4B59D",
+      "sName": "TRACY & PRINCE",
+      "sSub": "JUNE · LONG BEACH"
     },
     {
       "id": "fn-1",

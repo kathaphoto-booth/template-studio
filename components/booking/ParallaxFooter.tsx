@@ -30,7 +30,7 @@ export function ParallaxFooter({ onReserve }: { onReserve: () => void }) {
         >
           <div className="flex items-baseline justify-between gap-6">
             <p className="font-mono text-[9.5px] tracking-[0.22em] uppercase text-[var(--color-katha-fnt)]">
-              // The Studio
+              {"// The Studio"}
             </p>
             <button
               type="button"

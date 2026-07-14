@@ -103,6 +103,138 @@ export const PRESETS: PhotoboothPreset[] = [
 
   // ─── 2. LOOM FRAME (Katha Signature)
   {
+    id: "katha-editorial-void",
+    name: "Katha Signature — The Editorial Void",
+    type: "strip",
+    layoutId: "strip-3",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "\'Fraunces\', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration."
+  },
+
+  {
+    id: "katha-editorial-void-postcard",
+    name: "Katha Signature — The Editorial Void Postcard",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "\'Fraunces\', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-editorial-void-landscape",
+    name: "Katha Signature — The Editorial Void Landscape",
+    type: "postcard",
+    layoutId: "pc-3-v",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "\'Fraunces\', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-editorial-void-landscape-2sq",
+    name: "Katha Signature — The Editorial Void Landscape 2 Squares",
+    type: "postcard",
+    layoutId: "pc-2-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "\'Fraunces\', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-editorial-void-landscape-3sq",
+    name: "Katha Signature — The Editorial Void Landscape 3 Squares",
+    type: "postcard",
+    layoutId: "pc-3-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "\'Fraunces\', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-tracy-prince",
+    name: "Katha Signature — Tracy & Prince",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "\'Fraunces\', serif",
+    titleText: "Tracy & Prince",
+    subTitleText: "",
+    dateText: "",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "0px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Playfair Display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
+  },
+
+  {
     id: "katha-loom-frame",
     name: "Katha Signature — Loom Frame",
     type: "strip",
@@ -1391,6 +1523,12 @@ const DECORATION_ALIASES: Record<string, string> = {
   "katha-celestial-bituin-postcard":      "katha-celestial-bituin",
   "katha-celestial-bituin-landscape":     "katha-celestial-bituin",
   "katha-celestial-bituin-postcard-vertical": "katha-celestial-bituin",
+  "katha-editorial-void-postcard":      "katha-editorial-void",
+  "katha-editorial-void-landscape":     "katha-editorial-void",
+  "katha-editorial-void-landscape-1sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-2sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-3sq": "katha-editorial-void",
+
   "katha-woven-silk-postcard":      "katha-woven-silk",
   "katha-woven-silk-landscape":     "katha-woven-silk",
   "katha-heirloom-pina-postcard":   "katha-heirloom-pina",
@@ -1477,6 +1615,7 @@ export const HARMONY_PALETTES = [
   {
     id: "classic-noir",
     name: "Classic Noir",
+    tier: "classic",
     bg: "#FAF9F5",
     text: "#1C1C1C",
     secondary: "#8A7342",
@@ -1486,6 +1625,7 @@ export const HARMONY_PALETTES = [
   {
     id: "royal-emerald",
     name: "Royal Emerald",
+    tier: "classic",
     bg: "#1E2B22",
     text: "#FAF6F0",
     secondary: "#DFCE83",
@@ -1495,6 +1635,7 @@ export const HARMONY_PALETTES = [
   {
     id: "terracotta-sunset",
     name: "Terracotta Sunset",
+    tier: "classic",
     bg: "#FBF5F0",
     text: "#3C1A14",
     secondary: "#BC6C52",
@@ -1504,6 +1645,7 @@ export const HARMONY_PALETTES = [
   {
     id: "midnight-onyx",
     name: "Midnight Onyx",
+    tier: "classic",
     bg: "#111111",
     text: "#FFFFFF",
     secondary: "#C5A85C",
@@ -1513,12 +1655,198 @@ export const HARMONY_PALETTES = [
   {
     id: "misty-lavender",
     name: "Misty Lavender",
+    tier: "classic",
     bg: "#F5F3F7",
     text: "#2C2235",
     secondary: "#8C7B99",
     border: "#D5CFDB",
     slotBg: "#EBE6EF",
   },
+  // ── Harvested family harmonies (2026-07-14) — one palette per distinct
+  // preset color scheme in the catalog; tier follows the source family
+  // (signature = strict Katha law, classic = wedding-tier latitude).
+  // content.json print stocks remain the deliberate client-facing five.
+  {
+    id: "heirloom-pina",
+    name: "Heirloom Piña",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#C4B59D",
+    border: "#C4B59D",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "editorial-void",
+    name: "Editorial Void",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#111112",
+    secondary: "#1A1816",
+    border: "#111112",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "loom-frame",
+    name: "Loom Frame",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#241E1A",
+    border: "#241E1A",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "knalum-night",
+    name: "Knalum Night",
+    tier: "signature",
+    bg: "#1A1816",
+    text: "#EAE2D5",
+    secondary: "#C4B59D",
+    border: "#241E1A",
+    slotBg: "#241E1A",
+  },
+  {
+    id: "brass-ring",
+    name: "Brass Ring",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#8A7350",
+    border: "#8A7350",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "binakul-weave",
+    name: "Binakul Weave",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#5A5D5A",
+    border: "#EAE2D5",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "capiz-sage",
+    name: "Capiz Sage",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#6E6A62",
+    border: "#9C958A",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "luxe-gold",
+    name: "Luxe Gold",
+    tier: "classic",
+    bg: "#FAF6F0",
+    text: "#1C1917",
+    secondary: "#C5A85C",
+    border: "#C5A85C",
+    slotBg: "#F4EDE3",
+  },
+  {
+    id: "rose-whisper",
+    name: "Rose Whisper",
+    tier: "classic",
+    bg: "#FAF9F6",
+    text: "#292524",
+    secondary: "#A59E92",
+    border: "#EBE9E4",
+    slotBg: "#EDEDE9",
+  },
+  {
+    id: "warm-terracotta",
+    name: "Warm Terracotta",
+    tier: "classic",
+    bg: "#8F4D39",
+    text: "#FCFAF7",
+    secondary: "#E3CE9F",
+    border: "#DEC190",
+    slotBg: "#9A543E",
+  },
+  {
+    id: "art-deco-noir",
+    name: "Art Deco Noir",
+    tier: "classic",
+    bg: "#161616",
+    text: "#DEC190",
+    secondary: "#DEC190",
+    border: "#90774D",
+    slotBg: "#222222",
+  },
+  {
+    id: "editorial-white",
+    name: "Editorial White",
+    tier: "classic",
+    bg: "#FCFCFC",
+    text: "#121212",
+    secondary: "#737373",
+    border: "#E5E5E5",
+    slotBg: "#F5F5F5",
+  },
+  {
+    id: "vintage-lace",
+    name: "Vintage Lace",
+    tier: "classic",
+    bg: "#F2EFE7",
+    text: "#4E4138",
+    secondary: "#A39382",
+    border: "#D9D1C5",
+    slotBg: "#EFECE3",
+  },
+  {
+    id: "royal-crest",
+    name: "Royal Crest",
+    tier: "classic",
+    bg: "#FCFBF8",
+    text: "#6B5526",
+    secondary: "#8A7342",
+    border: "#D4C59B",
+    slotBg: "#FAFAF8",
+  },
+  {
+    id: "botanical-arch",
+    name: "Botanical Arch",
+    tier: "classic",
+    bg: "#FCFAF6",
+    text: "#2B2D2B",
+    secondary: "#707A65",
+    border: "#E3DFD5",
+    slotBg: "#F5F3ED",
+  },
+  {
+    id: "decked-monogram",
+    name: "Decked Monogram",
+    tier: "classic",
+    bg: "#FAF7F0",
+    text: "#3D3A35",
+    secondary: "#A68D6A",
+    border: "#DDD7CD",
+    slotBg: "#F2ECE0",
+  },
+  {
+    id: "woven-silk",
+    name: "Woven Silk",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#C4B59D",
+    border: "#EAE2D5",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "celestial-bituin",
+    name: "Celestial Bituin",
+    tier: "signature",
+    bg: "#0B0C10",
+    text: "#C4B59D",
+    secondary: "#EAE2D5",
+    border: "#241E1A",
+    slotBg: "#0B0C10",
+  },
+
 ];
 
 // ─── SLOT-COUNT-AGNOSTIC SVG DECORATION ENGINE ─────────────────────────────────
@@ -1586,6 +1914,8 @@ export function renderDecorativeSvg(
           <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
         </g>
       `;
+    case "katha-editorial-void":
+      return "";
     case "katha-heirloom-pina":
       return `
         <!-- Dual calado champagne borders -->
@@ -1660,6 +1990,25 @@ export function renderDecorativeSvg(
           <line x1="-120" y1="0" x2="-24" y2="0" stroke-width="1" />
           <line x1="24" y1="0" x2="120" y2="0" stroke-width="1" />
           <polygon points="-8,0 0,-7 8,0 0,7" stroke-width="1.2" />
+        </g>
+      `;
+
+    case "katha-tracy-prince":
+      return `
+        <!-- Subtle Overlay Frame intruding 12px into the photo slot -->
+        ` + layout.slots.map((s: any) => `
+          <rect x="${s.x + 12}" y="${s.y + 12}" width="${s.w - 24}" height="${s.h - 24}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" opacity="0.8" />
+          <rect x="${s.x + 18}" y="${s.y + 18}" width="${s.w - 36}" height="${s.h - 36}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.5" />
+        `).join("") + `
+        
+        <!-- Outer Canvas Frame -->
+        <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.8" />
+        <rect x="${margin / 2 + 8}" y="${margin / 2 + 8}" width="${vb.w - margin - 16}" height="${vb.h - margin - 16}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
+        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" fill="none" stroke="${secondaryColor}">
+           <circle cx="0" cy="0" r="14" stroke-width="1.5" />
+           <circle cx="0" cy="0" r="6" stroke-width="0.75" />
+           <line x1="-140" y1="0" x2="-32" y2="0" stroke-width="1" />
+           <line x1="32" y1="0" x2="140" y2="0" stroke-width="1" />
         </g>
       `;
 
