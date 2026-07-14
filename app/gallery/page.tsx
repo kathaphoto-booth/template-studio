@@ -70,7 +70,6 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
       }}
       role="button"
       tabIndex={0}
-      aria-label={`Reserve with the ${t.name} plate`}
       className="titem cursor-pointer w-full"
     >
       <m.div
@@ -92,7 +91,7 @@ function GalleryCard({ t, onOpen }: { t: any; onOpen: (t: any) => void }) {
 
         <div className="text-center" style={{ transform: "translateZ(10px)" }}>
           <div className="mb-3"><Tag style={t.style} /></div>
-          <h3 className="font-display text-[24px] lg:text-[28px] font-light text-[var(--color-katha-hi)] mt-1 mb-1.5">{t.name}</h3>
+          <h2 className="font-display text-[24px] lg:text-[28px] font-light text-[var(--color-katha-hi)] mt-1 mb-1.5">{t.name}</h2>
           <p className="font-mono text-[11px] tracking-[0.14em] text-[var(--color-katha-mut)] uppercase">{t.formatLabel}</p>
         </div>
       </m.div>
@@ -351,7 +350,7 @@ export default function Gallery() {
       <ArchiveEntrance />
 
       {/* Page content — scrolls up over the fixed footer; dims under the drawer */}
-      <div className="drawer-dim relative z-10 bg-[var(--color-katha-l0)] shadow-[0_80px_140px_rgba(0,0,0,0.65)]">
+      <div role="main" className="drawer-dim relative z-10 bg-[var(--color-katha-l0)] shadow-[0_80px_140px_rgba(0,0,0,0.65)]">
 
         {/* Top bar */}
         <header className="flex items-center justify-between px-6 lg:px-12 py-6 border-b border-[var(--color-katha-ln)]">
@@ -485,6 +484,7 @@ export default function Gallery() {
         }`}
         style={{ paddingBottom: "max(env(safe-area-inset-bottom), 16px)" }}
         aria-hidden={!hudVisible}
+        inert={!hudVisible ? true : undefined}
       >
         <div className="bg-[var(--color-katha-l1)]/95 backdrop-blur-sm border border-[var(--color-katha-ln)] shadow-[0_24px_60px_rgba(0,0,0,0.6)] px-6 py-4 flex items-center gap-8 max-w-full">
           <div className="flex flex-col min-w-0">
