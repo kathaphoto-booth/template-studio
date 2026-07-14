@@ -103,6 +103,138 @@ export const PRESETS: PhotoboothPreset[] = [
 
   // ─── 2. LOOM FRAME (Katha Signature)
   {
+    id: "katha-editorial-void",
+    name: "Katha Signature — The Editorial Void",
+    type: "strip",
+    layoutId: "strip-3",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration."
+  },
+
+  {
+    id: "katha-editorial-void-postcard",
+    name: "Katha Signature — The Editorial Void Postcard",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-editorial-void-landscape",
+    name: "Katha Signature — The Editorial Void Landscape",
+    type: "postcard",
+    layoutId: "pc-3-v",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-editorial-void-landscape-2sq",
+    name: "Katha Signature — The Editorial Void Landscape 2 Squares",
+    type: "postcard",
+    layoutId: "pc-2-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-editorial-void-landscape-3sq",
+    name: "Katha Signature — The Editorial Void Landscape 3 Squares",
+    type: "postcard",
+    layoutId: "pc-3-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-tracy-prince",
+    name: "Katha Signature — Tracy & Prince",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'Playfair Display', serif",
+    titleText: "Tracy & Prince",
+    subTitleText: "",
+    dateText: "",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "0px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Playfair Display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
+  },
+
+  {
     id: "katha-loom-frame",
     name: "Katha Signature — Loom Frame",
     type: "strip",
@@ -1391,6 +1523,12 @@ const DECORATION_ALIASES: Record<string, string> = {
   "katha-celestial-bituin-postcard":      "katha-celestial-bituin",
   "katha-celestial-bituin-landscape":     "katha-celestial-bituin",
   "katha-celestial-bituin-postcard-vertical": "katha-celestial-bituin",
+  "katha-editorial-void-postcard":      "katha-editorial-void",
+  "katha-editorial-void-landscape":     "katha-editorial-void",
+  "katha-editorial-void-landscape-1sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-2sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-3sq": "katha-editorial-void",
+
   "katha-woven-silk-postcard":      "katha-woven-silk",
   "katha-woven-silk-landscape":     "katha-woven-silk",
   "katha-heirloom-pina-postcard":   "katha-heirloom-pina",
@@ -1586,6 +1724,8 @@ export function renderDecorativeSvg(
           <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
         </g>
       `;
+    case "katha-editorial-void":
+      return "";
     case "katha-heirloom-pina":
       return `
         <!-- Dual calado champagne borders -->
@@ -1660,6 +1800,25 @@ export function renderDecorativeSvg(
           <line x1="-120" y1="0" x2="-24" y2="0" stroke-width="1" />
           <line x1="24" y1="0" x2="120" y2="0" stroke-width="1" />
           <polygon points="-8,0 0,-7 8,0 0,7" stroke-width="1.2" />
+        </g>
+      `;
+
+    case "katha-tracy-prince":
+      return `
+        <!-- Subtle Overlay Frame intruding 12px into the photo slot -->
+        ` + layout.slots.map((s: any) => `
+          <rect x="${s.x + 12}" y="${s.y + 12}" width="${s.w - 24}" height="${s.h - 24}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" opacity="0.8" />
+          <rect x="${s.x + 18}" y="${s.y + 18}" width="${s.w - 36}" height="${s.h - 36}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.5" />
+        `).join("") + `
+        
+        <!-- Outer Canvas Frame -->
+        <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.8" />
+        <rect x="${margin / 2 + 8}" y="${margin / 2 + 8}" width="${vb.w - margin - 16}" height="${vb.h - margin - 16}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
+        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" fill="none" stroke="${secondaryColor}">
+           <circle cx="0" cy="0" r="14" stroke-width="1.5" />
+           <circle cx="0" cy="0" r="6" stroke-width="0.75" />
+           <line x1="-140" y1="0" x2="-32" y2="0" stroke-width="1" />
+           <line x1="32" y1="0" x2="140" y2="0" stroke-width="1" />
         </g>
       `;
 
