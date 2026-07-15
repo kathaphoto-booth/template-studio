@@ -26,10 +26,22 @@ import { wordmarkSvgMarkup, logomarkSvgMarkup } from './brand-geometry';
  *   3.80–      handoff — host fades the overlay and begins content entrance
  */
 
-const VOID = '#161311'; // Kamagong obsidian (matches the prior entrance ground)
-const ECRU = '#ECE7DB'; // Piña Ecru bone
-const GILT_DARK = '#8A7350'; // gilt speaking on dark — extrusion walls + seal
-const KEY_WARM = '#F0DCBC'; // champagne-warmed key light
+/* Fallbacks mirror the @theme tokens; the live values are read from CSS custom
+   properties at mount (overlay law: never hardcode hex in material props).
+   VOID reconciled from the old entrance's #161311 to the real l0 token. */
+const FALLBACK = {
+  void: '#110F0D', // --color-katha-l0
+  bone: '#E4DACA', // --color-katha-hi
+  gilt: '#DCCBB5', // --color-katha-gilt
+  giltDark: '#8A7350', // --color-katha-gilt-dark
+};
+const KEY_WARM = '#F0DCBC'; // champagne-warmed key light — a temperature, not a surface
+
+function cssColor(name: string, fallback: string): string {
+  if (typeof window === 'undefined') return fallback;
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
 
 const HANDOFF_AT = 3.8;
 
@@ -76,23 +88,29 @@ function useBrandAssembly() {
     const letterGeos = buildGeoms(wordmarkSvgMarkup(), 26, 2.5);
     const wmSize = center(letterGeos);
 
-    // Letter materials: [0] faces + bevel (ecru piña sheen), [1] walls (gilt).
+    const bone = cssColor('--color-katha-hi', FALLBACK.bone);
+    const gilt = cssColor('--color-katha-gilt', FALLBACK.gilt);
+    const giltDark = cssColor('--color-katha-gilt-dark', FALLBACK.giltDark);
+
+    // Letter materials: [0] faces + bevel (bone with piña-fibre sheen — the
+    // grazing response comes from sheen, never a clearcoat varnish),
+    // [1] walls (gilt as an older, duller bronze; the key-light develop beat
+    // warms it further in useFrame).
     const letterMats = letterGeos.map(() => {
       const face = new THREE.MeshPhysicalMaterial({
-        color: ECRU,
-        roughness: 0.55,
+        color: bone,
+        roughness: 0.62,
         metalness: 0.04,
         sheen: 1,
-        sheenRoughness: 0.6,
-        sheenColor: new THREE.Color('#DCCBB5'),
-        clearcoat: 0.12,
+        sheenRoughness: 0.5,
+        sheenColor: new THREE.Color(gilt),
         transparent: true,
         opacity: 0,
       });
       const wall = new THREE.MeshStandardMaterial({
-        color: GILT_DARK,
-        roughness: 0.32,
-        metalness: 0.65,
+        color: giltDark,
+        roughness: 0.55,
+        metalness: 0.5,
         transparent: true,
         opacity: 0,
       });
@@ -103,14 +121,14 @@ function useBrandAssembly() {
     const sealGeos = buildGeoms(logomarkSvgMarkup(), 40, 4);
     const sealSize = center(sealGeos);
     const sealMat = new THREE.MeshStandardMaterial({
-      color: GILT_DARK,
-      roughness: 0.4,
-      metalness: 0.55,
+      color: giltDark,
+      roughness: 0.5,
+      metalness: 0.5,
       transparent: true,
       opacity: 0,
     });
 
-    return { letterGeos, letterMats, wmSize, sealGeos, sealMat, sealSize };
+    return { letterGeos, letterMats, wmSize, sealGeos, sealMat, sealSize, bone };
   }, []);
 }
 
@@ -122,7 +140,7 @@ function qaTempo(): number {
 }
 
 function FoundryPlate({ onHandoff }: { onHandoff: () => void }) {
-  const { letterGeos, letterMats, wmSize, sealGeos, sealMat, sealSize } = useBrandAssembly();
+  const { letterGeos, letterMats, wmSize, sealGeos, sealMat, sealSize, bone } = useBrandAssembly();
   const tempo = useMemo(() => qaTempo(), []);
 
   // Responsive fit: the wordmark takes 78% of the viewport width (capped for
@@ -177,9 +195,14 @@ function FoundryPlate({ onHandoff }: { onHandoff: () => void }) {
       wall.opacity = p;
     });
 
-    // Beat 3 — the key light develops the print.
-    if (keyLight.current) keyLight.current.intensity = 2.3 * easeInOutCubic(phase(t, 1.2, 1.4));
-    if (ambient.current) ambient.current.intensity = 0.05 + 0.13 * easeInOutCubic(phase(t, 1.2, 1.4));
+    // Beat 3 — the key light develops the print, and the gilt walls answer:
+    // dull old bronze settling toward a soft, never-mirror glow.
+    const develop = easeInOutCubic(phase(t, 1.2, 1.4));
+    if (keyLight.current) keyLight.current.intensity = 2.3 * develop;
+    if (ambient.current) ambient.current.intensity = 0.05 + 0.13 * develop;
+    letterMats.forEach(([, wall]) => {
+      wall.roughness = 0.55 - 0.13 * develop;
+    });
 
     // Beat 4 — the foundry seal, once.
     if (sealGroup.current) {
@@ -209,7 +232,7 @@ function FoundryPlate({ onHandoff }: { onHandoff: () => void }) {
       {/* The archive rule — a hairline above the wordmark. */}
       <mesh ref={rule} position={[0, layout.ruleY, -0.4]}>
         <boxGeometry args={[layout.ruleW, 0.012, 0.012]} />
-        <meshBasicMaterial ref={ruleMat} color={ECRU} transparent opacity={0} />
+        <meshBasicMaterial ref={ruleMat} color={bone} transparent opacity={0} />
       </mesh>
 
       {/* The wordmark — five extruded plates. SVG is y-down: flip Y. */}
@@ -243,6 +266,7 @@ export interface ArchiveEntranceSceneProps {
 }
 
 export default function ArchiveEntranceScene({ onReady, onHandoff }: ArchiveEntranceSceneProps) {
+  const voidColor = React.useMemo(() => cssColor('--color-katha-l0', FALLBACK.void), []);
   return (
     <Canvas
       dpr={[1, 2]}
@@ -251,8 +275,8 @@ export default function ArchiveEntranceScene({ onReady, onHandoff }: ArchiveEntr
       onCreated={() => onReady()}
       style={{ position: 'absolute', inset: 0 }}
     >
-      <color attach="background" args={[VOID]} />
-      <fog attach="fog" args={[VOID, 13, 24]} />
+      <color attach="background" args={[voidColor]} />
+      <fog attach="fog" args={[voidColor, 13, 24]} />
       <FoundryPlate onHandoff={onHandoff} />
     </Canvas>
   );

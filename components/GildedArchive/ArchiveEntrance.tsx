@@ -18,7 +18,7 @@ import dynamic from 'next/dynamic';
  *    → overlay fades, content wins. The site never waits on the ceremony.
  */
 
-const VOID = '#161311';
+const VOID = '#110F0D'; // --color-katha-l0 — reconciled from the old entrance's #161311
 const LOAD_GRACE_MS = 2600;
 const FADE_MS = 750;
 const SESSION_KEY = 'katha-entrance-played';
