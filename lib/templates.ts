@@ -46,7 +46,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -67,7 +67,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -88,7 +88,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -111,7 +111,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "\'Fraunces\', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -133,7 +133,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "\'Fraunces\', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -155,7 +155,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "\'Fraunces\', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -177,7 +177,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "\'Fraunces\', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -199,7 +199,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "\'Fraunces\', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -221,7 +221,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "\'Fraunces\', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Tracy & Prince",
     subTitleText: "",
     dateText: "",
@@ -243,7 +243,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#120704",
     borderColor: "#120704",
     secondaryColor: "#917259",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Romansa",
     subTitleText: "IKA-6 NA LABAS",
     dateText: "MAYNILA · 1957",
@@ -264,7 +264,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -285,7 +285,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -306,7 +306,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -328,7 +328,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -349,7 +349,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -370,7 +370,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -392,7 +392,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#8A7350",
     secondaryColor: "#8A7350",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "SOUTH COTABATO",
@@ -413,7 +413,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#8A7350",
     secondaryColor: "#8A7350",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "SOUTH COTABATO",
@@ -434,7 +434,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#8A7350",
     secondaryColor: "#8A7350",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "SOUTH COTABATO",
@@ -456,7 +456,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#5A5D5A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ABRA",
@@ -477,7 +477,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#5A5D5A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ABRA",
@@ -498,7 +498,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#5A5D5A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ABRA",
@@ -520,7 +520,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9C958A",
     secondaryColor: "#6E6A62",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -541,7 +541,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9C958A",
     secondaryColor: "#6E6A62",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -562,7 +562,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9C958A",
     secondaryColor: "#6E6A62",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -575,7 +575,7 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
   },
 
-  // ─── 7. HERITAGE FRAME (Katha Signature) — palette + Fraunces (Signature rule)
+  // ─── 7. HERITAGE FRAME (Katha Signature) — palette + FH Ronaldson (Signature rule)
   {
     id: "katha-heritage-frame",
     name: "Katha Signature — Heritage Frame",
@@ -585,7 +585,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Abel & Calado",
     subTitleText: "",
     dateText: "",
@@ -595,7 +595,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Fraunces display set on a Piña Ecru ground. Abel & Calado Heritage Frame."
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with FH Ronaldson display set on a Piña Ecru ground. Abel & Calado Heritage Frame."
   },
 
   // ─── 8. TRADITION GOLD LUXE (Classic Tier)
@@ -1185,7 +1185,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -1206,7 +1206,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -1248,7 +1248,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9FA38F",
     secondaryColor: "#6E7268",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -1272,7 +1272,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -1293,7 +1293,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -1314,7 +1314,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -1335,7 +1335,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -1356,7 +1356,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -1377,7 +1377,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -1461,7 +1461,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Bespoke Silk",
     subTitleText: "HANDCRAFTED",
     dateText: "KATHA",
@@ -1482,7 +1482,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Bespoke Silk",
     subTitleText: "HANDCRAFTED",
     dateText: "KATHA",
@@ -1503,7 +1503,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Bespoke Silk",
     subTitleText: "HANDCRAFTED",
     dateText: "KATHA",
@@ -1524,7 +1524,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#c4b59d",
     borderColor: "#241e1a",
     secondaryColor: "#eae2d5",
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "BITUIN",
     subTitleText: "star in the night sky",
     dateText: "OCTOBER 26, 2024 • MANILA",
@@ -1534,7 +1534,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#0B0C10",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Deep, textured night sky background accented with celestial deconstructed double-borders and an elegant 8-pointed gold star layout. Set in high-end Fraunces and Montserrat."
+    designerExplanation: "Deep, textured night sky background accented with celestial deconstructed double-borders and an elegant 8-pointed gold star layout. Set in high-end FH Ronaldson and Montserrat."
   },
 ];
 
@@ -1939,14 +1939,24 @@ export function renderDecorativeSvg(
     case "katha-editorial-void":
       return "";
     case "katha-guhit-1957":
+      // One plate, subtractive ink: a 1957 romansa interior was black on
+      // newsprint. Everything here darkens the paper (multiply) — ink never
+      // sits on top of it. No maker's mark on the print face (ruled 2026-07-15);
+      // attribution lives in designerExplanation and the archive.
       return `
-        <!-- Komiks panel keyline — Grepo's heavy border -->
+        <defs>
+          <pattern id="guhit-screen" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <circle cx="7" cy="7" r="1.7" fill="#120704"/>
+          </pattern>
+        </defs>
+        <!-- Komiks panel keyline — the heavy 1957 border -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${borderColor}" stroke-width="2.5" />
         ` + layout.slots.map((s: any) => `
           <rect x="${s.x - 6}" y="${s.y - 6}" width="${s.w + 12}" height="${s.h + 12}" fill="none" stroke="${borderColor}" stroke-width="1" opacity="0.55" />
+          <rect x="${s.x}" y="${s.y + s.h - 26}" width="${s.w}" height="26" fill="#120704" opacity="0.05" style="mix-blend-mode:multiply" />
         `).join("") + `
-        <!-- guhit ni — the signature, once, small, inside the panel like his pages -->
-        <text x="${vb.w - margin - 16}" y="${vb.h - margin - 16}" text-anchor="end" font-family="'Courier Prime', monospace" font-size="22" letter-spacing="2" fill="${secondaryColor}">guhit ni d.a. grepo · 1957</text>
+        <!-- Coarse halftone screen at the pedestal's foot — ink sinking into paper -->
+        <rect x="${tz.x}" y="${tz.y + tz.h - 44}" width="${tz.w}" height="44" fill="url(#guhit-screen)" opacity="0.16" style="mix-blend-mode:multiply" />
       `;
 
     case "katha-heirloom-pina":

@@ -9,7 +9,7 @@
 //
 // TWO-TIER MODEL (this is the whole trick):
 //   • Katha Signature presets  (id ^katha- / name "Katha Signature —")
-//       → held to the 11-token Katha palette + Fraunces display.
+//       → held to the 11-token Katha palette + FH Ronaldson display.
 //   • Classic presets          (everything else)
 //       → intentionally polished/symmetric wedding aesthetics. EXEMPT from
 //         Katha brand chrome (see .impeccable/ignore.md → classic-template-tier).
@@ -59,8 +59,8 @@ const nearCanon = (hex) => {
 };
 
 // Display font mandate for Signature tier (DESIGN_SYSTEM §3 / drift D1).
-const SIGNATURE_DISPLAY_OK = /fraunces/i;
-const SIGNATURE_DISPLAY_DRIFT = /cormorant|italiana|playfair|cinzel|rochester|parisienne/i;
+const SIGNATURE_DISPLAY_OK = /fh ronaldson/i;
+const SIGNATURE_DISPLAY_DRIFT = /fraunces|cormorant|italiana|playfair|cinzel|rochester|parisienne/i;
 
 // Forbidden user-facing vocabulary (DESIGN_SYSTEM §6 + §VIII agentic leak).
 const FORBIDDEN_VOCAB = [
@@ -134,7 +134,7 @@ for (const b of blocks) {
   // display font mandate
   const ff = field(b, "fontFamily") || "";
   if (SIGNATURE_DISPLAY_DRIFT.test(ff) && !SIGNATURE_DISPLAY_OK.test(ff))
-    P1.push(`${id} · fontFamily ${ff.trim()} — drift D1: Signature display must be Fraunces`);
+    P1.push(`${id} · fontFamily ${ff.trim()} — drift D1: Signature display must be FH Ronaldson`);
 }
 
 // vocab scan over USER-FACING field values only (not code comments)

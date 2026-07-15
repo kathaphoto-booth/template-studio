@@ -533,12 +533,12 @@
       "booth": "Oak",
       "formatLabel": "4×6 Postcard",
       "layout": "pv-2",
-      "font": "Fraunces",
+      "font": "FH Ronaldson Display",
       "ratio": {
         "w": 2,
         "h": 3
       },
-      "desc": "Double fine-lined frame in Champagne Heirloom with Fraunces serif set on a Piña Ecru ground.",
+      "desc": "Double fine-lined frame in Champagne Heirloom with FH Ronaldson serif set on a Piña Ecru ground.",
       "paper": "#E8E1D3",
       "slot": "#F5EFE4",
       "edge": "#C4B59D",
@@ -555,7 +555,7 @@
       "booth": "Oak",
       "formatLabel": "2×6 Strip",
       "layout": "strip-3",
-      "font": "Fraunces",
+      "font": "FH Ronaldson Display",
       "ratio": {
         "w": 1,
         "h": 3
@@ -577,7 +577,7 @@
       "booth": "Oak",
       "formatLabel": "4×6 Postcard",
       "layout": "pv-2",
-      "font": "Fraunces",
+      "font": "FH Ronaldson Display",
       "ratio": {
         "w": 2,
         "h": 3
