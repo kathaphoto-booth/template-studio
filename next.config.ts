@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
   images: {
+    formats: ['image/avif', 'image/webp'],
+    // One year: portfolio assets are content-hashed by filename convention.
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: 'https',
@@ -66,11 +69,9 @@ const nextConfig: NextConfig = {
     return list;
   },
   async rewrites() {
+    // NOTE: no '/' rewrite — the root is app/page.tsx, which forwards query
+    // params and redirects to /gallery (the public front door).
     return [
-      {
-        source: '/',
-        destination: '/index.html',
-      },
       {
         source: '/template-design',
         destination: '/portal/guest/template-design',
@@ -80,6 +81,11 @@ const nextConfig: NextConfig = {
         destination: '/inquire',
       }
     ];
+  },
+  // The legacy /reserve flow is consolidated into the gallery's Vault Drawer.
+  // Query strings (?tier=, ?lead=) are preserved through the redirect.
+  async redirects() {
+    return [{ source: '/reserve', destination: '/gallery', permanent: true }];
   },
   output: 'standalone',
   transpilePackages: ['motion'],

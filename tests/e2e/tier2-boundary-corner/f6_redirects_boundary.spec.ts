@@ -25,7 +25,8 @@ test.describe('F6: URL Redirection - Tier 2 Boundary/Corner', () => {
     await page.goto('/template-design/');
 
     await expect(page).toHaveURL(/\/template-design\/?$/);
-    await expect(page.getByRole('heading', { name: 'Choose your style' })).toBeVisible();
+    // Harvest customizer landmark — the stepper's 'Inscription' step label.
+    await expect(page.getByText('Inscription')).toBeVisible();
   });
 
   test('T2.3: unknown route returns the 404 page', async ({ page }) => {
@@ -39,7 +40,8 @@ test.describe('F6: URL Redirection - Tier 2 Boundary/Corner', () => {
     await page.goto('/template-design?utm_source=instagram&ref=bio');
 
     await expect(page).toHaveURL(/\/template-design\?utm_source=instagram&ref=bio$/);
-    await expect(page.getByRole('heading', { name: 'Choose your style' })).toBeVisible();
+    // Harvest customizer landmark — the stepper's 'Inscription' step label.
+    await expect(page.getByText('Inscription')).toBeVisible();
   });
 
   test('T2.5: deleted legacy route lands on the new domain with a 404', async ({ page }) => {

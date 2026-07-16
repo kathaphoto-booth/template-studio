@@ -2,7 +2,7 @@
 name: Katha Photo Booth
 description: Perseverance composed into thread — Filipino heritage woven through wabi-sabi web design.
 colors:
-  primary: "#8C382A"
+  primary: "#3D2B1F"
   primary-deep: "#6E2C20"
   neutral-bg: "#EAE2D5"
   obsidian-weave: "#111112"
@@ -11,7 +11,7 @@ colors:
   champagne-heirloom: "#C4B59D"
   iron-bark: "#241E1A"
   knalum-ink: "#1A1816"
-  loko-rust: "#8C382A"
+  loko-rust: "#3D2B1F"
   terracotta-earth: "#A35C44"
   abel-slate: "#5A5D5A"
   capiz-sage: "#B5B8A3"
@@ -64,6 +64,18 @@ components:
 
 # Katha Photo Booth — Visual Design System
 
+> **SCOPE (reconciled 2026-07-13).** This file governs the **print catalog** —
+> the Katha Signature preset system (`lib/templates.ts`, guarded by
+> `scripts/katha-template-guard.mjs`) and the physical prints guests keep.
+> The **booking web UI** (gallery → intake → customizer → portal) is governed
+> by the **Gilded Archive**: tokens in `app/globals.css @theme`, prose law in
+> the repo-root `DESIGN.md` of the orchestration repo. Where the two conflict
+> on WEB surfaces, the Gilded Archive wins — the funnel's single high-intent
+> accent is gilt `#DCCBB5` (never Loko Rust in app chrome), errors speak in
+> ink + a gilt rule (no red), and the Carved-Wood rule below is a PRINT
+> display rule (Cormorant is permitted as web body type). Sections 2–6 apply
+> to prints and preset artwork; read them through that lens.
+
 ## 1. Overview
 
 Katha (Tagalog) — to compose, to weave a poem or story. Not a noun; a verb. The booth
@@ -85,7 +97,7 @@ space (Ma). Data must reach the user as a continuous narrative thread, never ste
 ## 2. Colors
 
 ### Primary (sacred)
-- **Loko Rust** (#8C382A): The sacred CTA — and only the sacred CTA. From boiled loko
+- **Loko Rust** (#3D2B1F): The sacred CTA — and only the sacred CTA. From boiled loko
   root in the T'nalak tradition: blood, vitality, permission. Exactly one visible per
   screen. Its scarcity is the point.
 

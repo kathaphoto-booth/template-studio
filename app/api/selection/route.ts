@@ -107,12 +107,12 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
 
   // Premium Wabi-Sabi styled HTML email matching Katha aesthetic
   let html = `
-    <div style="font-family:'Hanken Grotesk', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#FAF9F5; color:#241E1A; line-height:1.6; border: 1px solid #EAE2D5; border-radius:0;">
-      <p style="font-family:'Libre Franklin', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#8C382A; margin-bottom: 24px; font-weight:600;">
+    <div style="font-family:'EB Garamond', Georgia, serif; max-width:600px; margin:0 auto; padding:40px; background-color:#FAF9F5; color:#241E1A; line-height:1.6; border: 1px solid #EAE2D5; border-radius:0;">
+      <p style="font-family:'Inter', sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:0.2em; color:#8A7350; margin-bottom: 24px; font-weight:600;">
         Katha Template Studio Notification
       </p>
       
-      <h2 style="font-family:'Playfair Display', serif; font-weight:400; font-size:22px; letter-spacing:-0.01em; margin-bottom: 30px; color:#241E1A; border-bottom: 1px solid #C4B59D; padding-bottom: 12px;">
+      <h2 style="font-family:'Fraunces', serif; font-weight:400; font-size:22px; letter-spacing:-0.01em; margin-bottom: 30px; color:#241E1A; border-bottom: 1px solid #DCCBB5; padding-bottom: 12px;">
         New Template Selection
       </h2>
       
@@ -152,19 +152,19 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       </table>
 
       ${s.notes ? `
-        <div style="background-color:#EAE2D5; padding:20px; margin-bottom:30px; border-top:1px dashed #C4B59D; font-size:14px; font-style:italic; color:#241E1A;">
+        <div style="background-color:#EAE2D5; padding:20px; margin-bottom:30px; border-left:3px solid #8A7350; font-size:14px; font-style:italic; color:#241E1A;">
           <strong>Client Notes:</strong><br/>
           "${s.notes ? escapeHtml(s.notes) : ""}"
         </div>
       ` : ""}
 
       <div style="margin-top:35px; margin-bottom:35px; text-align:center;">
-        <a href="${customizeLink}" style="display:inline-block; font-family:'Libre Franklin', sans-serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#8C382A; color:#FAF9F5; padding:16px 32px; text-decoration:none; border-radius:0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <a href="${customizeLink}" style="display:inline-block; font-family:'Inter', sans-serif; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.15em; background-color:#110F0D; color:#DCCBB5; padding:16px 32px; text-decoration:none; border-radius:0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
           Open in Studio
         </a>
       </div>
 
-      <p style="font-size:12px; color:#5A564E; text-align:center; border-top:1px dashed #C4B59D; padding-top:20px; margin-top:30px; font-style:italic;">
+      <p style="font-size:12px; color:#5A564E; text-align:center; border-top:1px dashed #DCCBB5; padding-top:20px; margin-top:30px; font-style:italic;">
         Clicking the button will open the Admin Studio with the client's names, event date, venue, selected template, and chosen font pre-filled.
       </p>
     </div>
@@ -373,19 +373,46 @@ export async function POST(req: NextRequest) {
     address: body.address ? String(body.address).slice(0, 500) : null,
   };
 
-  // Fan out to dispatch targets in parallel; report each result
-  const results = await Promise.all([
+  // ── Durable capture FIRST. A lead must never depend on email delivery.
+  // The Supabase row is the source of truth; notifications ride on top of it.
+  // If the DB write fails while Supabase is configured, return 503 so the
+  // client retries — a lost lead is the worst possible outcome here.
+  const dbResult = await dispatchSupabase(selection).then(r => ({ target: "supabase", ...r }));
+  const supabaseConfigured = !!supabaseAdmin;
+  if (supabaseConfigured && !dbResult.ok) {
+    console.error("[LEAD_CAPTURE_FAILED]", JSON.stringify({ selection, detail: dbResult.detail }));
+    return NextResponse.json(
+      { ok: false, error: "capture failed — please retry", dispatch: [dbResult] },
+      { status: 503 },
+    );
+  }
+
+  // ── Notifications — best-effort, never block capture.
+  const [emailResult, honeybookResult] = await Promise.all([
     dispatchEmail(selection).then(r => ({ target: "email", ...r })),
     dispatchHoneyBook(selection).then(r => ({ target: "honeybook", ...r })),
-    dispatchSupabase(selection).then(r => ({ target: "supabase", ...r })),
   ]);
 
+  const notified = emailResult.ok || honeybookResult.ok;
+  // When Supabase isn't configured (local/no env), fall back to notification as capture.
+  const captured = supabaseConfigured ? dbResult.ok : notified;
 
-  const anyOk = results.some(r => r.ok);
+  // A captured-but-unnotified lead must never look like a clean success. Emit a
+  // greppable tag so a daily "unnotified leads" check (or log alert) surfaces it.
+  if (captured && !notified) {
+    console.error("[UNNOTIFIED_LEAD]", JSON.stringify({
+      selectedAt: selection.selectedAt,
+      names: selection.names, date: selection.date, venue: selection.venue,
+      template: selection.templateName, lead: selection.lead,
+      email: emailResult.detail, honeybook: honeybookResult.detail,
+    }));
+  }
 
+  const results = [emailResult, honeybookResult, dbResult];
   return NextResponse.json({
-    ok: anyOk,
+    ok: captured,
+    notified,
     selection,
     dispatch: results,
-  }, { status: anyOk ? 200 : 202 }); // 202 = recorded, no dispatch yet (no env)
+  }, { status: captured ? 200 : 202 }); // 202 = captured, notification pending
 }

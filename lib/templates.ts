@@ -3,8 +3,11 @@
 // and the client gallery (app/gallery/). Edit decoration HERE only — it updates
 // preview, canvas export, AND the gallery thumbnails simultaneously.
 
-import { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout, FORMAT_MARGIN } from "./layouts.js";
-export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout };
+export { LAYOUTS, SAFE_MARGIN, SLOT_GAP, VIEWBOX, getLayout, layoutsForFormat, defaultLayoutFor, resolveLayout, getModifiedLayout } from "@/lib/layouts";
+import { resolveLayout, VIEWBOX, FORMAT_MARGIN, getModifiedLayout } from "@/lib/layouts";
+
+// Gilded Archive sacred accent (Satin Champagne) — the one thread of intent on dark grounds.
+const GILT_THREAD = "#DCCBB5";
 
 // Types
 export interface PhotoboothPreset {
@@ -43,11 +46,11 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "24px",
     slotBgColor: "#EAE2D5",
@@ -55,6 +58,50 @@ export const PRESETS: PhotoboothPreset[] = [
     decorativeSvg: "",
     designerExplanation: "Unbleached piña-fiber ground with a fine calado openwork divider drawn in champagne thread. Iron-bark serif set with quiet restraint."
   },
+  {
+    id: "katha-heirloom-pina-postcard",
+    name: "Katha Signature — Heirloom Piña Postcard",
+    type: "postcard-vertical",
+    layoutId: "pv-1-full",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "The Heirloom Piña strip rendered as a 4×6 postcard. Piña-fiber ecru ground with a champagne double-frame and calado openwork divider."
+  },
+  {
+    id: "katha-heirloom-pina-landscape",
+    name: "Katha Signature — Heirloom Piña Landscape",
+    type: "postcard",
+    layoutId: "pc-3-v",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Unbleached piña-fiber ground with a fine calado openwork divider. Landscape postcard variant."
+  },
+
+  // ─── 2. LOOM FRAME (Katha Signature)
   {
     id: "katha-editorial-void",
     name: "Katha Signature — The Editorial Void",
@@ -64,7 +111,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -76,6 +123,7 @@ export const PRESETS: PhotoboothPreset[] = [
     decorativeSvg: "",
     designerExplanation: "An uncompromising execution of Ma. Severe, clean photo strip layout floating on a massive expanse of Piña Ecru. For clients who want pure text, negative space, and absolute minimal decoration."
   },
+
   {
     id: "katha-editorial-void-postcard",
     name: "Katha Signature — The Editorial Void Postcard",
@@ -85,7 +133,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -97,6 +145,7 @@ export const PRESETS: PhotoboothPreset[] = [
     decorativeSvg: "",
     designerExplanation: "An uncompromising execution of Ma. Severe, clean vertical postcard layout floating on a massive expanse of Piña Ecru."
   },
+
   {
     id: "katha-editorial-void-landscape",
     name: "Katha Signature — The Editorial Void Landscape",
@@ -106,7 +155,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#111112",
     borderColor: "#111112",
     secondaryColor: "#1A1816",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "A Study in Ma",
     subTitleText: "MMXXVI",
     dateText: "MANILA",
@@ -118,29 +167,95 @@ export const PRESETS: PhotoboothPreset[] = [
     decorativeSvg: "",
     designerExplanation: "An uncompromising execution of Ma. Severe, clean landscape postcard layout floating on a massive expanse of Piña Ecru."
   },
+
   {
-    id: "katha-heirloom-pina-landscape",
-    name: "Katha Signature — Heirloom Piña Landscape",
+    id: "katha-editorial-void-landscape-2sq",
+    name: "Katha Signature — The Editorial Void Landscape 2 Squares",
     type: "postcard",
-    layoutId: "pc-3-v",
+    layoutId: "pc-2-sq",
     backgroundColor: "#EAE2D5",
-    textColor: "#241E1A",
-    borderColor: "#C4B59D",
-    secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "Maria & Jose",
-    subTitleText: "JULY 25, 2026",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "18px",
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Unbleached piña-fiber ground with a fine calado openwork divider. Landscape postcard variant."
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
   },
 
-  // ─── 2. LOOM FRAME (Katha Signature)
+  {
+    id: "katha-editorial-void-landscape-3sq",
+    name: "Katha Signature — The Editorial Void Landscape 3 Squares",
+    type: "postcard",
+    layoutId: "pc-3-sq",
+    backgroundColor: "#EAE2D5",
+    textColor: "#111112",
+    borderColor: "#111112",
+    secondaryColor: "#1A1816",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "A Study in Ma",
+    subTitleText: "MMXXVI",
+    dateText: "MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+  },
+
+  {
+    id: "katha-tracy-prince",
+    name: "Katha Signature — Tracy & Prince",
+    type: "postcard-vertical",
+    layoutId: "pv-2",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Tracy & Prince",
+    subTitleText: "",
+    dateText: "",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "0px",
+    slotGap: "24px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Playfair Display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
+  },
+
+  {
+    id: "katha-guhit-1957",
+    name: "Katha Signature — Guhit 1957",
+    type: "strip",
+    layoutId: "strip-3",
+    backgroundColor: "#F9D2AE",
+    textColor: "#120704",
+    borderColor: "#120704",
+    secondaryColor: "#917259",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Romansa",
+    subTitleText: "IKA-6 NA LABAS",
+    dateText: "MAYNILA · 1957",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "2px",
+    slotGap: "24px",
+    slotBgColor: "#E5B893",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "The easter egg. Aged-newsprint ground and dense komiks ink sampled directly from the 1957 Romansa Komiks pages of Deo Asis Grepo — Golden-Age Philippine Komiks illustrator, the founder's grandfather. Heavy panel keylines, one quiet signature. A printed thing, made by hand, passed down."
+  },
+
   {
     id: "katha-loom-frame",
     name: "Katha Signature — Loom Frame",
@@ -149,7 +264,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -170,7 +285,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -191,7 +306,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -213,7 +328,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -223,7 +338,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single loko-root rust rule — the dreamweaver's tri-color."
+    designerExplanation: "T'nalak soil-black ground from the seven-day knalum boil. Raw-fiber ecru lettering with a single satin-champagne rule — the dreamweaver's third thread, gilded."
   },
   {
     id: "katha-knalum-night-postcard",
@@ -234,7 +349,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -244,7 +359,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. 4×6 postcard variant."
+    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single satin-champagne accent. 4×6 postcard variant."
   },
   {
     id: "katha-knalum-night-landscape",
@@ -255,7 +370,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -265,7 +380,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single loko-root rust accent. Landscape postcard variant."
+    designerExplanation: "T'nalak soil-black ground with raw-fiber ecru lettering and a single satin-champagne accent. Landscape postcard variant."
   },
 
   // ─── 4. BRASS RING (Katha Signature)
@@ -275,9 +390,9 @@ export const PRESETS: PhotoboothPreset[] = [
     type: "strip",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Playfair Display', serif",
+    borderColor: "#8A7350",
+    secondaryColor: "#8A7350",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "SOUTH COTABATO",
@@ -287,7 +402,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single loko-rust circle beneath the names. Permission, and blessing."
+    designerExplanation: "The brass ring offered when a finished cloth leaves the loom, drawn as a single gilded circle beneath the names. Permission, and blessing."
   },
   {
     id: "katha-brass-ring-postcard",
@@ -296,9 +411,9 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Playfair Display', serif",
+    borderColor: "#8A7350",
+    secondaryColor: "#8A7350",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "SOUTH COTABATO",
@@ -308,7 +423,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "The brass ring permission seal, postcard-format. A single loko-rust ring beneath the names."
+    designerExplanation: "The brass ring permission seal, postcard-format. A single gilded ring beneath the names."
   },
   {
     id: "katha-brass-ring-landscape",
@@ -317,9 +432,9 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-v",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#8C382A",
-    secondaryColor: "#8C382A",
-    fontFamily: "'Playfair Display', serif",
+    borderColor: "#8A7350",
+    secondaryColor: "#8A7350",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "SOUTH COTABATO",
@@ -329,7 +444,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "The brass ring permission seal, landscape postcard format. A single loko-rust ring beneath the names."
+    designerExplanation: "The brass ring permission seal, landscape postcard format. A single gilded ring beneath the names."
   },
 
   // ─── 5. BINAKUL WEAVE (Katha Signature)
@@ -339,9 +454,9 @@ export const PRESETS: PhotoboothPreset[] = [
     type: "strip",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#C4B59D",
+    borderColor: "#EAE2D5",
     secondaryColor: "#5A5D5A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ABRA",
@@ -360,9 +475,9 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#C4B59D",
+    borderColor: "#EAE2D5",
     secondaryColor: "#5A5D5A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ABRA",
@@ -381,9 +496,9 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-v",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
-    borderColor: "#C4B59D",
+    borderColor: "#EAE2D5",
     secondaryColor: "#5A5D5A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ABRA",
@@ -405,7 +520,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9C958A",
     secondaryColor: "#6E6A62",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -426,7 +541,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9C958A",
     secondaryColor: "#6E6A62",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -447,7 +562,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#9C958A",
     secondaryColor: "#6E6A62",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -460,18 +575,18 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Capiz-shell windowpane in sage. Landscape postcard variant of the Capiz Sage signature."
   },
 
-  // ─── 7. TRACY & PRINCE (Katha Signature) — palette + Playfair Display (Vince-Alignment 2.2)
+  // ─── 7. HERITAGE FRAME (Katha Signature) — palette + FH Ronaldson (Signature rule)
   {
-    id: "katha-tracy-prince",
-    name: "Katha Signature — Tracy & Prince",
+    id: "katha-heritage-frame",
+    name: "Katha Signature — Heritage Frame",
     type: "postcard-vertical",
     layoutId: "pv-2",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "Tracy & Prince",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Abel & Calado",
     subTitleText: "",
     dateText: "",
     slotBorderRadius: "0px",
@@ -480,7 +595,7 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "60px",
     decorativeSvg: "",
-    designerExplanation: "Double fine-lined frame in Champagne Heirloom with Playfair Display set on a Piña Ecru ground. The Signature tier's quiet restraint for Tracy & Prince."
+    designerExplanation: "Double fine-lined frame in Champagne Heirloom with FH Ronaldson display set on a Piña Ecru ground. Abel & Calado Heritage Frame."
   },
 
   // ─── 8. TRADITION GOLD LUXE (Classic Tier)
@@ -491,8 +606,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "strip-3",
     backgroundColor: "#FAF6F0",
     textColor: "#544634",
-    borderColor: "#766023",
-    secondaryColor: "#766023",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
     fontFamily: "'Cinzel', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
@@ -512,8 +627,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pv-2",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#766023",
-    secondaryColor: "#766023",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -533,8 +648,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-v",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#766023",
-    secondaryColor: "#766023",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -621,7 +736,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#FCFAF7",
     borderColor: "#DEC190",
     secondaryColor: "#E3CE9F",
-    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontFamily: "'EB Garamond', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
     dateText: "NAPA VALLEY ● CALIFORNIA",
@@ -642,7 +757,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#FCFAF7",
     borderColor: "#DEC190",
     secondaryColor: "#E3CE9F",
-    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontFamily: "'EB Garamond', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
     dateText: "NAPA VALLEY ● CALIFORNIA",
@@ -663,7 +778,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#FCFAF7",
     borderColor: "#DEC190",
     secondaryColor: "#E3CE9F",
-    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontFamily: "'EB Garamond', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
     dateText: "NAPA VALLEY ● CALIFORNIA",
@@ -941,7 +1056,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#2B2D2B",
     borderColor: "#E3DFD5",
     secondaryColor: "#707A65",
-    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontFamily: "'EB Garamond', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
     dateText: "THE BOTANICAL SANCTUARY",
@@ -962,7 +1077,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#2B2D2B",
     borderColor: "#E3DFD5",
     secondaryColor: "#707A65",
-    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontFamily: "'EB Garamond', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
     dateText: "THE BOTANICAL SANCTUARY",
@@ -983,7 +1098,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#2B2D2B",
     borderColor: "#E3DFD5",
     secondaryColor: "#707A65",
-    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontFamily: "'EB Garamond', serif",
     titleText: "Steven & Cristalyn",
     subTitleText: "JULY 25, 2026",
     dateText: "THE BOTANICAL SANCTUARY",
@@ -1065,16 +1180,16 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "heirloom-pina-L",
     name: "Katha Signature — Heirloom Piña L-Shape",
     type: "postcard",
-    layoutId: "pc-L",
+    layoutId: "pc-H",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
-    slotBorderRadius: "2px",
+    slotBorderRadius: "0px",
     slotBorderWidth: "1.5px",
     slotGap: "20px",
     slotBgColor: "#EAE2D5",
@@ -1086,12 +1201,12 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "loom-frame-invL",
     name: "Katha Signature — Loom Frame Γ-Shape",
     type: "postcard",
-    layoutId: "pc-invL",
+    layoutId: "pc-I",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#241E1A",
     secondaryColor: "#241E1A",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "ILOCOS NORTE",
@@ -1107,7 +1222,7 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "editorial-landscape-L",
     name: "Style 8 — Editorial L-Shape Landscape",
     type: "postcard",
-    layoutId: "pc-L",
+    layoutId: "pc-H",
     backgroundColor: "#FCFCFC",
     textColor: "#121212",
     borderColor: "#E5E5E5",
@@ -1128,12 +1243,12 @@ export const PRESETS: PhotoboothPreset[] = [
     id: "capiz-sage-invL",
     name: "Katha Signature — Capiz Sage Γ-Shape Landscape",
     type: "postcard",
-    layoutId: "pc-invL",
+    layoutId: "pc-I",
     backgroundColor: "#EAE2D5",
     textColor: "#241E1A",
     borderColor: "#9FA38F",
     secondaryColor: "#6E7268",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "CAPIZ",
@@ -1146,8 +1261,29 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Capiz windowpane in sage. Inverted-L photo arrangement with the open corner reserved for the names."
   },
 
-  // ─── SQUARE LANDSCAPE VARIANTS (2×, 3× — 550×550 slots) ─────────────────────────
+  // ─── SQUARE LANDSCAPE VARIANTS (1×, 2×, 3× — 550×550 slots) ─────────────────────────
   // — Katha Signature families first —
+  {
+    id: "katha-heirloom-pina-landscape-1sq",
+    name: "Katha Signature — Heirloom Piña Landscape 1 Square",
+    type: "postcard",
+    layoutId: "pc-1-full",
+    backgroundColor: "#EAE2D5",
+    textColor: "#241E1A",
+    borderColor: "#C4B59D",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "MANILA",
+    slotBorderRadius: "2px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#EAE2D5",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "Piña-fiber ecru ground — a single centered square focal photo, wide branding pedestal below."
+  },
   {
     id: "katha-heirloom-pina-landscape-2sq",
     name: "Katha Signature — Heirloom Piña Landscape 2 Squares",
@@ -1157,7 +1293,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -1178,7 +1314,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#C4B59D",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "MANILA",
@@ -1191,15 +1327,15 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "Piña-fiber ecru ground — three square photos in a row with champagne thread accents."
   },
   {
-    id: "katha-knalum-night-landscape-2sq",
-    name: "Katha Signature — Knalum Night Landscape 2 Squares",
+    id: "katha-knalum-night-landscape-1sq",
+    name: "Katha Signature — Knalum Night Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-2-sq",
+    layoutId: "pc-1-full",
     backgroundColor: "#1A1816",
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -1209,7 +1345,28 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#241E1A",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "T’nalak soil-black — two square photos, ecru lettering with loko-root rust accent."
+    designerExplanation: "T’nalak soil-black ground — one square focal photo centered, satin-champagne accent text band."
+  },
+  {
+    id: "katha-knalum-night-landscape-2sq",
+    name: "Katha Signature — Knalum Night Landscape 2 Squares",
+    type: "postcard",
+    layoutId: "pc-2-sq",
+    backgroundColor: "#1A1816",
+    textColor: "#EAE2D5",
+    borderColor: "#241E1A",
+    secondaryColor: "#C4B59D",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "Maria & Jose",
+    subTitleText: "JULY 25, 2026",
+    dateText: "LAKE SEBU",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "18px",
+    slotBgColor: "#241E1A",
+    innerSpacing: "28px",
+    decorativeSvg: "",
+    designerExplanation: "T’nalak soil-black — two square photos, ecru lettering with satin-champagne accent."
   },
   {
     id: "katha-knalum-night-landscape-3sq",
@@ -1220,7 +1377,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#EAE2D5",
     borderColor: "#241E1A",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Maria & Jose",
     subTitleText: "JULY 25, 2026",
     dateText: "LAKE SEBU",
@@ -1233,46 +1390,25 @@ export const PRESETS: PhotoboothPreset[] = [
     designerExplanation: "T’nalak soil-black — three square photos in a row, raw-fiber ecru lettering."
   },
   {
-    id: "katha-editorial-void-landscape-2sq",
-    name: "Katha Signature — The Editorial Void Landscape 2 Squares",
+    id: "wedding-luxe-gold-landscape-1sq",
+    name: "Style 1 — Tradition Gold Landscape 1 Square",
     type: "postcard",
-    layoutId: "pc-2-sq",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#1A1816",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "A Study in Ma",
-    subTitleText: "MMXXVI",
-    dateText: "MANILA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
+    layoutId: "pc-1-full",
+    backgroundColor: "#FAF6F0",
+    textColor: "#1C1917",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
+    fontFamily: "'Cinzel', serif",
+    titleText: "STEVEN & CRISTALYN",
+    subTitleText: "JULY 25, 2026",
+    dateText: "NAPA VALLEY, CALIFORNIA",
+    slotBorderRadius: "4px",
+    slotBorderWidth: "3px",
     slotGap: "18px",
-    slotBgColor: "#EAE2D5",
+    slotBgColor: "#F4EDE3",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "An uncompromising execution of Ma. Severe, clean side-by-side square photos layout floating on a massive expanse of Piña Ecru."
-  },
-  {
-    id: "katha-editorial-void-landscape-3sq",
-    name: "Katha Signature — The Editorial Void Landscape 3 Squares",
-    type: "postcard",
-    layoutId: "pc-3-sq",
-    backgroundColor: "#EAE2D5",
-    textColor: "#111112",
-    borderColor: "#111112",
-    secondaryColor: "#1A1816",
-    fontFamily: "'Playfair Display', serif",
-    titleText: "A Study in Ma",
-    subTitleText: "MMXXVI",
-    dateText: "MANILA",
-    slotBorderRadius: "0px",
-    slotBorderWidth: "1.5px",
-    slotGap: "18px",
-    slotBgColor: "#EAE2D5",
-    innerSpacing: "28px",
-    decorativeSvg: "",
-    designerExplanation: "An uncompromising execution of Ma. Severe, clean three square photos layout floating on a massive expanse of Piña Ecru."
+    designerExplanation: "Tradition Gold — one square focal photo, gold-foil hairline frame."
   },
   {
     id: "wedding-luxe-gold-landscape-2sq",
@@ -1281,8 +1417,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-2-sq",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#766023",
-    secondaryColor: "#766023",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -1302,8 +1438,8 @@ export const PRESETS: PhotoboothPreset[] = [
     layoutId: "pc-3-sq",
     backgroundColor: "#FAF6F0",
     textColor: "#1C1917",
-    borderColor: "#766023",
-    secondaryColor: "#766023",
+    borderColor: "#C5A85C",
+    secondaryColor: "#C5A85C",
     fontFamily: "'Cinzel', serif",
     titleText: "STEVEN & CRISTALYN",
     subTitleText: "JULY 25, 2026",
@@ -1325,7 +1461,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Bespoke Silk",
     subTitleText: "HANDCRAFTED",
     dateText: "KATHA",
@@ -1346,7 +1482,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Bespoke Silk",
     subTitleText: "HANDCRAFTED",
     dateText: "KATHA",
@@ -1367,7 +1503,7 @@ export const PRESETS: PhotoboothPreset[] = [
     textColor: "#241E1A",
     borderColor: "#EAE2D5",
     secondaryColor: "#C4B59D",
-    fontFamily: "'Playfair Display', serif",
+    fontFamily: "'FH Ronaldson Display', serif",
     titleText: "Bespoke Silk",
     subTitleText: "HANDCRAFTED",
     dateText: "KATHA",
@@ -1377,7 +1513,28 @@ export const PRESETS: PhotoboothPreset[] = [
     slotBgColor: "#EAE2D5",
     innerSpacing: "28px",
     decorativeSvg: "",
-    designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
+        designerExplanation: "Generative signature theme representing structural thread paths in a 6x4 landscape postcard format."
+  },
+  {
+    id: "katha-celestial-bituin",
+    name: "Katha Signature — Bituin Celestial",
+    type: "postcard-vertical",
+    layoutId: "pv-3",
+    backgroundColor: "#0B0C10",
+    textColor: "#c4b59d",
+    borderColor: "#241e1a",
+    secondaryColor: "#eae2d5",
+    fontFamily: "'FH Ronaldson Display', serif",
+    titleText: "BITUIN",
+    subTitleText: "star in the night sky",
+    dateText: "OCTOBER 26, 2024 • MANILA",
+    slotBorderRadius: "0px",
+    slotBorderWidth: "1.5px",
+    slotGap: "24px",
+    slotBgColor: "#0B0C10",
+    innerSpacing: "60px",
+    decorativeSvg: "",
+    designerExplanation: "Deep, textured night sky background accented with celestial deconstructed double-borders and an elegant 8-pointed gold star layout. Set in high-end FH Ronaldson and Montserrat."
   },
 ];
 
@@ -1385,6 +1542,15 @@ export const PRESETS: PhotoboothPreset[] = [
 // ─── DECORATION ALIASES ───────────────────────────────────────────────
 // Maps format variants back to the root family ID so we only write the drawing rules ONCE.
 const DECORATION_ALIASES: Record<string, string> = {
+  "katha-celestial-bituin-postcard":      "katha-celestial-bituin",
+  "katha-celestial-bituin-landscape":     "katha-celestial-bituin",
+  "katha-celestial-bituin-postcard-vertical": "katha-celestial-bituin",
+  "katha-editorial-void-postcard":      "katha-editorial-void",
+  "katha-editorial-void-landscape":     "katha-editorial-void",
+  "katha-editorial-void-landscape-1sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-2sq": "katha-editorial-void",
+  "katha-editorial-void-landscape-3sq": "katha-editorial-void",
+
   "katha-woven-silk-postcard":      "katha-woven-silk",
   "katha-woven-silk-landscape":     "katha-woven-silk",
   "katha-heirloom-pina-postcard":   "katha-heirloom-pina",
@@ -1445,11 +1611,6 @@ const DECORATION_ALIASES: Record<string, string> = {
   "katha-knalum-night-landscape-1sq":   "katha-knalum-night",
   "katha-knalum-night-landscape-2sq":   "katha-knalum-night",
   "katha-knalum-night-landscape-3sq":   "katha-knalum-night",
-  "katha-editorial-void-postcard":      "katha-editorial-void",
-  "katha-editorial-void-landscape":     "katha-editorial-void",
-  "katha-editorial-void-landscape-1sq": "katha-editorial-void",
-  "katha-editorial-void-landscape-2sq": "katha-editorial-void",
-  "katha-editorial-void-landscape-3sq": "katha-editorial-void",
   "wedding-luxe-gold-landscape-1sq":    "wedding-luxe-gold",
   "wedding-luxe-gold-landscape-2sq":    "wedding-luxe-gold",
   "wedding-luxe-gold-landscape-3sq":    "wedding-luxe-gold",
@@ -1459,7 +1620,7 @@ export const LUXURY_FONTS = [
   { id: "cinzel", name: "Cinzel (Royal Roman)", css: "'Cinzel', serif" },
   { id: "playfair", name: "Playfair Display (Elegant Serif)", css: "'Playfair Display', serif" },
   { id: "bodoni", name: "Bodoni Moda (High Fashion Serif)", css: "'Bodoni Moda', serif" },
-  { id: "hanken-grotesk", name: "Hanken Grotesk (Clean Neo-Grotesque)", css: "'Hanken Grotesk', sans-serif" },
+  { id: "eb-garamond", name: "EB Garamond (Warm Garalde)", css: "'EB Garamond', serif" },
   { id: "italiana", name: "Italiana (Geometric Roman)", css: "'Italiana', serif" },
   { id: "aboreto", name: "Aboreto (Wire-Thin Modern Capital)", css: "'Aboreto', sans-serif" },
   { id: "greatvibes", name: "Great Vibes (Soft Cursive Harmony)", css: "'Great Vibes', cursive" },
@@ -1476,6 +1637,7 @@ export const HARMONY_PALETTES = [
   {
     id: "classic-noir",
     name: "Classic Noir",
+    tier: "classic",
     bg: "#FAF9F5",
     text: "#1C1C1C",
     secondary: "#8A7342",
@@ -1485,6 +1647,7 @@ export const HARMONY_PALETTES = [
   {
     id: "royal-emerald",
     name: "Royal Emerald",
+    tier: "classic",
     bg: "#1E2B22",
     text: "#FAF6F0",
     secondary: "#DFCE83",
@@ -1494,6 +1657,7 @@ export const HARMONY_PALETTES = [
   {
     id: "terracotta-sunset",
     name: "Terracotta Sunset",
+    tier: "classic",
     bg: "#FBF5F0",
     text: "#3C1A14",
     secondary: "#BC6C52",
@@ -1503,21 +1667,208 @@ export const HARMONY_PALETTES = [
   {
     id: "midnight-onyx",
     name: "Midnight Onyx",
+    tier: "classic",
     bg: "#111111",
     text: "#FFFFFF",
-    secondary: "#766023",
+    secondary: "#C5A85C",
     border: "#333333",
     slotBg: "#1A1A1A",
   },
   {
     id: "misty-lavender",
     name: "Misty Lavender",
+    tier: "classic",
     bg: "#F5F3F7",
     text: "#2C2235",
     secondary: "#8C7B99",
     border: "#D5CFDB",
     slotBg: "#EBE6EF",
   },
+  // ── Harvested family harmonies (2026-07-14) — one palette per distinct
+  // preset color scheme in the catalog; tier follows the source family
+  // (signature = strict Katha law, classic = wedding-tier latitude).
+  // content.json print stocks remain the deliberate client-facing five.
+  {
+    id: "heirloom-pina",
+    name: "Heirloom Piña",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#C4B59D",
+    border: "#C4B59D",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "editorial-void",
+    name: "Editorial Void",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#111112",
+    secondary: "#1A1816",
+    border: "#111112",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "loom-frame",
+    name: "Loom Frame",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#241E1A",
+    border: "#241E1A",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "knalum-night",
+    name: "Knalum Night",
+    tier: "signature",
+    bg: "#1A1816",
+    text: "#EAE2D5",
+    secondary: "#C4B59D",
+    border: "#241E1A",
+    slotBg: "#241E1A",
+  },
+  {
+    id: "brass-ring",
+    name: "Brass Ring",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#8A7350",
+    border: "#8A7350",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "binakul-weave",
+    name: "Binakul Weave",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#5A5D5A",
+    border: "#EAE2D5",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "capiz-sage",
+    name: "Capiz Sage",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#6E6A62",
+    border: "#9C958A",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "luxe-gold",
+    name: "Luxe Gold",
+    tier: "classic",
+    bg: "#FAF6F0",
+    text: "#1C1917",
+    secondary: "#C5A85C",
+    border: "#C5A85C",
+    slotBg: "#F4EDE3",
+  },
+  {
+    id: "rose-whisper",
+    name: "Rose Whisper",
+    tier: "classic",
+    bg: "#FAF9F6",
+    text: "#292524",
+    secondary: "#A59E92",
+    border: "#EBE9E4",
+    slotBg: "#EDEDE9",
+  },
+  {
+    id: "warm-terracotta",
+    name: "Warm Terracotta",
+    tier: "classic",
+    bg: "#8F4D39",
+    text: "#FCFAF7",
+    secondary: "#E3CE9F",
+    border: "#DEC190",
+    slotBg: "#9A543E",
+  },
+  {
+    id: "art-deco-noir",
+    name: "Art Deco Noir",
+    tier: "classic",
+    bg: "#161616",
+    text: "#DEC190",
+    secondary: "#DEC190",
+    border: "#90774D",
+    slotBg: "#222222",
+  },
+  {
+    id: "editorial-white",
+    name: "Editorial White",
+    tier: "classic",
+    bg: "#FCFCFC",
+    text: "#121212",
+    secondary: "#737373",
+    border: "#E5E5E5",
+    slotBg: "#F5F5F5",
+  },
+  {
+    id: "vintage-lace",
+    name: "Vintage Lace",
+    tier: "classic",
+    bg: "#F2EFE7",
+    text: "#4E4138",
+    secondary: "#A39382",
+    border: "#D9D1C5",
+    slotBg: "#EFECE3",
+  },
+  {
+    id: "royal-crest",
+    name: "Royal Crest",
+    tier: "classic",
+    bg: "#FCFBF8",
+    text: "#6B5526",
+    secondary: "#8A7342",
+    border: "#D4C59B",
+    slotBg: "#FAFAF8",
+  },
+  {
+    id: "botanical-arch",
+    name: "Botanical Arch",
+    tier: "classic",
+    bg: "#FCFAF6",
+    text: "#2B2D2B",
+    secondary: "#707A65",
+    border: "#E3DFD5",
+    slotBg: "#F5F3ED",
+  },
+  {
+    id: "decked-monogram",
+    name: "Decked Monogram",
+    tier: "classic",
+    bg: "#FAF7F0",
+    text: "#3D3A35",
+    secondary: "#A68D6A",
+    border: "#DDD7CD",
+    slotBg: "#F2ECE0",
+  },
+  {
+    id: "woven-silk",
+    name: "Woven Silk",
+    tier: "signature",
+    bg: "#EAE2D5",
+    text: "#241E1A",
+    secondary: "#C4B59D",
+    border: "#EAE2D5",
+    slotBg: "#EAE2D5",
+  },
+  {
+    id: "celestial-bituin",
+    name: "Celestial Bituin",
+    tier: "signature",
+    bg: "#0B0C10",
+    text: "#C4B59D",
+    secondary: "#EAE2D5",
+    border: "#241E1A",
+    slotBg: "#0B0C10",
+  },
+
 ];
 
 // ─── SLOT-COUNT-AGNOSTIC SVG DECORATION ENGINE ─────────────────────────────────
@@ -1560,26 +1911,61 @@ export function renderDecorativeSvg(
   const defs = `
     <defs>
       <linearGradient id="svg-gold-shimmer" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#766023" />
+        <stop offset="0%" stop-color="#C5A85C" />
         <stop offset="25%" stop-color="#F3E5BE" />
         <stop offset="50%" stop-color="#A58238" />
         <stop offset="75%" stop-color="#FFF3CD" />
-        <stop offset="100%" stop-color="#766023" />
+        <stop offset="100%" stop-color="#C5A85C" />
       </linearGradient>
     </defs>
   `;
 
   // Render SVG elements anchored ONLY to the canvas edges (relative to margin) or to the dynamic tz pedestal boundaries.
   switch (baseId) {
+    case "katha-celestial-bituin":
+      return `
+        <!-- Fine celestial double borders -->
+        <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" opacity="0.8" />
+        <rect x="${margin / 3 + 6}" y="${margin / 3 + 6}" width="${vb.w - 2 * margin / 3 - 12}" height="${vb.h - 2 * margin / 3 - 12}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.4" />
+        
+        <!-- Elegant 8-pointed star in the text zone divider -->
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" stroke="${secondaryColor}" fill="${secondaryColor}" stroke-width="1">
+          <line x1="-120" y1="0" x2="-25" y2="0" opacity="0.6" stroke-dasharray="2 4" />
+          <line x1="25" y1="0" x2="120" y2="0" opacity="0.6" stroke-dasharray="2 4" />
+          <path d="M 0,-12 L 2,-4 L 10,-2 L 3,0 L 6,8 L 0,3 L -6,8 L -3,0 L -10,-2 L -2,-4 Z" />
+          <circle cx="0" cy="0" r="1.5" fill="#FFFFFF" />
+        </g>
+      `;
     case "katha-editorial-void":
       return "";
+    case "katha-guhit-1957":
+      // One plate, subtractive ink: a 1957 romansa interior was black on
+      // newsprint. Everything here darkens the paper (multiply) — ink never
+      // sits on top of it. No maker's mark on the print face (ruled 2026-07-15);
+      // attribution lives in designerExplanation and the archive.
+      return `
+        <defs>
+          <pattern id="guhit-screen" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <circle cx="7" cy="7" r="1.7" fill="#120704"/>
+          </pattern>
+        </defs>
+        <!-- Komiks panel keyline — the heavy 1957 border -->
+        <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${borderColor}" stroke-width="2.5" />
+        ` + layout.slots.map((s: any) => `
+          <rect x="${s.x - 6}" y="${s.y - 6}" width="${s.w + 12}" height="${s.h + 12}" fill="none" stroke="${borderColor}" stroke-width="1" opacity="0.55" />
+          <rect x="${s.x}" y="${s.y + s.h - 26}" width="${s.w}" height="26" fill="#120704" opacity="0.05" style="mix-blend-mode:multiply" />
+        `).join("") + `
+        <!-- Coarse halftone screen at the pedestal's foot — ink sinking into paper -->
+        <rect x="${tz.x}" y="${tz.y + tz.h - 44}" width="${tz.w}" height="44" fill="url(#guhit-screen)" opacity="0.16" style="mix-blend-mode:multiply" />
+      `;
+
     case "katha-heirloom-pina":
       return `
         <!-- Dual calado champagne borders -->
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
         <rect x="${margin / 3 + 8}" y="${margin / 3 + 8}" width="${vb.w - 2 * margin / 3 - 16}" height="${vb.h - 2 * margin / 3 - 16}" fill="none" stroke="${secondaryColor}" stroke-width="0.6" opacity="0.55" />
         <!-- Dynamic Calado Openwork Divider anchored to textZone boundary -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1.4" fill="${secondaryColor}">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1.4" fill="${secondaryColor}">
           <line x1="-150" y1="0" x2="-26" y2="0" stroke-dasharray="1.5 7" stroke-linecap="round" />
           <line x1="26" y1="0" x2="150" y2="0" stroke-dasharray="1.5 7" stroke-linecap="round" />
           <path d="M -16,0 L 0,-9 L 16,0 L 0,9 Z" fill="none" stroke-width="1.1" />
@@ -1613,16 +1999,16 @@ export function renderDecorativeSvg(
       return `
         <!-- Soil-black T'nalak raw linen rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.8" />
-        <!-- A single, sacred loko-root rust horizontal thread above/below the text pedestal -->
-        <line x1="${vb.w / 2 - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${vb.w / 2 + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="#8C382A" stroke-width="2.5" />
+        <!-- A single, sacred satin-champagne thread above/below the text pedestal -->
+        <line x1="${tz.centerX - 90}" y1="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" x2="${tz.centerX + 90}" y2="${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18}" stroke="${GILT_THREAD}" stroke-width="2.5" />
       `;
 
     case "katha-brass-ring":
       return `
         <!-- Fine ecru rules -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
-        <!-- Sacred loko-rust brass ring centered at the boundary of the branding pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30})" fill="none" stroke="${secondaryColor}">
+        <!-- Sacred gilded brass ring centered at the boundary of the branding pedestal -->
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30})" fill="none" stroke="${secondaryColor}">
           <circle cx="0" cy="0" r="22" stroke-width="2" />
           <circle cx="0" cy="0" r="14" stroke-width="0.75" opacity="0.6" />
         </g>
@@ -1643,7 +2029,7 @@ export function renderDecorativeSvg(
         `).join("") + `
         
         <!-- Minimal organic hand-woven medallion centered below text pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 24 : tz.y + tz.h + 24})" fill="none" stroke="${secondaryColor}">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 24 : tz.y + tz.h + 24})" fill="none" stroke="${secondaryColor}">
           <line x1="-120" y1="0" x2="-24" y2="0" stroke-width="1" />
           <line x1="24" y1="0" x2="120" y2="0" stroke-width="1" />
           <polygon points="-8,0 0,-7 8,0 0,7" stroke-width="1.2" />
@@ -1669,12 +2055,38 @@ export function renderDecorativeSvg(
         </g>
       `;
 
+    case "katha-heritage-frame":
+      return `
+        <!-- Subtle Overlay Frame intruding 12px into the photo slot -->
+        ` + layout.slots.map((s: any) => `
+          <rect x="${s.x + 12}" y="${s.y + 12}" width="${s.w - 24}" height="${s.h - 24}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" opacity="0.8" />
+          <rect x="${s.x + 18}" y="${s.y + 18}" width="${s.w - 36}" height="${s.h - 36}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.5" />
+        `).join("") + `
+        
+        <!-- Outer Canvas Frame -->
+        <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="0.5" opacity="0.8" />
+        <rect x="${margin / 2 + 8}" y="${margin / 2 + 8}" width="${vb.w - margin - 16}" height="${vb.h - margin - 16}" fill="none" stroke="${secondaryColor}" stroke-width="1.5" />
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 20 : tz.y + tz.h + 20})" fill="none" stroke="${secondaryColor}">
+           <!-- Center rosette (Calado openwork motif) -->
+           <circle cx="0" cy="0" r="12" stroke-width="1" stroke-dasharray="1 1.5" />
+           <circle cx="0" cy="0" r="18" stroke-width="0.8" />
+           <circle cx="0" cy="0" r="5" stroke-width="1.2" />
+           <!-- Rosette petals -->
+           <path d="M 0,-18 L 3,-10 L 0,-5 L -3,-10 Z" stroke-width="1" fill="none" />
+           <path d="M 0,18 L 3,10 L 0,5 L -3,10 Z" stroke-width="1" fill="none" />
+           <path d="M -18,0 L -10,3 L -5,0 L -10,-3 Z" stroke-width="1" fill="none" />
+           <path d="M 18,0 L 10,3 L 5,0 L 10,-3 Z" stroke-width="1" fill="none" />
+           
+           <!-- Framing lines with end dots -->
+           <line x1="-160" y1="0" x2="-30" y2="0" stroke-width="1" />
+           <line x1="30" y1="0" x2="160" y2="0" stroke-width="1" />
+           <circle cx="-160" cy="0" r="2" fill="${secondaryColor}" stroke="none" />
+           <circle cx="160" cy="0" r="2" fill="${secondaryColor}" stroke="none" />
+        </g>
+      `;
+
     case "katha-binakul-weave":
       return `
-        <!-- Media slots boundaries to ensure visibility in LumaBooth overlays -->
-        ` + layout.slots.map((s: any) => `
-          <rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" fill="none" stroke="${borderColor}" stroke-width="1.5" />
-        `).join("") + `
         <!-- Inactive Inabel abacá borders -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.55" />
         <!-- Mathematical optical binakul whirlpools in corners to confuse malevolent spirits -->
@@ -1691,7 +2103,7 @@ export function renderDecorativeSvg(
         <!-- Sage border -->
         <rect x="${margin / 2}" y="${margin / 2}" width="${vb.w - margin}" height="${vb.h - margin}" fill="none" stroke="${secondaryColor}" stroke-width="1.2" />
         <!-- Translucent Capiz Windowpane Grid in the text pedestal gap -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 18 : tz.y + tz.h + 18})" stroke="${secondaryColor}" stroke-width="1">
           <rect x="-72" y="-12" width="24" height="24" fill="${secondaryColor}" fill-opacity="0.15" />
           <rect x="-42" y="-12" width="24" height="24" fill="none" />
           <rect x="-12" y="-12" width="24" height="24" fill="${secondaryColor}" fill-opacity="0.15" />
@@ -1722,7 +2134,7 @@ export function renderDecorativeSvg(
         <!-- Ivory linen border -->
         <rect x="${margin / 4}" y="${margin / 4}" width="${vb.w - 2 * margin / 4}" height="${vb.h - 2 * margin / 4}" fill="none" stroke="${secondaryColor}" stroke-dasharray="8 6" stroke-width="1.5" opacity="0.5" />
         <!-- Hand-sketched classic ivory rose aligned dynamically above/below the text -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 45 : tz.y + tz.h + 45}) scale(1.65)">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 45 : tz.y + tz.h + 45}) scale(1.65)">
           <path d="M 12 30 C 5 22 15 15 22 24 C 28 12 40 20 32 30 C 45 32 35 48 24 40 C 15 45 8 36 12 30 Z" fill="#FFFFFF" stroke="${color}" stroke-width="1" />
           <path d="M 22 28 C 18 24 24 20 26 26 Z" fill="#FCFAF2" stroke="${color}" stroke-width="0.75" />
           <path d="M -5 32 Q 5 18 12 28" fill="none" stroke="#9A9F95" stroke-width="1" />
@@ -1779,7 +2191,7 @@ export function renderDecorativeSvg(
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="3" />
         <rect x="${margin / 3 + 9}" y="${margin / 3 + 9}" width="${vb.w - 2 * margin / 3 - 18}" height="${vb.h - 2 * margin / 3 - 18}" fill="none" stroke="${secondaryColor}" stroke-width="1" opacity="0.6" />
         <!-- Dynamic circular debossed crest centered at text pedestal -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.15)" stroke="${secondaryColor}" fill="none" stroke-width="1.2">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.15)" stroke="${secondaryColor}" fill="none" stroke-width="1.2">
           <ellipse cx="0" cy="0" rx="36" ry="26" />
           <path d="M -15, -12 L 0, -20 L 15, -12 L 10, 8 L -10, 8 Z" opacity="0.2" fill="${secondaryColor}" />
         </g>
@@ -1797,7 +2209,7 @@ export function renderDecorativeSvg(
         <!-- Hand-torn deckled edges -->
         <rect x="${margin / 3}" y="${margin / 3}" width="${vb.w - 2 * margin / 3}" height="${vb.h - 2 * margin / 3}" fill="none" stroke="${secondaryColor}" stroke-width="1" stroke-dasharray="20 4 4 4" />
         <!-- Dynamic copper wax-seal centered above/below names -->
-        <g transform="translate(${vb.w / 2}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.35)" fill="none" stroke="${secondaryColor}" stroke-width="1.5">
+        <g transform="translate(${tz.centerX}, ${textPosition === 'bottom' ? tz.y - 30 : tz.y + tz.h + 30}) scale(1.35)" fill="none" stroke="${secondaryColor}" stroke-width="1.5">
           <path d="M -35,5 C -45,35 45,35 35,5 C 25,-25 -25,-25 -35,5 Z" fill="${secondaryColor}" opacity="0.15" stroke-width="1" />
           <circle cx="0" cy="4" r="28" stroke="${secondaryColor}" stroke-width="1" />
         </g>

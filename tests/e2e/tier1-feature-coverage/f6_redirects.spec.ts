@@ -42,7 +42,8 @@ test.describe('F6: URL Redirection - Tier 1 Happy Path', () => {
 
     // Rewrite (not redirect): the short URL is preserved, gallery renders.
     await expect(page).toHaveURL(/\/template-design$/);
-    await expect(page.getByRole('heading', { name: 'Choose your style' })).toBeVisible();
+    // Harvest customizer landmark — the stepper's 'Inscription' step label.
+    await expect(page.getByText('Inscription')).toBeVisible();
   });
 
   test('T1.5: /secured landing routes inquirers into the template designer', async ({ page }) => {
@@ -52,6 +53,7 @@ test.describe('F6: URL Redirection - Tier 1 Happy Path', () => {
 
     await page.getByRole('link', { name: 'Begin shaping your edition' }).click();
     await page.waitForURL('**/template-design');
-    await expect(page.getByRole('heading', { name: 'Choose your style' })).toBeVisible();
+    // Harvest customizer landmark — the stepper's 'Inscription' step label.
+    await expect(page.getByText('Inscription')).toBeVisible();
   });
 });

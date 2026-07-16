@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/error-boundaries */
-/* eslint-disable react/no-unescaped-entities */
+ 
+ 
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -117,12 +117,12 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             <div style={{ marginTop: "32px" }}>
               <a
                 href={buildStudioUrl(selection)}
-                style={{ display: "inline-block", backgroundColor: "#8C382A", color: "#EAE2D5", textDecoration: "none", padding: "12px 28px", fontFamily: "'Inter', sans-serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em" }}
+                style={{ display: "inline-block", backgroundColor: "#DCCBB5", color: "#110F0D", textDecoration: "none", padding: "12px 28px", fontFamily: "'Inter', sans-serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em" }}
               >
                 Open in Studio →
               </a>
               <p style={{ marginTop: "10px", fontSize: "12px", color: "#5A5D5A", fontFamily: "'Inter', sans-serif" }}>
-                Opens the template editor pre-filled with this client's specs.
+                Opens the template editor pre-filled with this client&apos;s specs.
               </p>
             </div>
           </>
@@ -143,8 +143,8 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
         <Link href="/admin" style={{ fontFamily: "'Inter', sans-serif", fontSize: "11px", textTransform: "uppercase", letterSpacing: "0.2em", color: "#5A5D5A", textDecoration: "none", display: "inline-block", marginBottom: "32px" }}>
           ← All Leads
         </Link>
-        <div style={{ color: "#8C382A", padding: "40px", backgroundColor: "rgba(140,56,42,0.1)", border: "1px solid #8C382A", borderRadius: 0 }}>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", margin: "0 0 16px 0" }}>Failed to load lead details</h2>
+        <div style={{ color: "#E4DACA", padding: "40px", backgroundColor: "rgba(220,203,181,0.08)", borderLeft: "2px solid #E4DACA", borderRadius: 0 }}>
+          <h2 style={{ fontFamily: "'Fraunces', serif", margin: "0 0 16px 0" }}>Failed to load lead details</h2>
           <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "14px", margin: 0 }}>{err.message}</p>
         </div>
       </div>

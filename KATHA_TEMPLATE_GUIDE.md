@@ -60,7 +60,7 @@ palette, font, symmetry, or radius. The guard enforces this split automatically.
 Use only these for `backgroundColor / textColor / borderColor / secondaryColor / slotBgColor`:
 
 ```
-Knalum Ink    #1A1816    Loko Rust     #8C382A   (sacred — Brass Ring family only)
+Knalum Ink    #1A1816    Loko Rust     #3D2B1F   (sacred — Brass Ring family only)
 Piña Ecru     #EAE2D5    Terracotta    #A35C44
 Champagne     #C4B59D    Abel Slate    #5A5D5A
 Iron Bark     #241E1A    Capiz Sage    #B5B8A3

@@ -1,0 +1,922 @@
+{
+  "_meta": {
+    "brand": "Katha Booth",
+    "system": "Roasted Archive",
+    "note": "Single source of truth for the Katha booking flow. Render UI from this; never hardcode. Tiers/add-ons/prices are REAL, scraped 2026-07-02 from client.kathabooth.com/public/inquiry-form and confirmed by Jed. Present with the Roasted Archive aesthetic but do not alter names/prices/inclusions.",
+    "serviceArea": "Los Angeles & Orange County",
+    "serviceAreaLong": "Serving Los Angeles & Orange County — from Carson and the South Bay through Orange County.",
+    "baseLocation": "Carson, CA 90745",
+    "plate": "Plate No. 2026-CF",
+    "copyright": "©2026 Katha Booth",
+    "contactEmail": "kathabooth@gmail.com",
+    "emailFrom": "hello@kathabooth.com",
+    "emailFromNote": "kathabooth.com VERIFIED in Resend 2026-07-12 (SPF/DKIM live, smoke test id 479c5fdc). Client-facing email sends from hello@kathabooth.com. DMARC record still recommended: TXT _dmarc \"v=DMARC1; p=none;\". Contract/invoice email remains HoneyBook."
+  },
+  "seo": {
+    "note": "Emit a LocalBusiness JSON-LD script for SEO/AIO. Specific place names beat 'Southern California'.",
+    "businessName": "Katha Booth",
+    "areaServed": [
+      "Los Angeles County",
+      "Orange County",
+      "Carson",
+      "Long Beach",
+      "South Bay",
+      "Los Angeles",
+      "Anaheim",
+      "Irvine"
+    ],
+    "cityBase": "Carson, CA",
+    "postalBase": "90745",
+    "keywords": [
+      "photo booth rental Los Angeles",
+      "photo booth rental Orange County",
+      "luxury photo booth Los Angeles",
+      "wedding photo booth Orange County"
+    ]
+  },
+  "integrations": {
+    "payments_and_legal": "STRICTLY HoneyBook. Invoice + contract + payment stay in HoneyBook via its native embedded Lead Form + workflows. This site does NOT process payments or contracts.",
+    "honeybookLeadForm": "Recommended handoff: the booking 'Secure Dates' CTA routes the inquiry into HoneyBook's embedded Lead Form so HoneyBook fires brochure->invoice->contract->payment natively. Supabase also stores the lead for the availability admin + records.",
+    "HONEYBOOK_LEAD_FORM": "PLACEHOLDER — Jed pastes the HoneyBook Lead Form URL or embed snippet here. Jed builds the form + its brochure/invoice/contract/payment workflow INSIDE HoneyBook. Fable 5 only wires this single value into the branded 'Reserve' seam (PRD 14.1a). Prefill across the seam is NOT reliable — keep the HoneyBook form short so clients don't re-type everything.",
+    "honeybookFormMode": "url | embed",
+    "makeDotCom": "NOT viable for the HoneyBook bridge — HoneyBook has NO Make.com connector (native integrations are QuickBooks, Gmail, Calendly, Facebook, Zapier only). Make free tier is fine for OPTIONAL side automations off Supabase (e.g. new lead -> Google Sheet / SMS), never in the money/legal path.",
+    "zapier": "Avoid — requires a paid HoneyBook/Zapier tier. Not needed given the native Lead Form path."
+  },
+  "supabase": {
+    "url": "https://hvvomiyskizxzhyytcfd.supabase.co",
+    "anonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh2dm9taXlza2l6eHpoeXl0Y2ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxOTUxNTIsImV4cCI6MjA5NTc3MTE1Mn0.PLxKGlo_nM_TeM3MvJ-L6Epf4LyxS4KOaQ2l4mSV_2A",
+    "publishableKey": "sb_publishable_kDKUaI-kblRcUZgyiX-k7A_F91IqaQC",
+    "note": "⚠ LIVE-VERIFIED 2026-07-04: the legacy JWT anonKey is REJECTED by this project (PGRST301) — clients MUST use publishableKey (verified working against available_dates REST + supabase-js). anonKey kept for the record only. Keys here are SAFE client-side (RLS protects data). The SERVICE_ROLE key is NEVER here — Vercel env only, for /api/lead."
+  },
+  "tokens": {
+    "l0": "#110F0D",
+    "l1": "#1A1714",
+    "l2": "#241F1B",
+    "l3": "#2E2722",
+    "hi": "#E8E1D3",
+    "mut": "#A39B8E",
+    "fnt": "#857D71",
+    "gilt": "#DCCBB5",
+    "giltHover": "#C2B19D",
+    "line": "rgba(232,225,211,0.08)",
+    "ok": "#10B981",
+    "paperBone": "#F7F5F1",
+    "paperWarm": "#F5EFE6",
+    "inkCharcoal": "#2C2523"
+  },
+  "fonts": {
+    "display": "'FH Ronaldson Display', 'Fraunces', serif",
+    "serif": "'Fraunces', serif",
+    "body": "'Outfit', sans-serif",
+    "mono": "'Courier Prime', monospace"
+  },
+  "motionLaw": {
+    "maxTiltDeg": 6,
+    "minSettleDurationSec": 1.2,
+    "settleReturnEases": [
+      "power3.out",
+      "power4.out"
+    ],
+    "symmetricTransitionEasesPreserve": [
+      "power4.inOut (shutter close/open)",
+      "power3.inOut (format morph)"
+    ],
+    "forbiddenEases": [
+      "back",
+      "elastic",
+      "bounce",
+      "spring"
+    ],
+    "reducedMotion": "wrap timelines in gsap.matchMedia('(prefers-reduced-motion: no-preference)') AND add a reduce-branch that force-reveals ticket folds (opacity:1,rotateX:0), parts/hides shutter blades, and reveals the wordmark"
+  },
+  "texture": {
+    "grain": "feTurbulence fractalNoise baseFrequency=0.85 numOctaves=3 stitchTiles=stitch, rect opacity~0.03 (all steps, aria-hidden)",
+    "wabiSabiWordmarkFilter": "feTurbulence fractalNoise baseFrequency='0.03 0.06' numOctaves=3 -> feDisplacementMap scale=4 xChannel=R yChannel=G (WORDMARK ONLY)"
+  },
+  "tiers": [
+    {
+      "key": "editorial",
+      "name": "Editorial Installation",
+      "badge": "With Prints",
+      "price": 949,
+      "hours": 3,
+      "extraHourRate": 149,
+      "available": true,
+      "blurb": "Oak wood DSLR installation with professional-grade photography and metallic pearl proprietary prints.",
+      "includes": [
+        "Up to 3 hours print service ($149 per additional hour)",
+        "Oak wood DSLR installation",
+        "Professional grade photos",
+        "Choice of 2×6 or 4×6 prints",
+        "Metallic Pearl proprietary prints",
+        "Unlimited sessions",
+        "Instant media sharing",
+        "3 complimentary beauty effects",
+        "Dynamic GIFs",
+        "Premium 8×8' backdrop",
+        "Custom overlay & template",
+        "Custom welcome screen"
+      ],
+      "optional": [
+        "Premium prop signs & table",
+        "Photo booth attendant"
+      ]
+    },
+    {
+      "key": "glam_editorial",
+      "name": "Glam Editorial Installation",
+      "badge": "With Prints · Flagship",
+      "price": 1149,
+      "hours": 3,
+      "extraHourRate": 149,
+      "available": true,
+      "default": true,
+      "blurb": "The full Editorial installation with professional monochrome, skin-soothing photography.",
+      "includes": [
+        "Up to 3 hours print service ($149 per additional hour)",
+        "Oak wood DSLR installation",
+        "Professional monochrome skin-soothing photos",
+        "Choice of 2×6 or 4×6 prints",
+        "Metallic Pearl proprietary prints",
+        "Unlimited sessions",
+        "Instant media sharing",
+        "3 complimentary beauty effects",
+        "Dynamic GIFs",
+        "Premium 8×8' backdrop",
+        "Custom overlay & template",
+        "Custom welcome screen"
+      ],
+      "optional": [
+        "Premium prop signs & table",
+        "Photo booth attendant"
+      ]
+    },
+    {
+      "key": "architectural",
+      "name": "Architectural Installation",
+      "badge": "With Prints",
+      "price": 749,
+      "hours": 3,
+      "extraHourRate": 149,
+      "available": false,
+      "unavailableLabel": "Currently Unavailable",
+      "blurb": "Architectural booth configuration with prints. Temporarily unavailable.",
+      "includes": [
+        "Up to 3 hours print service ($149 per additional hour)",
+        "Choice of 2×6 or 4×6 prints",
+        "Unlimited sessions",
+        "Instant media sharing",
+        "3 complimentary beauty effects",
+        "Dynamic GIFs",
+        "Premium 8×8' backdrop",
+        "Custom overlay & template",
+        "Custom welcome screen"
+      ],
+      "optional": [
+        "Premium prop signs & table",
+        "Photo booth attendant"
+      ]
+    },
+    {
+      "key": "katha_booth",
+      "name": "Katha Booth Installation",
+      "badge": "With Prints · Essential",
+      "price": 549,
+      "hours": 4,
+      "extraHourRate": 149,
+      "available": true,
+      "blurb": "The essential Katha booth — four hours of unlimited high-grade photos, GIFs, and instant sharing.",
+      "includes": [
+        "Up to 4 hours print service ($149 per additional hour)",
+        "2×6 prints",
+        "Unlimited high-grade photos and dynamic GIFs",
+        "Instant media sharing via text, AirDrop, QR code",
+        "Complimentary beauty filters",
+        "Choice of standard backdrop",
+        "Choice of standard overlay & template",
+        "Choice of standard welcome screen",
+        "Online gallery for viewing and downloading"
+      ],
+      "optional": [
+        "Premium prop signs & table"
+      ]
+    }
+  ],
+  "addons": [
+    {
+      "key": "bespoke_backdrop",
+      "name": "Bespoke Backdrop",
+      "price": 499,
+      "type": "toggle",
+      "note": "A stylish, high-quality backdrop to match your event's theme. Flower wall not included."
+    },
+    {
+      "key": "white_flower_backdrop",
+      "name": "White Flower Backdrop",
+      "price": 499,
+      "type": "toggle",
+      "note": "A gorgeous white flower backdrop to elevate your event's ambiance. Perfect for weddings and social gatherings."
+    },
+    {
+      "key": "additional_hours",
+      "name": "Additional Hour(s)",
+      "price": 149,
+      "type": "quantity",
+      "min": 0,
+      "max": 2,
+      "unit": "hour",
+      "note": "$149/hour · up to 2 hours maximum."
+    }
+  ],
+  "intakeFields": {
+    "note": "Match the real HoneyBook inquiry form. Core columns (client_name/email/phone/venue/event_date) map to leads; the rest fold into leads.notes as JSON and/or selections.",
+    "required": [
+      "fullName",
+      "email",
+      "phone",
+      "venueAddress",
+      "eventType",
+      "indoorsOutdoors",
+      "startDate",
+      "startTime"
+    ],
+    "optional": [
+      "guestCount",
+      "howHeard",
+      "specialNotes"
+    ],
+    "eventTypeOptions": [
+      "Wedding",
+      "Engagement",
+      "Birthday",
+      "Corporate / Brand",
+      "Anniversary",
+      "Debut / Quinceañera",
+      "Graduation",
+      "Other"
+    ],
+    "indoorsOutdoors": [
+      "Indoors",
+      "Outdoors"
+    ],
+    "howHeardOptions": [
+      "Instagram",
+      "Google",
+      "Referral / Word of Mouth",
+      "TikTok",
+      "Wedding Planner / Venue",
+      "Other"
+    ]
+  },
+  "palettes": [
+    {
+      "key": "pina",
+      "name": "Heirloom Piña",
+      "bg": "#F5EFE6",
+      "text": "#2C2523",
+      "sub": "#2C2523",
+      "slot": "#E8E1D3",
+      "stroke": "#2C2523",
+      "default": true
+    },
+    {
+      "key": "sepia",
+      "name": "Sepia Bone",
+      "bg": "#E9DFCC",
+      "text": "#2C2523",
+      "sub": "#5A564E",
+      "slot": "#DCCBB5",
+      "stroke": "#2C2523"
+    },
+    {
+      "key": "void",
+      "name": "The Void",
+      "bg": "#110F0D",
+      "text": "#E8E1D3",
+      "sub": "#A39B8E",
+      "slot": "#241F1B",
+      "stroke": "#E8E1D3"
+    },
+    {
+      "key": "moss",
+      "name": "Moss Patina",
+      "bg": "#4E5B48",
+      "text": "#F5EFE6",
+      "sub": "#DCCBB5",
+      "slot": "#3A4437",
+      "stroke": "#F5EFE6"
+    },
+    {
+      "key": "champagne",
+      "name": "Satin Champagne",
+      "bg": "#DCCBB5",
+      "text": "#2C2523",
+      "sub": "#5C554C",
+      "slot": "#C2B19D",
+      "stroke": "#2C2523"
+    }
+  ],
+  "customizer": {
+    "note": "MATCH the prior book.kathabooth.com model (photobooth-template-studio). Do NOT use the flattened 2-format placeholder. Live preview slots + text zone are positioned as PERCENTAGES of the layout viewBox.",
+    "authorityFiles": [
+      "pb-v3/lib/layouts.js (LAYOUT REGISTRY — slot + textZone rectangles per arrangement, 300-DPI viewBox; single source of slot math; superset of legacy after 2026-07-14 harvest)",
+      "pb-v3/lib/templates.ts (full preset catalog + LUXURY_FONTS + tier-tagged HARMONY_PALETTES; legacy photobooth-template-studio is retired reference only)",
+      "pb-v3/components/customizer/ (live-preview implementation — the tested, mobile-first flow)"
+    ],
+    "model": "gallery of real presets -> pick a style -> personalize names/date/venue (+font, text-position) -> faithful live preview from layout geometry -> optional reference-photo upload to Supabase Storage",
+    "formats": [
+      "strip (600x1800)",
+      "postcard-vertical (1200x1800)",
+      "postcard (1800x1200)"
+    ],
+    "slotRender": "left = slot.x/viewBox.w*100, top = slot.y/viewBox.h*100, w = slot.w/viewBox.w*100, h = slot.h/viewBox.h*100. Slots stay EMPTY (client's booth photos print there).",
+    "referenceUpload": "Supabase Storage refs/<uuid>.<ext>; path stored on selections.reference_photos[]; base64 fallback",
+    "persistTo": "selections table (template_id/template_name/layout/names/date/venue/font_family/reference_photos/configuration/service_tier/lead=leads.lead_hash)"
+  },
+  "portfolio": {
+    "note": "Real Katha booth stock (from kathabooth@gmail.com Drive). Use in a gallery + hero atmosphere + optionally tier cards. NEVER inside customizer preview slots. Path: assets/portfolio/",
+    "images": [
+      {
+        "src": "assets/portfolio/velour-floral.jpg",
+        "alt": "Katha booth — Velour Floral installation"
+      },
+      {
+        "src": "assets/portfolio/wildflower-wedding.jpg",
+        "alt": "Katha booth — Wildflower wedding"
+      },
+      {
+        "src": "assets/portfolio/glam-portrait.jpg",
+        "alt": "Katha booth — Glam portrait"
+      },
+      {
+        "src": "assets/portfolio/peachy.jpg",
+        "alt": "Katha booth — Peachy set"
+      },
+      {
+        "src": "assets/portfolio/western-rich.jpg",
+        "alt": "Katha booth — Western Rich installation"
+      },
+      {
+        "src": "assets/portfolio/lumiere.jpg",
+        "alt": "Katha booth — Lumière installation"
+      }
+    ]
+  },
+  "copy": {
+    "step1": {
+      "eyebrow": "// Inquiry & Availability",
+      "headline": "Check availability. Reserve the night.",
+      "sub": "Oak-wood DSLR and modern installations that frame quiet, high-contrast portrait captures. Select your installation below.",
+      "cta": "Secure Dates & Begin Design"
+    },
+    "step2": {
+      "eyebrow": "// Studio Customizer",
+      "headline": "Design Your Commemorative Card.",
+      "sub": "Compose the text layers and pick a physical paper hue. Live proof updates instantly.",
+      "cta": "Finalize Custom Design",
+      "titlePlaceholder": "e.g., LORENZO & CORAZON",
+      "subtitlePlaceholder": "e.g., OCTOBER 15, 2026 • LOS ANGELES"
+    },
+    "step3": {
+      "eyebrow": "✓ Inquiry Received",
+      "headline": "Inquiry Registered & Secured.",
+      "sub": "Your requested date is logged. We'll review availability and reply from hello@kathabooth.com with a detailed proposal.",
+      "printCta": "Print Physical Ticket Stock",
+      "emailCta": "Email Copy to Inbox",
+      "restartCta": "Start New Inquiry"
+    },
+    "privacyLine": "We use your details to respond to your inquiry and, if you opt in, to share occasional Katha offers. Unsubscribe anytime.",
+    "marketingConsentLabel": "Keep me posted on Katha offers & availability (optional).",
+    "marketingConsentDefault": false
+  },
+  "leadsColumns": {
+    "note": "Insert ONLY these columns into Supabase `leads`. Verified 2026-07-02 (39 rows, all columns present). Design data goes to the `selections` table (FK selections.lead -> leads.lead_hash), not leads.",
+    "leads": {
+      "client_name": "contact.fullName (NOT NULL)",
+      "client_email": "contact.email (NOT NULL)",
+      "client_phone": "contact.phone",
+      "event_date": "STATE.date as ISO 'YYYY-MM-DD' string (column is TEXT, NOT NULL)",
+      "lead_hash": "crypto.randomUUID() (NOT NULL, unique)",
+      "venue_name": "contact.venueAddress",
+      "tier_selected": "tier name",
+      "addons": "JSON.stringify(selected add-ons incl. additional_hours qty)",
+      "notes": "JSON.stringify({eventType, indoorsOutdoors, startTime, guestCount, howHeard, specialNotes, priceQuoted})",
+      "status": "'Inquired'  (matches existing default)"
+    },
+    "selections_optional": {
+      "note": "If you also persist the Step-2 design, write a row to `selections` after the design step. lead = leads.lead_hash.",
+      "template_name": "design.format",
+      "names": "design.title",
+      "date": "STATE.date",
+      "venue": "contact.venueAddress",
+      "service_tier": "tier name",
+      "configuration": "JSON { subtitle, palette, format }"
+    }
+  },
+  "availability": {
+    "model": "ALLOW-LIST (admin portal). The studio marks dates OPEN in the admin portal; the public calendar shows only OPEN, future, non-booked dates as selectable.",
+    "table": "public.available_dates (date PK, status 'open'|'booked', note)",
+    "publicRead": "GET {url}/rest/v1/available_dates?select=date,status  with apikey + Authorization Bearer = anonKey. RLS allows public SELECT.",
+    "adminWrite": "admin.html: Supabase Auth magic link -> RLS (is_admin()) permits insert/update/delete. Admins seeded in public.admins.",
+    "seededSampleRows": 20,
+    "adminsSeeded": [
+      "kathabooth@gmail.com"
+    ]
+  },
+  "openDecisions": {
+    "pricingConfirmed": true,
+    "submitTransport": "serverless + supabase (WIRED). Add SUPABASE service-role/secret + RESEND_API_KEY to the katha-booking-html Vercel project env.",
+    "emailFrom": "onboarding@resend.dev (self-notify works). Client emails via HoneyBook. Verify kathabooth.com in Resend only if you later want client email from hello@kathabooth.com.",
+    "migrationsApplied": true,
+    "availabilitySource": "available_dates allow-list via admin portal (WIRED)",
+    "minNoticeDays": 7,
+    "admins": "kathabooth@gmail.com (shared business inbox — covers Jed + brother; no second admin needed)",
+    "customDomain": "book.kathabooth.com (CONFIRMED)",
+    "analytics": "Vercel Web Analytics (free on Hobby) — add the one-line script",
+    "serviceArea": "Los Angeles & Orange County",
+    "paymentsAndLegal": "HoneyBook only (native Lead Form + workflows). No Zapier, no Make in the money/legal path."
+  },
+  "templates": [
+    {
+      "id": "loom-oak",
+      "plate": "004",
+      "name": "Loom Oak",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "Newsreader",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Three frames on unbleached ground with a single gilt seam — the warp line of the loom drawn straight down the strip.",
+      "paper": "#ECE7DB",
+      "slot": "#D1CBBF",
+      "edge": "#8A7350",
+      "ink": "#161311",
+      "accent": "#8A7350",
+      "sName": "AMARA & SEBASTIAN",
+      "sSub": "OCTOBER · LONG BEACH"
+    },
+    {
+      "id": "bituin",
+      "plate": "011",
+      "name": "Bituin",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "Newsreader",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Leaf-black ground, two apertures in geometric tension, one champagne thread bisecting the field below.",
+      "paper": "#1A1714",
+      "slot": "#241F1B",
+      "edge": "#8F8C8A",
+      "ink": "#E8E1D3",
+      "accent": "#DCCBB5",
+      "sName": "RENZO & CAMILLE",
+      "sSub": "NOVEMBER · CARSON"
+    },
+    {
+      "id": "calado-pina",
+      "plate": "019",
+      "name": "Calado Piña",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "Cormorant Garamond",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Two openings on raw piña fiber, divided by a hand-stitched calado — openwork drawn the way grandmothers drew it.",
+      "paper": "#E3DEC5",
+      "slot": "#D2CBBF",
+      "edge": "#8F8C8A",
+      "ink": "#161311",
+      "accent": "#8A7350",
+      "sName": "Marisol & Diego",
+      "sSub": "September · Pasadena"
+    },
+    {
+      "id": "sombra-twin",
+      "plate": "027",
+      "name": "Sombra Twin",
+      "style": "Signature",
+      "booth": "White",
+      "formatLabel": "6×4 Square",
+      "layout": "pc-2-sq",
+      "font": "Cormorant Garamond",
+      "ratio": {
+        "w": 3,
+        "h": 2
+      },
+      "desc": "Twin squares with breathing room, each trailing a ghost silhouette offset behind it, as if seen through fabric.",
+      "paper": "#D2CBBF",
+      "slot": "#C0B9AC",
+      "edge": "#8F8C8A",
+      "ink": "#161311",
+      "accent": "#8A7350",
+      "sName": "SOFIA & MARCO",
+      "sSub": "SEPTEMBER · LOS ANGELES"
+    },
+    {
+      "id": "katha-heritage-frame",
+      "plate": "033",
+      "name": "Abel & Calado",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Double fine-lined frame in Champagne Heirloom with FH Ronaldson serif set on a Piña Ecru ground.",
+      "paper": "#E8E1D3",
+      "slot": "#F5EFE4",
+      "edge": "#C4B59D",
+      "ink": "#241E1A",
+      "accent": "#C4B59D",
+      "sName": "Abel & Calado",
+      "sSub": "OCTOBER · MALIBU"
+    },
+    {
+      "id": "editorial-void",
+      "plate": "036",
+      "name": "Editorial Void",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "A study in Ma — three severe apertures adrift on unbroken Piña. No ornament; the negative space is the design.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#111112",
+      "ink": "#111112",
+      "accent": "#1A1816",
+      "sName": "ELENA & MARCUS",
+      "sSub": "AUGUST · PASADENA"
+    },
+    {
+      "id": "tracy-prince",
+      "plate": "038",
+      "name": "Tracy & Prince",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Double fine-lined frame in Champagne Heirloom on Piña ground — the Signature tier's quietest restraint.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#C4B59D",
+      "ink": "#241E1A",
+      "accent": "#C4B59D",
+      "sName": "TRACY & PRINCE",
+      "sSub": "JUNE · LONG BEACH"
+    },
+    {
+      "id": "katha-heirloom-pina",
+      "plate": "089",
+      "name": "Heirloom Piña",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Unbleached piña-fiber ground with a fine calado openwork divider drawn in champagne thread. Iron-bark serif set with quiet restraint.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#C4B59D",
+      "ink": "#241E1A",
+      "accent": "#C4B59D",
+      "sName": "HEIRLOOM PIÑA",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-guhit-1957",
+      "plate": "090",
+      "name": "Guhit 1957",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "The easter egg. Aged-newsprint ground and dense komiks ink sampled directly from the 1957 Romansa Komiks pages of Deo Asis Grepo…",
+      "paper": "#F9D2AE",
+      "slot": "#E5B893",
+      "edge": "#120704",
+      "ink": "#120704",
+      "accent": "#917259",
+      "sName": "GUHIT 1957",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-loom-frame",
+      "plate": "091",
+      "name": "Loom Frame",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "A loom-frame border of nested rules and corner cross-ties, echoing the hardwood frame that holds the warp threads taut.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#241E1A",
+      "ink": "#241E1A",
+      "accent": "#241E1A",
+      "sName": "LOOM FRAME",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-knalum-night",
+      "plate": "092",
+      "name": "Knalum Night",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "T'nalak soil-black ground from the seven-day knalum boil.",
+      "paper": "#1A1816",
+      "slot": "#241E1A",
+      "edge": "#241E1A",
+      "ink": "#EAE2D5",
+      "accent": "#C4B59D",
+      "sName": "KNALUM NIGHT",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-brass-ring",
+      "plate": "093",
+      "name": "Brass Ring",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "The brass ring offered when a finished cloth leaves the loom, drawn as a single gilded circle beneath the names. Permission, and blessing.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#8A7350",
+      "ink": "#241E1A",
+      "accent": "#8A7350",
+      "sName": "BRASS RING",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-binakul-weave",
+      "plate": "094",
+      "name": "Binakul Weave",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Ilocos binakul optical weave at the corners — apotropaic geometry meant to confuse malevolent spirits, woven quietly at low contrast.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#EAE2D5",
+      "ink": "#241E1A",
+      "accent": "#5A5D5A",
+      "sName": "BINAKUL WEAVE",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-capiz-sage",
+      "plate": "095",
+      "name": "Capiz Sage",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Capiz-shell windowpane lattice rendered in sage — the translucent pane that filters lowland light into a soft, even glow.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#9C958A",
+      "ink": "#241E1A",
+      "accent": "#6E6A62",
+      "sName": "CAPIZ SAGE",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-woven-silk",
+      "plate": "096",
+      "name": "Woven Silk",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Generative signature theme representing pure unrefined structural thread paths running continuously.",
+      "paper": "#EAE2D5",
+      "slot": "#EAE2D5",
+      "edge": "#EAE2D5",
+      "ink": "#241E1A",
+      "accent": "#C4B59D",
+      "sName": "WOVEN SILK",
+      "sSub": "2×6 STRIP",
+      "generated": true
+    },
+    {
+      "id": "katha-celestial-bituin",
+      "plate": "097",
+      "name": "Bituin Celestial",
+      "style": "Signature",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-3",
+      "font": "FH Ronaldson Display",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Deep, textured night sky background accented with celestial deconstructed double-borders and an elegant 8-pointed gold star layout.",
+      "paper": "#0B0C10",
+      "slot": "#0B0C10",
+      "edge": "#241e1a",
+      "ink": "#c4b59d",
+      "accent": "#eae2d5",
+      "sName": "BITUIN CELESTIAL",
+      "sSub": "4×6 POSTCARD",
+      "generated": true
+    },
+    {
+      "id": "fn-1",
+      "isFootnote": true,
+      "text": "Calado Piña — openwork drawn from Barong Tagalog embroidery, 17th c."
+    },
+    {
+      "id": "iron-rule",
+      "plate": "041",
+      "name": "Iron Rule",
+      "style": "Classic",
+      "booth": "White",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-4",
+      "font": "Newsreader",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Four frames, one hairline rule. The design steps back so the portrait carries the whole strip.",
+      "paper": "#FAFAF8",
+      "slot": "#ECE7DB",
+      "edge": "#8F8C8A",
+      "ink": "#161311",
+      "accent": "#8F8C8A",
+      "sName": "NADIA + ELIAS",
+      "sSub": "JULY · LONG BEACH"
+    },
+    {
+      "id": "champagne-frame",
+      "plate": "053",
+      "name": "Champagne Frame",
+      "style": "Classic",
+      "booth": "Oak",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "Newsreader",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "A concentric pewter border around two portraits — restraint with a single quiet line.",
+      "paper": "#ECE7DB",
+      "slot": "#D1CBBF",
+      "edge": "#8F8C8A",
+      "ink": "#161311",
+      "accent": "#8F8C8A",
+      "sName": "JAMES & ELEANOR",
+      "sSub": "OCTOBER · MALIBU"
+    },
+    {
+      "id": "wedding-luxe-gold",
+      "plate": "062",
+      "name": "Tradition Gold",
+      "style": "Classic",
+      "booth": "White",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-3",
+      "font": "Cinzel",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Double gold foil fine outline detailing around each slot. Clean Roman serif display, providing timeless heirloom appeal.",
+      "paper": "#FAF6F0",
+      "slot": "#F4EDE3",
+      "edge": "#C5A85C",
+      "ink": "#544634",
+      "accent": "#C5A85C",
+      "sName": "LENA & THEO",
+      "sSub": "JULY · CARSON"
+    },
+    {
+      "id": "rose-whisper",
+      "plate": "075",
+      "name": "Rose Whisper",
+      "style": "Classic",
+      "booth": "White",
+      "formatLabel": "4×6 Postcard",
+      "layout": "pv-2",
+      "font": "Playfair Display",
+      "ratio": {
+        "w": 2,
+        "h": 3
+      },
+      "desc": "Deckled ivory paper backdrop adorned with a hand-sketched classic cream and white rose nested gracefully above the text.",
+      "paper": "#FAF9F6",
+      "slot": "#EDEDE9",
+      "edge": "#EBE9E4",
+      "ink": "#292524",
+      "accent": "#A59E92",
+      "sName": "Ines & Rafael",
+      "sSub": "June · Long Beach"
+    },
+    {
+      "id": "wedding-warm-terracotta",
+      "plate": "088",
+      "name": "Warm Umber",
+      "style": "Classic",
+      "booth": "Oak",
+      "formatLabel": "2×6 Strip",
+      "layout": "strip-4",
+      "font": "EB Garamond",
+      "ratio": {
+        "w": 1,
+        "h": 3
+      },
+      "desc": "Bohemian dry umber clay ground. Accentuated by fine hairline gold rules and micro leafy contours.",
+      "paper": "#7A5A3E",
+      "slot": "#846248",
+      "edge": "#DEC190",
+      "ink": "#FCFAF7",
+      "accent": "#E3CE9F",
+      "sName": "MIRA & JONAS",
+      "sSub": "AUGUST · IRVINE"
+    },
+    {
+      "id": "fn-2",
+      "isFootnote": true,
+      "text": "The Classic Standard — 1px hairlines. The portrait carries the weight."
+    }
+  ]
+}

@@ -15,3 +15,10 @@ exports/*.pdf
 chat_memory.jsonl
 
 
+
+# Scratch: playwright console/page logs (29M, regenerated per run)
+.playwright-cli/
+
+# screenshot harness output
+.shots/
+public/portfolio/Photo Booth Stock Photos/

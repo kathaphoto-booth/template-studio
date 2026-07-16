@@ -1,6 +1,6 @@
 {
   "schema_version": "1",
-  "generated_at": "2026-06-12T20:23:00.438Z",
+  "generated_at": "2026-07-07T17:37:36.733Z",
   "project": {
     "id": "e536b5c5-bbe6-4454-97ec-befb53ad0ca9",
     "name": "template-studio",
@@ -15,48 +15,48 @@
   },
   "score": {
     "track": "walk_on",
-    "total": 58,
+    "total": 65,
     "total_max": 100,
-    "audit": 29,
+    "audit": 32,
     "audit_max": 50,
     "scout": 0,
     "scout_max": 30,
     "community": 1,
     "community_max": 20,
-    "delta_since_last": null,
+    "delta_since_last": 7,
     "band": "mid",
-    "walk_on_total": 58,
+    "walk_on_total": 65,
     "walk_on_band": "mid",
-    "walk_on_audit_normalized": 58
+    "walk_on_audit_normalized": 64
   },
   "standing": null,
   "strengths": [
     {
       "axis": "Infrastructure",
-      "bullet": "CI workflow present + npm lockfile + HTTPS enforced; desktop Lighthouse perf 99 with 0 console errors and 0 network failures."
-    },
-    {
-      "axis": "Security",
-      "bullet": "Session management wired: auth state listener + sign-out handler in hooks/useAuth.ts via @supabase/supabase-js; session gap = false."
+      "bullet": "CI workflow active + lockfile present + 94 commits since May 31 — repo is being actively maintained with discipline."
     },
     {
       "axis": "Code",
-      "bullet": "64 commits across 2 contributors in 12 days; 186 files spanning frontend (7 React components, 10 pages) and backend API routes."
+      "bullet": "4 structured SKILL.md definitions with valid frontmatter under .claude/skills/ — agentic scaffolding is deliberate, not accidental."
+    },
+    {
+      "axis": "UX",
+      "bullet": "Lighthouse mobile perf 98, desktop 100, accessibility 98, Best Practices 100 — zero console errors and 113 KB total payload."
     }
   ],
   "concerns": [
     {
-      "axis": "Security",
-      "bullet": "Webhook handler at app/api/webhooks/honeybook/route.ts has 0 signature checks — forged POST events accepted with no HMAC verification."
+      "axis": "Code",
+      "bullet": "3 hardcoded localhost:3000 URLs in app/api/inquiry/route.ts, capture-screenshots.mjs, capture_mobile.cjs — will 404 in production."
     },
     {
-      "axis": "Code",
-      "bullet": "Hardcoded http://localhost:3000 in app/api/inquiry/route.ts will silently fail on the live Vercel deployment."
+      "axis": "Security",
+      "bullet": "Webhook idempotency gap: handler at app/api/webhooks/honeybook/route.ts has 0 idempotency-key checks — duplicate event processing on provider retry."
     }
   ],
   "snapshot": {
-    "id": "164a847a-9912-443b-b3d1-6e9c664e3995",
-    "created_at": "2026-06-12T10:19:24.682156+00:00",
-    "trigger_type": "initial"
+    "id": "7f7bd691-bfa6-4a8b-a672-aecc0c4db76a",
+    "created_at": "2026-07-07T17:37:34.148019+00:00",
+    "trigger_type": "resubmit"
   }
 }

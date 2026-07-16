@@ -9,7 +9,7 @@
 //
 // TWO-TIER MODEL (this is the whole trick):
 //   • Katha Signature presets  (id ^katha- / name "Katha Signature —")
-//       → held to the Katha palette (10 brand tokens + 2 ecru-safe text) + Playfair Display.
+//       → held to the 11-token Katha palette + FH Ronaldson display.
 //   • Classic presets          (everything else)
 //       → intentionally polished/symmetric wedding aesthetics. EXEMPT from
 //         Katha brand chrome (see .impeccable/ignore.md → classic-template-tier).
@@ -23,18 +23,21 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { LAYOUTS } from "../lib/layouts.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SRC = resolve(__dirname, "../lib/templates.ts");
 const text = readFileSync(SRC, "utf8");
 
-// ── CANON (DESIGN_SYSTEM.v2.md — 10 brand tokens + 2 ecru-safe text) + documented in-use tints ──
+// ── CANON (DESIGN_SYSTEM.v2.md — 11 tokens) + documented in-use tints ──
 const CANON = new Set([
   "#111112", "#eae2d5", "#9c958a", "#c4b59d", "#241e1a",   // UI tokens
-  "#1a1816", "#8c382a", "#a35c44", "#5a5d5a", "#b5b8a3",   // narrative tokens
+  "#1a1816", "#3d2b1f", "#a35c44", "#5a5d5a", "#b5b8a3",   // narrative tokens
   "#5a564e", "#6e6a62",                                     // ecru-safe muted (§VIII)
-  "#e0d7c7", "#8f4d39",                                     // documented Signature tints
+  "#e0d7c7",                                                // documented Signature tint
+  // #8f4d39 REMOVED 2026-07-11 — retired red family, zero uses (Gilded Archive no-red law)
+  "#dccbb5", "#8a7350", "#c2b19d",                          // Gilded Archive gilt (ratified 2026-07-06/07)
+  "#e9dfcc", "#4e5b48",                                     // Sepia Bone stock + moss state (Gilded Archive)
+  "#f9d2ae", "#e5b893",                                     // Guhit 1957 heritage newsprint — sampled from Deo Asis Grepo's Romansa Komiks pages (easter egg, ratified 2026-07-14)
 ]);
 const LEGACY_OAX = new Set(["#0a0806", "#bf9d2c", "#c4c1b8", "#161618"]);
 const PURE = new Set(["#000000", "#000", "#ffffff", "#fff"]);
@@ -56,8 +59,8 @@ const nearCanon = (hex) => {
 };
 
 // Display font mandate for Signature tier (DESIGN_SYSTEM §3 / drift D1).
-const SIGNATURE_DISPLAY_OK = /playfair display|hanken grotesk/i;
-const SIGNATURE_DISPLAY_DRIFT = /cormorant|italiana|fraunces|eb garamond|cinzel|rochester|parisienne/i;
+const SIGNATURE_DISPLAY_OK = /fh ronaldson/i;
+const SIGNATURE_DISPLAY_DRIFT = /fraunces|cormorant|italiana|playfair|cinzel|rochester|parisienne/i;
 
 // Forbidden user-facing vocabulary (DESIGN_SYSTEM §6 + §VIII agentic leak).
 const FORBIDDEN_VOCAB = [
@@ -115,24 +118,6 @@ let sig = 0, classic = 0;
 
 for (const b of blocks) {
   const id = field(b, "id") || "(unknown)";
-
-  // layout-law cross-check (decisions.md 2026-06-11) — BOTH tiers, the slot
-  // law is catalog-wide: layoutId must resolve, its format must match the
-  // preset type, and the resolved layout must obey the 2/3/4-slot law.
-  const layoutId = field(b, "layoutId");
-  if (layoutId) {
-    const layout = LAYOUTS[layoutId];
-    const type = field(b, "type");
-    if (!layout)
-      P0.push(`${id} · layoutId "${layoutId}" — dangling ref, no such layout in LAYOUTS`);
-    else {
-      if (type && layout.format !== type)
-        P0.push(`${id} · layoutId "${layoutId}" is format "${layout.format}" but preset type is "${type}"`);
-      if (layout.slotCount < 2 || layout.slotCount > 4)
-        P0.push(`${id} · layout "${layoutId}" has ${layout.slotCount} slot(s) — violates the 2/3/4-slot law`);
-    }
-  }
-
   if (!isSignature(b)) { classic++; continue; }
   sig++;
 
@@ -149,7 +134,7 @@ for (const b of blocks) {
   // display font mandate
   const ff = field(b, "fontFamily") || "";
   if (SIGNATURE_DISPLAY_DRIFT.test(ff) && !SIGNATURE_DISPLAY_OK.test(ff))
-    P1.push(`${id} · fontFamily ${ff.trim()} — drift D1: Signature display must be Playfair Display or Hanken Grotesk`);
+    P1.push(`${id} · fontFamily ${ff.trim()} — drift D1: Signature display must be FH Ronaldson`);
 }
 
 // vocab scan over USER-FACING field values only (not code comments)

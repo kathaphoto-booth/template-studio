@@ -13,7 +13,9 @@ test("/inquire submits 3 fields and shows the portal link on-screen", async ({ p
   await page.getByLabel(/name/i).fill("Ana Reyes");
   await page.getByLabel(/email/i).fill("ana@example.com");
   await page.getByLabel(/event date/i).fill("2026-09-12");
-  await page.getByRole("button", { name: /commission|begin|continue/i }).click();
+  // The submit CTA is "Send Inquiry" (renamed late in Section D; the old
+  // /commission|begin|continue/ regex never matched it).
+  await page.getByRole("button", { name: /send inquiry/i }).click();
 
   const link = page.getByRole("link", { name: /template|design|continue/i });
   await expect(link).toHaveAttribute("href", /\/portal\/deadbeef.*\/template-design/);
