@@ -4,16 +4,48 @@ import AxeBuilder from '@axe-core/playwright';
 // Surfaces reachable without auth; add the admin queue here once Plan 3 lands.
 const SURFACES = ['/gallery', '/portal/demo/template-design'];
 
+// The cinematic entrance is session-guarded (plays once per session). Seed the
+// session flag so scans measure the page at rest — WCAG contrast applies to
+// content at rest, and mid-fade blends read as false contrast failures.
+const SKIP_ENTRANCE = { 'katha-archive-entered': '1' };
+
 for (const path of SURFACES) {
   test(`axe: ${path} has no serious violations`, async ({ page }) => {
-    await page.goto(path);
-    const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+    await page.addInitScript((kv) => {
+      for (const [k, v] of Object.entries(kv)) sessionStorage.setItem(k, v as string);
+    }, SKIP_ENTRANCE);
+    // A 404 page passes axe trivially — assert the surface actually exists
+    // so a lost route can never masquerade as an accessible one (found the
+    // hard way when a merge dropped /gallery and this suite stayed green).
+    const res = await page.goto(path);
+    expect(res?.status(), `${path} must serve 200`).toBe(200);
+    // Let the weave/fin reveals land, then reveal the parallax footer by
+    // scrolling to the end — contrast is judged in each surface's readable
+    // state. At page top the footer sits occluded behind the opaque page at
+    // 0.2 opacity (the Osmo reveal), which axe misreads as failing text.
+    await page.waitForTimeout(1800);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(900);
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      // Velvet Rope law (DESIGN.md §4): locked content stays visible but
+      // dimmed to 0.22 and carries `inert` — it is inactive UI, exempt from
+      // the contrast requirement until the gate opens.
+      .exclude('.act-gate:not(.act-gate--open)')
+      .analyze();
     const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
     expect(serious, JSON.stringify(serious.map((v) => v.id), null, 2)).toEqual([]);
   });
 
   test(`tap targets >=44px: ${path}`, async ({ page }) => {
-    await page.goto(path);
+    await page.addInitScript((kv) => {
+      for (const [k, v] of Object.entries(kv)) sessionStorage.setItem(k, v as string);
+    }, SKIP_ENTRANCE);
+    const res = await page.goto(path);
+    expect(res?.status(), `${path} must serve 200`).toBe(200);
+    await page.waitForTimeout(1800);
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(900);
     const small = await page.$$eval('a[href], button, [role="button"], [role="radio"], [role="option"], input', (els) =>
       els.filter((el) => {
         const r = (el as HTMLElement).getBoundingClientRect();
