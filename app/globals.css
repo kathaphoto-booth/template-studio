@@ -89,6 +89,32 @@
   --touch-lg: 48px;     /* primary actions */
   --field-h: 56px;      /* input height */
   --tap-gap: 12px;      /* min gap between adjacent targets */
+
+  /* ═══ Compat layer — legacy names still referenced by the gated
+     main-lineage pages (/inquire, /studio, /legacy-home, portal chrome).
+     Aliases only; every hex already exists in the Gilded world (print-stock
+     inks or the muted-on-light pair). No red. Retire with those pages. ═══ */
+  --color-katha-pina-ecru: #EAE2D5;          /* legacy ecru (pre-Gilded) */
+  --color-katha-iron-bark: #241E1A;           /* = plate ink (Heirloom Piña) */
+  --color-katha-champagne-heirloom: #C4B59D;  /* = plate edge/accent */
+  --color-katha-ecru-muted: #5A564E;          /* = --color-stock-ink-mut */
+  --color-katha-ecru-muted-soft: #6E6A62;
+
+  /* Vince-Alignment 2.1 — Vince's storefront scale, scoped to the gated
+     legacy proposal-clone pages only (never Gilded surfaces). */
+  --color-katha-vince-cream:      #F6F3EC;
+  --color-katha-vince-beige:      #ECE4DA;
+  --color-katha-vince-taupe:      #7B736B;
+  --color-katha-vince-walnut:     #574C3F;
+  --color-katha-vince-near-black: #36302A;
+}
+
+/* Literal-name aliases so direct var(--katha-vince-*) references resolve (parallel
+   naming used by the proposal-clone). Mirrors the @theme --color-katha-vince-* scale. */
+:root {
+  --katha-vince-cream: #F6F3EC; --katha-vince-beige: #ECE4DA;
+  --katha-vince-taupe: #7B736B; --katha-vince-walnut: #574C3F;
+  --katha-vince-near-black: #36302A;
 }
 
 @layer base {
@@ -271,4 +297,209 @@ body.drawer { overflow: hidden; }
   .gate-plate:hover, .tier-card:hover, .titem:hover {
     transform: none;
   }
+}
+
+/* ==========================================================================
+   INQUIRY MULTI-STEP FUNNEL ANIMATIONS
+   ========================================================================== */
+
+@keyframes slow-creep {
+  from { transform: translateY(0%); }
+  to { transform: translateY(-10%); }
+}
+
+.cortado-parallax {
+  /* Scroll-driven animation for the Barong Cortado texture */
+  animation: slow-creep linear both;
+  animation-timeline: scroll();
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Whisper Translucency Frame Architecture */
+.l-frame-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 12px;
+  background-color: rgba(234, 226, 213, 0.45); /* Piña Ecru base */
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L8,8 M8,0 L0,8' stroke='rgba(196, 181, 157, 0.3)' stroke-width='0.5'/%3E%3C/svg%3E");
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99;
+  pointer-events: none;
+  /* Softly fade out to the right so it doesn't create a hard box */
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to right, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+}
+
+.l-frame-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 12px;
+  height: 100vh;
+  background-color: rgba(234, 226, 213, 0.45); /* Piña Ecru base */
+  background-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,0 L8,8 M8,0 L0,8' stroke='rgba(196, 181, 157, 0.3)' stroke-width='0.5'/%3E%3C/svg%3E");
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 99;
+  pointer-events: none;
+  /* Softly fade out to the bottom so it doesn't create a hard box */
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+}
+
+@media (min-width: 768px) {
+  .l-frame-top {
+    height: 16px;
+  }
+  .l-frame-left {
+    width: 16px;
+  }
+}
+
+/* =========================================
+   PRIMARY FILTERS: Horizontal Swipe Track
+   ========================================= */
+.tier-swipe-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding: 12px 0 24px 0;
+  border-bottom: 0.5px solid rgba(196, 181, 157, 0.3);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.tier-swipe-track::-webkit-scrollbar {
+  display: none;
+}
+
+.tier-swipe-track a {
+  scroll-snap-align: start;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--color-katha-iron-bark);
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.tier-swipe-track a[aria-current="true"] {
+  opacity: 1;
+  font-weight: 500;
+}
+
+.tier-swipe-track a:focus-visible {
+  outline: 2px solid var(--color-katha-champagne-heirloom);
+  outline-offset: 4px;
+}
+
+/* =========================================
+   SECONDARY FILTERS: Native Drawer
+   ========================================= */
+.filter-drawer {
+  margin: 16px 0 32px 0;
+}
+
+.filter-drawer summary {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  list-style: none;
+  color: var(--color-katha-iron-bark);
+  opacity: 0.7;
+  padding-bottom: 8px;
+}
+
+.filter-drawer summary::-webkit-details-marker {
+  display: none;
+}
+
+.filter-drawer summary:focus-visible {
+  outline: 2px solid var(--color-katha-champagne-heirloom);
+  outline-offset: 4px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+  padding-top: 24px;
+  border-top: 0.5px solid rgba(196, 181, 157, 0.3);
+}
+
+/* =========================================
+   FILTER OPTIONS & TYPOGRAPHY
+   ========================================= */
+.whisper-label {
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--color-katha-ecru-muted);
+  display: block;
+  margin-bottom: 12px;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.filter-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-decoration: none;
+  color: var(--color-katha-iron-bark);
+  opacity: 0.4;
+  transition: all 0.2s ease;
+}
+
+.filter-link[aria-current="true"] {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.filter-link:focus-visible {
+  outline: 2px solid var(--color-katha-champagne-heirloom);
+  outline-offset: 2px;
+}
+
+/* =========================================
+   GALLERY AUTO-FIT & EMPTY STATE
+   ========================================= */
+.empty-state-whisper {
+  grid-column: 1 / -1;
+  padding: 64px 0;
+  text-align: center;
+  font-family: var(--font-sans);
+  color: var(--color-katha-ecru-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.reset-curation-btn {
+  display: inline-block;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-katha-iron-bark);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-katha-iron-bark);
 }

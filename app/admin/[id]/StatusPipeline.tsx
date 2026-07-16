@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { LEAD_STATUSES, LeadStatus } from "@/lib/constants";
 
-export function StatusPipeline({ currentStatus, leadHash, authToken }: { currentStatus: string; leadHash: string; authToken?: string }) {
+export function StatusPipeline({ currentStatus, leadHash }: { currentStatus: string; leadHash: string }) {
   const [status, setStatus] = useState<LeadStatus>((currentStatus as LeadStatus) ?? "Inquired");
   const [saving, setSaving] = useState(false);
 
@@ -18,12 +18,11 @@ export function StatusPipeline({ currentStatus, leadHash, authToken }: { current
     setStatus(next);
     setSaving(true);
     try {
+      // Same-origin PATCH — the browser re-attaches the cached Basic-auth
+      // credential automatically (admin already authenticated to load /admin).
       const res = await fetch("/api/admin/status", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          ...(authToken ? { Authorization: `Basic ${authToken}` } : {}),
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ lead_hash: leadHash, status: next }),
       });
       if (!res.ok) {

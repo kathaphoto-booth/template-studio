@@ -98,7 +98,7 @@ function buildPreviewEmail(name: string, message?: string): string {
       </h2>
       <p style="font-size:16px;margin:0 0 20px;">Dear ${name},</p>
       ${message
-        ? `<p style="font-size:15px;font-style:italic;margin:0 0 28px;padding:16px 20px;border-left:3px solid #C4B59D;background:rgba(196,181,157,0.12);">${escapeHtml(message)}</p>`
+        ? `<p style="font-size:15px;font-style:italic;margin:0 0 28px;padding:16px 20px;border-top:1px dashed #C4B59D;background:rgba(196,181,157,0.12);">${escapeHtml(message)}</p>`
         : ""}
       <p style="font-size:15px;margin:0 0 32px;color:#3a3530;">
         We have finished crafting your photo booth design. Our team will reach out with the final file and any next steps for your event.
@@ -106,7 +106,7 @@ function buildPreviewEmail(name: string, message?: string): string {
       <p style="font-size:13px;color:#5A564E;border-top:1px dashed #C4B59D;padding-top:20px;margin:0 0 24px;font-style:italic;">
         A photo experience designed with intention.
       </p>
-      <p style="font-family:'Inter',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#5A564E;margin:0;">
+      <p style="font-family:'Libre Franklin',sans-serif;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:#5A564E;margin:0;">
         Warmly,<br/>The Katha Team
       </p>
     </div>

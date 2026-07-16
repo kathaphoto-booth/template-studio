@@ -26,12 +26,22 @@ import { CinematicEntrance } from '@/components/CinematicEntrance';
 import { EntryCapture } from '@/components/entry/EntryCapture';
 
 import { KathaThread } from '@/components/marks/KathaThread';
+import JsonLd from '@/components/seo/JsonLd';
+
+const SITE_DESCRIPTION =
+  'Heritage photo-booth installations. Oak-wood DSLR capture, archival prints, quiet high-contrast portraits. Check open dates and reserve your night — Los Angeles & Orange County.';
 
 export const metadata: Metadata = {
-  title: 'Katha Booth — Check Availability & Reserve · Los Angeles & Orange County',
-  description:
-    'Heritage photo-booth installations. Oak-wood DSLR capture, archival prints, quiet high-contrast portraits. Check open dates and reserve your night — Los Angeles & Orange County.',
+  metadataBase: new URL('https://book.kathabooth.com'),
+  title: {
+    default: 'Katha Booth — Check Availability & Reserve · Los Angeles & Orange County',
+    template: '%s — Katha Booth',
+  },
+  description: SITE_DESCRIPTION,
   keywords: ['photo booth', 'Los Angeles', 'Orange County', 'wedding', 'editorial', 'archival prints'],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Katha Booth — The Gilded Archive',
     description:
@@ -39,6 +49,12 @@ export const metadata: Metadata = {
     type: 'website',
     url: 'https://book.kathabooth.com',
     siteName: 'Katha Booth',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Katha Booth — The Gilded Archive',
+    description: SITE_DESCRIPTION,
   },
 };
 
@@ -74,6 +90,8 @@ export default function RootLayout({
             <feColorMatrix values="0 0 0 0 0.141  0 0 0 0 0.118  0 0 0 0 0.102  0 0 0 0.12 0" />
           </filter>
         </svg>
+        {/* Site-wide structured data (schema.org JSON-LD) */}
+        <JsonLd />
         <KathaThread className="fixed inset-0 z-0 pointer-events-none" />
         <SmoothScrollProvider>
           <CinematicEntrance>

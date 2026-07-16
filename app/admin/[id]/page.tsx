@@ -1,3 +1,5 @@
+ 
+ 
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -56,18 +58,23 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
       </Link>
 
       {/* Header */}
-      <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: "28px", fontWeight: 400, color: "#EAE2D5", letterSpacing: "-0.02em", margin: "0 0 8px" }}>
+      <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", fontWeight: 400, color: "#EAE2D5", letterSpacing: "-0.02em", margin: "0 0 8px" }}>
         {lead.client_name}
       </h1>
       <p style={{ fontSize: "14px", color: "#9C958A", margin: "0 0 40px", fontFamily: "'Inter', sans-serif" }}>
         {lead.client_email}{lead.client_phone ? ` · ${lead.client_phone}` : ""}
       </p>
 
-      {/* Status pipeline — Client Component */}
+      {/* Status pipeline — Client Component.
+          NOTE: do NOT pass the Studio password down as a prop. Client-component
+          props are serialized into the RSC payload and ship to the browser —
+          embedding `admin:<STUDIO_PASSWORD>` here previously leaked the master
+          credential into the page HTML. The PATCH to /api/admin/status is
+          same-origin, so the browser re-attaches the cached Basic-auth header
+          automatically (same as SendPreview's call to /api/admin/notify). */}
       <StatusPipeline
         currentStatus={lead.status}
         leadHash={lead.lead_hash}
-        authToken={Buffer.from(`admin:${process.env.STUDIO_PASSWORD ?? ""}`).toString("base64")}
       />
 
       {/* Client brief */}

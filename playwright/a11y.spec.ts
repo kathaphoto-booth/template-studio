@@ -36,7 +36,11 @@ test('reduced-motion renders all content (no opacity:0 traps)', async ({ browser
   await ctx.close();
 });
 
-test('keyboard: the funnel primary CTA is reachable and focus is visible', async ({ page }) => {
+test('keyboard: the funnel primary CTA is reachable and focus is visible', async ({ page, browserName }) => {
+  // WebKit (the iphone-se project) does not move focus with a plain Tab —
+  // that's iOS Safari's real keyboard model, not a product regression. The
+  // keyboard-focus law is asserted by the desktop (chromium) project.
+  test.skip(browserName === 'webkit', 'plain Tab does not traverse focus in WebKit');
   await page.goto('/gallery');
   await page.keyboard.press('Tab');
   const outline = await page.evaluate(() => {

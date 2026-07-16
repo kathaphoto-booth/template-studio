@@ -19,7 +19,7 @@ export default function NotFound() {
         </p>
         <Link
           href="/gallery"
-          className="inline-block bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-6 py-3.5 rounded-[3px] hover:brightness-105 transition-all"
+          className="inline-flex items-center min-h-[var(--touch)] bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[10px] tracking-[0.16em] uppercase px-6 rounded-[3px] hover:brightness-105 transition-all"
         >
           Return to the gallery →
         </Link>

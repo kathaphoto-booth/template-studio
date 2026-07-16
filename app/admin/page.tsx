@@ -1,3 +1,4 @@
+ 
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 
@@ -66,7 +67,7 @@ export default async function AdminPage(props: { searchParams: Promise<{ page?: 
     return (
     <div>
       <div style={{ marginBottom: "32px", display: "flex", alignItems: "baseline", gap: "16px" }}>
-        <h1 style={{ fontFamily: "'Fraunces', serif", fontSize: "28px", fontWeight: 400, margin: 0, color: "#EAE2D5", letterSpacing: "-0.02em" }}>
+        <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "28px", fontWeight: 400, margin: 0, color: "#EAE2D5", letterSpacing: "-0.02em" }}>
           Leads
         </h1>
         <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", color: "#9C958A" }}>

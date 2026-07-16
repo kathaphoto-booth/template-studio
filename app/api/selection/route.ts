@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase";
+import { isServiceTierId, getServiceTier } from "@/lib/serviceTiers";
+import { checkRateLimit, getClientIp, hashIp } from "@/lib/rateLimit";
 
 
 // ──────────────────────────────────────────────────────────────────────
@@ -26,7 +28,31 @@ type Selection = {
   notes?: string | null;
   lead?: string | null;
   selectedAt: string;
+  // Full interactive design state (font, text position, tier, future knobs).
+  // Persisted as a single JSONB column — no per-knob schema churn.
+  configuration?: Record<string, unknown> | null;
+  serviceTier?: string | null; // ServiceTierId; validated below
+  address?: string | null;     // PII — server-only
 };
+
+// Reference photos arrive either as Storage paths (refs/<uuid>.<ext>) or
+// legacy inline base64 (data:image/...). Storage paths get short-lived
+// signed URLs for the notification email; base64 passes through as-is.
+async function resolveReferenceUrls(photos: string[] | null | undefined): Promise<string[]> {
+  if (!photos || photos.length === 0) return [];
+  const resolved: string[] = [];
+  for (const p of photos) {
+    if (p.startsWith("data:")) {
+      resolved.push(p);
+    } else if (supabaseAdmin) {
+      const { data } = await supabaseAdmin.storage
+        .from("katha-references")
+        .createSignedUrl(p, 60 * 60 * 24 * 7); // 7 days
+      if (data?.signedUrl) resolved.push(data.signedUrl);
+    }
+  }
+  return resolved;
+}
 
 const FORBIDDEN_WORDS = ["luxury", "premium", "stunning", "amazing"];
 
@@ -44,19 +70,19 @@ function escapeHtml(str: string): string {
 //   • from: 'onboarding@resend.dev' works out of the box (no domain verification)
 //   • once kathabooth.com is verified with Resend, set NOTIFICATION_FROM to
 //     e.g. "Katha <hello@kathabooth.com>"
-//   • to: defaults to jedgrepo@gmail.com if NOTIFICATION_EMAIL is unset
+//   • to: defaults to kathabooth@gmail.com if NOTIFICATION_EMAIL is unset
 async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: string }> {
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
-  }
 
-  const toAddr = process.env.NOTIFICATION_EMAIL || "jedgrepo@gmail.com";
+  const toAddr = process.env.NOTIFICATION_EMAIL || "kathabooth@gmail.com";
   const fromAddr = process.env.NOTIFICATION_FROM || "Katha <onboarding@resend.dev>";
   const appUrl = process.env.APP_URL || "https://kathabooth.com";
 
+  const tier = s.serviceTier ? getServiceTier(s.serviceTier) : undefined;
+  const tierLabel = tier ? `${tier.name} · ${tier.material} — $${tier.price.toLocaleString()}` : "—";
+
   // Construct secure, dynamic query parameter link to auto-fill the admin room
-  const customizeLink = `${appUrl}/?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
+  const customizeLink = `${appUrl}/studio?names=${encodeURIComponent(s.names || "")}&date=${encodeURIComponent(s.date || "")}&venue=${encodeURIComponent(s.venue || "")}&preset=${encodeURIComponent(s.templateId)}&layout=${encodeURIComponent(s.layout)}&font=${encodeURIComponent(s.fontFamily || "")}`;
 
   const subject = `Template Chosen — ${s.names || "Client"} · ${s.templateName}`;
   
@@ -68,9 +94,16 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
     `Venue/Notes:   ${s.venue || "—"}`,
     `Selected Font: ${s.fontFamily || "—"}`,
     s.notes ? `Client Notes:  ${s.notes}` : null,
+    `Service Tier:  ${tierLabel}`,
+    `Venue Address: ${s.address || "—"}`,
     `Selected At:   ${s.selectedAt}`,
     `Direct Studio Customize Link: ${customizeLink}`
   ].filter(Boolean).join("\n");
+
+  if (!apiKey) {
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: toAddr, subject });
+    return { ok: false, detail: "email not configured (missing RESEND_API_KEY)" };
+  }
 
   // Premium Wabi-Sabi styled HTML email matching Katha aesthetic
   let html = `
@@ -108,6 +141,14 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
           <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Selected Font</td>
           <td style="padding:10px 0; color:#241E1A; font-style:italic;">${s.fontFamily ? escapeHtml(s.fontFamily) : "—"}</td>
         </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Service Tier</td>
+          <td style="padding:10px 0; color:#241E1A;">${escapeHtml(tierLabel)}</td>
+        </tr>
+        <tr style="border-bottom:1px dashed #EAE2D5;">
+          <td style="padding:10px 0; font-weight:bold; color:#5A564E;">Venue Address</td>
+          <td style="padding:10px 0; color:#241E1A;">${s.address ? escapeHtml(s.address) : "—"}</td>
+        </tr>
       </table>
 
       ${s.notes ? `
@@ -129,14 +170,15 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
     </div>
   `;
 
-  if (s.referencePhotos && s.referencePhotos.length > 0) {
+  const referenceUrls = await resolveReferenceUrls(s.referencePhotos);
+  if (referenceUrls.length > 0) {
     html += `
       <div style="max-width:600px; margin:20px auto 0 auto; font-family: sans-serif; padding:0 10px;">
         <h3 style="font-size:14px; color:#241E1A; margin-bottom: 12px; font-weight: 600;">Uploaded Reference Photos:</h3>
         <div style="display:flex; gap:12px; flex-wrap:wrap;">
-          ${s.referencePhotos.map((photo, idx) => `
-            <div style="border: 1px solid #C4B59D; border-radius: 4px; padding: 4px; background: white; margin-bottom: 10px;">
-              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:180px; max-height:180px; object-fit:cover; display:block; border-radius: 2px;" />
+          ${referenceUrls.map((photo, idx) => `
+            <div style="border: 1px solid #C4B59D; padding: 4px; background: #EAE2D5; margin-bottom: 10px;">
+              <img src="${photo}" alt="Reference Photo ${idx + 1}" style="max-width:180px; max-height:180px; object-fit:cover; display:block;" />
             </div>
           `).join("")}
         </div>
@@ -153,9 +195,13 @@ async function dispatchEmail(s: Selection): Promise<{ ok: boolean; detail: strin
       html,
       text: textLines + (s.referencePhotos && s.referencePhotos.length > 0 ? `\n\n[Attached reference photos: ${s.referencePhotos.length}]` : ""),
     });
-    if (error) return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
+    if (error) {
+      if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: toAddr, subject });
+      return { ok: false, detail: `resend error: ${error.message || JSON.stringify(error)}` };
+    }
     return { ok: true, detail: `email sent (id ${data?.id || "?"})` };
   } catch (err: any) {
+    if (process.env.NODE_ENV !== "production") console.log("[email:mock]", { to: toAddr, subject });
     return { ok: false, detail: `email exception: ${err?.message || err}` };
 
   }
@@ -247,6 +293,9 @@ async function dispatchSupabase(s: Selection): Promise<{ ok: boolean; detail: st
         notes: s.notes,
         lead: s.lead,
         selected_at: s.selectedAt,
+        configuration: s.configuration ?? {},
+        service_tier: s.serviceTier,
+        address: s.address,
       });
 
     if (error) {
@@ -262,6 +311,24 @@ async function dispatchSupabase(s: Selection): Promise<{ ok: boolean; detail: st
 
 // ── POST handler ──────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const ipHash = hashIp(ip);
+  const rateLimitResult = await checkRateLimit(`selection:${ipHash}`, 10, 60);
+
+  if (!rateLimitResult.success) {
+    return NextResponse.json(
+      { ok: false, error: "Too many template selections. Please try again later." },
+      {
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit": "10",
+          "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+          "X-RateLimit-Reset": rateLimitResult.reset,
+        },
+      }
+    );
+  }
+
   let body: any;
   try { body = await req.json(); }
   catch { return NextResponse.json({ ok: false, error: "invalid json" }, { status: 400 }); }
@@ -278,6 +345,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "payload rejected" }, { status: 400 });
   }
 
+  if (body?.serviceTier && !isServiceTierId(body.serviceTier)) {
+    return NextResponse.json({ ok: false, error: "invalid serviceTier" }, { status: 400 });
+  }
+
   const selection: Selection = {
     templateId: String(body.templateId).slice(0, 100),
     templateName: String(body.templateName).slice(0, 200),
@@ -292,6 +363,14 @@ export async function POST(req: NextRequest) {
     notes: body.notes ? String(body.notes).slice(0, 2000) : null,
     lead: body.lead ? String(body.lead).slice(0, 200) : null,
     selectedAt: new Date().toISOString(),
+    configuration:
+      body.configuration && typeof body.configuration === "object" && !Array.isArray(body.configuration)
+        && JSON.stringify(body.configuration).length <= 10_000
+        ? body.configuration
+        : null,
+    serviceTier:
+      body.serviceTier && isServiceTierId(body.serviceTier) ? body.serviceTier : null,
+    address: body.address ? String(body.address).slice(0, 500) : null,
   };
 
   // ── Durable capture FIRST. A lead must never depend on email delivery.

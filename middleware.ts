@@ -1,24 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
-// Pure JS constant-time comparison for Edge Runtime support
-function constantTimeCompare(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
+
+// Constant-time string compare. Node's crypto.timingSafeEqual is unavailable
+// in the edge runtime (throws at request time), so we do it by hand.
+function safeEqual(a: string, b: string): boolean {
+  const len = Math.max(a.length, b.length);
+  let diff = a.length === b.length ? 0 : 1;
+  for (let i = 0; i < len; i++) diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0);
+  return diff === 0;
 }
 
 // ──────────────────────────────────────────────────────────────────────
 // Studio gate — protects the admin/designer UI (and AI routes) behind a
 // simple HTTP Basic auth check.
 //
-// PROTECTED   /admin     → operator studio
-//             /api/generate, /api/admin → AI + admin cost surface
+// PROTECTED   /studio, /studio/*       → studio UI (admin tweak)
+//             /admin,  /admin/*        → lead list + per-lead detail (PII)
+//             /api/admin/*             → admin mutations (status, notify)
+//             /api/generate*           → AI cost surface (future)
 //
-// PUBLIC      /          → redirects to /gallery (the public front door)
-//             /gallery   → client-facing funnel
-//             /api/selection → client submits their pick (POST only)
+// PUBLIC      /                        → redirects to /gallery (the public front door)
+//             /gallery                 → client-facing funnel
+//             /portal/[id]/...         → client-facing template gallery
+//             /api/selection, /api/lead, /api/request, /api/availability,
+//             /api/upload-url, /api/webhooks/*
 //
 // Set STUDIO_PASSWORD in env. Username can be anything (we ignore it).
 // If STUDIO_PASSWORD is unset, the gate stands open — in every environment.
@@ -27,11 +31,17 @@ function constantTimeCompare(a: string, b: string): boolean {
 // before sharing the studio URL; until then the studio is reachable.
 // ──────────────────────────────────────────────────────────────────────
 
-const PROTECTED_PATHS = ["/admin"];
-const PROTECTED_PREFIXES = ["/api/generate", "/api/admin"];
+// Exact path OR any sub-path under these bases is protected. Sub-path match
+// uses the `base + "/"` boundary so "/admin" never accidentally matches
+// "/administrator" — and, critically, "/admin/<lead-uuid>" IS gated (the
+// earlier exact-match list let it through, leaking lead PII to anon callers).
+const PROTECTED_BASES = ["/studio", "/admin", "/api/admin"];
+// Loose string prefixes — anything starting with these is protected. Kept
+// loose so "/api/generate" also covers a future "/api/generate-theme".
+const PROTECTED_PREFIXES = ["/api/generate"];
 
 function isProtected(pathname: string): boolean {
-  if (PROTECTED_PATHS.includes(pathname)) return true;
+  if (PROTECTED_BASES.some((b) => pathname === b || pathname.startsWith(b + "/"))) return true;
   return PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
 }
 
@@ -50,8 +60,7 @@ export function middleware(req: NextRequest) {
     const decoded = Buffer.from(encoded, "base64").toString("utf-8");
     const colonIndex = decoded.indexOf(":");
     const provided = decoded.slice(colonIndex + 1);
-    const match = constantTimeCompare(provided, password);
-    if (match) return NextResponse.next();
+    if (safeEqual(provided, password)) return NextResponse.next();
   }
 
   return new NextResponse("Unauthorized", {

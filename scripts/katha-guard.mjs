@@ -55,7 +55,7 @@ if (!p0Only) {
   try {
     const s = g3.stdout || "";
     findings = JSON.parse(s.slice(s.indexOf("["), s.lastIndexOf("]") + 1));
-  } catch { console.log("  (detect produced no parseable JSON — skipping)"); }
+      } catch { console.log("  (detect produced no parseable JSON — skipping)"); }
   if (findings.length) {
     const bySev = {};
     for (const f of findings) bySev[f.severity] = (bySev[f.severity] || 0) + 1;

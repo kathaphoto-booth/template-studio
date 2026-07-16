@@ -1,0 +1,87 @@
+.overlay {
+  background-color: var(--modal-bg, rgba(239, 237, 230, 0.85)); /* Ecru-safe base with opacity */
+  backdrop-filter: blur(8px);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 50;
+}
+
+.content {
+  background-color: #FAFAFA; /* Light mode base, or use var(--bg-primary) if defined */
+  border-radius: 0; /* Brand law: no rounded corners */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 500px;
+  max-height: 85vh;
+  padding: 32px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 51;
+  overflow-y: auto;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  margin: 0 0 8px;
+  font-family: var(--font-display), serif;
+  font-weight: 500;
+  color: var(--text-primary, #1A1A1A);
+  font-size: 1.5rem;
+}
+
+.description {
+  margin: 0 0 24px;
+  color: var(--text-secondary, #666);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-family: var(--font-inter), sans-serif;
+}
+
+.closeButton {
+  font-family: inherit;
+  border-radius: 0; /* Brand law: no rounded corners */
+  height: 25px;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+
+.closeButton:focus {
+  outline: 2px solid var(--modal-accent, #222);
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

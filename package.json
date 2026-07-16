@@ -18,11 +18,14 @@
     "guard:ci": "node scripts/katha-guard.mjs --p0-only",
     "guard:templates": "node scripts/katha-template-guard.mjs",
     "guard:layout": "node scripts/validate-spec.mjs",
-    "guard:detect": "impeccable detect app lib --json"
+    "guard:detect": "impeccable detect app lib --json",
+    "figma:sync": "node --env-file=.env scripts/sync_figma.js"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^5.2.1",
     "@katha/core": "file:./vendor/katha-core",
+    "@radix-ui/react-dialog": "^1.1.16",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.106.2",
     "autoprefixer": "^10.4.21",
@@ -40,10 +43,12 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "resend": "^6.12.4",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "workflow": "^4.5.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
+    "@next/bundle-analyzer": "^16.2.9",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "4.1.11",
     "@tailwindcss/typography": "^0.5.19",
