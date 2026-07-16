@@ -46,8 +46,11 @@ export default function ProofClient() {
   const templates = (content as any).templates as any[];
   const palettes = (content as any).palettes as Palette[];
 
+  // loom-oak carries real sample inscriptions ('AMARA & SEBASTIAN' ·
+  // 'OCTOBER · LONG BEACH'), so the plate reads like a finished print even
+  // before the visitor types — the generated plates sample as format labels.
   const template = useMemo(
-    () => templates.find((t) => t.id === 'katha-heirloom-pina') ?? templates[0],
+    () => templates.find((t) => t.id === 'loom-oak') ?? templates[0],
     [templates],
   );
 
@@ -60,8 +63,20 @@ export default function ProofClient() {
 
   return (
     <main className="min-h-screen bg-[var(--color-katha-l0)] text-[var(--color-katha-ink)]">
+      {/* Wabi-sabi grain — same material layer as the gallery */}
+      <div className="grain" aria-hidden="true" />
+
       {/* ── Hero — the claim, stated once, plainly ── */}
-      <section className="px-6 md:px-16 pt-24 md:pt-36 pb-20 max-w-[1200px] mx-auto">
+      <section className="relative px-6 md:px-16 pt-24 md:pt-36 pb-20 max-w-[1200px] mx-auto">
+        {/* Registry annotation rail — the filing-cabinet voice, set on its
+            spine along the hero's open right edge. Decorative; every fact it
+            carries lives in accessible copy below. */}
+        <p
+          aria-hidden="true"
+          className="hidden lg:block absolute right-16 top-40 font-mono text-[11px] tracking-[0.3em] uppercase text-[var(--color-katha-fnt)] [writing-mode:vertical-rl]"
+        >
+          Plate {template.plate ?? '001'} · {template.name} — held for no one yet
+        </p>
         <p className={`${EYEBROW} mb-10 weave`}>
           {'//'} The Proof · Los Angeles &amp; Orange County
         </p>
@@ -80,12 +95,20 @@ export default function ProofClient() {
           not. We think you should see the thing you&rsquo;re buying first.
           So here it is.
         </p>
+        <a
+          href="#plate"
+          className="inline-flex items-center gap-3 min-h-[var(--touch)] mt-12 font-mono text-[13px] tracking-[0.18em] uppercase text-[var(--color-katha-mut)] hover:text-[var(--color-katha-ink)] transition-colors weave d3"
+        >
+          <span aria-hidden="true" className="inline-block w-10 h-px bg-[var(--color-katha-ln2)]" />
+          The plate is live below
+        </a>
       </section>
 
       {/* ── The demonstration — the page does the arguing ── */}
       <section
+        id="plate"
         aria-labelledby="proof-demo-heading"
-        className="bg-[var(--color-katha-l1)] border-y border-[var(--color-katha-ln)]"
+        className="bg-[var(--color-katha-l1)] border-y border-[var(--color-katha-ln)] scroll-mt-6"
       >
         <div className="px-6 md:px-16 py-20 max-w-[1200px] mx-auto">
           <p className={`${EYEBROW} mb-4`}>{'//'} Plate {template.plate} · live</p>
@@ -97,8 +120,36 @@ export default function ProofClient() {
             Type. The plate takes your names.
           </h2>
 
-          <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-14 lg:gap-20 items-start">
-            <div className="space-y-8 max-w-[440px]">
+          <div className="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-20 items-start">
+            {/* The plate leads. On small screens it stays pinned while the
+                fields scroll beneath — typing must never be blind. */}
+            <div className="sticky top-0 z-10 h-[42vh] py-3 bg-[var(--color-katha-l1)] border-b border-[var(--color-katha-ln)] lg:order-2 lg:static lg:h-auto lg:py-0 lg:border-b-0">
+              <div className="h-full lg:h-[600px]">
+                <LivePreview
+                  template={template}
+                  layoutId={template.layout}
+                  palette={palette}
+                  title={names}
+                  subtitle={date}
+                  venue=""
+                  proofText={
+                    names || date
+                      ? `Proof updated. ${names || template.sName} · ${date || template.sSub} on ${palette.name}.`
+                      : undefined
+                  }
+                />
+              </div>
+              {/* Specimen label — the plate reads as a catalogued object. */}
+              <p className="hidden lg:flex items-baseline justify-center gap-4 mt-6 font-mono text-[13px] tracking-[0.16em] uppercase text-[var(--color-katha-fnt)]">
+                <span>Plate {template.plate ?? '—'} · {template.name}</span>
+                <span aria-hidden="true" className="inline-block w-8 h-px bg-[var(--color-katha-ln)] relative -top-[4px]" />
+                <span className="normal-case tracking-[0.06em] text-[var(--color-katha-mut)]">
+                  the three frames print from your booth that night
+                </span>
+              </p>
+            </div>
+
+            <div className="space-y-8 max-w-[440px] lg:order-1">
               <Field
                 id="proof-names"
                 label="Your names"
@@ -113,7 +164,7 @@ export default function ProofClient() {
                 value={date}
                 onChange={setDate}
                 placeholder={template.sSub}
-                helper="October 3, 2026 reads well in Courier."
+                helper="A date, a month, a place — however the second line should read."
               />
 
               <div>
@@ -139,22 +190,6 @@ export default function ProofClient() {
                 plate our clients finalize.
               </p>
             </div>
-
-            <div className="lg:sticky lg:top-16 h-[520px] md:h-[620px]">
-              <LivePreview
-                template={template}
-                layoutId={template.layout}
-                palette={palette}
-                title={names}
-                subtitle={date}
-                venue=""
-                proofText={
-                  names || date
-                    ? `Proof updated. ${names || template.sName} · ${date || template.sSub} on ${palette.name}.`
-                    : undefined
-                }
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -171,6 +206,9 @@ export default function ProofClient() {
             >
               How the market designs your print
             </h2>
+            <p className="font-mono text-[13px] tracking-[0.16em] uppercase text-[var(--color-katha-fnt)] mt-8">
+              Surveyed July 2026 · twelve companies, LA &amp; OC
+            </p>
           </div>
           <div>
             <ol className="list-none">
@@ -239,8 +277,8 @@ export default function ProofClient() {
         </div>
       </section>
 
-      {/* ── The one gilt CTA ── */}
-      <section className="px-6 md:px-16 py-28 max-w-[1200px] mx-auto text-center">
+      {/* ── The one gilt CTA — the closing plate ── */}
+      <section className="px-6 md:px-16 py-28 max-w-[720px] mx-auto text-center border-t border-[var(--color-katha-ln)]">
         <p className={`${EYEBROW} mb-8`}>{'//'} The customizer is open</p>
         <p
           className="font-display font-light text-[var(--color-katha-hi)] max-w-[24ch] mx-auto mb-12"
