@@ -41,7 +41,7 @@ export function DateGate({ days, loading, error, selected, onRetry, onPick }: Da
       </p>
 
       {loading && (
-        <div className="flex gap-3 overflow-hidden" aria-label="Checking open dates">
+        <div role="status" className="flex gap-3 overflow-hidden" aria-label="Checking open dates">
           {Array.from({ length: 7 }).map((_, i) => (
             <div
               key={i}
@@ -57,7 +57,7 @@ export function DateGate({ days, loading, error, selected, onRetry, onPick }: Da
           <p className="font-body text-[17px] text-[var(--color-katha-ink)] leading-relaxed">
             The registry didn&rsquo;t answer. Open dates can&rsquo;t be shown right now —
             try again, or write to{' '}
-            <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4">
+            <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4 inline-block py-3 -my-3">
               hello@kathabooth.com
             </a>{' '}
             with your date.
@@ -77,7 +77,7 @@ export function DateGate({ days, loading, error, selected, onRetry, onPick }: Da
         <div className="border-l-2 border-[var(--color-katha-hi)] bg-[var(--color-katha-l1)] px-6 py-5 max-w-[560px]">
           <p className="font-body text-[17px] text-[var(--color-katha-ink)] leading-relaxed">
             Every listed night is spoken for. Write to{' '}
-            <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4">
+            <a href="mailto:hello@kathabooth.com" className="underline underline-offset-4 inline-block py-3 -my-3">
               hello@kathabooth.com
             </a>{' '}
             for off-calendar dates.

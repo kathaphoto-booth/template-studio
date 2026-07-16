@@ -55,7 +55,7 @@ export function ParallaxFooter({ onReserve }: { onReserve: () => void }) {
                 </p>
                 <a
                   href="mailto:hello@kathabooth.com"
-                  className="font-body text-[17px] text-[var(--color-katha-ink)] hover:text-[var(--color-katha-hi)] transition-colors inline-block py-3"
+                  className="font-body text-[17px] text-[var(--color-katha-ink)] hover:text-[var(--color-katha-hi)] transition-colors inline-flex items-center min-h-[var(--touch)]"
                 >
                   hello@kathabooth.com
                 </a>
