@@ -5,6 +5,7 @@ import Link from 'next/link';
 import LivePreview from '@/components/customizer/LivePreview';
 import { Field } from '@/components/ui/Field';
 import { Swatch } from '@/components/ui/Swatch';
+import { saveDraft } from '@/lib/draft';
 import content from '@/lib/content.json';
 
 /**
@@ -54,11 +55,11 @@ export default function ProofClient() {
     [templates],
   );
 
+  const defaultPaletteKey =
+    palettes.find((p: any) => (p as any).default)?.key ?? palettes[0].key;
   const [names, setNames] = useState('');
   const [date, setDate] = useState('');
-  const [paletteKey, setPaletteKey] = useState<string>(
-    palettes.find((p: any) => (p as any).default)?.key ?? palettes[0].key,
-  );
+  const [paletteKey, setPaletteKey] = useState<string>(defaultPaletteKey);
   const palette = palettes.find((p) => p.key === paletteKey) ?? palettes[0];
 
   return (
@@ -91,9 +92,8 @@ export default function ProofClient() {
           style={{ fontSize: 'var(--fs-lede)' }}
         >
           Around here, the print is designed after you pay. A proof arrives by
-          email — thirty days out if you&rsquo;re early, five if you&rsquo;re
-          not. We think you should see the thing you&rsquo;re buying first.
-          So here it is.
+          email — thirty days before your event, sometimes five. We think you
+          should see the thing you&rsquo;re buying first. So here it is.
         </p>
         <a
           href="#plate"
@@ -217,12 +217,12 @@ export default function ProofClient() {
                 else&rsquo;s names.
               </Ledger>
               <Ledger n="02">
-                Book and pay. A designer starts on your print thirty days out —
-                sometimes five.
+                Book and pay. Design begins thirty days before your event — a
+                questionnaire first, then samples.
               </Ledger>
               <Ledger n="03">
-                A proof lands by email. Two rounds of revisions, if you catch
-                them in time.
+                A proof lands by email, sometimes five days out. Two rounds of
+                revisions, if you catch them in time.
               </Ledger>
             </ol>
             <p
@@ -288,6 +288,23 @@ export default function ProofClient() {
         </p>
         <Link
           href="/template-design"
+          onClick={() => {
+            // Carry the demo into the customizer — "finish the plate you
+            // started" is literal. Only when the visitor actually touched it;
+            // an untouched demo must not clobber a returning guest's draft.
+            const touched = names || date || palette.key !== defaultPaletteKey;
+            if (touched) {
+              saveDraft('guest', {
+                templateId: template.id,
+                paletteKey: palette.key,
+                layoutId: template.layout,
+                textPosition: 'bottom',
+                title: names,
+                subtitle: date,
+                venue: '',
+              });
+            }
+          }}
           className="inline-flex items-center justify-center min-h-[var(--touch-lg)] px-10 bg-[var(--color-katha-gilt)] text-[var(--color-katha-l0)] font-mono text-[16px] tracking-[0.12em] uppercase rounded-[2px] hover:brightness-105 transition-all"
         >
           Design your print now →
