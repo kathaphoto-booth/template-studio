@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
 // Surfaces reachable without auth; add the admin queue here once Plan 3 lands.
-const SURFACES = ['/gallery', '/portal/demo/template-design'];
+const SURFACES = ['/gallery', '/portal/demo/template-design', '/proof'];
 
 // The cinematic entrance is session-guarded (plays once per session). Seed the
 // session flag so scans measure the page at rest — WCAG contrast applies to
